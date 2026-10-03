@@ -20,27 +20,31 @@ const app = express();
 // Security Headers & CORS
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
-// Always-allowed origins (hardcoded production domains + localhost)
-const ALWAYS_ALLOWED = [
-  'https://chinmaya-mission-adoni.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-];
-
-// Merge with any extra origins from env var
+// Merge env origins with hardcoded ones
 const envOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
   : [];
 
-const allowedOriginsSet = new Set([...ALWAYS_ALLOWED, ...envOrigins]);
+const allowedOriginsSet = new Set([
+  'https://chinmaya-mission-adoni.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  ...envOrigins,
+]);
+
+// Regex: allow ALL Vercel preview/production URLs for this project
+const vercelPreviewPattern = /^https:\/\/chinmaya-mission-adoni(-[a-z0-9]+)*\.vercel\.app$/;
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Render health checks)
+      // Allow requests with no origin (curl, mobile apps, Render health checks)
       if (!origin) return callback(null, true);
+      // Allow exact matches
       if (allowedOriginsSet.has(origin)) return callback(null, true);
-      // In non-production, allow all origins
+      // Allow all Vercel preview deployments for this project
+      if (vercelPreviewPattern.test(origin)) return callback(null, true);
+      // In development, allow everything
       if (process.env.NODE_ENV !== 'production') return callback(null, true);
       callback(new Error(`CORS: Origin ${origin} not allowed`));
     },
