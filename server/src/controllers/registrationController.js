@@ -56,6 +56,12 @@ export const submitIndividualRegistration = async (req, res) => {
       });
     }
 
+    let parsedDob = null;
+    if (dateOfBirth) {
+      const d = new Date(dateOfBirth);
+      if (!isNaN(d.getTime())) parsedDob = d;
+    }
+
     let saved = false;
     let registration;
     let attempts = 0;
@@ -68,11 +74,11 @@ export const submitIndividualRegistration = async (req, res) => {
           registrationId,
           userId: req.user ? req.user._id : null,
           fullName: fullName.trim(),
-          dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+          dateOfBirth: parsedDob,
           isStudent: Boolean(isStudent),
           institutionName: isStudent ? (institutionName || 'N/A').trim() : 'N/A',
           contactNumber: cleanPhone,
-          tShirtSize,
+          tShirtSize: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(tShirtSize) ? tShirtSize : 'M',
           registrationType: 'FORM',
           institutionType: 'OTHER',
         });
