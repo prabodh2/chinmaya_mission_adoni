@@ -20,13 +20,30 @@ const app = express();
 // Security Headers & CORS
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS
+// Always-allowed origins (hardcoded production domains + localhost)
+const ALWAYS_ALLOWED = [
+  'https://chinmaya-mission-adoni.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+];
+
+// Merge with any extra origins from env var
+const envOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-  : true;
+  : [];
+
+const allowedOriginsSet = new Set([...ALWAYS_ALLOWED, ...envOrigins]);
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Render health checks)
+      if (!origin) return callback(null, true);
+      if (allowedOriginsSet.has(origin)) return callback(null, true);
+      // In non-production, allow all origins
+      if (process.env.NODE_ENV !== 'production') return callback(null, true);
+      callback(new Error(`CORS: Origin ${origin} not allowed`));
+    },
     credentials: true,
   })
 );
