@@ -64,7 +64,7 @@ const mediaSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['Home', 'About', 'Activities', 'What We Do', 'Let\'s Connect', 'Marathon', 'Registration', 'Banner', 'Footer', 'Gallery', 'Other'],
+      enum: ['Home', 'About', 'Activities', 'Let\'s Connect', 'Marathon', 'Registration', 'Banner', 'Footer', 'Gallery', 'Other'],
       default: 'Other',
       index: true,
     },

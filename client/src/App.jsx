@@ -7,7 +7,6 @@ import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
-import { WhatWeDoPage } from './pages/WhatWeDoPage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
@@ -43,7 +42,6 @@ export function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/about-me" element={<AboutPage />} />
                 <Route path="/activities" element={<ActivitiesPage />} />
-                <Route path="/what-we-do" element={<WhatWeDoPage />} />
                 <Route path="/lets-connect" element={<LetsConnectPage />} />
                 <Route path="/register" element={<RegistrationPage />} />
 

@@ -463,8 +463,8 @@ export const deleteMedia = async (req, res) => {
 // @access  Private/Admin
 export const getMediaCategories = async (req, res) => {
   try {
-    const categories = ['Home', 'About', 'Activities', 'What We Do', 'Let\'s Connect', 'Marathon', 'Registration', 'Banner', 'Footer', 'Gallery', 'Other'];
-    const pages = ['Home', 'About', 'Activities', 'What We Do', 'Let\'s Connect', 'Registration', 'General'];
+    const categories = ['Home', 'About', 'Activities', 'Let\'s Connect', 'Marathon', 'Registration', 'Banner', 'Footer', 'Gallery', 'Other'];
+    const pages = ['Home', 'About', 'Activities', 'Let\'s Connect', 'Registration', 'General'];
     
     res.json({
       success: true,

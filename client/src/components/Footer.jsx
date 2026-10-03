@@ -21,9 +21,8 @@ const FALLBACK_FOOTER = {
       { label: 'Home', url: '/', enabled: true, displayOrder: 1 },
       { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
       { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 3 },
-      { label: 'What We Do', url: '/what-we-do', enabled: true, displayOrder: 4 },
-      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 5 },
-      { label: 'Marathon Registration', url: '/register', enabled: true, displayOrder: 6 },
+      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 4 },
+      { label: 'Marathon Registration', url: '/register', enabled: true, displayOrder: 5 },
     ],
   },
   contact: {
