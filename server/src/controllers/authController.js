@@ -3,7 +3,7 @@ import User from '../models/User.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'chyk_adoni_anti_drug_marathon_2026_jwt_secret_key_987654321', {
-    expiresIn: '30d',
+    expiresIn: process.env.JWT_EXPIRES_IN || '365d',
   });
 };
 
