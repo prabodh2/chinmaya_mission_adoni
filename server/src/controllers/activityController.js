@@ -1,9 +1,14 @@
 import Activity from '../models/Activity.js';
 import { uploadToCloudinary } from '../config/cloudinary.js';
+import { seedInitialData } from '../utils/seedData.js';
 
 export const getActivities = async (req, res) => {
   try {
-    const activities = await Activity.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    let activities = await Activity.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    if (activities.length === 0) {
+      await seedInitialData();
+      activities = await Activity.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    }
     res.json({ success: true, data: activities });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

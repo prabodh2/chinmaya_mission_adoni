@@ -1,8 +1,13 @@
 import FAQ from '../models/FAQ.js';
+import { seedInitialData } from '../utils/seedData.js';
 
 export const getFAQs = async (req, res) => {
   try {
-    const faqs = await FAQ.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    let faqs = await FAQ.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    if (faqs.length === 0) {
+      await seedInitialData();
+      faqs = await FAQ.find({ active: true }).sort({ order: 1, createdAt: -1 });
+    }
     res.json({ success: true, data: faqs });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

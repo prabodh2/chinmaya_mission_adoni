@@ -75,13 +75,68 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
   },
 ];
 
+const DEFAULT_ACTIVITIES = [
+  {
+    _id: 'act-1',
+    title: 'Youth Marathon Prep Bootcamps',
+    category: 'Marathon Training',
+    description: 'Weekly morning running sessions and endurance training across Adoni schools and colleges.',
+    imageUrl: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=800&auto=format&fit=crop',
+    active: true,
+  },
+  {
+    _id: 'act-2',
+    title: 'School Anti-Drug Oath & Pledge',
+    category: 'School Drive',
+    description: 'Interactive student rallies and pledge signatures taking place in 50+ Adoni institutions.',
+    imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop',
+    active: true,
+  },
+  {
+    _id: 'act-3',
+    title: 'Mind & Body Wellness Seminars',
+    category: 'Fitness & Wellness',
+    description: 'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+    active: true,
+  },
+];
+
+const DEFAULT_FAQS = [
+  {
+    _id: 'faq-1',
+    question: 'When and where is the Anti-Drug Marathon Run 2026?',
+    answer: 'The event will take place on Sunday, 6 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
+  },
+  {
+    _id: 'faq-2',
+    question: 'Who can participate in the marathon?',
+    answer: 'The marathon is open to everyone! Students from schools and colleges, working professionals, families, and senior citizens in Adoni are all encouraged to join.',
+  },
+  {
+    _id: 'faq-3',
+    question: 'Is there an entry fee for registration?',
+    answer: 'Registration is free for all, anyone can participate.',
+  },
+  {
+    _id: 'faq-4',
+    question: 'How can schools and colleges submit registrations?',
+    answer: 'Institutions can visit the Registration page, select "School & College Registration", download the template, upload student details, and submit in one single step.',
+  },
+  {
+    _id: 'faq-5',
+    question: 'Will certificates be provided to participants?',
+    answer: 'Yes! Physical certificates will be given after the completion of the run.',
+  },
+];
+
 export const HomePage = () => {
   const [homepageData, setHomepageData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [eventConfig, setEventConfig] = useState(null);
   const [banners, setBanners] = useState({ horizontal: null, vertical: [] });
-  const [faqs, setFaqs] = useState([]);
-  const [activities, setActivities] = useState([]);
+  const [faqs, setFaqs] = useState(DEFAULT_FAQS);
+  const [activities, setActivities] = useState(DEFAULT_ACTIVITIES);
 
   const loadAllData = () => {
     // 1. Fetch Public Homepage Configuration from CMS
@@ -110,12 +165,22 @@ export const HomePage = () => {
     faqService.getFAQs().then((res) => {
       if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
         setFaqs(res.data.data);
+      } else {
+        setFaqs(DEFAULT_FAQS);
       }
-    }).catch(() => {});
+    }).catch(() => {
+      setFaqs(DEFAULT_FAQS);
+    });
 
     activityService.getActivities().then((res) => {
-      if (res.data?.success) setActivities(res.data.data.slice(0, 3));
-    }).catch(() => {});
+      if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        setActivities(res.data.data.slice(0, 3));
+      } else {
+        setActivities(DEFAULT_ACTIVITIES);
+      }
+    }).catch(() => {
+      setActivities(DEFAULT_ACTIVITIES);
+    });
   };
 
   useEffect(() => {
