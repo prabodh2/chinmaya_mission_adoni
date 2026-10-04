@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { activityService } from '../services/api';
+import { activityService, contentService } from '../services/api';
 import {
   Flame,
   Sparkles,
@@ -138,9 +138,8 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
 
 export const ActivitiesPage = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [apiActivities, setApiActivities] = useState([]);
 
-  // Centralized structured data matching prompt requirements
+  // Centralized structured data for core Chinmaya Mission Adoni centres & wings
   const initialActivities = [
     {
       id: 'chinmaya-sanjeevaraya-temple',
@@ -164,7 +163,7 @@ export const ActivitiesPage = () => {
       description:
         'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
       imageUrl:
-        'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1000&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
       imageAlt: 'Shanta Malleshwara Temple Adoni Worship Center',
       imageSource: 'Shri Shantamalleshwara Swami Temple Adoni',
       imageCredit: 'Official Festival & Devotional Observances',
@@ -203,12 +202,114 @@ export const ActivitiesPage = () => {
     },
   ];
 
+  const defaultMovementActivities = [
+    {
+      id: 'act-1',
+      title: 'Youth Marathon Prep Bootcamps',
+      category: 'Marathon Training',
+      section: 'COMMUNITY & MOVEMENT INITIATIVES',
+      description:
+        'Weekly morning running sessions and endurance training across Adoni schools and colleges.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=800&auto=format&fit=crop',
+      imageAlt: 'Youth Marathon Prep Bootcamps',
+      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
+    },
+    {
+      id: 'act-2',
+      title: 'School Anti-Drug Oath & Pledge',
+      category: 'School Drive',
+      section: 'COMMUNITY & MOVEMENT INITIATIVES',
+      description:
+        'Interactive student rallies and pledge signatures taking place in 50+ Adoni institutions.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop',
+      imageAlt: 'School Anti-Drug Oath & Pledge',
+      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
+    },
+    {
+      id: 'act-3',
+      title: 'Mind & Body Wellness Seminars',
+      category: 'Fitness & Wellness',
+      section: 'COMMUNITY & MOVEMENT INITIATIVES',
+      description:
+        'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+      imageAlt: 'Mind & Body Wellness Seminars',
+      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
+    },
+    {
+      id: 'act-4',
+      title: 'Adoni Torch Relay & Street Rallies',
+      category: 'Awareness Campaign',
+      section: 'COMMUNITY & MOVEMENT INITIATIVES',
+      description:
+        'Torch relay highlighting positive choices, sports culture, and freedom from addiction.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop',
+      imageAlt: 'Adoni Torch Relay & Street Rallies',
+      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
+    },
+  ];
+
+  const [missionActivities, setMissionActivities] = useState(initialActivities);
+  const [movementActivities, setMovementActivities] = useState(defaultMovementActivities);
+
   const loadActivities = () => {
+    // 1. Fetch community & movement activities from API
     activityService
       .getActivities()
       .then((res) => {
         if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-          setApiActivities(res.data.data);
+          setMovementActivities(
+            res.data.data.map((act) => ({
+              id: act._id || act.title,
+              title: act.title,
+              section: 'COMMUNITY & MOVEMENT INITIATIVES',
+              category: act.category || 'Activity',
+              description: act.description,
+              imageUrl: act.imageUrl,
+              imageAlt: act.title,
+              icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+
+    // 2. Fetch About/Activities CMS updates if customized in admin dashboard
+    contentService
+      .getContent('about_page')
+      .then((res) => {
+        if (res.data?.success && res.data?.data?.ourActivities?.cards) {
+          const cmsCards = res.data.data.ourActivities.cards;
+          setMissionActivities((prev) =>
+            prev.map((item, idx) => {
+              const matchedCard = cmsCards.find(
+                (c) =>
+                  c.id === item.id ||
+                  c.title?.toLowerCase() === item.title?.toLowerCase() ||
+                  (idx === 0 && c.id === 'act-1') ||
+                  (idx === 1 && c.id === 'act-2') ||
+                  (idx === 2 && c.id === 'act-3') ||
+                  (idx === 3 && c.id === 'act-4')
+              );
+              if (matchedCard) {
+                const cleanImg = matchedCard.imageUrl?.includes('photo-1507692049790-de58290a4334')
+                  ? 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop'
+                  : (matchedCard.imageUrl || item.imageUrl);
+
+                return {
+                  ...item,
+                  title: matchedCard.title || item.title,
+                  description: matchedCard.content || matchedCard.description || item.description,
+                  imageUrl: cleanImg,
+                };
+              }
+              return item;
+            })
+          );
         }
       })
       .catch(() => {});
@@ -233,28 +334,16 @@ export const ActivitiesPage = () => {
     };
   }, []);
 
-  const displayList = apiActivities.length > 0
-    ? apiActivities.map((act) => ({
-        id: act._id || act.title,
-        title: act.title,
-        section: act.category?.toUpperCase() || 'ACTIVITIES',
-        category: act.category || 'Activity',
-        description: act.description,
-        imageUrl: act.imageUrl,
-        imageAlt: act.title,
-        icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-      }))
-    : initialActivities;
-
-  const spiritualDevotionActivities = displayList.filter(
-    (item) => item.section === 'SPIRITUALITY & DEVOTION' || item.category === 'Marathon Training' || item.category === 'School Drive'
+  const spiritualDevotionActivities = missionActivities.filter(
+    (item) => item.section === 'SPIRITUALITY & DEVOTION'
   );
-  const cultureDevotionActivities = displayList.filter(
-    (item) => item.section === 'CULTURE & DEVOTION' || item.category === 'Fitness & Wellness' || item.category === 'Awareness Campaign'
+  const cultureDevotionActivities = missionActivities.filter(
+    (item) => item.section === 'CULTURE & DEVOTION'
   );
-  const chykActivity = displayList.find(
-    (item) => item.id === 'chinmaya-yuva-kendra' || item.title.includes('CHYK')
-  ) || initialActivities[3];
+  const chykActivity =
+    missionActivities.find(
+      (item) => item.id === 'chinmaya-yuva-kendra' || item.title?.includes('CHYK')
+    ) || initialActivities[3];
 
   return (
     <main className="min-h-screen py-12 sm:py-16 px-4 max-w-7xl mx-auto space-y-16 sm:space-y-24">
@@ -352,9 +441,36 @@ export const ActivitiesPage = () => {
         )}
       </section>
 
+      {/* 5. SECTION 4: MOVEMENT & COMMUNITY INITIATIVES */}
+      {movementActivities.length > 0 && (
+        <section className="space-y-8">
+          <div className="flex items-center gap-3 pb-4 border-b border-[var(--border-color)]">
+            <div className="w-10 h-10 rounded-2xl bg-[var(--yellow)]/15 text-[var(--orange)] flex items-center justify-center">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-extrabold text-[var(--orange)] uppercase tracking-wider block">
+                SECTION 04
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+                COMMUNITY & MOVEMENT INITIATIVES
+              </h2>
+            </div>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {movementActivities.map((act) => (
+              <ActivityCard
+                key={act.id || act._id || act.title}
+                activity={act}
+                onSelect={setSelectedActivity}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* 5. CLOSING VISUAL SECTION */}
+      {/* 6. CLOSING VISUAL SECTION */}
       <footer className="p-10 sm:p-14 rounded-3xl bg-gradient-to-r from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white text-center shadow-2xl space-y-6 relative overflow-hidden border border-white/10">
         <div className="relative z-10 space-y-4 max-w-3xl mx-auto">
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[var(--yellow)] font-extrabold text-xs uppercase tracking-widest border border-white/20">

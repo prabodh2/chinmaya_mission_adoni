@@ -354,7 +354,7 @@ export const seedInitialData = async () => {
                 id: 'act-2',
                 title: 'SHANTA MALLESHWARA TEMPLE',
                 content: 'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
-                imageUrl: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=800&auto=format&fit=crop',
+                imageUrl: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=800&auto=format&fit=crop',
                 badge: 'SACRED CENTRE'
               },
               {
@@ -748,7 +748,7 @@ export const seedInitialData = async () => {
           description: 'Sacred worship centre associated with Chinmaya Mission Adoni.',
           caption: 'Shanta Malleshwara Temple • Sacred Centre of Worship',
           altText: 'Shanta Malleshwara Temple Adoni',
-          url: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=800&auto=format&fit=crop',
+          url: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=800&auto=format&fit=crop',
           publicId: 'temple_shanta_malleshwara',
           mimeType: 'image/jpeg',
           fileSize: 260000,
