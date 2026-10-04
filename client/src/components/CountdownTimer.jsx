@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin } from 'lucide-react';
 
-export const CountdownTimer = ({ targetDate = '2026-12-06T06:00:00.000+05:30' }) => {
+export const CountdownTimer = ({ targetDate = '2026-12-20T06:00:00.000+05:30' }) => {
   const calculateTimeLeft = () => {
-    const eventTime = Date.parse(targetDate) || Date.parse('2026-12-06T06:00:00.000+05:30');
+    const eventTime = Date.parse(targetDate) || Date.parse('2026-12-20T06:00:00.000+05:30');
     const difference = eventTime - new Date().getTime();
 
     if (difference <= 0) {
@@ -48,7 +48,7 @@ export const CountdownTimer = ({ targetDate = '2026-12-06T06:00:00.000+05:30' })
               <span>EVENT COUNTDOWN</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-              6 DECEMBER <span className="text-[var(--orange)]">2026</span>
+              20 DECEMBER <span className="text-[var(--orange)]">2026</span>
             </h3>
             <p className="text-xs sm:text-sm font-semibold text-[var(--text-muted)] flex items-center justify-center md:justify-start gap-2">
               <Clock className="w-4 h-4 text-[var(--cyan)]" /> 6:00 AM ONWARDS • <MapPin className="w-4 h-4 text-[var(--orange)]" /> ADONI, ANDHRA PRADESH

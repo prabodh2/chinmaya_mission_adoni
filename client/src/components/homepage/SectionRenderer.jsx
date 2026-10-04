@@ -23,7 +23,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
   if (!section || !section.isEnabled) return null;
 
-  const eventDateStr = eventConfig?.eventDate || '2026-12-06T06:00:00.000+05:30';
+  const eventDateStr = eventConfig?.eventDate || '2026-12-20T06:00:00.000+05:30';
 
   switch (section.type) {
     case 'hero':
@@ -64,7 +64,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
             <div className="inline-flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl text-xs sm:text-sm font-bold text-[var(--text-primary)]">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-[var(--orange)]" />
-                <span>Sunday, 6 December 2026</span>
+                <span>Sunday, 20 December 2026</span>
               </div>
               <div className="h-4 w-px bg-[var(--border-color)] hidden sm:block" />
               <Link

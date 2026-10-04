@@ -20,7 +20,7 @@ const DEFAULT_SECTIONS = [
     sectionId: 'marathon-1',
     type: 'marathon',
     title: 'EVENT DETAILS & COUNTDOWN',
-    subtitle: 'Sunday, 6 December 2026 • 6:00 AM Onwards',
+    subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
     description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
     badgeText: 'EVENT INFORMATION',
     primaryButtonText: 'REGISTER FOR MARATHON',

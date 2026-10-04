@@ -10,7 +10,7 @@ export const getEventConfig = async (req, res) => {
         subSlogan: 'Run for a Drug-Free Future',
         location: 'Adoni, Andhra Pradesh, India',
         venue: 'Chinmaya Mission Adoni',
-        eventDate: new Date('2026-12-06T06:00:00.000+05:30'),
+        eventDate: new Date('2026-12-20T06:00:00.000+05:30'),
         eventTime: '6:00 AM onwards',
         organizers: ['Chinmaya Mission Adoni', 'Chinmaya Yuva Kendra Adoni'],
         registrationOpen: true,

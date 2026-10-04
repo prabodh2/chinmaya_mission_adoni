@@ -81,7 +81,7 @@ export const RegistrationReceiptModal = ({ data, onClose }) => {
           <div className="pt-3 border-t border-white/15 text-[11px] text-slate-300 space-y-1">
             <div className="flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5 text-[var(--orange)]" />
-              <span>Sunday, 6 December 2026 • 6:00 AM</span>
+              <span>Sunday, 20 December 2026 • 6:00 AM</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-[var(--cyan)]" />

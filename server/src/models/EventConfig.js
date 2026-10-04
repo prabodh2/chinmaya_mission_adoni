@@ -7,7 +7,7 @@ const eventConfigSchema = new mongoose.Schema(
     subSlogan: { type: String, default: 'Run for a Drug-Free Future' },
     location: { type: String, default: 'Adoni, Andhra Pradesh, India' },
     venue: { type: String, default: 'Chinmaya Mission Adoni' },
-    eventDate: { type: Date, default: new Date('2026-12-06T06:00:00.000+05:30') },
+    eventDate: { type: Date, default: new Date('2026-12-20T06:00:00.000+05:30') },
     eventTime: { type: String, default: '6:00 AM onwards' },
     organizers: {
       type: [String],
@@ -15,7 +15,7 @@ const eventConfigSchema = new mongoose.Schema(
     },
     registrationOpen: { type: Boolean, default: true },
     registrationStartDate: { type: Date, default: new Date('2026-01-01T00:00:00.000Z') },
-    registrationEndDate: { type: Date, default: new Date('2026-12-05T23:59:59.000Z') },
+    registrationEndDate: { type: Date, default: new Date('2026-12-19T23:59:59.000Z') },
   },
   { timestamps: true }
 );

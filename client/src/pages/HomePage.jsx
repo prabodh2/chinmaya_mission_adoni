@@ -34,7 +34,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     sectionId: 'marathon-1',
     type: 'marathon',
     title: 'EVENT DETAILS & COUNTDOWN',
-    subtitle: 'Sunday, 6 December 2026 • 6:00 AM Onwards',
+    subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
     description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
     badgeText: 'EVENT INFORMATION',
     primaryButtonText: 'REGISTER FOR MARATHON',
@@ -106,7 +106,7 @@ const DEFAULT_FAQS = [
   {
     _id: 'faq-1',
     question: 'When and where is the Anti-Drug Marathon Run 2026?',
-    answer: 'The event will take place on Sunday, 6 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
+    answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
   },
   {
     _id: 'faq-2',
