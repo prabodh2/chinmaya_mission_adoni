@@ -23,8 +23,20 @@ import {
 } from 'lucide-react';
 
 export const AboutPage = () => {
-  const [content, setContent] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [content, setContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cms_about_content');
+      if (cached) return JSON.parse(cached);
+    } catch (_) {}
+    return null;
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !localStorage.getItem('cms_about_content');
+    } catch (_) {
+      return true;
+    }
+  });
 
   // Fallback default content matching exact prompt specification
   const defaultContent = {
@@ -207,12 +219,16 @@ export const AboutPage = () => {
       .then((res) => {
         if (res.data?.success && res.data?.data) {
           const apiData = res.data.data;
-          setContent({ ...defaultContent, ...apiData });
+          const merged = { ...defaultContent, ...apiData };
+          setContent(merged);
+          try {
+            localStorage.setItem('cms_about_content', JSON.stringify(merged));
+          } catch (_) {}
         } else {
-          setContent(defaultContent);
+          setContent((prev) => prev || defaultContent);
         }
       })
-      .catch(() => setContent(defaultContent))
+      .catch(() => setContent((prev) => prev || defaultContent))
       .finally(() => setLoading(false));
   };
 

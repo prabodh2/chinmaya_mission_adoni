@@ -125,6 +125,11 @@ export const HomePageManager = () => {
       if (res.data?.success) {
         showFeedback('success', 'Homepage configuration updated successfully!');
         applyDynamicTheme(theme);
+        try {
+          localStorage.setItem('cms_homepage_config', JSON.stringify(res.data.data || payload));
+          localStorage.setItem('cms_last_updated', Date.now().toString());
+          window.dispatchEvent(new Event('cms_updated'));
+        } catch (_) {}
       }
     } catch (err) {
       showFeedback('error', 'Failed to save homepage settings.');

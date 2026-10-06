@@ -85,19 +85,19 @@ const DEFAULT_ACTIVITIES = [
     active: true,
   },
   {
-    _id: 'act-2',
-    title: 'School Anti-Drug Oath & Pledge',
-    category: 'School Drive',
-    description: 'Interactive student rallies and pledge signatures taking place in 50+ Adoni institutions.',
-    imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop',
-    active: true,
-  },
-  {
     _id: 'act-3',
     title: 'Mind & Body Wellness Seminars',
     category: 'Fitness & Wellness',
     description: 'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
     imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+    active: true,
+  },
+  {
+    _id: 'act-4',
+    title: 'Adoni Torch Relay & Street Rallies',
+    category: 'Awareness Campaign',
+    description: 'Torch relay highlighting positive choices, sports culture, and freedom from addiction.',
+    imageUrl: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop',
     active: true,
   },
 ];
@@ -135,13 +135,27 @@ const DEFAULT_FAQS = [
   },
 ];
 
+const getCached = (key, fallback) => {
+  try {
+    const item = localStorage.getItem(key);
+    if (item) return JSON.parse(item);
+  } catch (_) {}
+  return fallback;
+};
+
 export const HomePage = () => {
-  const [homepageData, setHomepageData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [eventConfig, setEventConfig] = useState(null);
-  const [banners, setBanners] = useState({ horizontal: null, vertical: [] });
-  const [faqs, setFaqs] = useState(DEFAULT_FAQS);
-  const [activities, setActivities] = useState(DEFAULT_ACTIVITIES);
+  const [homepageData, setHomepageData] = useState(() => getCached('cms_homepage_config', null));
+  const [loading, setLoading] = useState(() => !getCached('cms_homepage_config', null));
+  const [eventConfig, setEventConfig] = useState(() => getCached('cms_event_config', null));
+  const [banners, setBanners] = useState(() => getCached('cms_banners', { horizontal: null, vertical: [] }));
+  const [faqs, setFaqs] = useState(() => getCached('cms_faqs', DEFAULT_FAQS));
+  const [activities, setActivities] = useState(() => {
+    const cached = getCached('cms_activities', null);
+    if (Array.isArray(cached) && cached.length > 0) {
+      return cached.filter((a) => !/School Anti-Drug Oath/i.test(a.title || ''));
+    }
+    return DEFAULT_ACTIVITIES;
+  });
 
   const loadAllData = () => {
     // 1. Fetch Public Homepage Configuration from CMS
@@ -150,6 +164,7 @@ export const HomePage = () => {
       .then((res) => {
         if (res.data?.success && res.data?.data) {
           setHomepageData(res.data.data);
+          try { localStorage.setItem('cms_homepage_config', JSON.stringify(res.data.data)); } catch (_) {}
           if (res.data.data.theme) {
             applyDynamicTheme(res.data.data.theme);
           }
@@ -160,16 +175,23 @@ export const HomePage = () => {
 
     // 2. Fetch Auxiliary Data (Events, Banners, FAQs, Activities)
     eventService.getConfig().then((res) => {
-      if (res.data?.success) setEventConfig(res.data.data);
+      if (res.data?.success) {
+        setEventConfig(res.data.data);
+        try { localStorage.setItem('cms_event_config', JSON.stringify(res.data.data)); } catch (_) {}
+      }
     }).catch(() => {});
 
     bannerService.getBanners().then((res) => {
-      if (res.data?.success) setBanners(res.data.data);
+      if (res.data?.success) {
+        setBanners(res.data.data);
+        try { localStorage.setItem('cms_banners', JSON.stringify(res.data.data)); } catch (_) {}
+      }
     }).catch(() => {});
 
     faqService.getFAQs().then((res) => {
       if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
         setFaqs(res.data.data);
+        try { localStorage.setItem('cms_faqs', JSON.stringify(res.data.data)); } catch (_) {}
       } else {
         setFaqs(DEFAULT_FAQS);
       }
@@ -179,7 +201,11 @@ export const HomePage = () => {
 
     activityService.getActivities().then((res) => {
       if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        setActivities(res.data.data.slice(0, 3));
+        const cleanActs = res.data.data
+          .filter((a) => a.active !== false && !/School Anti-Drug Oath/i.test(a.title || ''))
+          .slice(0, 3);
+        setActivities(cleanActs);
+        try { localStorage.setItem('cms_activities', JSON.stringify(cleanActs)); } catch (_) {}
       } else {
         setActivities(DEFAULT_ACTIVITIES);
       }

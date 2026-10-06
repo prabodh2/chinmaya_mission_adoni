@@ -510,11 +510,73 @@ export const deleteMedia = async (req, res) => {
       });
     }
 
+    const mediaUrl = media.url;
+    const mediaTitle = media.title;
+    const mediaPublicId = media.publicId;
+
+    // 1. Permanently delete matching activities
+    if (mediaUrl || mediaPublicId || mediaTitle) {
+      const actFilter = [];
+      if (mediaPublicId) actFilter.push({ publicId: mediaPublicId });
+      if (mediaUrl) actFilter.push({ imageUrl: mediaUrl });
+      if (mediaTitle) actFilter.push({ title: mediaTitle });
+      if (actFilter.length > 0) {
+        await Activity.deleteMany({ $or: actFilter });
+      }
+    }
+
+    // 2. Permanently delete matching banners
+    if (mediaUrl || mediaPublicId || mediaTitle) {
+      const banFilter = [];
+      if (mediaPublicId) banFilter.push({ publicId: mediaPublicId });
+      if (mediaUrl) banFilter.push({ imageUrl: mediaUrl });
+      if (mediaTitle) banFilter.push({ title: mediaTitle });
+      if (banFilter.length > 0) {
+        await Banner.deleteMany({ $or: banFilter });
+      }
+    }
+
+    // 3. Clear from HomePage sections if referenced
+    const homeConfig = await HomePage.findOne();
+    if (homeConfig) {
+      let homeChanged = false;
+      if (homeConfig.disabledImage === mediaUrl) {
+        homeConfig.disabledImage = '';
+        homeChanged = true;
+      }
+      if (Array.isArray(homeConfig.sections)) {
+        homeConfig.sections.forEach((sec) => {
+          if (sec.imageUrl === mediaUrl) {
+            sec.imageUrl = '';
+            homeChanged = true;
+          }
+        });
+      }
+      if (homeChanged) await homeConfig.save();
+    }
+
+    // 4. Clear from PageContent if referenced
+    const allPageContents = await PageContent.find();
+    for (const pc of allPageContents) {
+      let pcChanged = false;
+      const targetObj = pc.content || pc.data;
+      if (targetObj && mediaUrl) {
+        const jsonStr = JSON.stringify(targetObj);
+        if (jsonStr.includes(mediaUrl)) {
+          const replacedStr = jsonStr.replaceAll(mediaUrl, '');
+          if (pc.content) pc.content = JSON.parse(replacedStr);
+          else if (pc.data) pc.data = JSON.parse(replacedStr);
+          pcChanged = true;
+        }
+      }
+      if (pcChanged) await pc.save();
+    }
+
     await Media.findByIdAndDelete(req.params.id);
 
     res.json({
       success: true,
-      message: 'Media asset deleted successfully',
+      message: 'Media asset deleted permanently from all pages and website sections',
       data: { id: req.params.id },
     });
   } catch (err) {

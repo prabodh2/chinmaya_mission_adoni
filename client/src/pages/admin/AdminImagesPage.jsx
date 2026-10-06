@@ -155,6 +155,19 @@ export const AdminImagesPage = () => {
     img.src = objectUrl;
   };
 
+  const clearCmsCaches = () => {
+    try {
+      localStorage.removeItem('cms_activities');
+      localStorage.removeItem('cms_mission_activities');
+      localStorage.removeItem('cms_movement_activities');
+      localStorage.removeItem('cms_about_content');
+      localStorage.removeItem('cms_banners');
+      localStorage.removeItem('cms_homepage_config');
+      localStorage.setItem('cms_last_updated', Date.now().toString());
+      window.dispatchEvent(new Event('cms_updated'));
+    } catch (_) {}
+  };
+
   // Create Image Record
   const handleAddSubmit = async (e) => {
     e.preventDefault();
@@ -184,6 +197,7 @@ export const AdminImagesPage = () => {
 
       const res = await mediaService.uploadMedia(formData);
       if (res.data?.success) {
+        clearCmsCaches();
         setStatusMsg({ type: 'success', text: 'Image uploaded and saved to Media Library!' });
         setShowAddModal(false);
         resetForm();
@@ -224,6 +238,7 @@ export const AdminImagesPage = () => {
       const res = await mediaService.updateMedia(selectedMedia._id, formData);
 
       if (res.data?.success) {
+        clearCmsCaches();
         setStatusMsg({
           type: 'success',
           text: form.file
@@ -258,6 +273,7 @@ export const AdminImagesPage = () => {
 
       const res = await mediaService.replaceMediaFile(selectedMedia._id, formData);
       if (res.data?.success) {
+        clearCmsCaches();
         setStatusMsg({ type: 'success', text: 'Image file replaced successfully!' });
         setShowReplaceModal(false);
         fetchMedia(pagination.page);
@@ -280,6 +296,7 @@ export const AdminImagesPage = () => {
     try {
       const res = await mediaService.deleteMedia(selectedMedia._id, force);
       if (res.data?.success) {
+        clearCmsCaches();
         setStatusMsg({ type: 'success', text: 'Media asset deleted successfully.' });
         setShowDeleteModal(false);
         fetchMedia(pagination.page);

@@ -103,7 +103,17 @@ export const deleteActivity = async (req, res) => {
   try {
     const activity = await Activity.findByIdAndDelete(req.params.id);
     if (!activity) return res.status(404).json({ success: false, message: 'Activity not found' });
-    res.json({ success: true, message: 'Activity deleted' });
+    try {
+      const Media = (await import('../models/Media.js')).default;
+      await Media.deleteMany({
+        $or: [
+          { publicId: activity.publicId },
+          { url: activity.imageUrl },
+          { title: activity.title },
+        ],
+      });
+    } catch (_) {}
+    res.json({ success: true, message: 'Activity deleted permanently' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

@@ -250,17 +250,36 @@ export const ActivitiesPage = () => {
     },
   ];
 
-  const [missionActivities, setMissionActivities] = useState(initialActivities);
-  const [movementActivities, setMovementActivities] = useState(defaultMovementActivities);
+  const getCached = (key, fallback) => {
+    try {
+      const item = localStorage.getItem(key);
+      if (item) return JSON.parse(item);
+    } catch (_) {}
+    return fallback;
+  };
+
+  const [missionActivities, setMissionActivities] = useState(() => {
+    const cached = getCached('cms_mission_activities', null);
+    if (Array.isArray(cached) && cached.length > 0) return cached;
+    return initialActivities;
+  });
+  const [movementActivities, setMovementActivities] = useState(() => {
+    const cached = getCached('cms_movement_activities', null);
+    if (Array.isArray(cached) && cached.length > 0) {
+      return cached.filter((a) => !/School Anti-Drug Oath/i.test(a.title || ''));
+    }
+    return defaultMovementActivities;
+  });
 
   const loadActivities = () => {
     // 1. Fetch community & movement activities from API
     activityService
       .getActivities()
       .then((res) => {
-        if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-          setMovementActivities(
-            res.data.data.map((act) => ({
+        if (res.data?.success && Array.isArray(res.data.data)) {
+          const list = res.data.data
+            .filter((act) => act.active !== false && !/School Anti-Drug Oath/i.test(act.title || ''))
+            .map((act) => ({
               id: act._id || act.title,
               title: act.title,
               section: 'COMMUNITY & MOVEMENT INITIATIVES',
@@ -269,8 +288,14 @@ export const ActivitiesPage = () => {
               imageUrl: act.imageUrl,
               imageAlt: act.title,
               icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-            }))
-          );
+            }));
+          setMovementActivities(list);
+          try {
+            localStorage.setItem(
+              'cms_movement_activities',
+              JSON.stringify(list.map((x) => ({ ...x, icon: undefined })))
+            );
+          } catch (_) {}
         }
       })
       .catch(() => {});
@@ -281,8 +306,8 @@ export const ActivitiesPage = () => {
       .then((res) => {
         if (res.data?.success && res.data?.data?.ourActivities?.cards) {
           const cmsCards = res.data.data.ourActivities.cards;
-          setMissionActivities((prev) =>
-            prev.map((item, idx) => {
+          setMissionActivities((prev) => {
+            const updated = prev.map((item, idx) => {
               const matchedCard = cmsCards.find(
                 (c) =>
                   c.id === item.id ||
@@ -303,8 +328,15 @@ export const ActivitiesPage = () => {
                 };
               }
               return item;
-            })
-          );
+            });
+            try {
+              localStorage.setItem(
+                'cms_mission_activities',
+                JSON.stringify(updated.map((x) => ({ ...x, icon: undefined })))
+              );
+            } catch (_) {}
+            return updated;
+          });
         }
       })
       .catch(() => {});
