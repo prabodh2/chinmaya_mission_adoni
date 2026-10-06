@@ -24,6 +24,7 @@ input[type=number]{width:70px;padding:6px;border-radius:6px;border:1px solid var
 .stat b{display:block;font-size:22px;color:var(--route2)}.stat span{font-size:12px;color:var(--mut)}
 .info{margin-top:12px;background:var(--card);border-left:5px solid var(--route);border-radius:8px;padding:12px;font-family:system-ui,sans-serif;font-size:14px;min-height:60px}
 .note{font-size:12px;color:var(--mut);margin-top:10px;font-family:system-ui,sans-serif}
+.km ellipse,.km text{transition:fill .25s ease}
 .km{cursor:pointer}.km:hover ellipse{fill:var(--route)}
 .lm{cursor:pointer}.pc{cursor:pointer;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:400;padding:8px 10px}.pc:hover,.pc.on{border-color:var(--route2);background:var(--bg)}.pc b{color:var(--route2);font-size:13px}
 .fig path{fill:none;stroke:var(--route2);stroke-width:4.5;stroke-linecap:round}.fig .hd{fill:var(--route2)}
@@ -74,6 +75,23 @@ function draw(){const q=pt(f);const rn=document.getElementById('runner'),q2=pt(M
  const pc=+document.getElementById('pc').value,k=f*T;sl.value=f*1000;
  sd.textContent=k.toFixed(1);sr.textContent=(T-k).toFixed(1);st.textContent=fmt(k*pc);sf.textContent=fmt(T*pc);
  const i=Math.min(T,Math.round(k)),at=Math.abs(k-i)<0.12||(i==T&&f>.94);
+ document.querySelectorAll('#kms .km').forEach((el, j) => {
+   const isCrossed = j > 0 && f >= fp(j);
+   const elp = el.querySelector('ellipse');
+   const txt = el.querySelector('text');
+   if (elp && txt) {
+     if (j === 0) {
+       elp.setAttribute('fill', 'var(--acc)');
+       txt.setAttribute('fill', '#fff');
+     } else if (isCrossed) {
+       elp.setAttribute('fill', 'var(--route)');
+       txt.setAttribute('fill', '#fff');
+     } else {
+       elp.setAttribute('fill', j === T ? 'var(--route2)' : 'var(--card)');
+       txt.setAttribute('fill', j === T ? '#fff' : 'var(--ink)');
+     }
+   }
+ });
  document.querySelectorAll('.pc').forEach((e,j)=>e.classList.toggle('on',at&&j==i));
  if(at)info.innerHTML=`<b>Point ${i}/${T} · ${P[i]}</b><br>${i==0?'Start line – warm up and flag off.':i==T?'Finish line! '+fmt(T*pc)+' at your pace.':`${i} km done, ${T-i} km to go. ETA ${fmt(i*pc)} at ${pc} min/km. Next: ${P[i+1]}.`}`;
  else{const n=Math.ceil(k);info.innerHTML=`<b>${k.toFixed(1)} km</b> · heading to Point ${n}: ${P[n]}`}}

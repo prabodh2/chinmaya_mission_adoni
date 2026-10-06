@@ -325,32 +325,49 @@ export const MarathonRouteMap = ({ className = '' }) => {
 
             {/* Checkpoint KM Circles */}
             <g id="kms">
-              {checkpointsData.map((item) => (
-                <g
-                  key={`km-${item.index}`}
-                  className="cursor-pointer transition-transform hover:scale-105"
-                  transform={`translate(${item.x},${item.y})`}
-                  onClick={() => handleCheckpointClick(item.fraction)}
-                >
-                  <ellipse
-                    rx="22"
-                    ry="13"
-                    fill={item.index === 0 ? 'var(--acc)' : item.index === TOTAL_KM ? 'var(--route2)' : 'var(--card)'}
-                    stroke="var(--ink)"
-                    strokeWidth="1.8"
-                  />
-                  <text
-                    textAnchor="middle"
-                    y="4"
-                    fontSize="11"
-                    fontWeight="700"
-                    fill={item.index === 0 || item.index === TOTAL_KM ? '#fff' : 'var(--ink)'}
-                    fontFamily="system-ui, sans-serif"
+              {checkpointsData.map((item) => {
+                const isCrossed = item.index > 0 && fraction >= item.fraction;
+                return (
+                  <g
+                    key={`km-${item.index}`}
+                    className="cursor-pointer transition-transform hover:scale-105"
+                    transform={`translate(${item.x},${item.y})`}
+                    onClick={() => handleCheckpointClick(item.fraction)}
                   >
-                    {item.index}/{TOTAL_KM}
-                  </text>
-                </g>
-              ))}
+                    <ellipse
+                      rx="22"
+                      ry="13"
+                      fill={
+                        item.index === 0
+                          ? 'var(--acc)'
+                          : isCrossed
+                          ? 'var(--route)'
+                          : item.index === TOTAL_KM
+                          ? 'var(--route2)'
+                          : 'var(--card)'
+                      }
+                      stroke="var(--ink)"
+                      strokeWidth="1.8"
+                      style={{ transition: 'fill 0.25s ease' }}
+                    />
+                    <text
+                      textAnchor="middle"
+                      y="4"
+                      fontSize="11"
+                      fontWeight="700"
+                      fill={
+                        item.index === 0 || isCrossed || item.index === TOTAL_KM
+                          ? '#fff'
+                          : 'var(--ink)'
+                      }
+                      fontFamily="system-ui, sans-serif"
+                      style={{ transition: 'fill 0.25s ease' }}
+                    >
+                      {item.index}/{TOTAL_KM}
+                    </text>
+                  </g>
+                );
+              })}
             </g>
 
             {/* Kinematic Animated Runner Figure */}
