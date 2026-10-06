@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anti-Drug Movement Marathon - 7KM</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fbf3e4;--card:#fffaf0;--ink:#2b1a0e;--mut:#7a6650;--route:#e8872b;--route2:#c0392b;--acc:#1f6f5c;--line:#e6d5b5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120d;--card:#221a12;--ink:#f6ead6;--mut:#b8a48a;--route:#ffa13d;--route2:#ff6b57;--acc:#52d1b0;--line:#3a2d1f}}
+:root[data-theme="dark"]{--bg:#17120d;--card:#221a12;--ink:#f6ead6;--mut:#b8a48a;--route:#ffa13d;--route2:#ff6b57;--acc:#52d1b0;--line:#3a2d1f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:.5px}
+.sub{color:var(--mut);margin:4px 0 14px;font-family:system-ui,sans-serif;font-size:14px}
+.board{background:var(--card);border:3px solid var(--ink);border-radius:14px;padding:8px;position:relative}
+svg{width:100%;height:auto;display:block}
+.ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px;font-family:system-ui,sans-serif;font-size:14px}
+button{background:var(--ink);color:var(--bg);border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--route)}
+input[type=number]{width:70px;padding:6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px;font-family:system-ui,sans-serif}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat b{display:block;font-size:22px;color:var(--route2)}.stat span{font-size:12px;color:var(--mut)}
+.info{margin-top:12px;background:var(--card);border-left:5px solid var(--route);border-radius:8px;padding:12px;font-family:system-ui,sans-serif;font-size:14px;min-height:60px}
+.note{font-size:12px;color:var(--mut);margin-top:10px;font-family:system-ui,sans-serif}
+.km{cursor:pointer}.km:hover ellipse{fill:var(--route)}
+.lm{cursor:pointer}.pc{cursor:pointer;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:400;padding:8px 10px}.pc:hover,.pc.on{border-color:var(--route2);background:var(--bg)}.pc b{color:var(--route2);font-size:13px}
+.fig path{fill:none;stroke:var(--route2);stroke-width:4.5;stroke-linecap:round}.fig .hd{fill:var(--route2)}
+#runner{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff)}
+text{font-family:system-ui,sans-serif}
+</style></head><body><div class="wrap">
+<h1>🏃 ANTI-DRUG MOVEMENT MARATHON - 7KM</h1>
+<p class="sub">Tap any checkpoint or drag the runner. 8 checkpoints, 0 to 7 km. Drag the runner or tap any point.</p>
+<div class="board">
+<svg id="m" viewBox="0 0 960 820" role="img" aria-label="Loop route map">
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="var(--line)" stroke-width="1"/></pattern></defs>
+<rect width="960" height="820" fill="url(#g)"/>
+<text x="480" y="400" text-anchor="middle" font-size="40" font-weight="700" fill="var(--line)" font-family="Georgia,serif">7 KM</text>
+<text x="480" y="432" text-anchor="middle" font-size="16" fill="var(--mut)">LOOP RACE</text>
+<path id="p" d="M300 153 L350 168 L590 150 L750 190 L865 196 L860 250 L750 460 L650 640 L530 775 L350 625 L90 425 L65 410 L90 260 L135 205 Z" fill="none" stroke="var(--ink)" stroke-width="20" stroke-linejoin="round" opacity=".15"/>
+<path id="done" d="" fill="none" stroke="var(--route2)" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="trk" d="M300 153 L350 168 L590 150 L750 190 L865 196 L860 250 L750 460 L650 640 L530 775 L350 625 L90 425 L65 410 L90 260 L135 205 Z" fill="none" stroke="var(--route)" stroke-width="11" stroke-linejoin="round" opacity=".55"/>
+<g id="lms"></g><g id="kms"></g>
+<g id="runner"><ellipse cy="17" rx="18" ry="4" fill="#000" opacity=".25"/><g id="dir"><g class="fig" transform="scale(1.7)"><animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur=".25s" repeatCount="indefinite" additive="sum"/><g><path d="M0 -12 L0 -1"/><animateTransform attributeName="transform" type="rotate" values="-55 0 -12;35 0 -12;-55 0 -12" dur=".5s" begin="-0.25s" repeatCount="indefinite"/><g><path d="M0 -1 L0 10"/><animateTransform attributeName="transform" type="rotate" values="30 0 -1;115 0 -1;30 0 -1" dur=".5s" begin="-0.25s" repeatCount="indefinite"/></g></g><g transform="rotate(18 0 -12)"><g><path d="M0 -26 L0 -17"/><animateTransform attributeName="transform" type="rotate" values="55 0 -26;-55 0 -26;55 0 -26" dur=".5s" begin="-0.25s" repeatCount="indefinite"/><g><path d="M0 -17 L0 -8"/><animateTransform attributeName="transform" type="rotate" values="-80 0 -17;-100 0 -17;-80 0 -17" dur=".5s" begin="-0.25s" repeatCount="indefinite"/></g></g><path d="M0 -28 L0 -12"/><circle cx="0" cy="-35" r="6" class="hd"/><g><path d="M0 -26 L0 -17"/><animateTransform attributeName="transform" type="rotate" values="55 0 -26;-55 0 -26;55 0 -26" dur=".5s" begin="0s" repeatCount="indefinite"/><g><path d="M0 -17 L0 -8"/><animateTransform attributeName="transform" type="rotate" values="-80 0 -17;-100 0 -17;-80 0 -17" dur=".5s" begin="0s" repeatCount="indefinite"/></g></g></g><g><path d="M0 -12 L0 -1"/><animateTransform attributeName="transform" type="rotate" values="-55 0 -12;35 0 -12;-55 0 -12" dur=".5s" begin="0s" repeatCount="indefinite"/><g><path d="M0 -1 L0 10"/><animateTransform attributeName="transform" type="rotate" values="30 0 -1;115 0 -1;30 0 -1" dur=".5s" begin="0s" repeatCount="indefinite"/></g></g></g></g></g></svg></div>
+<div class="ctrl"><button id="pb">▶ Run</button><input type="range" id="sl" min="0" max="1000" value="0" aria-label="Position">
+<label>Pace (min/km) <input type="number" id="pc" value="6" min="3" max="12" step="0.5"></label></div>
+<div class="stats"><div class="stat"><b id="sd">0.0</b><span>km covered</span></div><div class="stat"><b id="sr">7.0</b><span>km remaining</span></div><div class="stat"><b id="st">0:00</b><span>elapsed (h:mm)</span></div><div class="stat"><b id="sf">0:42</b><span>finish time at pace</span></div></div>
+<div class="info" id="info">Start at <b>Chinmaya Mission</b>. Press Run or tap a checkpoint.</div>
+<div class="stats" id="pts" style="margin-top:12px"></div><p class="note">Checkpoints are spaced evenly at 1 km each along the traced route. Confirm exact positions with the organisers.</p>
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg",T=7,p=document.getElementById('trk'),L=p.getTotalLength();
+const pt=f=>p.getPointAtLength(f*L);
+const mk=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+const P=['Chinmaya Mission','Auditorium Front','Basaveshwara Circle – Brindavan Lodge','Vimala Residency','VRK Mall','Bus Stand','YMG Circle – Devi Nursing Home','Reliance Digital'];
+const fp=i=>i==T?0.965:i/T;
+P.forEach((n,i)=>{const f=fp(i),q=pt(f),dx=q.x-480,dy=q.y-420,m=Math.hypot(dx,dy)||1;
+ const ox=q.x+dx/m*34,oy=q.y+dy/m*30,an=dx>60?'start':dx<-60?'end':'middle';
+ const g=mk('g',{class:'lm'}),w=n.length>22;
+ const parts=w?n.split(' – '):[n];
+ const t=mk('text',{x:ox,y:oy+(dy>0?10:0)-(parts.length-1)*8,'text-anchor':an,'font-size':14,'font-weight':700,fill:'var(--ink)'});
+ parts.forEach((s,j)=>{const ts=mk('tspan',{x:ox,dy:j?16:0});ts.textContent=s;t.append(ts)});
+ g.append(t);g.onclick=()=>go(f,true);document.getElementById('lms').append(g);
+ const k=mk('g',{class:'km',transform:`translate(${q.x},${q.y})`});
+ k.append(mk('ellipse',{rx:22,ry:13,fill:i==0?'var(--acc)':i==T?'var(--route2)':'var(--card)',stroke:'var(--ink)','stroke-width':1.8}));
+ const tx=mk('text',{'text-anchor':'middle',y:4,'font-size':11,'font-weight':700,fill:i==0||i==T?'#fff':'var(--ink)'});tx.textContent=i+'/'+T;k.append(tx);
+ k.onclick=()=>go(f,true);document.getElementById('kms').append(k);
+ const b=document.createElement('button');b.className='pc';b.innerHTML=`<b>Km ${i}</b><br>${n}`;b.onclick=()=>go(f,true);document.getElementById('pts').append(b)});
+const sl=document.getElementById('sl'),info=document.getElementById('info'),pb=document.getElementById('pb');let f=0,pl=false,last=0;
+const fmt=m=>Math.floor(m/60)+':'+String(Math.round(m%60)).padStart(2,'0');
+function draw(){const q=pt(f);const rn=document.getElementById('runner'),q2=pt(Math.min(1,f+.004)),q3=pt(Math.max(0,f-.004));rn.setAttribute('transform',`translate(${q.x},${q.y-17})`);document.getElementById('dir').setAttribute('transform',`scale(${q2.x>=q3.x?1:-1},1)`);const sv=document.getElementById('m');if(pl)sv.unpauseAnimations();else{sv.pauseAnimations();sv.setCurrentTime(0)}
+ let d='';for(let i=0;i<=60;i++){const r=pt(f*i/60);d+=(i?'L':'M')+r.x+' '+r.y}document.getElementById('done').setAttribute('d',d);
+ const pc=+document.getElementById('pc').value,k=f*T;sl.value=f*1000;
+ sd.textContent=k.toFixed(1);sr.textContent=(T-k).toFixed(1);st.textContent=fmt(k*pc);sf.textContent=fmt(T*pc);
+ const i=Math.min(T,Math.round(k)),at=Math.abs(k-i)<0.12||(i==T&&f>.94);
+ document.querySelectorAll('.pc').forEach((e,j)=>e.classList.toggle('on',at&&j==i));
+ if(at)info.innerHTML=`<b>Point ${i}/${T} · ${P[i]}</b><br>${i==0?'Start line – warm up and flag off.':i==T?'Finish line! '+fmt(T*pc)+' at your pace.':`${i} km done, ${T-i} km to go. ETA ${fmt(i*pc)} at ${pc} min/km. Next: ${P[i+1]}.`}`;
+ else{const n=Math.ceil(k);info.innerHTML=`<b>${k.toFixed(1)} km</b> · heading to Point ${n}: ${P[n]}`}}
+function go(x,show){f=x;if(show){pl=false;pb.textContent='▶ Run'}draw()}
+sl.oninput=()=>{f=sl.value/1000;draw()};document.getElementById('pc').oninput=draw;
+function tick(ts){if(pl){f+=(ts-last)/24000;if(f>=1){f=1;pl=false;pb.textContent='🏁 Again'}draw()}last=ts;requestAnimationFrame(tick)}
+pb.onclick=()=>{if(f>=1)f=0;pl=!pl;pb.textContent=pl?'⏸ Pause':'▶ Run';draw()};
+requestAnimationFrame(tick);draw();
+</script></body></html>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Play, Pause, RotateCcw, MapPin, Flag, Timer, Navigation, Award, Sparkles } from 'lucide-react';
 
 const TOTAL_KM = 7;
 const PATH_D = "M300 153 L350 168 L590 150 L750 190 L865 196 L860 250 L750 460 L650 640 L530 775 L350 625 L90 425 L65 410 L90 260 L135 205 Z";
@@ -26,6 +25,7 @@ const formatTime = (minutes) => {
 
 export const MarathonRouteMap = ({ className = '' }) => {
   const pathRef = useRef(null);
+  const svgRef = useRef(null);
   const [pathLength, setPathLength] = useState(0);
   const [fraction, setFraction] = useState(0); // 0 to 1
   const [isPlaying, setIsPlaying] = useState(false);
@@ -44,6 +44,25 @@ export const MarathonRouteMap = ({ className = '' }) => {
       }
     }
   }, []);
+
+  // Control SVG animations pause/unpause
+  useEffect(() => {
+    if (svgRef.current) {
+      try {
+        if (isPlaying) {
+          if (typeof svgRef.current.unpauseAnimations === 'function') {
+            svgRef.current.unpauseAnimations();
+          }
+        } else {
+          if (typeof svgRef.current.pauseAnimations === 'function') {
+            svgRef.current.pauseAnimations();
+          }
+        }
+      } catch (err) {
+        // Fallback if SVG animation API is unavailable
+      }
+    }
+  }, [isPlaying]);
 
   // Animation Loop
   const tick = useCallback((timestamp) => {
@@ -91,6 +110,14 @@ export const MarathonRouteMap = ({ className = '' }) => {
     return getPointAtFraction(fraction);
   }, [fraction, getPointAtFraction]);
 
+  // Runner facing direction (flip horizontally when running left vs right)
+  const runnerDir = useMemo(() => {
+    if (!pathRef.current || pathLength <= 0) return 1;
+    const q2 = getPointAtFraction(Math.min(1, fraction + 0.004));
+    const q3 = getPointAtFraction(Math.max(0, fraction - 0.004));
+    return q2.x >= q3.x ? 1 : -1;
+  }, [fraction, pathLength, getPointAtFraction]);
+
   // Path traced so far by runner
   const completedPathD = useMemo(() => {
     if (!pathRef.current || pathLength <= 0) return '';
@@ -117,7 +144,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
       const oy = q.y + (dy / m) * 30;
       const textAnchor = dx > 60 ? 'start' : dx < -60 ? 'end' : 'middle';
       const parts = name.length > 22 ? name.split(' – ') : [name];
-      return { index: i, name, fraction: f, x: q.x, y: q.y, ox, oy, textAnchor, parts };
+      return { index: i, name, fraction: f, x: q.x, y: q.y, dx, dy, ox, oy, textAnchor, parts };
     });
   }, [pathLength]);
 
@@ -145,116 +172,146 @@ export const MarathonRouteMap = ({ className = '' }) => {
   };
 
   return (
-    <div id="marathon-map" className={`w-full max-w-5xl mx-auto space-y-6 ${className}`}>
-      
-      {/* Header Badge & Title */}
-      <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] shadow-2xl space-y-4 text-center sm:text-left relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-wider uppercase border border-[var(--orange)]/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>OFFICIAL 7KM LOOP MARATHON ROUTE MAP</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-heading text-[var(--text-primary)]">
-              🏃 ANTI-DRUG MOVEMENT MARATHON - 7KM
-            </h2>
-            <p className="text-xs sm:text-sm text-[var(--text-muted)] font-semibold">
-              Interactive Route Simulator • Tap any checkpoint or drag slider to simulate the runner's progress.
-            </p>
-          </div>
+    <div id="marathon-map" className={`marathon-route-container w-full max-w-5xl mx-auto ${className}`}>
+      <style>{`
+        .marathon-route-container {
+          --bg: #fbf3e4;
+          --card: #fffaf0;
+          --ink: #2b1a0e;
+          --mut: #7a6650;
+          --route: #e8872b;
+          --route2: #c0392b;
+          --acc: #1f6f5c;
+          --line: #e6d5b5;
+          font-family: Georgia, 'Times New Roman', serif;
+        }
+        @media (prefers-color-scheme: dark) {
+          :root:not([data-theme="light"]) .marathon-route-container {
+            --bg: #17120d;
+            --card: #221a12;
+            --ink: #f6ead6;
+            --mut: #b8a48a;
+            --route: #ffa13d;
+            --route2: #ff6b57;
+            --acc: #52d1b0;
+            --line: #3a2d1f;
+          }
+        }
+        :root[data-theme="dark"] .marathon-route-container {
+          --bg: #17120d;
+          --card: #221a12;
+          --ink: #f6ead6;
+          --mut: #b8a48a;
+          --route: #ffa13d;
+          --route2: #ff6b57;
+          --acc: #52d1b0;
+          --line: #3a2d1f;
+        }
+        .marathon-route-container .fig path {
+          fill: none;
+          stroke: var(--route2);
+          stroke-width: 4.5;
+          stroke-linecap: round;
+        }
+        .marathon-route-container .fig .hd {
+          fill: var(--route2);
+        }
+        .marathon-route-container #runner {
+          filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff);
+        }
+      `}</style>
 
-          {/* Interactive Chinmaya Mission Adoni Badge */}
-          <button
-            onClick={() => handleCheckpointClick(0)}
-            className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[var(--card)] text-[var(--ink)] border-2 border-[var(--cyan)] shadow-lg hover:shadow-cyan-500/20 hover:scale-105 transition-all font-bold text-xs group cursor-pointer"
-            title="Jump to Start Point: Chinmaya Mission Adoni"
-          >
-            <div className="w-6 h-6 rounded-full bg-[var(--cyan)]/20 flex items-center justify-center text-[var(--cyan)] group-hover:bg-[var(--cyan)] group-hover:text-white transition-colors">
-              <MapPin className="w-3.5 h-3.5" />
-            </div>
-            <span className="font-extrabold text-[var(--text-primary)]">Chinmaya Mission Adoni</span>
-          </button>
+      <div className="bg-[var(--card)] text-[var(--ink)] border-2 sm:border-3 border-[var(--ink)] rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
+        
+        {/* Header */}
+        <div>
+          <h2 className="m-0 text-xl sm:text-2xl md:text-3xl font-normal tracking-wide text-[var(--ink)]">
+            🏃 ANTI-DRUG MOVEMENT MARATHON - 7KM
+          </h2>
+          <p className="text-[var(--mut)] my-1 font-sans text-xs sm:text-sm">
+            Tap any checkpoint or drag the runner. 8 checkpoints, 0 to 7 km. Drag the runner or tap any point.
+          </p>
         </div>
 
-        {/* SVG BOARD */}
-        <div className="relative w-full rounded-2xl overflow-hidden bg-[var(--bg-primary)] border-2 border-[var(--border-color)] shadow-inner p-2 sm:p-4">
+        {/* SVG Route Board */}
+        <div className="bg-[var(--card)] border-2 sm:border-3 border-[var(--ink)] rounded-xl p-2 sm:p-3 relative overflow-hidden shadow-inner">
           <svg
             id="m"
+            ref={svgRef}
             viewBox="0 0 960 820"
             role="img"
-            aria-label="7KM Loop Route Map"
-            className="w-full h-auto select-none"
+            aria-label="Loop route map"
+            className="w-full h-auto block select-none"
           >
             <defs>
-              <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M40 0H0V40" fill="none" stroke="currentColor" className="text-[var(--border-color)] opacity-40" strokeWidth="1" />
+              <pattern id="g-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M40 0H0V40" fill="none" stroke="var(--line)" strokeWidth="1" />
               </pattern>
             </defs>
 
-            {/* Grid background */}
-            <rect width="960" height="820" fill="url(#g)" />
+            {/* Grid */}
+            <rect width="960" height="820" fill="url(#g-pattern)" />
 
-            {/* Watermark Text */}
-            <text x="480" y="395" textAnchor="middle" fontSize="42" fontWeight="800" fill="currentColor" className="text-[var(--text-muted)] opacity-20 font-heading">
+            {/* Watermark */}
+            <text x="480" y="400" textAnchor="middle" fontSize="40" fontWeight="700" fill="var(--line)" fontFamily="Georgia, serif">
               7 KM
             </text>
-            <text x="480" y="430" textAnchor="middle" fontSize="16" fontWeight="700" fill="currentColor" className="text-[var(--text-muted)] opacity-30 font-sans tracking-widest">
-              LOOP RACE ROUTE
+            <text x="480" y="432" textAnchor="middle" fontSize="16" fill="var(--mut)" fontFamily="system-ui, sans-serif">
+              LOOP RACE
             </text>
 
-            {/* Reference Path (Hidden element for getTotalLength calculations) */}
+            {/* Path outline background */}
             <path
-              ref={pathRef}
               id="p"
+              ref={pathRef}
               d={PATH_D}
               fill="none"
-              stroke="currentColor"
-              className="text-[var(--text-primary)] opacity-15"
+              stroke="var(--ink)"
               strokeWidth="20"
               strokeLinejoin="round"
+              opacity=".15"
             />
 
-            {/* Path completed so far (highlighted in vivid red/coral) */}
+            {/* Done (completed) path */}
             {completedPathD && (
               <path
                 id="done"
                 d={completedPathD}
                 fill="none"
-                stroke="var(--route2, #ef4444)"
-                strokeWidth="12"
+                stroke="var(--route2)"
+                strokeWidth="11"
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
             )}
 
-            {/* Main Track line */}
+            {/* Main track path */}
             <path
               id="trk"
               d={PATH_D}
               fill="none"
-              stroke="var(--orange, #f97316)"
+              stroke="var(--route)"
               strokeWidth="11"
               strokeLinejoin="round"
-              strokeDasharray="4 2"
-              opacity="0.75"
+              opacity=".55"
             />
 
-            {/* Landmarks Text Labels */}
+            {/* Landmark text labels */}
             <g id="lms">
               {checkpointsData.map((item) => (
                 <g
                   key={`lm-${item.index}`}
-                  className="cursor-pointer group"
+                  className="cursor-pointer"
                   onClick={() => handleCheckpointClick(item.fraction)}
                 >
                   <text
                     x={item.ox}
-                    y={item.oy + (item.y > 420 ? 10 : 0) - (item.parts.length - 1) * 8}
+                    y={item.oy + (item.dy > 0 ? 10 : 0) - (item.parts.length - 1) * 8}
                     textAnchor={item.textAnchor}
-                    fontSize="13"
-                    fontWeight="800"
-                    fill="currentColor"
-                    className="text-[var(--text-primary)] hover:fill-[var(--orange)] transition-colors font-sans"
+                    fontSize="14"
+                    fontWeight="700"
+                    fill="var(--ink)"
+                    fontFamily="system-ui, sans-serif"
                   >
                     {item.parts.map((s, j) => (
                       <tspan key={j} x={item.ox} dy={j ? 16 : 0}>
@@ -266,106 +323,174 @@ export const MarathonRouteMap = ({ className = '' }) => {
               ))}
             </g>
 
-            {/* KM Checkpoint Circles */}
+            {/* Checkpoint KM Circles */}
             <g id="kms">
-              {checkpointsData.map((item) => {
-                const isStart = item.index === 0;
-                const isFinish = item.index === TOTAL_KM;
-                const isCurrent = closestIndex === item.index;
-                return (
-                  <g
-                    key={`km-${item.index}`}
-                    className="cursor-pointer transition-transform hover:scale-110"
-                    transform={`translate(${item.x},${item.y})`}
-                    onClick={() => handleCheckpointClick(item.fraction)}
+              {checkpointsData.map((item) => (
+                <g
+                  key={`km-${item.index}`}
+                  className="cursor-pointer transition-transform hover:scale-105"
+                  transform={`translate(${item.x},${item.y})`}
+                  onClick={() => handleCheckpointClick(item.fraction)}
+                >
+                  <ellipse
+                    rx="22"
+                    ry="13"
+                    fill={item.index === 0 ? 'var(--acc)' : item.index === TOTAL_KM ? 'var(--route2)' : 'var(--card)'}
+                    stroke="var(--ink)"
+                    strokeWidth="1.8"
+                  />
+                  <text
+                    textAnchor="middle"
+                    y="4"
+                    fontSize="11"
+                    fontWeight="700"
+                    fill={item.index === 0 || item.index === TOTAL_KM ? '#fff' : 'var(--ink)'}
+                    fontFamily="system-ui, sans-serif"
                   >
-                    <ellipse
-                      rx="24"
-                      ry="14"
-                      fill={
-                        isStart
-                          ? '#059669' // Teal/Green for Start
-                          : isFinish
-                          ? '#dc2626' // Red for Finish
-                          : isCurrent
-                          ? '#f97316' // Orange active
-                          : 'var(--bg-secondary, #1e293b)'
-                      }
-                      stroke={isCurrent ? '#ffffff' : 'var(--border-color, #475569)'}
-                      strokeWidth={isCurrent ? '2.5' : '1.8'}
-                    />
-                    <text
-                      textAnchor="middle"
-                      y="4"
-                      fontSize="11"
-                      fontWeight="800"
-                      fill={isStart || isFinish || isCurrent ? '#ffffff' : 'var(--text-primary)'}
-                    >
-                      {item.index}/{TOTAL_KM}
-                    </text>
-                  </g>
-                );
-              })}
+                    {item.index}/{TOTAL_KM}
+                  </text>
+                </g>
+              ))}
             </g>
 
-            {/* Runner Marker with Pulse Animation */}
+            {/* Kinematic Animated Runner Figure */}
             {pathLength > 0 && (
-              <g id="runner" transform={`translate(${runnerPos.x},${runnerPos.y})`}>
-                <circle r="18" fill="#ef4444" opacity="0.35">
-                  <animate attributeName="r" values="14;24;14" dur="1.2s" repeatCount="indefinite" />
-                </circle>
-                <circle r="10" fill="#dc2626" stroke="#ffffff" strokeWidth="3" />
+              <g id="runner" transform={`translate(${runnerPos.x},${runnerPos.y - 17})`}>
+                <ellipse cy="17" rx="18" ry="4" fill="#000" opacity=".25" />
+                <g id="dir" transform={`scale(${runnerDir}, 1)`}>
+                  <g className="fig" transform="scale(1.7)">
+                    <animateTransform
+                      attributeName="transform"
+                      type="translate"
+                      values="0 0;0 -3;0 0"
+                      dur=".25s"
+                      repeatCount="indefinite"
+                      additive="sum"
+                    />
+                    <g>
+                      <path d="M0 -12 L0 -1" />
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        values="-55 0 -12;35 0 -12;-55 0 -12"
+                        dur=".5s"
+                        begin="-0.25s"
+                        repeatCount="indefinite"
+                      />
+                      <g>
+                        <path d="M0 -1 L0 10" />
+                        <animateTransform
+                          attributeName="transform"
+                          type="rotate"
+                          values="30 0 -1;115 0 -1;30 0 -1"
+                          dur=".5s"
+                          begin="-0.25s"
+                          repeatCount="indefinite"
+                        />
+                      </g>
+                    </g>
+                    <g transform="rotate(18 0 -12)">
+                      <g>
+                        <path d="M0 -26 L0 -17" />
+                        <animateTransform
+                          attributeName="transform"
+                          type="rotate"
+                          values="55 0 -26;-55 0 -26;55 0 -26"
+                          dur=".5s"
+                          begin="-0.25s"
+                          repeatCount="indefinite"
+                        />
+                        <g>
+                          <path d="M0 -17 L0 -8" />
+                          <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            values="-80 0 -17;-100 0 -17;-80 0 -17"
+                            dur=".5s"
+                            begin="-0.25s"
+                            repeatCount="indefinite"
+                          />
+                        </g>
+                      </g>
+                      <path d="M0 -28 L0 -12" />
+                      <circle cx="0" cy="-35" r="6" className="hd" />
+                      <g>
+                        <path d="M0 -26 L0 -17" />
+                        <animateTransform
+                          attributeName="transform"
+                          type="rotate"
+                          values="55 0 -26;-55 0 -26;55 0 -26"
+                          dur=".5s"
+                          begin="0s"
+                          repeatCount="indefinite"
+                        />
+                        <g>
+                          <path d="M0 -17 L0 -8" />
+                          <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            values="-80 0 -17;-100 0 -17;-80 0 -17"
+                            dur=".5s"
+                            begin="0s"
+                            repeatCount="indefinite"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                    <g>
+                      <path d="M0 -12 L0 -1" />
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        values="-55 0 -12;35 0 -12;-55 0 -12"
+                        dur=".5s"
+                        begin="0s"
+                        repeatCount="indefinite"
+                      />
+                      <g>
+                        <path d="M0 -1 L0 10" />
+                        <animateTransform
+                          attributeName="transform"
+                          type="rotate"
+                          values="30 0 -1;115 0 -1;30 0 -1"
+                          dur=".5s"
+                          begin="0s"
+                          repeatCount="indefinite"
+                        />
+                      </g>
+                    </g>
+                  </g>
+                </g>
               </g>
             )}
           </svg>
         </div>
 
-        {/* CONTROLS */}
-        <div className="flex flex-wrap items-center gap-4 bg-[var(--bg-secondary)] p-4 rounded-2xl border border-[var(--border-color)]">
+        {/* Controls */}
+        <div className="flex flex-wrap items-center gap-3 font-sans text-sm">
           <button
+            type="button"
             onClick={handlePlayToggle}
-            className="btn-primary py-2.5 px-6 text-xs font-black tracking-wider uppercase flex items-center gap-2 shadow-lg"
+            className="bg-[var(--ink)] text-[var(--bg)] border-0 rounded-lg py-2.5 px-4 font-semibold cursor-pointer hover:opacity-90 transition-opacity"
           >
-            {fraction >= 1 ? (
-              <>
-                <RotateCcw className="w-4 h-4" />
-                <span>🏁 RUN AGAIN</span>
-              </>
-            ) : isPlaying ? (
-              <>
-                <Pause className="w-4 h-4" />
-                <span>PAUSE</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4" />
-                <span>RUN SIMULATION</span>
-              </>
-            )}
+            {fraction >= 1 ? '🏁 Again' : isPlaying ? '⏸ Pause' : '▶ Run'}
           </button>
 
-          {/* Position Slider */}
-          <div className="flex-1 min-w-[200px] flex items-center gap-3">
-            <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">Start</span>
-            <input
-              type="range"
-              min="0"
-              max="1000"
-              value={Math.round(fraction * 1000)}
-              onChange={(e) => {
-                setIsPlaying(false);
-                setFraction(Number(e.target.value) / 1000);
-              }}
-              className="w-full accent-[var(--orange)] cursor-pointer h-2 bg-[var(--bg-primary)] rounded-lg border border-[var(--border-color)]"
-              aria-label="Runner Position"
-            />
-            <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">Finish</span>
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="1000"
+            value={Math.round(fraction * 1000)}
+            onChange={(e) => {
+              setIsPlaying(false);
+              setFraction(Number(e.target.value) / 1000);
+            }}
+            className="flex-1 min-w-[160px] accent-[var(--route)] cursor-pointer"
+            aria-label="Runner Position"
+          />
 
-          {/* Pace Selector */}
-          <div className="flex items-center gap-2 bg-[var(--bg-primary)] px-3 py-1.5 rounded-xl border border-[var(--border-color)] text-xs font-extrabold text-[var(--text-primary)]">
-            <Timer className="w-4 h-4 text-[var(--orange)]" />
-            <span>Pace (min/km):</span>
+          <label className="flex items-center gap-2 font-medium">
+            Pace (min/km)
             <input
               type="number"
               min="3"
@@ -373,90 +498,77 @@ export const MarathonRouteMap = ({ className = '' }) => {
               step="0.5"
               value={pace}
               onChange={(e) => setPace(Math.max(3, Math.min(12, Number(e.target.value) || 6)))}
-              className="w-16 py-1 px-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] text-center text-xs font-bold text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+              className="w-[70px] p-1.5 rounded-md border border-[var(--line)] bg-[var(--card)] text-[var(--ink)] text-sm"
             />
+          </label>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-sans">
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl p-2.5">
+            <b className="block text-2xl text-[var(--route2)] font-sans">{kmCovered.toFixed(1)}</b>
+            <span className="text-xs text-[var(--mut)]">km covered</span>
+          </div>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl p-2.5">
+            <b className="block text-2xl text-[var(--route2)] font-sans">{kmRemaining.toFixed(1)}</b>
+            <span className="text-xs text-[var(--mut)]">km remaining</span>
+          </div>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl p-2.5">
+            <b className="block text-2xl text-[var(--route2)] font-sans">{elapsedTimeStr}</b>
+            <span className="text-xs text-[var(--mut)]">elapsed (h:mm)</span>
+          </div>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl p-2.5">
+            <b className="block text-2xl text-[var(--route2)] font-sans">{finishTimeStr}</b>
+            <span className="text-xs text-[var(--mut)]">finish time at pace</span>
           </div>
         </div>
 
-        {/* LIVE STATS GRID */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-center space-y-1">
-            <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">COVERED</span>
-            <b className="text-2xl font-black text-[var(--orange)]">{kmCovered.toFixed(1)} <span className="text-xs font-normal">km</span></b>
-          </div>
-          <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-center space-y-1">
-            <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">REMAINING</span>
-            <b className="text-2xl font-black text-red-500">{kmRemaining.toFixed(1)} <span className="text-xs font-normal">km</span></b>
-          </div>
-          <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-center space-y-1">
-            <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">ELAPSED TIME</span>
-            <b className="text-2xl font-black text-[var(--cyan)]">{elapsedTimeStr} <span className="text-xs font-normal">hrs</span></b>
-          </div>
-          <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-center space-y-1">
-            <span className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider block">EST. FINISH</span>
-            <b className="text-2xl font-black text-emerald-500">{finishTimeStr} <span className="text-xs font-normal">hrs</span></b>
-          </div>
-        </div>
-
-        {/* CHECKPOINT INFO BANNER */}
-        <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border-l-4 border-[var(--orange)] border border-[var(--border-color)] space-y-1">
+        {/* Info Banner */}
+        <div className="bg-[var(--card)] border-l-4 border-[var(--route)] rounded-lg p-3 font-sans text-sm min-h-[60px] flex items-center">
           {isAtCheckpoint ? (
             <div>
-              <p className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-wider">
-                POINT {closestIndex}/{TOTAL_KM} • {CHECKPOINTS[closestIndex]}
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mt-1">
-                {closestIndex === 0
-                  ? '📍 Start line at Chinmaya Mission Ashrama – Warm up and flag off!'
-                  : closestIndex === TOTAL_KM
-                  ? `🏁 Finish line reached! Completed in approx. ${finishTimeStr} hrs at your ${pace} min/km pace.`
-                  : `${closestIndex} km completed, ${TOTAL_KM - closestIndex} km remaining. ETA ${formatTime(closestIndex * pace)} at ${pace} min/km. Next: ${CHECKPOINTS[closestIndex + 1] || 'Finish'}.`}
-              </p>
+              <b>Point {closestIndex}/{TOTAL_KM} · {CHECKPOINTS[closestIndex]}</b>
+              <br />
+              {closestIndex === 0
+                ? 'Start line – warm up and flag off.'
+                : closestIndex === TOTAL_KM
+                ? `Finish line! ${finishTimeStr} at your pace.`
+                : `${closestIndex} km done, ${TOTAL_KM - closestIndex} km to go. ETA ${formatTime(closestIndex * pace)} at ${pace} min/km. Next: ${CHECKPOINTS[closestIndex + 1]}.`}
             </div>
           ) : (
             <div>
-              <p className="text-xs font-extrabold text-[var(--cyan)] uppercase tracking-wider">
-                ROUTE IN PROGRESS • {kmCovered.toFixed(1)} KM
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-[var(--text-primary)] mt-1">
-                Heading towards Point {nextCheckpointIndex}: <span className="text-[var(--orange)]">{CHECKPOINTS[nextCheckpointIndex]}</span>
-              </p>
+              <b>{kmCovered.toFixed(1)} km</b> · heading to Point {nextCheckpointIndex}: {CHECKPOINTS[nextCheckpointIndex]}
             </div>
           )}
         </div>
 
-        {/* CHECKPOINT SELECTION BUTTONS */}
-        <div className="space-y-2">
-          <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
-            Quick Jump to Checkpoint:
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {CHECKPOINTS.map((name, i) => {
-              const f = getCheckpointFraction(i);
-              const isActive = closestIndex === i && isAtCheckpoint;
-              return (
-                <button
-                  key={i}
-                  onClick={() => handleCheckpointClick(f)}
-                  className={`p-2.5 rounded-xl text-left border text-xs transition-all ${
-                    isActive
-                      ? 'bg-[var(--orange)]/15 border-[var(--orange)] text-[var(--orange)] font-extrabold shadow-md'
-                      : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)] font-medium hover:border-[var(--orange)] hover:bg-[var(--bg-tertiary)]'
-                  }`}
-                >
-                  <span className="font-extrabold text-[var(--orange)] block text-[11px]">
-                    KM {i}
-                  </span>
-                  <span className="truncate block font-semibold">{name}</span>
-                </button>
-              );
-            })}
-          </div>
+        {/* Checkpoint Buttons */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-sans">
+          {CHECKPOINTS.map((n, i) => {
+            const f = getCheckpointFraction(i);
+            const at = Math.abs(kmCovered - i) < 0.12 || (i === TOTAL_KM && fraction > 0.94);
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => handleCheckpointClick(f)}
+                className={`text-left p-2 rounded-lg font-normal cursor-pointer border transition-colors ${
+                  at
+                    ? 'border-[var(--route2)] bg-[var(--bg)]'
+                    : 'border-[var(--line)] bg-[var(--card)] text-[var(--ink)] hover:border-[var(--route2)] hover:bg-[var(--bg)]'
+                }`}
+              >
+                <b className="text-[var(--route2)] text-[13px] block">Km {i}</b>
+                <span className="text-xs block truncate">{n}</span>
+              </button>
+            );
+          })}
         </div>
 
-        <p className="text-[11px] text-[var(--text-muted)] font-medium italic text-center sm:text-left pt-2">
-          * Note: Checkpoints are spaced evenly at 1 km intervals along the 7KM traced loop route in Adoni. Please confirm exact positions with marathon organizers.
+        <p className="text-xs text-[var(--mut)] m-0 pt-1 font-sans">
+          Checkpoints are spaced evenly at 1 km each along the traced route. Confirm exact positions with the organisers.
         </p>
+
       </div>
     </div>
   );
