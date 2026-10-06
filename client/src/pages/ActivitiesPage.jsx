@@ -148,7 +148,7 @@ export const ActivitiesPage = () => {
       category: 'Spirituality & Devotion',
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-      imageUrl: '/assets/images/activity-sanjeevaraya.png',
+      imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
       imageSource: 'Chinmaya Mission Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
@@ -253,7 +253,18 @@ export const ActivitiesPage = () => {
   const getCached = (key, fallback) => {
     try {
       const item = localStorage.getItem(key);
-      if (item) return JSON.parse(item);
+      if (item) {
+        const parsed = JSON.parse(item);
+        if (Array.isArray(parsed)) {
+          return parsed.map((act) => {
+            if (act.imageUrl === '/assets/images/activity-sanjeevaraya.png') {
+              return { ...act, imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2' };
+            }
+            return act;
+          });
+        }
+        return parsed;
+      }
     } catch (_) {}
     return fallback;
   };
@@ -334,7 +345,17 @@ export const ActivitiesPage = () => {
                 'cms_mission_activities',
                 JSON.stringify(updated.map((x) => ({ ...x, icon: undefined })))
               );
-            } catch (_) {}
+            } catch (_) {
+              try {
+                // If quota exceeded, omit huge base64 strings so caching still works
+                const cleanForStorage = updated.map((x) => ({
+                  ...x,
+                  icon: undefined,
+                  imageUrl: (x.imageUrl && x.imageUrl.length > 50000) ? undefined : x.imageUrl,
+                }));
+                localStorage.setItem('cms_mission_activities', JSON.stringify(cleanForStorage));
+              } catch (__) {}
+            }
             return updated;
           });
         }

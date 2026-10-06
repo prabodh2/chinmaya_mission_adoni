@@ -26,7 +26,17 @@ export const AboutPage = () => {
   const [content, setContent] = useState(() => {
     try {
       const cached = localStorage.getItem('cms_about_content');
-      if (cached) return JSON.parse(cached);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed?.ourActivities?.cards) {
+          parsed.ourActivities.cards.forEach((c) => {
+            if (c.imageUrl === '/assets/images/activity-sanjeevaraya.png') {
+              c.imageUrl = '/assets/images/activity-sanjeevaraya.png?v=2';
+            }
+          });
+        }
+        return parsed;
+      }
     } catch (_) {}
     return null;
   });
@@ -161,7 +171,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA SANJEEVARAYA TEMPLE',
           content:
             'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl: '/assets/images/activity-sanjeevaraya.png',
+          imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2',
           badge: 'SPIRITUAL TEMPLE',
           iconName: 'Landmark',
         },
@@ -223,7 +233,21 @@ export const AboutPage = () => {
           setContent(merged);
           try {
             localStorage.setItem('cms_about_content', JSON.stringify(merged));
-          } catch (_) {}
+          } catch (_) {
+            try {
+              const safeMerged = { ...merged };
+              if (safeMerged.ourActivities?.cards) {
+                safeMerged.ourActivities = {
+                  ...safeMerged.ourActivities,
+                  cards: safeMerged.ourActivities.cards.map((c) => ({
+                    ...c,
+                    imageUrl: (c.imageUrl && c.imageUrl.length > 50000) ? undefined : c.imageUrl,
+                  })),
+                };
+              }
+              localStorage.setItem('cms_about_content', JSON.stringify(safeMerged));
+            } catch (__) {}
+          }
         } else {
           setContent((prev) => prev || defaultContent);
         }
