@@ -342,8 +342,6 @@ export const MarathonRouteMap = ({ className = '' }) => {
                           ? 'var(--acc)'
                           : isCrossed
                           ? 'var(--route)'
-                          : item.index === TOTAL_KM
-                          ? 'var(--route2)'
                           : 'var(--card)'
                       }
                       stroke="var(--ink)"
@@ -356,7 +354,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
                       fontSize="11"
                       fontWeight="700"
                       fill={
-                        item.index === 0 || isCrossed || item.index === TOTAL_KM
+                        item.index === 0 || isCrossed
                           ? '#fff'
                           : 'var(--ink)'
                       }

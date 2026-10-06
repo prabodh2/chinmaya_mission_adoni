@@ -64,8 +64,8 @@ P.forEach((n,i)=>{const f=fp(i),q=pt(f),dx=q.x-480,dy=q.y-420,m=Math.hypot(dx,dy
  parts.forEach((s,j)=>{const ts=mk('tspan',{x:ox,dy:j?16:0});ts.textContent=s;t.append(ts)});
  g.append(t);g.onclick=()=>go(f,true);document.getElementById('lms').append(g);
  const k=mk('g',{class:'km',transform:`translate(${q.x},${q.y})`});
- k.append(mk('ellipse',{rx:22,ry:13,fill:i==0?'var(--acc)':i==T?'var(--route2)':'var(--card)',stroke:'var(--ink)','stroke-width':1.8}));
- const tx=mk('text',{'text-anchor':'middle',y:4,'font-size':11,'font-weight':700,fill:i==0||i==T?'#fff':'var(--ink)'});tx.textContent=i+'/'+T;k.append(tx);
+ k.append(mk('ellipse',{rx:22,ry:13,fill:i==0?'var(--acc)':'var(--card)',stroke:'var(--ink)','stroke-width':1.8}));
+ const tx=mk('text',{'text-anchor':'middle',y:4,'font-size':11,'font-weight':700,fill:i==0?'#fff':'var(--ink)'});tx.textContent=i+'/'+T;k.append(tx);
  k.onclick=()=>go(f,true);document.getElementById('kms').append(k);
  const b=document.createElement('button');b.className='pc';b.innerHTML=`<b>Km ${i}</b><br>${n}`;b.onclick=()=>go(f,true);document.getElementById('pts').append(b)});
 const sl=document.getElementById('sl'),info=document.getElementById('info'),pb=document.getElementById('pb');let f=0,pl=false,last=0;
@@ -87,8 +87,8 @@ function draw(){const q=pt(f);const rn=document.getElementById('runner'),q2=pt(M
        elp.setAttribute('fill', 'var(--route)');
        txt.setAttribute('fill', '#fff');
      } else {
-       elp.setAttribute('fill', j === T ? 'var(--route2)' : 'var(--card)');
-       txt.setAttribute('fill', j === T ? '#fff' : 'var(--ink)');
+       elp.setAttribute('fill', 'var(--card)');
+       txt.setAttribute('fill', 'var(--ink)');
      }
    }
  });
