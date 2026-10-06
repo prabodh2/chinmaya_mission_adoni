@@ -98,7 +98,7 @@ export const TransformationSection = () => {
         </div>
 
         {/* Bright / Positive Side Card */}
-        <div className="bg-gradient-to-br from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] p-8 sm:p-10 rounded-3xl relative overflow-hidden shadow-2xl flex flex-col justify-between border-2 border-[var(--orange)]/30 group">
+        <div className="bg-white p-8 sm:p-10 rounded-3xl relative overflow-hidden shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] flex flex-col justify-between border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--yellow)]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -120,7 +120,7 @@ export const TransformationSection = () => {
               {positiveTraits.map((trait) => {
                 const IconComp = trait.icon;
                 return (
-                  <div key={trait.name} className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--orange)] transition-colors">
+                  <div key={trait.name} className="p-3.5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm hover:border-[var(--orange)] transition-colors">
                     <div className={`w-8 h-8 rounded-xl bg-[var(--orange)]/10 flex items-center justify-center mb-2 ${trait.color}`}>
                       <IconComp className="w-4 h-4" />
                     </div>

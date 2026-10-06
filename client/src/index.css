@@ -8,6 +8,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  background-color: #FFF0C5;
 }
 
 body {
@@ -16,6 +17,7 @@ body {
   width: 100%;
   min-width: 0;
   overflow-x: hidden;
+  background-color: #FFF0C5;
 }
 
 #root {
@@ -23,4 +25,5 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #FFF0C5;
 }

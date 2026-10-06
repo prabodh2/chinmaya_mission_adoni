@@ -404,9 +404,9 @@ export const seedInitialData = async () => {
         disabledContactUrl: '/lets-connect',
         theme: {
           primaryColor: '#0B2340',
-          secondaryColor: '#FFF8EC',
+          secondaryColor: '#FFF0C5',
           accentColor: '#F4511E',
-          backgroundColor: '#FFF8EC',
+          backgroundColor: '#FFF0C5',
           textColor: '#0B2340',
           buttonColor: '#F4511E',
           buttonHoverColor: '#D84315',

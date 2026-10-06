@@ -1,14 +1,37 @@
 import Activity from '../models/Activity.js';
+import Media from '../models/Media.js';
 import { uploadToCloudinary } from '../config/cloudinary.js';
 import { seedInitialData } from '../utils/seedData.js';
 
 export const getActivities = async (req, res) => {
   try {
-    let activities = await Activity.find({ active: true }).sort({ order: 1, createdAt: -1 });
-    if (activities.length === 0) {
-      await seedInitialData();
-      activities = await Activity.find({ active: true }).sort({ order: 1, createdAt: -1 });
-    }
+    let activities = await Activity.find({ active: true }).sort({ order: 1, updatedAt: -1 });
+
+    // Also include active activities from Media library
+    const activityMedia = await Media.find({
+      status: 'ACTIVE',
+      $or: [
+        { category: 'Activities' },
+        { page: 'Activities' },
+      ],
+    }).sort({ displayOrder: 1, updatedAt: -1 });
+
+    const existingUrls = new Set(activities.map((a) => a.imageUrl));
+    const existingTitles = new Set(activities.map((a) => (a.title || '').toLowerCase()));
+
+    const extraActivities = activityMedia
+      .filter((m) => !existingUrls.has(m.url) && !existingTitles.has((m.title || '').toLowerCase()))
+      .map((m) => ({
+        _id: m._id,
+        title: m.title,
+        category: m.section || 'Activity',
+        description: m.description || m.caption || m.title,
+        imageUrl: m.url,
+        active: true,
+      }));
+
+    activities = [...activities, ...extraActivities];
+
     res.json({ success: true, data: activities });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

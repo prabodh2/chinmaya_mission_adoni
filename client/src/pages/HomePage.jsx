@@ -222,7 +222,7 @@ export const HomePage = () => {
   if (homepageData && homepageData.isEnabled === false) {
     return (
       <div className="min-h-[85vh] flex items-center justify-center p-4 bg-[var(--bg-primary)]">
-        <div className="bg-[var(--bg-secondary)] border-2 border-[var(--orange)]/30 rounded-3xl max-w-2xl w-full p-8 sm:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] rounded-3xl max-w-2xl w-full p-8 sm:p-12 text-center space-y-6 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] relative overflow-hidden">
           <div className="w-16 h-16 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center mx-auto shadow-inner">
             <Wrench className="w-8 h-8 animate-pulse" />
           </div>

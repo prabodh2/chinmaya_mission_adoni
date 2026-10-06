@@ -18,7 +18,7 @@ import {
 // Reusable Activity Card Component
 const ActivityCard = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl overflow-hidden hover:border-[var(--orange)]/60 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
+    <article className="rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] overflow-hidden hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
       <div>
         {/* Card Image Container */}
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/20">
@@ -75,7 +75,7 @@ const ActivityCard = ({ activity, onSelect }) => {
 // Reusable CHYK Feature Section Component
 const ChykFeatureSection = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-3xl bg-gradient-to-br from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] border-2 border-[var(--orange)]/40 shadow-2xl p-6 sm:p-10 relative overflow-hidden">
+    <article className="rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] p-6 sm:p-10 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -112,7 +112,7 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
             {activity.title}
           </h3>
 
-          <p className="text-sm sm:text-base text-[var(--text-primary)] font-semibold leading-relaxed p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)]">
+          <p className="text-sm sm:text-base text-[var(--text-primary)] font-semibold leading-relaxed p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
             "{activity.description}"
           </p>
 
@@ -124,7 +124,7 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
             {['KNOWLEDGE', 'DISCIPLINE', 'CONFIDENCE', 'COMPASSION', 'SERVICE'].map((tag) => (
               <span
                 key={tag}
-                className="px-3.5 py-1.5 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--orange)] font-extrabold text-[11px] tracking-wider uppercase shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl bg-white border border-[rgba(11,35,64,0.08)] text-[var(--orange)] font-extrabold text-[11px] tracking-wider uppercase shadow-sm"
               >
                 #{tag}
               </span>
@@ -293,13 +293,7 @@ export const ActivitiesPage = () => {
                   (idx === 3 && c.id === 'act-4')
               );
               if (matchedCard) {
-                const isLegacyStock =
-                  matchedCard.imageUrl?.includes('photo-1544367567-0f2fcb009e0b') ||
-                  matchedCard.imageUrl?.includes('photo-1507692049790-de58290a4334') ||
-                  matchedCard.imageUrl?.includes('photo-1582510003544-4d00b7f74220') ||
-                  matchedCard.imageUrl?.includes('photo-1529156069898-49953e39b3ac');
-
-                const cleanImg = isLegacyStock ? item.imageUrl : (matchedCard.imageUrl || item.imageUrl);
+                const cleanImg = matchedCard.imageUrl || item.imageUrl;
 
                 return {
                   ...item,
@@ -491,7 +485,7 @@ export const ActivitiesPage = () => {
       {/* Lightbox Modal for Enlarged Activity Images */}
       {selectedActivity && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative">
+          <div className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-3xl w-full overflow-hidden shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative">
             <button
               onClick={() => setSelectedActivity(null)}
               className="absolute top-4 right-4 p-2 rounded-full bg-black/70 text-white hover:bg-black transition-colors z-10"

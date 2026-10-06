@@ -212,8 +212,20 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       contentService.getContent('about_page').then((res) => {
         if (res.data?.success && res.data?.data) {
           setAboutCmsForm(res.data.data);
+        } else {
+          setAboutCmsForm({
+            hero: { title: '', subtitle: '', intro: '', imageUrl: '' },
+            whoWeAre: { p1: '', p2: '' },
+            chykSection: { imageUrl: '' },
+          });
         }
-      }).catch(() => {});
+      }).catch(() => {
+        setAboutCmsForm({
+          hero: { title: '', subtitle: '', intro: '', imageUrl: '' },
+          whoWeAre: { p1: '', p2: '' },
+          chykSection: { imageUrl: '' },
+        });
+      });
     }
   }, [activeTab]);
 

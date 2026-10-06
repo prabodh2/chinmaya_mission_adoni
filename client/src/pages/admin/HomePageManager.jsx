@@ -146,11 +146,31 @@ export const HomePageManager = () => {
     }
   };
 
+  const saveSectionsToBackend = async (newSectionsList) => {
+    try {
+      const payload = {
+        isEnabled,
+        disabledTitle,
+        disabledMessage,
+        disabledImage,
+        disabledContactButton,
+        disabledContactUrl,
+        theme,
+        sections: newSectionsList.map((sec, idx) => ({ ...sec, order: idx + 1 })),
+      };
+      await homepageService.updateHomepage(payload);
+    } catch (err) {
+      console.error('Failed to auto-save sections to server:', err);
+    }
+  };
+
   // Section Handlers
   const handleToggleSection = (sectionId) => {
-    setSections((prev) =>
-      prev.map((sec) => (sec.sectionId === sectionId ? { ...sec, isEnabled: !sec.isEnabled } : sec))
+    const updated = sections.map((sec) =>
+      sec.sectionId === sectionId ? { ...sec, isEnabled: !sec.isEnabled } : sec
     );
+    setSections(updated);
+    saveSectionsToBackend(updated);
   };
 
   const handleMoveUp = (index) => {
@@ -160,6 +180,7 @@ export const HomePageManager = () => {
     newSecs[index - 1] = newSecs[index];
     newSecs[index] = temp;
     setSections(newSecs);
+    saveSectionsToBackend(newSecs);
   };
 
   const handleMoveDown = (index) => {
@@ -169,22 +190,26 @@ export const HomePageManager = () => {
     newSecs[index + 1] = newSecs[index];
     newSecs[index] = temp;
     setSections(newSecs);
+    saveSectionsToBackend(newSecs);
   };
 
   const handleDeleteSection = (sectionId) => {
-    setSections((prev) => prev.filter((s) => s.sectionId !== sectionId));
+    const updated = sections.filter((s) => s.sectionId !== sectionId);
+    setSections(updated);
     setDeleteConfirmId(null);
-    showFeedback('success', 'Section removed from homepage.');
+    saveSectionsToBackend(updated);
+    showFeedback('success', 'Section removed from homepage and saved!');
   };
 
-  const handleAddSectionSubmit = (e) => {
+  const handleAddSectionSubmit = async (e) => {
     e.preventDefault();
     const newSecObj = {
       ...newSection,
       sectionId: `section-${Date.now()}`,
       order: sections.length + 1,
     };
-    setSections((prev) => [...prev, newSecObj]);
+    const updated = [...sections, newSecObj];
+    setSections(updated);
     setIsAddModalOpen(false);
     setNewSection({
       type: 'custom',
@@ -199,18 +224,21 @@ export const HomePageManager = () => {
       imageUrl: '',
       isEnabled: true,
     });
-    showFeedback('success', 'New homepage section created!');
+    await saveSectionsToBackend(updated);
+    showFeedback('success', 'New homepage section created and saved live!');
   };
 
-  const handleUpdateSectionSubmit = (e) => {
+  const handleUpdateSectionSubmit = async (e) => {
     e.preventDefault();
     if (!editingSection) return;
 
-    setSections((prev) =>
-      prev.map((s) => (s.sectionId === editingSection.sectionId ? editingSection : s))
+    const updated = sections.map((s) =>
+      s.sectionId === editingSection.sectionId ? editingSection : s
     );
+    setSections(updated);
     setEditingSection(null);
-    showFeedback('success', 'Section updated successfully!');
+    await saveSectionsToBackend(updated);
+    showFeedback('success', 'Section updated and saved to live homepage!');
   };
 
   // Image Upload Helper for Forms

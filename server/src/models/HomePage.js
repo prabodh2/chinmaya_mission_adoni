@@ -35,9 +35,9 @@ const homePageSchema = new mongoose.Schema(
     disabledContactUrl: { type: String, default: '/lets-connect' },
     theme: {
       primaryColor: { type: String, default: '#0B2340' },
-      secondaryColor: { type: String, default: '#FFF8EC' },
+      secondaryColor: { type: String, default: '#FFF0C5' },
       accentColor: { type: String, default: '#F4511E' },
-      backgroundColor: { type: String, default: '#FFF8EC' },
+      backgroundColor: { type: String, default: '#FFF0C5' },
       textColor: { type: String, default: '#0B2340' },
       buttonColor: { type: String, default: '#F4511E' },
       buttonHoverColor: { type: String, default: '#D84315' },

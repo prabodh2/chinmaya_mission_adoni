@@ -63,28 +63,27 @@ const DEFAULT_SECTIONS = [
 
 const getOrCreateHomePage = async () => {
   let homePage = await HomePage.findOne();
-  if (!homePage || !Array.isArray(homePage.sections) || homePage.sections.length === 0) {
-    if (!homePage) {
-      homePage = new HomePage();
-    }
-    homePage.isEnabled = true;
-    homePage.disabledTitle = homePage.disabledTitle || 'Website Updates In Progress';
-    homePage.disabledMessage = homePage.disabledMessage || 'The public homepage is currently undergoing scheduled updates. Please check back soon!';
-    homePage.disabledImage = homePage.disabledImage || 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=1600&auto=format&fit=crop';
-    homePage.disabledContactButton = true;
-    homePage.disabledContactUrl = '/lets-connect';
-    homePage.theme = homePage.theme || {
-      primaryColor: '#0B2340',
-      secondaryColor: '#FFF8EC',
-      accentColor: '#F4511E',
-      backgroundColor: '#FFF8EC',
-      textColor: '#0B2340',
-      buttonColor: '#F4511E',
-      buttonHoverColor: '#D84315',
-      cardBackgroundColor: '#FFFFFF',
-      headingColor: '#0B2340',
-    };
-    homePage.sections = DEFAULT_SECTIONS;
+  if (!homePage) {
+    homePage = new HomePage({
+      isEnabled: true,
+      disabledTitle: 'Website Updates In Progress',
+      disabledMessage: 'The public homepage is currently undergoing scheduled updates. Please check back soon!',
+      disabledImage: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=1600&auto=format&fit=crop',
+      disabledContactButton: true,
+      disabledContactUrl: '/lets-connect',
+      theme: {
+        primaryColor: '#0B2340',
+        secondaryColor: '#FFF0C5',
+        accentColor: '#F4511E',
+        backgroundColor: '#FFF0C5',
+        textColor: '#0B2340',
+        buttonColor: '#F4511E',
+        buttonHoverColor: '#D84315',
+        cardBackgroundColor: '#FFFFFF',
+        headingColor: '#0B2340',
+      },
+      sections: DEFAULT_SECTIONS,
+    });
     await homePage.save();
   }
   return homePage;

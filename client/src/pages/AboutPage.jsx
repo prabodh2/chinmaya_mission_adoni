@@ -207,21 +207,6 @@ export const AboutPage = () => {
       .then((res) => {
         if (res.data?.success && res.data?.data) {
           const apiData = res.data.data;
-          if (apiData.ourActivities?.cards) {
-            apiData.ourActivities.cards = apiData.ourActivities.cards.map((card, idx) => {
-              const defaultCard = defaultContent.ourActivities?.cards?.[idx];
-              const isLegacyStock =
-                card.imageUrl &&
-                (card.imageUrl.includes('photo-1544367567-0f2fcb009e0b') ||
-                  card.imageUrl.includes('photo-1507692049790-de58290a4334') ||
-                  card.imageUrl.includes('photo-1582510003544-4d00b7f74220') ||
-                  card.imageUrl.includes('photo-1526976668912-1a811878dd37'));
-              if (isLegacyStock) {
-                return { ...card, imageUrl: defaultCard?.imageUrl || card.imageUrl };
-              }
-              return card;
-            });
-          }
           setContent({ ...defaultContent, ...apiData });
         } else {
           setContent(defaultContent);
@@ -348,7 +333,7 @@ export const AboutPage = () => {
 
       {/* 2. WHO WE ARE SECTION */}
       <section id="who-we-are" className="px-4 max-w-7xl mx-auto scroll-mt-24">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-10">
+        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
               <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
@@ -366,10 +351,10 @@ export const AboutPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Paragraphs */}
             <div className="lg:col-span-7 space-y-5 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-normal">
-              <p className="p-5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)]/60">
+              <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
                 {data.whoWeAre.p1}
               </p>
-              <p className="p-5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)]/60">
+              <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
                 {data.whoWeAre.p2}
               </p>
             </div>
@@ -379,7 +364,7 @@ export const AboutPage = () => {
               {data.whoWeAre.highlights.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-5 rounded-2xl bg-gradient-to-r from-[var(--bg-tertiary)] to-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--orange)]/50 transition-all shadow-sm flex items-center gap-4"
+                  className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/50 transition-all shadow-sm flex items-center gap-4"
                 >
                   <div className="w-12 h-12 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
                     {idx === 0 ? (
@@ -435,7 +420,7 @@ export const AboutPage = () => {
                   }`}
                 >
                   <div className={`w-full md:w-1/2 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-                    <div className="p-6 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-lg hover:border-[var(--orange)] transition-all group">
+                    <div className="p-6 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:border-[var(--orange)] transition-all group">
                       <span className="inline-block px-3 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] text-xs font-extrabold font-heading mb-2">
                         {item.year}
                       </span>
@@ -506,7 +491,7 @@ export const AboutPage = () => {
           {data.ourMission.items.map((item, index) => (
             <div
               key={item.id || index}
-              className={`p-8 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--orange)] transition-all duration-300 hover:-translate-y-1 shadow-lg flex flex-col justify-between group ${
+              className={`p-8 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-t-4 border-t-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] hover:border-[var(--orange)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group ${
                 index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
               }`}
             >
@@ -539,7 +524,7 @@ export const AboutPage = () => {
 
       {/* 6. CHINMAYA YUVA KENDRA (CHYK) ADONI SECTION */}
       <section className="px-4 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)] border-2 border-[var(--orange)]/40 shadow-2xl space-y-10 relative overflow-hidden">
+        <div className="p-8 sm:p-14 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10 relative overflow-hidden">
           {/* Accent Glow */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -572,7 +557,7 @@ export const AboutPage = () => {
                   {data.chykSection.keywords.map((kw, i) => (
                     <span
                       key={i}
-                      className="px-4 py-2 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--orange)] font-extrabold text-xs tracking-wider uppercase shadow-sm hover:border-[var(--orange)] transition-colors"
+                      className="px-4 py-2 rounded-xl bg-white border border-[rgba(11,35,64,0.08)] text-[var(--orange)] font-extrabold text-xs tracking-wider uppercase shadow-sm hover:border-[var(--orange)] transition-colors"
                     >
                       #{kw}
                     </span>
@@ -591,58 +576,6 @@ export const AboutPage = () => {
                 />
                 <div className="absolute top-4 right-4 px-4 py-1.5 rounded-full bg-black/80 text-[var(--yellow)] font-extrabold text-xs backdrop-blur-md border border-white/20">
                   YOUTH IN ACTION
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. SPIRITUALITY IN ACTION SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Visual Side */}
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <div className="rounded-3xl overflow-hidden border border-[var(--border-color)] shadow-xl group">
-                <img
-                  src={data.spiritualityInAction.imageUrl}
-                  alt="Spirituality In Action"
-                  className="w-full h-72 sm:h-[360px] object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-
-            {/* Content Side */}
-            <div className="lg:col-span-7 space-y-6 text-left order-1 lg:order-2">
-              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-                LIVING THE TEACHINGS
-              </span>
-
-              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-                {data.spiritualityInAction.heading}
-              </h2>
-
-              <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-                {data.spiritualityInAction.content}
-              </p>
-
-              {/* Visual Flow Connector */}
-              <div className="pt-4 space-y-2">
-                <span className="text-[11px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider block">
-                  OUR PRACTICAL PHILOSOPHY FLOW
-                </span>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)]">
-                  {data.spiritualityInAction.flow.map((step, idx) => (
-                    <React.Fragment key={idx}>
-                      <span className="px-3 py-1.5 rounded-lg bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs sm:text-sm">
-                        {step}
-                      </span>
-                      {idx < data.spiritualityInAction.flow.length - 1 && (
-                        <ArrowRight className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
-                      )}
-                    </React.Fragment>
-                  ))}
                 </div>
               </div>
             </div>
@@ -669,10 +602,10 @@ export const AboutPage = () => {
           {data.ourActivities.cards.map((card) => (
             <div
               key={card.id || card.title}
-              className={`rounded-3xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col justify-between ${
+              className={`rounded-3xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] flex flex-col justify-between ${
                 card.featured
-                  ? 'bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-tertiary)] border-2 border-[var(--orange)]'
-                  : 'bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--orange)]/60'
+                  ? 'bg-white border-2 border-[var(--orange)]'
+                  : 'bg-white border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/60'
               }`}
             >
               <div>
@@ -719,7 +652,7 @@ export const AboutPage = () => {
 
       {/* 9. CONTINUING THE LEGACY SECTION */}
       <section className="px-4 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-8">
+        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
               EVERLASTING INSPIRATION
@@ -737,7 +670,7 @@ export const AboutPage = () => {
             {data.continuingLegacy.highlights.map((item, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-center space-y-1 hover:border-[var(--orange)] transition-colors"
+                className="p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm text-center space-y-1 hover:border-[var(--orange)] transition-colors"
               >
                 <CheckCircle className="w-5 h-5 text-[var(--orange)] mx-auto mb-1" />
                 <span className="text-xs font-extrabold text-[var(--text-primary)] font-heading block truncate">

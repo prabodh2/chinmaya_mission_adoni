@@ -61,7 +61,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
               )}
             </div>
 
-            <div className="inline-flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl text-xs sm:text-sm font-bold text-[var(--text-primary)]">
+            <div className="inline-flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] text-xs sm:text-sm font-bold text-[var(--text-primary)]">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-[var(--orange)]" />
                 <span>Sunday, 20 December 2026</span>
@@ -113,7 +113,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'marathon':
       return (
-        <section className="py-8 px-4 bg-[var(--bg-secondary)] border-y border-[var(--border-color)]">
+        <section className="py-8 px-4 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
           <div className="max-w-6xl mx-auto space-y-6 text-center">
             {section.title && (
               <div className="space-y-2">
@@ -159,7 +159,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
           {activities && activities.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {activities.map((act) => (
-                <div key={act._id || act.title} className="rounded-3xl overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl group hover:border-[var(--orange)] transition-all">
+                <div key={act._id || act.title} className="rounded-3xl overflow-hidden bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] group hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] hover:-translate-y-1 transition-all duration-300">
                   <div className="h-48 overflow-hidden relative">
                     <img src={act.imageUrl} alt={act.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <span className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/70 text-white font-bold text-[10px] backdrop-blur-md">
@@ -183,7 +183,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'faq':
       return (
-        <section className="py-16 px-4 bg-[var(--bg-secondary)] border-t border-[var(--border-color)]">
+        <section className="py-16 px-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-2">
               <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest">
@@ -196,7 +196,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
             <div className="space-y-4">
               {(faqs || []).map((faq, idx) => (
-                <div key={faq._id || idx} className="rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] overflow-hidden">
+                <div key={faq._id || idx} className="rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_4px_12px_rgba(11,35,64,0.04)] overflow-hidden hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_8px_24px_rgba(11,35,64,0.08)] transition-all duration-300">
                   <button
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full flex items-center justify-between p-5 text-left font-bold text-sm text-[var(--text-primary)] hover:text-[var(--orange)] transition-colors"
@@ -247,7 +247,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
     case 'about':
       return (
         <section className="py-16 px-4 max-w-6xl mx-auto">
-          <div className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-secondary)] border-2 border-[var(--orange)]/30 space-y-6 shadow-2xl">
+          <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] space-y-6 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)]">
             {section.badgeText && (
               <span className="px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs uppercase tracking-widest">
                 {section.badgeText}

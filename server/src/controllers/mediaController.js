@@ -172,6 +172,9 @@ export const uploadMedia = async (req, res) => {
 
     await media.save();
 
+    // Immediately sync new image across all relevant CMS collections
+    await syncMediaImageToCollections(media);
+
     res.status(201).json({
       success: true,
       message: 'Image uploaded and added to media library successfully',
@@ -195,25 +198,85 @@ export const syncMediaImageToCollections = async (mediaItem, oldUrl) => {
     const newUrl = mediaItem.url;
     const publicId = mediaItem.publicId;
 
-    // 1. Sync to Banners
-    const bannerQuery = {
-      $or: [
-        { publicId: publicId },
-        { title: mediaItem.title },
-      ],
-    };
-    if (oldUrl) bannerQuery.$or.push({ imageUrl: oldUrl });
-    await Banner.updateMany(bannerQuery, { $set: { imageUrl: newUrl } });
+    // 1. Sync to Banners (Vertical Poster Carousel)
+    if (
+      mediaItem.section === 'Vertical Poster Carousel' ||
+      (mediaItem.category === 'Banner' && mediaItem.page === 'Home')
+    ) {
+      const bannerQuery = {
+        $or: [
+          { publicId: publicId },
+          { title: mediaItem.title },
+        ],
+      };
+      if (oldUrl) bannerQuery.$or.push({ imageUrl: oldUrl });
+      const existing = await Banner.findOne(bannerQuery);
+      if (existing) {
+        await Banner.updateOne(
+          { _id: existing._id },
+          { $set: { imageUrl: newUrl, active: mediaItem.status === 'ACTIVE', updatedAt: new Date() } }
+        );
+      } else {
+        await Banner.create({
+          title: mediaItem.title,
+          imageUrl: newUrl,
+          publicId: publicId,
+          bannerType: 'VERTICAL',
+          order: mediaItem.displayOrder || 1,
+          active: mediaItem.status === 'ACTIVE',
+        });
+      }
+    }
+
+    // 1b. Sync Horizontal Banner (Hero)
+    if (
+      mediaItem.section === 'Hero Banner' ||
+      (mediaItem.category === 'Banner' && (mediaItem.title || '').toLowerCase().includes('hero'))
+    ) {
+      await Banner.updateMany({ bannerType: 'HORIZONTAL' }, { $set: { imageUrl: newUrl, active: true, updatedAt: new Date() } });
+      const homeConfig = await HomePage.findOne();
+      if (homeConfig && Array.isArray(homeConfig.sections)) {
+        homeConfig.sections.forEach((sec) => {
+          if (sec.type === 'hero') sec.imageUrl = newUrl;
+        });
+        await homeConfig.save();
+      }
+    }
 
     // 2. Sync to Activities
-    const activityQuery = {
-      $or: [
-        { publicId: publicId },
-        { title: mediaItem.title },
-      ],
-    };
-    if (oldUrl) activityQuery.$or.push({ imageUrl: oldUrl });
-    await Activity.updateMany(activityQuery, { $set: { imageUrl: newUrl } });
+    if (mediaItem.category === 'Activities' || mediaItem.page === 'Activities') {
+      const activityQuery = {
+        $or: [
+          { publicId: publicId },
+          { title: mediaItem.title },
+        ],
+      };
+      if (oldUrl) activityQuery.$or.push({ imageUrl: oldUrl });
+      const existing = await Activity.findOne(activityQuery);
+      if (existing) {
+        await Activity.updateOne(
+          { _id: existing._id },
+          {
+            $set: {
+              imageUrl: newUrl,
+              description: mediaItem.description || existing.description,
+              active: mediaItem.status === 'ACTIVE',
+              updatedAt: new Date(),
+            },
+          }
+        );
+      } else {
+        await Activity.create({
+          title: mediaItem.title,
+          category: mediaItem.section || 'Activity',
+          description: mediaItem.description || mediaItem.caption || mediaItem.title,
+          imageUrl: newUrl,
+          publicId: publicId,
+          order: mediaItem.displayOrder || 0,
+          active: mediaItem.status === 'ACTIVE',
+        });
+      }
+    }
 
     // 3. Sync to HomePage sections & disabled maintenance image
     const homeConfig = await HomePage.findOne();
@@ -227,7 +290,8 @@ export const syncMediaImageToCollections = async (mediaItem, oldUrl) => {
         homeConfig.sections.forEach((sec) => {
           if (
             (oldUrl && sec.imageUrl === oldUrl) ||
-            (sec.title && sec.title.toLowerCase() === (mediaItem.title || '').toLowerCase())
+            (sec.title && sec.title.toLowerCase() === (mediaItem.title || '').toLowerCase()) ||
+            (mediaItem.section === 'Hero Banner' && sec.type === 'hero')
           ) {
             sec.imageUrl = newUrl;
             updatedHome = true;
@@ -250,17 +314,17 @@ export const syncMediaImageToCollections = async (mediaItem, oldUrl) => {
         updatedAbout = true;
       } else {
         const c = aboutContent.content;
-        if (c.hero && mediaItem.section === 'Hero Header') {
+        if (c.hero && (mediaItem.section === 'Hero Header' || (mediaItem.title || '').toLowerCase().includes('hero'))) {
           c.hero.imageUrl = newUrl;
           updatedAbout = true;
         }
-        if (c.chykSection && mediaItem.category === 'About' && (mediaItem.title || '').includes('CHYK')) {
+        if (c.chykSection && (mediaItem.category === 'About' || mediaItem.page === 'About') && (mediaItem.title || '').toLowerCase().includes('chyk')) {
           c.chykSection.imageUrl = newUrl;
           updatedAbout = true;
         }
         if (c.ourActivities && Array.isArray(c.ourActivities.cards)) {
           c.ourActivities.cards.forEach((card) => {
-            if (card.title && mediaItem.title && card.title.toLowerCase().includes(mediaItem.title.toLowerCase())) {
+            if (card.title && mediaItem.title && (card.title.toLowerCase().includes(mediaItem.title.toLowerCase()) || mediaItem.title.toLowerCase().includes(card.title.toLowerCase()))) {
               card.imageUrl = newUrl;
               updatedAbout = true;
             }

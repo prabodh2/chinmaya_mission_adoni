@@ -33,7 +33,7 @@ export const CountdownTimer = ({ targetDate = '2026-12-20T06:00:00.000+05:30' })
 
   return (
     <div className="w-full max-w-4xl mx-auto py-6 px-4">
-      <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[var(--orange)]/30 relative overflow-hidden shadow-2xl bg-gradient-to-br from-[var(--bg-secondary)] via-[var(--bg-tertiary)] to-[var(--bg-secondary)]">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl border-l-4 border-l-[var(--orange)] relative overflow-hidden">
         
         {/* Glow Accent */}
         <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
@@ -65,7 +65,7 @@ export const CountdownTimer = ({ targetDate = '2026-12-20T06:00:00.000+05:30' })
             ].map((unit, idx) => (
               <div
                 key={unit.label}
-                className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] shadow-inner min-w-[65px] sm:min-w-[85px]"
+                className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm min-w-[65px] sm:min-w-[85px]"
               >
                 <span className={`text-2xl sm:text-4xl font-extrabold font-heading tracking-tight ${unit.color}`}>
                   {unit.value}

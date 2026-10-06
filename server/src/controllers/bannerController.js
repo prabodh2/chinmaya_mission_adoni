@@ -1,10 +1,33 @@
 import Banner from '../models/Banner.js';
+import Media from '../models/Media.js';
 import { uploadToCloudinary } from '../config/cloudinary.js';
 
 export const getActiveBanners = async (req, res) => {
   try {
     const horizontalBanner = await Banner.findOne({ bannerType: 'HORIZONTAL', active: true }).sort({ updatedAt: -1 });
-    const verticalBanners = await Banner.find({ bannerType: 'VERTICAL', active: true }).sort({ order: 1, createdAt: -1 });
+    let verticalBanners = await Banner.find({ bannerType: 'VERTICAL', active: true }).sort({ order: 1, updatedAt: -1 });
+
+    // Also include any active media items tagged for Vertical Poster Carousel that aren't in banners yet
+    const carouselMedia = await Media.find({
+      status: 'ACTIVE',
+      $or: [
+        { section: 'Vertical Poster Carousel' },
+        { category: 'Banner', page: 'Home' },
+      ],
+    }).sort({ displayOrder: 1, updatedAt: -1 });
+
+    const existingUrls = new Set(verticalBanners.map((b) => b.imageUrl));
+    const extraBanners = carouselMedia
+      .filter((m) => !existingUrls.has(m.url))
+      .map((m) => ({
+        _id: m._id,
+        title: m.title,
+        imageUrl: m.url,
+        tag: m.caption || m.category || 'MARATHON 2026',
+        active: true,
+      }));
+
+    verticalBanners = [...verticalBanners, ...extraBanners];
 
     res.json({
       success: true,
