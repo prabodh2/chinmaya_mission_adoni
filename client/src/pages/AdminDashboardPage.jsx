@@ -73,6 +73,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     slogan: '',
     venue: '',
     eventDate: '',
+    registrationEndDate: '2026-11-30T23:59',
     registrationOpen: true,
   });
   const [configSaving, setConfigSaving] = useState(false);
@@ -180,6 +181,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             slogan: cfg.slogan,
             venue: cfg.venue,
             eventDate: cfg.eventDate ? new Date(cfg.eventDate).toISOString().substring(0, 16) : '',
+            registrationEndDate: cfg.registrationEndDate
+              ? new Date(cfg.registrationEndDate).toISOString().substring(0, 16)
+              : '2026-11-30T23:59',
             registrationOpen: cfg.registrationOpen,
           });
         }
@@ -961,6 +965,17 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                 onChange={(e) => setEventForm({ ...eventForm, eventDate: e.target.value })}
                 className="w-full py-3 px-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)]"
               />
+            </div>
+
+            <div>
+              <label className="block font-bold mb-1 text-[var(--text-primary)] uppercase">Last Day of Registration (30/11/2026)</label>
+              <input
+                type="datetime-local"
+                value={eventForm.registrationEndDate}
+                onChange={(e) => setEventForm({ ...eventForm, registrationEndDate: e.target.value })}
+                className="w-full py-3 px-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)]"
+              />
+              <span className="text-[10px] text-[var(--text-muted)] mt-1 block">Registration closes on: 30 November 2026 (30/11/2026)</span>
             </div>
 
             <div className="p-4 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-between">

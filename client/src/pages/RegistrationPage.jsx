@@ -81,7 +81,12 @@ export const RegistrationPage = () => {
     }).catch(() => {});
   }, [location.hash]);
 
-  const isRegistrationOpen = eventConfig ? eventConfig.registrationOpen : true;
+  const isPastDeadline = eventConfig?.registrationEndDate
+    ? new Date() > new Date(eventConfig.registrationEndDate)
+    : false;
+  const isRegistrationOpen = eventConfig
+    ? eventConfig.registrationOpen && !isPastDeadline
+    : true;
 
   // Individual Validation
   const validateIndividual = () => {
@@ -292,20 +297,27 @@ export const RegistrationPage = () => {
       
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase border ${
-          isRegistrationOpen
-            ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
-            : 'bg-red-500/15 text-red-500 border-red-500/30'
-        }`}>
-          <CheckCircle className="w-4 h-4" />
-          {isRegistrationOpen ? 'REGISTRATION OPEN' : 'REGISTRATION CLOSED'}
-        </span>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase border ${
+            isRegistrationOpen
+              ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
+              : 'bg-red-500/15 text-red-500 border-red-500/30'
+          }`}>
+            <CheckCircle className="w-4 h-4" />
+            {isRegistrationOpen ? 'REGISTRATION OPEN' : 'REGISTRATION CLOSED'}
+          </span>
+
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-wider uppercase border bg-[var(--orange)]/15 text-[var(--orange)] border-[var(--orange)]/30">
+            <Calendar className="w-4 h-4" />
+            LAST DAY TO REGISTER: 30/11/2026
+          </span>
+        </div>
 
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)]">
           MARATHON <span className="text-[var(--orange)]">REGISTRATION</span>
         </h1>
         <p className="text-sm sm:text-base text-[var(--text-muted)] font-medium">
-          These details will be used to generate your official marathon pass and certificate.
+          Last date of registration is <strong className="text-[var(--text-primary)] font-bold">30 November 2026 (30/11/2026)</strong>. Details will be used to generate your official marathon pass and certificate.
         </p>
       </div>
 
@@ -343,7 +355,11 @@ export const RegistrationPage = () => {
           {!isRegistrationOpen && (
             <div className="p-4 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-500 font-extrabold text-xs mb-6 flex items-center gap-3">
               <AlertCircle className="w-5 h-5 flex-shrink-0" />
-              <span>Marathon registration is currently closed by the organizers. Please check back later.</span>
+              <span>
+                {isPastDeadline
+                  ? 'Marathon registration is now closed. The last date to register was 30 November 2026 (30/11/2026).'
+                  : 'Marathon registration is currently closed by the organizers. Please check back later.'}
+              </span>
             </div>
           )}
 

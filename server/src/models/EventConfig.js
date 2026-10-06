@@ -15,7 +15,7 @@ const eventConfigSchema = new mongoose.Schema(
     },
     registrationOpen: { type: Boolean, default: true },
     registrationStartDate: { type: Date, default: new Date('2026-01-01T00:00:00.000Z') },
-    registrationEndDate: { type: Date, default: new Date('2026-12-19T23:59:59.000Z') },
+    registrationEndDate: { type: Date, default: new Date('2026-11-30T23:59:59.000+05:30') },
   },
   { timestamps: true }
 );

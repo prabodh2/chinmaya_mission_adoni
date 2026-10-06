@@ -23,14 +23,20 @@ const generateBatchId = () => {
 
 export const submitIndividualRegistration = async (req, res) => {
   try {
-    // Check if registration is open in EventConfig
+    // Check if registration is open in EventConfig and deadline has not passed
     const config = await EventConfig.findOne();
-    if (config && !config.registrationOpen) {
-      return res.status(400).json({
-        success: false,
-        message: 'Registration is currently closed by the organizers',
-        errorCode: 'REGISTRATION_CLOSED',
-      });
+    if (config) {
+      const now = new Date();
+      const isPastDeadline = config.registrationEndDate && now > new Date(config.registrationEndDate);
+      if (!config.registrationOpen || isPastDeadline) {
+        return res.status(400).json({
+          success: false,
+          message: isPastDeadline
+            ? 'Registration closed. The last date to register was 30 November 2026 (30/11/2026).'
+            : 'Registration is currently closed by the organizers',
+          errorCode: 'REGISTRATION_CLOSED',
+        });
+      }
     }
 
     const { fullName, dateOfBirth, isStudent, institutionName, contactNumber, tShirtSize } = req.body;
@@ -126,12 +132,18 @@ export const submitIndividualRegistration = async (req, res) => {
 export const submitBulkRegistration = async (req, res) => {
   try {
     const config = await EventConfig.findOne();
-    if (config && !config.registrationOpen) {
-      return res.status(400).json({
-        success: false,
-        message: 'Registration is currently closed',
-        errorCode: 'REGISTRATION_CLOSED',
-      });
+    if (config) {
+      const now = new Date();
+      const isPastDeadline = config.registrationEndDate && now > new Date(config.registrationEndDate);
+      if (!config.registrationOpen || isPastDeadline) {
+        return res.status(400).json({
+          success: false,
+          message: isPastDeadline
+            ? 'Registration closed. The last date to register was 30 November 2026 (30/11/2026).'
+            : 'Registration is currently closed by the organizers',
+          errorCode: 'REGISTRATION_CLOSED',
+        });
+      }
     }
 
     const { contactPersonName, phone, institutionType, institutionName, studentsData } = req.body;

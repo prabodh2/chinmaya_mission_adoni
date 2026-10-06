@@ -115,16 +115,21 @@ const DEFAULT_FAQS = [
   },
   {
     _id: 'faq-3',
+    question: 'What is the last date to register for the marathon?',
+    answer: 'The last day of registration is 30 November 2026 (30/11/2026). Make sure to register online before the deadline.',
+  },
+  {
+    _id: 'faq-4',
     question: 'Is there an entry fee for registration?',
     answer: 'Registration is free for all, anyone can participate.',
   },
   {
-    _id: 'faq-4',
+    _id: 'faq-5',
     question: 'How can schools and colleges submit registrations?',
     answer: 'Institutions can visit the Registration page, select "School & College Registration", download the template, upload student details, and submit in one single step.',
   },
   {
-    _id: 'faq-5',
+    _id: 'faq-6',
     question: 'Will certificates be provided to participants?',
     answer: 'Yes! Physical certificates will be given after the completion of the run.',
   },

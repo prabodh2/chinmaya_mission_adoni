@@ -14,7 +14,11 @@ export const getEventConfig = async (req, res) => {
         eventTime: '6:00 AM onwards',
         organizers: ['Chinmaya Mission Adoni', 'Chinmaya Yuva Kendra Adoni'],
         registrationOpen: true,
+        registrationEndDate: new Date('2026-11-30T23:59:59.000+05:30'),
       });
+    } else if (!config.registrationEndDate || new Date(config.registrationEndDate).getMonth() === 11) {
+      config.registrationEndDate = new Date('2026-11-30T23:59:59.000+05:30');
+      await config.save();
     }
     res.json({ success: true, data: config });
   } catch (err) {
