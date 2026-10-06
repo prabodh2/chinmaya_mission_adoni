@@ -107,6 +107,8 @@ export const adminService = {
     api.get(`/admin/batches/${batchId}/download`, { responseType: 'blob' }),
   deleteBatch: (batchId) => api.delete(`/admin/batches/${batchId}`),
   retrySheetsSync: (id) => api.post(`/admin/registrations/${id}/sync-sheets`),
+  getRegistrationSummary: (type = 'FORM') =>
+    api.get('/admin/registrations/individual/summary', { params: { type } }),
 };
 
 export const contactService = {

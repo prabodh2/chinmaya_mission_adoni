@@ -204,3 +204,58 @@ export const retrySheetsSync = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+export const getIndividualRegistrationSummary = async (req, res) => {
+  try {
+    const { type = 'FORM' } = req.query;
+    const matchQuery = { status: 'CONFIRMED' };
+    if (type && type.toUpperCase() !== 'ALL') {
+      matchQuery.registrationType = type.toUpperCase();
+    }
+
+    // Dynamic count for total registrations from database
+    const totalRegistrations = await Registration.countDocuments(matchQuery);
+
+    // Dynamic database aggregation grouping by tShirtSize
+    const sizeCounts = await Registration.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: '$tShirtSize',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const sizes = {
+      S: 0,
+      M: 0,
+      L: 0,
+      XL: 0,
+    };
+
+    sizeCounts.forEach((item) => {
+      if (item._id) {
+        const sizeKey = String(item._id).trim().toUpperCase();
+        if (Object.prototype.hasOwnProperty.call(sizes, sizeKey)) {
+          sizes[sizeKey] = item.count;
+        }
+      }
+    });
+
+    // Total T-Shirts = S + M + L + XL
+    const totalTshirts = sizes.S + sizes.M + sizes.L + sizes.XL;
+
+    res.json({
+      success: true,
+      data: {
+        totalRegistrations,
+        totalTshirts,
+        sizes,
+      },
+    });
+  } catch (err) {
+    console.error('[Registration Summary Error]:', err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

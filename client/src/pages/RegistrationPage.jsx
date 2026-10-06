@@ -490,7 +490,7 @@ export const RegistrationPage = () => {
                   T-Shirt Size *
                 </label>
                 <div className="flex flex-wrap items-center gap-2">
-                  {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((size) => (
+                  {['S', 'M', 'L', 'XL'].map((size) => (
                     <button
                       key={size}
                       type="button"

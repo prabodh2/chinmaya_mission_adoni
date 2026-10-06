@@ -7,6 +7,7 @@ import {
   downloadBatchSpreadsheet,
   deleteBulkBatch,
   retrySheetsSync,
+  getIndividualRegistrationSummary,
 } from '../controllers/adminController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
@@ -17,6 +18,8 @@ router.use(protect, requireAdmin);
 
 router.get('/dashboard-stats', getDashboardStats);
 router.get('/registrations', getAdminRegistrations);
+router.get('/registrations/summary', getIndividualRegistrationSummary);
+router.get('/registrations/individual/summary', getIndividualRegistrationSummary);
 router.get('/batches', getBulkBatches);
 router.get('/batches/:batchId/students', getBatchStudents);
 router.get('/batches/:batchId/download', downloadBatchSpreadsheet);

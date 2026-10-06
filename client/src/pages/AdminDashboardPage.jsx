@@ -35,6 +35,7 @@ import {
   Layout,
   Trash2,
   Eye,
+  Shirt,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -59,6 +60,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
   const [filterInstitution, setFilterInstitution] = useState('ALL');
   const [filterSize, setFilterSize] = useState('ALL');
   const [institutions, setInstitutions] = useState([]);
+  const [summaryData, setSummaryData] = useState(null);
+  const [loadingSummary, setLoadingSummary] = useState(false);
 
   // Batches Tab State
   const [batches, setBatches] = useState([]);
@@ -137,11 +140,25 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             }
           })
           .catch(() => {});
+        loadRegistrationSummary();
       } else if (regType === 'SCHOOL_COLLEGE') {
         loadBatches();
       }
     }
   }, [activeTab, regType, searchTerm, filterInstitution, filterSize, regPagination.page]);
+
+  const loadRegistrationSummary = () => {
+    setLoadingSummary(true);
+    adminService
+      .getRegistrationSummary('FORM')
+      .then((res) => {
+        if (res.data?.success) {
+          setSummaryData(res.data.data);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingSummary(false));
+  };
 
   const loadBatches = () => {
     adminService
@@ -652,6 +669,80 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                   </div>
                 </div>
               )}
+
+              {/* REGISTRATION & T-SHIRT SUMMARY (BOTTOM OF FORM REGISTRATIONS) */}
+              <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
+                <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] space-y-6 shadow-xl">
+                  <div className="text-center pb-4 border-b border-[var(--border-color)]">
+                    <h4 className="text-sm sm:text-base font-black font-heading tracking-widest uppercase text-[var(--orange)]">
+                      REGISTRATION SUMMARY
+                    </h4>
+                    <p className="text-[11px] text-[var(--text-muted)] font-medium mt-1">
+                      Dynamic count across all individual registrations in the database
+                    </p>
+                  </div>
+
+                  {/* 1. Total Registrations */}
+                  <div className="p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-center space-y-1">
+                    <span className="text-xs font-black uppercase tracking-wider text-[var(--text-muted)] block">
+                      TOTAL REGISTRATIONS
+                    </span>
+                    <div className="text-3xl sm:text-4xl font-black font-heading text-[var(--text-primary)]">
+                      {summaryData
+                        ? Number(summaryData.totalRegistrations).toLocaleString('en-IN')
+                        : (loadingSummary ? '...' : '0')}
+                    </div>
+                  </div>
+
+                  {/* 2. T-Shirt Summary Header */}
+                  <div className="pt-2 space-y-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <Shirt className="w-4 h-4 text-[var(--cyan)]" />
+                      <h5 className="text-xs font-black uppercase tracking-widest text-[var(--cyan)]">
+                        T-SHIRT SUMMARY
+                      </h5>
+                    </div>
+
+                    {/* Breakdown: S, M, L, XL */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {['S', 'M', 'L', 'XL'].map((size) => (
+                        <div
+                          key={size}
+                          className="p-5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-center shadow-sm transition-all hover:border-[var(--cyan)]/40"
+                        >
+                          <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-[var(--cyan)]/15 text-[var(--cyan)] mb-2">
+                            {size}
+                          </span>
+                          <div className="text-2xl sm:text-3xl font-black font-heading text-[var(--text-primary)]">
+                            {summaryData && summaryData.sizes?.[size] !== undefined
+                              ? Number(summaryData.sizes[size]).toLocaleString('en-IN')
+                              : (loadingSummary ? '...' : '0')}
+                          </div>
+                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mt-1">
+                            Size {size}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* 3. Total T-Shirts Required */}
+                    <div className="p-6 rounded-2xl bg-[var(--bg-primary)] border-2 border-[var(--cyan)]/40 text-center space-y-1">
+                      <span className="text-xs font-black uppercase tracking-wider text-[var(--cyan)] block">
+                        TOTAL T-SHIRTS
+                      </span>
+                      <div className="text-3xl sm:text-4xl font-black font-heading text-[var(--cyan)]">
+                        {summaryData
+                          ? Number(summaryData.totalTshirts).toLocaleString('en-IN')
+                          : (loadingSummary ? '...' : '0')}
+                      </div>
+                      <span className="text-[10px] text-[var(--text-muted)] font-medium block">
+                        Total T-shirts required (S + M + L + XL)
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </>
           )}
 
