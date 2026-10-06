@@ -54,7 +54,11 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
     },
   ];
 
-  const itemsToDisplay = banners.length > 0 ? banners : defaultPosters;
+  // Filter out any default 'Vertical Poster' items
+  const cleanBanners = (banners || []).filter(
+    (b) => !/^Vertical Poster/i.test(b.title || '')
+  );
+  const itemsToDisplay = cleanBanners.length > 0 ? cleanBanners : defaultPosters;
   // Duplicate list to guarantee seamless infinite loop from right to left
   const duplicatedItems = [...itemsToDisplay, ...itemsToDisplay];
 
@@ -67,38 +71,48 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
 
       <div className="mb-4 text-center">
         <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--yellow)] px-3 py-1 rounded-full bg-[var(--yellow)]/10 border border-[var(--yellow)]/30">
-          FEATURED MOVEMENT POSTERS • ADONI 2026
+          Chinmaya Mission Adoni
         </span>
       </div>
 
       {/* Infinite Right-to-Left Continuous Loop Container */}
       <div className="animate-scroll gap-4 sm:gap-6 px-4">
-        {duplicatedItems.map((item, idx) => (
-          <div
-            key={`${item._id || item.id || idx}-${idx}`}
-            className="w-56 sm:w-64 h-80 sm:h-96 flex-shrink-0 rounded-2xl overflow-hidden relative group border border-white/10 shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
-          >
-            <img
-              src={item.imageUrl}
-              alt={item.title || 'Marathon Poster'}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
-              loading="lazy"
-            />
-            
-            {/* Poster Card Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 sm:p-5 flex flex-col justify-end">
-              <span className="inline-block self-start px-2.5 py-1 text-[10px] font-extrabold tracking-wider rounded-lg bg-[var(--orange)] text-white mb-2 shadow-md">
-                {item.tag || item.category || 'MARATHON 2026'}
-              </span>
-              <h4 className="text-sm sm:text-base font-extrabold text-white leading-tight font-heading group-hover:text-[var(--yellow)] transition-colors">
-                {item.title}
-              </h4>
-              <p className="text-[11px] text-slate-300 font-medium mt-1">
-                Chinmaya Mission Adoni
-              </p>
+        {duplicatedItems.map((item, idx) => {
+          // Remove any occurrence of the word 'marathon' from tag if present
+          const cleanTag = (item.tag || item.category || '')
+            .replace(/\bmarathon\b\s*/gi, '')
+            .replace(/\b2026\b/gi, '')
+            .trim();
+
+          return (
+            <div
+              key={`${item._id || item.id || idx}-${idx}`}
+              className="w-56 sm:w-64 h-80 sm:h-96 flex-shrink-0 rounded-2xl overflow-hidden relative group border border-white/10 shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
+            >
+              <img
+                src={item.imageUrl}
+                alt={item.title || 'Chinmaya Mission Adoni'}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
+                loading="lazy"
+              />
+              
+              {/* Poster Card Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 sm:p-5 flex flex-col justify-end">
+                {cleanTag && cleanTag.toLowerCase() !== 'banner' ? (
+                  <span className="inline-block self-start px-2.5 py-1 text-[10px] font-extrabold tracking-wider rounded-lg bg-[var(--orange)] text-white mb-2 shadow-md uppercase">
+                    {cleanTag}
+                  </span>
+                ) : null}
+                <h4 className="text-sm sm:text-base font-extrabold text-white leading-tight font-heading group-hover:text-[var(--yellow)] transition-colors">
+                  {item.title}
+                </h4>
+                <p className="text-[11px] text-slate-300 font-medium mt-1">
+                  Chinmaya Mission Adoni
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

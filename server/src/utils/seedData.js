@@ -120,46 +120,6 @@ export const seedInitialData = async () => {
           active: true,
           order: 1,
         },
-        {
-          title: 'Vertical Poster 1 - Say No to Drugs',
-          imageUrl: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop',
-          publicId: 'vert_poster_1',
-          bannerType: 'VERTICAL',
-          active: true,
-          order: 1,
-        },
-        {
-          title: 'Vertical Poster 2 - Youth Power Adoni',
-          imageUrl: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800&auto=format&fit=crop',
-          publicId: 'vert_poster_2',
-          bannerType: 'VERTICAL',
-          active: true,
-          order: 2,
-        },
-        {
-          title: 'Vertical Poster 3 - Health & Discipline',
-          imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop',
-          publicId: 'vert_poster_3',
-          bannerType: 'VERTICAL',
-          active: true,
-          order: 3,
-        },
-        {
-          title: 'Vertical Poster 4 - Chinmaya Mission Movement',
-          imageUrl: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=800&auto=format&fit=crop',
-          publicId: 'vert_poster_4',
-          bannerType: 'VERTICAL',
-          active: true,
-          order: 4,
-        },
-        {
-          title: 'Vertical Poster 5 - Brighter Future Adoni',
-          imageUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=800&auto=format&fit=crop',
-          publicId: 'vert_poster_5',
-          bannerType: 'VERTICAL',
-          active: true,
-          order: 5,
-        },
       ]);
       console.log('[Seed] Default banners created.');
     }

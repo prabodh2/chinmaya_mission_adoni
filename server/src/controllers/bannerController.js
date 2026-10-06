@@ -7,23 +7,23 @@ export const getActiveBanners = async (req, res) => {
     const horizontalBanner = await Banner.findOne({ bannerType: 'HORIZONTAL', active: true }).sort({ updatedAt: -1 });
     let verticalBanners = await Banner.find({ bannerType: 'VERTICAL', active: true }).sort({ order: 1, updatedAt: -1 });
 
-    // Also include any active media items tagged for Vertical Poster Carousel that aren't in banners yet
+    // Filter out any seed vertical posters if any exist
+    verticalBanners = verticalBanners.filter((b) => !/^Vertical Poster/i.test(b.title));
+
+    // Also include any active media items strictly tagged for Vertical Poster Carousel that aren't in banners yet
     const carouselMedia = await Media.find({
       status: 'ACTIVE',
-      $or: [
-        { section: 'Vertical Poster Carousel' },
-        { category: 'Banner', page: 'Home' },
-      ],
+      section: 'Vertical Poster Carousel',
     }).sort({ displayOrder: 1, updatedAt: -1 });
 
     const existingUrls = new Set(verticalBanners.map((b) => b.imageUrl));
     const extraBanners = carouselMedia
-      .filter((m) => !existingUrls.has(m.url))
+      .filter((m) => !existingUrls.has(m.url) && !/^Vertical Poster/i.test(m.title))
       .map((m) => ({
         _id: m._id,
         title: m.title,
         imageUrl: m.url,
-        tag: m.caption || m.category || 'MARATHON 2026',
+        tag: m.caption || m.category || '',
         active: true,
       }));
 
