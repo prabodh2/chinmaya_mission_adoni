@@ -65,7 +65,12 @@ export const bannerService = {
 export const registrationService = {
   getInstitutions: () => api.get('/registrations/institutions'),
   submitForm: (data) => api.post('/registrations/form', data),
-  submitBulk: (data) => api.post('/registrations/bulk', data),
+  submitBulk: (data) =>
+    api.post(
+      '/registrations/bulk',
+      data,
+      data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
+    ),
   parseFile: (fileFormData) =>
     api.post('/registrations/parse-file', fileFormData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -96,8 +101,11 @@ export const faqService = {
 export const adminService = {
   getStats: () => api.get('/admin/dashboard-stats'),
   getRegistrations: (params) => api.get('/admin/registrations', { params }),
-  getBatches: () => api.get('/admin/batches'),
+  getBatches: (params) => api.get('/admin/batches', { params }),
   getBatchStudents: (batchId) => api.get(`/admin/batches/${batchId}/students`),
+  downloadBatchSpreadsheet: (batchId) =>
+    api.get(`/admin/batches/${batchId}/download`, { responseType: 'blob' }),
+  deleteBatch: (batchId) => api.delete(`/admin/batches/${batchId}`),
   retrySheetsSync: (id) => api.post(`/admin/registrations/${id}/sync-sheets`),
 };
 

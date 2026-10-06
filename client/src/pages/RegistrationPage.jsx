@@ -50,6 +50,7 @@ export const RegistrationPage = () => {
     institutionType: 'SCHOOL',
     institutionName: '',
   });
+  const [bulkFile, setBulkFile] = useState(null);
   const [parsedData, setParsedData] = useState(null); // { totalRows, validRows, invalidRows, preview }
   const [bulkParsing, setBulkParsing] = useState(false);
   const [bulkSubmitting, setBulkSubmitting] = useState(false);
@@ -166,6 +167,7 @@ export const RegistrationPage = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setBulkFile(file);
     setBulkParsing(true);
     setBulkStatus({ success: false, message: null, error: null });
 
@@ -181,7 +183,7 @@ export const RegistrationPage = () => {
       setBulkStatus({
         success: false,
         message: null,
-        error: err.response?.data?.message || 'Failed to parse file',
+        error: err.response?.data?.message || 'Failed to parse file preview',
       });
     } finally {
       setBulkParsing(false);
@@ -209,12 +211,30 @@ export const RegistrationPage = () => {
   // Submit Bulk Batch
   const handleBulkSubmit = async (e) => {
     e.preventDefault();
-    if (!parsedData || parsedData.validRows === 0) {
-      alert('Please upload a valid spreadsheet file containing student records.');
+
+    if (!isRegistrationOpen) {
+      alert('Marathon registration is currently closed by the organizers.');
       return;
     }
-    if (!bulkForm.contactPersonName || !bulkForm.phone || !bulkForm.institutionName) {
-      alert('Please fill out all institution contact details.');
+    if (!bulkForm.contactPersonName.trim()) {
+      alert('Please enter Contact Person Name');
+      return;
+    }
+    const cleanPhone = getCleanPhoneNumber(bulkForm.phone);
+    if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
+      alert('Please enter a valid 10-digit Indian phone number starting with 6-9');
+      return;
+    }
+    if (!bulkForm.institutionName.trim()) {
+      alert('Please enter School or College Name');
+      return;
+    }
+    if (!bulkFile) {
+      alert('Please upload a spreadsheet file (.xlsx, .xls, .csv) with student records');
+      return;
+    }
+    if (parsedData && parsedData.validRows === 0) {
+      alert('The uploaded spreadsheet does not contain any valid student rows. Please check the file.');
       return;
     }
 
@@ -222,23 +242,31 @@ export const RegistrationPage = () => {
     setBulkStatus({ success: false, message: null, error: null });
 
     try {
-      const payload = {
-        contactPersonName: bulkForm.contactPersonName,
-        phone: bulkForm.phone,
-        institutionType: bulkForm.institutionType,
-        institutionName: bulkForm.institutionName,
-        studentsData: parsedData.preview.filter((row) => row.isValid),
-      };
+      const formData = new FormData();
+      formData.append('contactPersonName', bulkForm.contactPersonName.trim());
+      formData.append('phone', cleanPhone);
+      formData.append('institutionType', bulkForm.institutionType);
+      formData.append('institutionName', bulkForm.institutionName.trim());
+      formData.append('file', bulkFile);
+      if (parsedData?.preview) {
+        formData.append(
+          'studentsData',
+          JSON.stringify(parsedData.preview.filter((row) => row.isValid))
+        );
+      }
 
-      const res = await registrationService.submitBulk(payload);
+      const res = await registrationService.submitBulk(formData);
       if (res.data?.success) {
         confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
         setBulkStatus({
           success: true,
-          message: res.data.message,
+          message:
+            res.data.message ||
+            `Successfully submitted bulk registration for ${bulkForm.institutionName}!`,
           error: null,
         });
         setParsedData(null);
+        setBulkFile(null);
         setBulkForm({
           contactPersonName: '',
           phone: '',
@@ -250,7 +278,9 @@ export const RegistrationPage = () => {
       setBulkStatus({
         success: false,
         message: null,
-        error: err.response?.data?.message || 'Bulk submission failed',
+        error:
+          err.response?.data?.message ||
+          'Bulk registration submission failed. Please check your spreadsheet file and try again.',
       });
     } finally {
       setBulkSubmitting(false);
@@ -612,24 +642,69 @@ export const RegistrationPage = () => {
               </div>
             </div>
 
-            {/* Drag & Drop File Upload Box */}
-            <div className="p-8 rounded-3xl border-2 border-dashed border-[var(--cyan)]/40 bg-[var(--bg-primary)] text-center space-y-4 relative hover:border-[var(--cyan)] transition-colors">
-              <Upload className="w-10 h-10 text-[var(--cyan)] mx-auto animate-bounce" />
-              <div>
-                <h4 className="text-sm font-extrabold text-[var(--text-primary)] font-heading">
-                  UPLOAD SPREADSHEET FILE (.xlsx, .xls, .csv)
-                </h4>
-                <p className="text-xs text-[var(--text-muted)] mt-1">
-                  Drag and drop file here or click to browse from device
-                </p>
+            {/* Drag & Drop File Upload Box & Attached File Display */}
+            {bulkFile ? (
+              <div className="p-6 rounded-3xl bg-[var(--bg-primary)] border-2 border-[var(--cyan)] shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--cyan)]/15 text-[var(--cyan)] flex items-center justify-center flex-shrink-0">
+                    <FileSpreadsheet className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-extrabold text-[var(--text-primary)]">
+                      {bulkFile.name}
+                    </h4>
+                    <p className="text-xs text-[var(--text-muted)] flex items-center gap-2 mt-0.5">
+                      <span>{(bulkFile.size / 1024).toFixed(1)} KB</span>
+                      <span>•</span>
+                      <span className="text-emerald-500 font-bold flex items-center gap-1">
+                        <CheckCircle className="w-3.5 h-3.5" /> Sheet attached & ready to submit
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label className="btn-secondary py-2 px-4 text-xs cursor-pointer border-[var(--cyan)] text-[var(--cyan)] hover:bg-[var(--cyan)]/10">
+                    <span>CHANGE FILE</span>
+                    <input
+                      type="file"
+                      accept=".csv, .xls, .xlsx"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBulkFile(null);
+                      setParsedData(null);
+                    }}
+                    className="p-2 rounded-xl text-red-500 hover:bg-red-500/10 transition-colors text-xs font-bold"
+                    title="Remove File"
+                  >
+                    REMOVE
+                  </button>
+                </div>
               </div>
-              <input
-                type="file"
-                accept=".csv, .xls, .xlsx"
-                onChange={handleFileUpload}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-              />
-            </div>
+            ) : (
+              <div className="p-8 rounded-3xl border-2 border-dashed border-[var(--cyan)]/40 bg-[var(--bg-primary)] text-center space-y-4 relative hover:border-[var(--cyan)] transition-colors">
+                <Upload className="w-10 h-10 text-[var(--cyan)] mx-auto animate-bounce" />
+                <div>
+                  <h4 className="text-sm font-extrabold text-[var(--text-primary)] font-heading">
+                    UPLOAD SPREADSHEET FILE (.xlsx, .xls, .csv) *
+                  </h4>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
+                    Drag and drop file here or click to browse from device
+                  </p>
+                </div>
+                <input
+                  type="file"
+                  accept=".csv, .xls, .xlsx"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </div>
+            )}
 
             {bulkParsing && (
               <p className="text-center text-xs font-bold text-[var(--cyan)] animate-pulse">
@@ -693,17 +768,24 @@ export const RegistrationPage = () => {
                   </table>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={parsedData.validRows === 0 || bulkSubmitting}
-                  className="btn-primary w-full justify-center py-4 text-base bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white shadow-2xl"
-                >
-                  <Building className="w-5 h-5" />
-                  <span>{bulkSubmitting ? 'PROCESSING BULK SUBMISSION...' : `SUBMIT ${parsedData.validRows} STUDENT REGISTRATIONS`}</span>
-                </button>
-
               </div>
             )}
+
+            {/* Always Visible Submit Button for School / College Bulk Form */}
+            <button
+              type="submit"
+              disabled={bulkSubmitting || !isRegistrationOpen}
+              className="btn-primary w-full justify-center py-4 text-base bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white shadow-2xl hover:scale-[1.01] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Building className="w-5 h-5" />
+              <span>
+                {bulkSubmitting
+                  ? 'SUBMITTING REGISTRATION & UPLOADING SHEET...'
+                  : parsedData?.validRows
+                  ? `SUBMIT ${parsedData.validRows} STUDENT REGISTRATIONS`
+                  : 'SUBMIT SCHOOL / COLLEGE REGISTRATION'}
+              </span>
+            </button>
 
           </form>
 

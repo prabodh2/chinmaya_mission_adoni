@@ -11,6 +11,10 @@ const bulkBatchSchema = new mongoose.Schema(
     validRecords: { type: Number, required: true },
     failedRecords: { type: Number, default: 0 },
     duplicatesDetected: { type: Number, default: 0 },
+    fileName: { type: String },
+    fileMimeType: { type: String },
+    fileSize: { type: Number },
+    fileData: { type: String }, // Base64 data of original uploaded spreadsheet file
   },
   { timestamps: true }
 );

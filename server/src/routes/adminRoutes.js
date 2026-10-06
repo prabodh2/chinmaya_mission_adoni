@@ -4,6 +4,8 @@ import {
   getAdminRegistrations,
   getBulkBatches,
   getBatchStudents,
+  downloadBatchSpreadsheet,
+  deleteBulkBatch,
   retrySheetsSync,
 } from '../controllers/adminController.js';
 import { protect } from '../middleware/authMiddleware.js';
@@ -17,6 +19,8 @@ router.get('/dashboard-stats', getDashboardStats);
 router.get('/registrations', getAdminRegistrations);
 router.get('/batches', getBulkBatches);
 router.get('/batches/:batchId/students', getBatchStudents);
+router.get('/batches/:batchId/download', downloadBatchSpreadsheet);
+router.delete('/batches/:batchId', deleteBulkBatch);
 router.post('/registrations/:id/sync-sheets', retrySheetsSync);
 
 export default router;

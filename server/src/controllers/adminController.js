@@ -3,6 +3,7 @@ import BulkBatch from '../models/BulkBatch.js';
 import Institution from '../models/Institution.js';
 import User from '../models/User.js';
 import { syncRegistrationToGoogleSheets } from '../config/googleSheets.js';
+import * as XLSX from 'xlsx';
 
 export const getDashboardStats = async (req, res) => {
   try {
@@ -118,6 +119,66 @@ export const getBatchStudents = async (req, res) => {
     const { batchId } = req.params;
     const students = await Registration.find({ batchId }).sort({ fullName: 1 });
     res.json({ success: true, data: students });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const downloadBatchSpreadsheet = async (req, res) => {
+  try {
+    const { batchId } = req.params;
+    const batch = await BulkBatch.findOne({ batchId });
+    if (!batch) {
+      return res.status(404).json({ success: false, message: 'Batch not found' });
+    }
+
+    if (batch.fileData) {
+      const buffer = Buffer.from(batch.fileData, 'base64');
+      const filename = batch.fileName || `${batch.institutionName.replace(/\s+/g, '_')}_${batchId}.xlsx`;
+      const mimeType = batch.fileMimeType || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+      res.setHeader('Content-Type', mimeType);
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      return res.send(buffer);
+    }
+
+    // Fallback: Generate spreadsheet from stored student records for this batch
+    const students = await Registration.find({ batchId }).sort({ createdAt: 1 });
+    const rows = students.map((s, idx) => ({
+      'S.No': idx + 1,
+      'Registration ID': s.registrationId,
+      'Full Name': s.fullName,
+      'Date of Birth': s.dateOfBirth ? new Date(s.dateOfBirth).toISOString().split('T')[0] : 'N/A',
+      'Contact Number': s.contactNumber,
+      'T-Shirt Size': s.tShirtSize,
+      'Institution': s.institutionName,
+      'Institution Type': s.institutionType,
+      'Contact Person': s.contactPersonName || batch.contactPersonName,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+    const safeName = batch.institutionName.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `${safeName}_Students_${batchId}.xlsx`;
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    return res.send(buffer);
+  } catch (err) {
+    console.error('[Download Batch Spreadsheet Error]:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to download spreadsheet file' });
+  }
+};
+
+export const deleteBulkBatch = async (req, res) => {
+  try {
+    const { batchId } = req.params;
+    await BulkBatch.findOneAndDelete({ batchId });
+    await Registration.deleteMany({ batchId });
+    res.json({ success: true, message: 'Batch and associated student records deleted successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

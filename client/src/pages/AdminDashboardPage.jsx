@@ -33,6 +33,8 @@ import {
   LogOut,
   Award,
   Layout,
+  Trash2,
+  Eye,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -116,35 +118,39 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     }).catch(() => {});
   };
 
-  // Fetch Registrations
+  // Fetch Registrations or Bulk Batches
   useEffect(() => {
     if (activeTab === 'REGISTRATIONS') {
-      adminService
-        .getRegistrations({
-          type: regType,
-          search: searchTerm,
-          institution: filterInstitution,
-          size: filterSize,
-          page: regPagination.page,
-        })
-        .then((res) => {
-          if (res.data?.success) {
-            setRegistrations(res.data.data.items);
-            setRegPagination(res.data.data.pagination);
-          }
-        })
-        .catch(() => {});
+      if (regType === 'FORM') {
+        adminService
+          .getRegistrations({
+            type: 'FORM',
+            search: searchTerm,
+            institution: filterInstitution,
+            size: filterSize,
+            page: regPagination.page,
+          })
+          .then((res) => {
+            if (res.data?.success) {
+              setRegistrations(res.data.data.items);
+              setRegPagination(res.data.data.pagination);
+            }
+          })
+          .catch(() => {});
+      } else if (regType === 'SCHOOL_COLLEGE') {
+        loadBatches();
+      }
     }
   }, [activeTab, regType, searchTerm, filterInstitution, filterSize, regPagination.page]);
 
-  // Fetch Batches
-  useEffect(() => {
-    if (activeTab === 'BATCHES') {
-      adminService.getBatches().then((res) => {
+  const loadBatches = () => {
+    adminService
+      .getBatches()
+      .then((res) => {
         if (res.data?.success) setBatches(res.data.data);
-      }).catch(() => {});
-    }
-  }, [activeTab]);
+      })
+      .catch(() => {});
+  };
 
   // Fetch Event Config
   useEffect(() => {
@@ -245,20 +251,93 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     }
   };
 
+  // File Size Formatter Helper
+  const formatFileSize = (bytes) => {
+    if (!bytes) return null;
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  // Download Batch Spreadsheet File
+  const handleDownloadBatchSheet = async (batch) => {
+    try {
+      const res = await adminService.downloadBatchSpreadsheet(batch.batchId);
+      const blob = new Blob([res.data], {
+        type: batch.fileMimeType || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = batch.fileName || `${(batch.institutionName || 'Batch').replace(/\s+/g, '_')}_${batch.batchId}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download batch spreadsheet failed:', err);
+      alert('Failed to download spreadsheet file for this batch.');
+    }
+  };
+
+  // Delete Bulk Batch
+  const handleDeleteBatch = async (batchId, instName) => {
+    if (!window.confirm(`Are you sure you want to delete the batch for "${instName || batchId}"? This will also remove all student records under this batch.`)) {
+      return;
+    }
+    try {
+      const res = await adminService.deleteBatch(batchId);
+      if (res.data?.success) {
+        alert('Batch deleted successfully.');
+        loadBatches();
+        loadDashboardStats();
+      }
+    } catch (err) {
+      alert('Failed to delete batch.');
+    }
+  };
+
   // Export CSV Helper
   const exportRegistrationsCSV = () => {
-    if (registrations.length === 0) return;
-    let csv = 'Registration ID,Full Name,Date of Birth,Institution,Contact Number,T-Shirt Size,Type,Date\n';
-    registrations.forEach((r) => {
-      csv += `"${r.registrationId}","${r.fullName}","${r.dateOfBirth ? new Date(r.dateOfBirth).toISOString().split('T')[0] : 'N/A'}","${r.institutionName}","${r.contactNumber}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
-    });
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Registrations_Export_${regType}_${Date.now()}.csv`;
-    a.click();
+    if (regType === 'FORM') {
+      if (registrations.length === 0) return;
+      let csv = 'Registration ID,Full Name,Date of Birth,Institution,Contact Number,T-Shirt Size,Type,Date\n';
+      registrations.forEach((r) => {
+        csv += `"${r.registrationId}","${r.fullName}","${r.dateOfBirth ? new Date(r.dateOfBirth).toISOString().split('T')[0] : 'N/A'}","${r.institutionName}","${r.contactNumber}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Registrations_Form_${Date.now()}.csv`;
+      a.click();
+    } else {
+      if (batches.length === 0) return;
+      let csv = 'Batch ID,Institution Name,Institution Type,Contact Person,Phone,Total Students,Uploaded File,Submission Date\n';
+      batches.forEach((b) => {
+        csv += `"${b.batchId}","${b.institutionName}","${b.institutionType || 'N/A'}","${b.contactPersonName}","${b.phone}","${b.totalStudents}","${b.fileName || 'N/A'}","${new Date(b.createdAt).toISOString()}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `School_College_Batches_${Date.now()}.csv`;
+      a.click();
+    }
   };
+
+  const filteredBatches = batches.filter((b) => {
+    const q = searchTerm.trim().toLowerCase();
+    const matchesSearch = !q || (
+      (b.batchId && b.batchId.toLowerCase().includes(q)) ||
+      (b.institutionName && b.institutionName.toLowerCase().includes(q)) ||
+      (b.contactPersonName && b.contactPersonName.toLowerCase().includes(q)) ||
+      (b.phone && b.phone.toLowerCase().includes(q)) ||
+      (b.fileName && b.fileName.toLowerCase().includes(q))
+    );
+    const matchesInst = filterInstitution === 'ALL' || b.institutionName === filterInstitution;
+    return matchesSearch && matchesInst;
+  });
 
   return (
     <div className="min-h-screen py-10 px-4 max-w-7xl mx-auto space-y-8">
@@ -302,7 +381,6 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
           { id: 'FOOTER_CMS', label: 'Footer CMS', icon: Settings },
           { id: 'REGISTRATIONS', label: 'Registrations', icon: Award },
-          { id: 'BATCHES', label: 'Bulk Batches', icon: FileSpreadsheet },
           { id: 'EVENT_CONFIG', label: 'Event Control', icon: Settings },
           { id: 'BANNERS', label: 'Banner Uploads', icon: ImageIcon },
           { id: 'ACTIVITIES', label: 'Activities CMS', icon: ImageIcon },
@@ -463,174 +541,246 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             </button>
           </div>
 
-          {/* Search & Filter Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="relative">
-              <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search ID, name, phone, institution..."
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
-              />
-            </div>
+          {/* 1. FORM REGISTRATIONS VIEW */}
+          {regType === 'FORM' && (
+            <>
+              {/* Search & Filter Controls */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search ID, name, phone, institution..."
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
+                  />
+                </div>
 
-            <select
-              value={filterInstitution}
-              onChange={(e) => setFilterInstitution(e.target.value)}
-              className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
-            >
-              <option value="ALL">ALL INSTITUTIONS</option>
-              {institutions.map((inst) => (
-                <option key={inst} value={inst}>{inst}</option>
-              ))}
-            </select>
-
-            <select
-              value={filterSize}
-              onChange={(e) => setFilterSize(e.target.value)}
-              className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
-            >
-              <option value="ALL">ALL T-SHIRT SIZES</option>
-              {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((sz) => (
-                <option key={sz} value={sz}>{sz}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Registrations Data Table */}
-          <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
-                <tr>
-                  <th className="p-3">Reg ID</th>
-                  <th className="p-3">Student Name</th>
-                  <th className="p-3">DOB</th>
-                  <th className="p-3">Institution</th>
-                  <th className="p-3">Phone</th>
-                  <th className="p-3">T-Shirt</th>
-                  <th className="p-3">Date</th>
-                  <th className="p-3">Sheets Sync</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border-color)]/30 text-[var(--text-primary)]">
-                {registrations.length > 0 ? (
-                  registrations.map((item) => (
-                    <tr key={item._id}>
-                      <td className="p-3 font-mono font-bold text-[var(--orange)]">{item.registrationId}</td>
-                      <td className="p-3 font-extrabold">{item.fullName}</td>
-                      <td className="p-3">{item.dateOfBirth ? new Date(item.dateOfBirth).toLocaleDateString('en-IN') : 'N/A'}</td>
-                      <td className="p-3 font-medium">{item.institutionName}</td>
-                      <td className="p-3">{item.contactNumber}</td>
-                      <td className="p-3 font-bold text-[var(--yellow)]">{item.tShirtSize}</td>
-                      <td className="p-3">{new Date(item.createdAt).toLocaleDateString('en-IN')}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
-                          item.googleSheetsSync?.status === 'success'
-                            ? 'bg-emerald-500/15 text-emerald-500'
-                            : 'bg-amber-500/15 text-amber-500'
-                        }`}>
-                          {item.googleSheetsSync?.status || 'saved'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={8} className="p-8 text-center text-[var(--text-muted)] font-bold">
-                      No registrations found matching your criteria.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination Controls */}
-          {regPagination.pages > 1 && (
-            <div className="flex items-center justify-between text-xs pt-2">
-              <span className="text-[var(--text-muted)] font-bold">
-                Page {regPagination.page} of {regPagination.pages} ({regPagination.total} records)
-              </span>
-              <div className="flex gap-2">
-                <button
-                  disabled={regPagination.page === 1}
-                  onClick={() => setRegPagination({ ...regPagination, page: regPagination.page - 1 })}
-                  className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                <select
+                  value={filterInstitution}
+                  onChange={(e) => setFilterInstitution(e.target.value)}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
                 >
-                  Prev
-                </button>
-                <button
-                  disabled={regPagination.page === regPagination.pages}
-                  onClick={() => setRegPagination({ ...regPagination, page: regPagination.page + 1 })}
-                  className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                  <option value="ALL">ALL INSTITUTIONS</option>
+                  {institutions.map((inst) => (
+                    <option key={inst} value={inst}>{inst}</option>
+                  ))}
+                </select>
+
+                <select
+                  value={filterSize}
+                  onChange={(e) => setFilterSize(e.target.value)}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
                 >
-                  Next
-                </button>
+                  <option value="ALL">ALL T-SHIRT SIZES</option>
+                  {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((sz) => (
+                    <option key={sz} value={sz}>{sz}</option>
+                  ))}
+                </select>
               </div>
-            </div>
+
+              {/* Registrations Data Table */}
+              <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
+                    <tr>
+                      <th className="p-3">Reg ID</th>
+                      <th className="p-3">Student Name</th>
+                      <th className="p-3">DOB</th>
+                      <th className="p-3">Institution</th>
+                      <th className="p-3">Phone</th>
+                      <th className="p-3">T-Shirt</th>
+                      <th className="p-3">Date</th>
+                      <th className="p-3">Sheets Sync</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--border-color)]/30 text-[var(--text-primary)]">
+                    {registrations.length > 0 ? (
+                      registrations.map((item) => (
+                        <tr key={item._id}>
+                          <td className="p-3 font-mono font-bold text-[var(--orange)]">{item.registrationId}</td>
+                          <td className="p-3 font-extrabold">{item.fullName}</td>
+                          <td className="p-3">{item.dateOfBirth ? new Date(item.dateOfBirth).toLocaleDateString('en-IN') : 'N/A'}</td>
+                          <td className="p-3 font-medium">{item.institutionName}</td>
+                          <td className="p-3">{item.contactNumber}</td>
+                          <td className="p-3 font-bold text-[var(--yellow)]">{item.tShirtSize}</td>
+                          <td className="p-3">{new Date(item.createdAt).toLocaleDateString('en-IN')}</td>
+                          <td className="p-3">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                              item.googleSheetsSync?.status === 'success'
+                                ? 'bg-emerald-500/15 text-emerald-500'
+                                : 'bg-amber-500/15 text-amber-500'
+                            }`}>
+                              {item.googleSheetsSync?.status || 'saved'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={8} className="p-8 text-center text-[var(--text-muted)] font-bold">
+                          No registrations found matching your criteria.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {regPagination.pages > 1 && (
+                <div className="flex items-center justify-between text-xs pt-2">
+                  <span className="text-[var(--text-muted)] font-bold">
+                    Page {regPagination.page} of {regPagination.pages} ({regPagination.total} records)
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      disabled={regPagination.page === 1}
+                      onClick={() => setRegPagination({ ...regPagination, page: regPagination.page - 1 })}
+                      className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                    >
+                      Prev
+                    </button>
+                    <button
+                      disabled={regPagination.page === regPagination.pages}
+                      onClick={() => setRegPagination({ ...regPagination, page: regPagination.page + 1 })}
+                      className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
-        </div>
-      )}
+          {/* 2. SCHOOL / COLLEGE BULK SUBMISSIONS VIEW */}
+          {regType === 'SCHOOL_COLLEGE' && (
+            <>
+              {/* Search & Filter Controls */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search batch ID, school/college, contact person, file..."
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
+                  />
+                </div>
 
-      {/* TAB 3: BULK BATCHES */}
-      {activeTab === 'BATCHES' && (
-        <div className="glass-card p-6 rounded-3xl border border-[var(--border-color)] space-y-6 animate-in fade-in">
-          <h3 className="text-xl font-extrabold font-heading text-[var(--text-primary)]">
-            INSTITUTION BULK BATCHES LOG
-          </h3>
+                <select
+                  value={filterInstitution}
+                  onChange={(e) => setFilterInstitution(e.target.value)}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
+                >
+                  <option value="ALL">ALL INSTITUTIONS</option>
+                  {institutions.map((inst) => (
+                    <option key={inst} value={inst}>{inst}</option>
+                  ))}
+                </select>
+              </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
-                <tr>
-                  <th className="p-3">Batch ID</th>
-                  <th className="p-3">Institution</th>
-                  <th className="p-3">Contact Person</th>
-                  <th className="p-3">Phone</th>
-                  <th className="p-3">Total Students</th>
-                  <th className="p-3">Valid</th>
-                  <th className="p-3">Upload Date</th>
-                  <th className="p-3">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border-color)]/30 text-[var(--text-primary)]">
-                {batches.length > 0 ? (
-                  batches.map((batch) => (
-                    <tr key={batch._id}>
-                      <td className="p-3 font-mono font-bold text-[var(--cyan)]">{batch.batchId}</td>
-                      <td className="p-3 font-extrabold">{batch.institutionName}</td>
-                      <td className="p-3 font-medium">{batch.contactPersonName}</td>
-                      <td className="p-3">{batch.phone}</td>
-                      <td className="p-3 font-bold">{batch.totalStudents}</td>
-                      <td className="p-3 font-bold text-emerald-500">{batch.validRecords}</td>
-                      <td className="p-3">{new Date(batch.createdAt).toLocaleDateString('en-IN')}</td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => {
-                            adminService.getBatchStudents(batch.batchId).then((r) => {
-                              if (r.data?.success) setSelectedBatchStudents(r.data.data);
-                            });
-                          }}
-                          className="px-3 py-1 rounded-lg bg-[var(--cyan)] text-white text-[10px] font-bold"
-                        >
-                          VIEW STUDENTS
-                        </button>
-                      </td>
+              {/* Batches Data Table */}
+              <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
+                    <tr>
+                      <th className="p-3">Batch ID</th>
+                      <th className="p-3">Institution</th>
+                      <th className="p-3">Contact Person</th>
+                      <th className="p-3">Phone</th>
+                      <th className="p-3 text-center">Students</th>
+                      <th className="p-3">Uploaded Sheet</th>
+                      <th className="p-3">Submission Date</th>
+                      <th className="p-3 text-right">Actions</th>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={8} className="p-8 text-center text-[var(--text-muted)] font-bold">
-                      No bulk upload batches found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--border-color)]/30 text-[var(--text-primary)]">
+                    {filteredBatches.length > 0 ? (
+                      filteredBatches.map((batch) => (
+                        <tr key={batch._id} className="hover:bg-[var(--bg-tertiary)]/40 transition-colors">
+                          <td className="p-3 font-mono font-bold text-[var(--cyan)]">{batch.batchId}</td>
+                          <td className="p-3">
+                            <div className="font-extrabold text-[var(--text-primary)]">{batch.institutionName}</div>
+                            {batch.institutionType && (
+                              <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase bg-[var(--cyan)]/15 text-[var(--cyan)]">
+                                {batch.institutionType}
+                              </span>
+                            )}
+                          </td>
+                          <td className="p-3 font-medium">{batch.contactPersonName}</td>
+                          <td className="p-3">{batch.phone}</td>
+                          <td className="p-3 text-center">
+                            <span className="px-2.5 py-1 rounded-full text-xs font-black bg-[var(--cyan)]/15 text-[var(--cyan)]">
+                              {batch.totalStudents}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            {batch.fileName ? (
+                              <div className="flex items-center gap-2 max-w-[220px]" title={batch.fileName}>
+                                <FileSpreadsheet className="w-4 h-4 text-emerald-500 shrink-0" />
+                                <span className="truncate font-semibold text-[var(--text-primary)]">{batch.fileName}</span>
+                                {batch.fileSize && (
+                                  <span className="text-[10px] text-[var(--text-muted)] shrink-0">
+                                    ({formatFileSize(batch.fileSize)})
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-[var(--text-muted)] italic text-[11px]">Excel Spreadsheet</span>
+                            )}
+                          </td>
+                          <td className="p-3">{new Date(batch.createdAt).toLocaleDateString('en-IN')}</td>
+                          <td className="p-3 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => handleDownloadBatchSheet(batch)}
+                                title="Download the sheet uploaded by this institution"
+                                className="btn-secondary py-1.5 px-3 text-[11px] font-extrabold border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 flex items-center gap-1.5 shadow-sm"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>DOWNLOAD SHEET</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  adminService.getBatchStudents(batch.batchId).then((r) => {
+                                    if (r.data?.success) setSelectedBatchStudents(r.data.data);
+                                  });
+                                }}
+                                title="View enrolled students"
+                                className="btn-secondary py-1.5 px-2.5 text-[11px] font-extrabold border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 flex items-center gap-1"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>STUDENTS</span>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteBatch(batch.batchId, batch.institutionName)}
+                                title="Delete Batch"
+                                className="p-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={8} className="p-8 text-center text-[var(--text-muted)] font-bold">
+                          {batches.length === 0
+                            ? 'No school or college bulk submissions found yet.'
+                            : 'No bulk submissions match your search filter.'}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
 
           {/* Batch Students Detail Modal */}
           {selectedBatchStudents && (
@@ -640,7 +790,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                   <h4 className="text-lg font-bold font-heading text-[var(--text-primary)]">
                     BATCH STUDENT RECORDS ({selectedBatchStudents.length})
                   </h4>
-                  <button onClick={() => setSelectedBatchStudents(null)} className="text-red-500 font-bold text-xs">
+                  <button onClick={() => setSelectedBatchStudents(null)} className="text-red-500 font-bold text-xs hover:underline">
                     CLOSE [X]
                   </button>
                 </div>

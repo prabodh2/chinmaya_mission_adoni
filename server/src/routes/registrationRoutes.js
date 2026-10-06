@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get('/institutions', getInstitutions);
 router.post('/form', registrationLimiter, submitIndividualRegistration);
-router.post('/bulk', registrationLimiter, submitBulkRegistration);
+router.post('/bulk', registrationLimiter, uploadSpreadsheet, submitBulkRegistration);
 router.post('/parse-file', uploadSpreadsheet, parseSpreadsheetFile);
 router.get('/my-registrations', protect, getUserRegistrations);
 router.get('/details/:id', getRegistrationById);

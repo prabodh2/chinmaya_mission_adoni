@@ -136,25 +136,46 @@ export const submitBulkRegistration = async (req, res) => {
 
     const { contactPersonName, phone, institutionType, institutionName, studentsData } = req.body;
 
-    if (!contactPersonName || !phone || !institutionName || !studentsData) {
+    if (!contactPersonName || !phone || !institutionName) {
       return res.status(400).json({
         success: false,
-        message: 'Contact person, phone, institution name, and student data are required',
+        message: 'Contact person name, phone number, and institution name are required',
         errorCode: 'VALIDATION_ERROR',
       });
     }
 
     let parsedStudents = [];
-    if (typeof studentsData === 'string') {
-      parsedStudents = JSON.parse(studentsData);
-    } else if (Array.isArray(studentsData)) {
-      parsedStudents = studentsData;
+    if (studentsData) {
+      if (typeof studentsData === 'string') {
+        try {
+          parsedStudents = JSON.parse(studentsData);
+        } catch (e) {
+          parsedStudents = [];
+        }
+      } else if (Array.isArray(studentsData)) {
+        parsedStudents = studentsData;
+      }
+    }
+
+    // If studentsData not provided or empty, attempt parsing from attached req.file
+    if ((!parsedStudents || parsedStudents.length === 0) && req.file) {
+      const buffer = req.file.buffer;
+      if (req.file.originalname.match(/\.csv$/i)) {
+        const text = buffer.toString('utf-8');
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+        parsedStudents = parsed.data;
+      } else {
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        parsedStudents = XLSX.utils.sheet_to_json(sheet);
+      }
     }
 
     if (!parsedStudents || parsedStudents.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'No student records found in the submission',
+        message: 'No student records found. Please upload a valid spreadsheet file containing student data.',
         errorCode: 'EMPTY_BULK_DATA',
       });
     }
@@ -198,7 +219,7 @@ export const submitBulkRegistration = async (req, res) => {
       syncRegistrationToGoogleSheets(reg).then(async (res) => {
         reg.googleSheetsSync = res;
         await reg.save();
-      });
+      }).catch(() => {});
     }
 
     let cleanBulkPhone = phone.replace(/\D/g, '');
@@ -215,6 +236,10 @@ export const submitBulkRegistration = async (req, res) => {
       totalStudents: parsedStudents.length,
       validRecords: validCount,
       failedRecords: failedCount,
+      fileName: req.file ? req.file.originalname : `Batch_${batchId}.csv`,
+      fileMimeType: req.file ? req.file.mimetype : 'text/csv',
+      fileSize: req.file ? req.file.size : 0,
+      fileData: req.file ? req.file.buffer.toString('base64') : null,
     });
 
     await bulkBatch.save();
@@ -227,6 +252,7 @@ export const submitBulkRegistration = async (req, res) => {
         totalStudents: parsedStudents.length,
         validRecords: validCount,
         failedRecords: failedCount,
+        fileName: bulkBatch.fileName,
       },
     });
   } catch (err) {
