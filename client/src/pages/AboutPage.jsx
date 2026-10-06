@@ -23,31 +23,6 @@ import {
 } from 'lucide-react';
 
 export const AboutPage = () => {
-  const [content, setContent] = useState(() => {
-    try {
-      const cached = localStorage.getItem('cms_about_content');
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (parsed?.ourActivities?.cards) {
-          parsed.ourActivities.cards.forEach((c) => {
-            if (c.imageUrl === '/assets/images/activity-sanjeevaraya.png') {
-              c.imageUrl = '/assets/images/activity-sanjeevaraya.png?v=2';
-            }
-          });
-        }
-        return parsed;
-      }
-    } catch (_) {}
-    return null;
-  });
-  const [loading, setLoading] = useState(() => {
-    try {
-      return !localStorage.getItem('cms_about_content');
-    } catch (_) {
-      return true;
-    }
-  });
-
   // Fallback default content matching exact prompt specification
   const defaultContent = {
     hero: {
@@ -55,8 +30,7 @@ export const AboutPage = () => {
       subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
       intro:
         'Chinmaya Mission Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1200&auto=format&fit=crop',
+      imageUrl: '/assets/images/about-ashram-hero.jpg',
     },
     whoWeAre: {
       heading: 'WHO ARE WE?',
@@ -100,51 +74,6 @@ export const AboutPage = () => {
         },
       ],
     },
-    ourVision: {
-      heading: 'OUR VISION',
-      quote:
-        'To inspire individuals to discover their inner potential, live by universal values and contribute positively to society through knowledge, compassion and selfless service.',
-    },
-    ourMission: {
-      heading: 'OUR MISSION',
-      items: [
-        {
-          id: 'item-1',
-          title: 'SPIRITUAL GROWTH',
-          description:
-            'Sharing the wisdom of Vedanta and the Bhagavad Gita to encourage self-understanding and spiritual development.',
-          iconName: 'BookOpen',
-        },
-        {
-          id: 'item-2',
-          title: 'YOUTH EMPOWERMENT',
-          description:
-            'Guiding young people towards leadership, discipline, confidence and character building.',
-          iconName: 'Zap',
-        },
-        {
-          id: 'item-3',
-          title: 'CULTURAL ENRICHMENT',
-          description:
-            "Preserving and promoting India's spiritual and cultural heritage through meaningful programmes and celebrations.",
-          iconName: 'Sparkles',
-        },
-        {
-          id: 'item-4',
-          title: 'COMMUNITY SERVICE',
-          description:
-            'Encouraging selfless service and initiatives that contribute to the welfare of society.',
-          iconName: 'HeartHandshake',
-        },
-        {
-          id: 'item-5',
-          title: 'HOLISTIC DEVELOPMENT',
-          description:
-            'Integrating timeless spiritual wisdom with practical living to nurture responsible, compassionate and well-rounded individuals.',
-          iconName: 'Compass',
-        },
-      ],
-    },
     chykSection: {
       heading: 'CHINMAYA YUVA KENDRA (CHYK) ADONI',
       p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
@@ -171,7 +100,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA SANJEEVARAYA TEMPLE',
           content:
             'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2',
+          imageUrl: '/assets/images/activity-sanjeevaraya.png',
           badge: 'SPIRITUAL TEMPLE',
           iconName: 'Landmark',
         },
@@ -189,8 +118,7 @@ export const AboutPage = () => {
           title: 'DEVI GROUP',
           content:
             "The Devi Group is dedicated to nurturing devotion, spiritual understanding and the preservation of cultural values. Through devotional gatherings, spiritual learning and collective participation in traditional activities, the group encourages members to deepen their spiritual connection and contribute to the Mission's broader vision.",
-          imageUrl:
-            'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop',
+          imageUrl: '/assets/images/activity-devigroup.jpg',
           badge: 'DEVOTIONAL WING',
           iconName: 'Heart',
         },
@@ -223,6 +151,36 @@ export const AboutPage = () => {
     },
   };
 
+  const [content, setContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cms_about_content');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed?.ourActivities?.cards) {
+          parsed.ourActivities.cards.forEach((c, idx) => {
+            const def = defaultContent.ourActivities.cards[idx];
+            if (!c.imageUrl || c.imageUrl === 'undefined' || typeof c.imageUrl !== 'string' || c.imageUrl.trim() === '') {
+              c.imageUrl = def?.imageUrl;
+            } else if (c.imageUrl.includes('activity-sanjeevaraya.png')) {
+              c.imageUrl = '/assets/images/activity-sanjeevaraya.png';
+            } else if (c.imageUrl.includes('devi_group_wing') || c.imageUrl.includes('photo-1511632765486')) {
+              c.imageUrl = '/assets/images/activity-devigroup.jpg';
+            }
+          });
+        }
+        return parsed;
+      }
+    } catch (_) {}
+    return null;
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !localStorage.getItem('cms_about_content');
+    } catch (_) {
+      return true;
+    }
+  });
+
   const loadAboutContent = () => {
     contentService
       .getContent('about_page')
@@ -230,6 +188,18 @@ export const AboutPage = () => {
         if (res.data?.success && res.data?.data) {
           const apiData = res.data.data;
           const merged = { ...defaultContent, ...apiData };
+          if (merged.ourActivities?.cards) {
+            merged.ourActivities.cards = merged.ourActivities.cards.map((c, idx) => {
+              let cleanImg = c.imageUrl;
+              const def = defaultContent.ourActivities.cards[idx];
+              if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
+                cleanImg = def?.imageUrl;
+              } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
+                cleanImg = '/assets/images/activity-sanjeevaraya.png';
+              }
+              return { ...c, imageUrl: cleanImg };
+            });
+          }
           setContent(merged);
           try {
             localStorage.setItem('cms_about_content', JSON.stringify(merged));
@@ -239,10 +209,13 @@ export const AboutPage = () => {
               if (safeMerged.ourActivities?.cards) {
                 safeMerged.ourActivities = {
                   ...safeMerged.ourActivities,
-                  cards: safeMerged.ourActivities.cards.map((c) => ({
-                    ...c,
-                    imageUrl: (c.imageUrl && c.imageUrl.length > 50000) ? undefined : c.imageUrl,
-                  })),
+                  cards: safeMerged.ourActivities.cards.map((c, idx) => {
+                    const def = defaultContent.ourActivities.cards[idx];
+                    return {
+                      ...c,
+                      imageUrl: (c.imageUrl && c.imageUrl.length > 50000) ? (def?.imageUrl || '') : c.imageUrl,
+                    };
+                  }),
                 };
               }
               localStorage.setItem('cms_about_content', JSON.stringify(safeMerged));
@@ -651,9 +624,21 @@ export const AboutPage = () => {
               <div>
                 <div className="h-56 overflow-hidden relative">
                   <img
-                    src={card.imageUrl}
+                    src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
                     alt={card.title}
+                    onError={(e) => {
+                      if (card.id === 'act-1' || card.title?.toLowerCase().includes('sanjeevaraya')) {
+                        e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+                      } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
+                        e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+                      } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
+                        e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                      } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
+                        e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+                      }
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="eager"
                   />
                   <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/75 text-white font-extrabold text-[11px] uppercase tracking-wider backdrop-blur-md border border-white/20">
                     {card.badge}

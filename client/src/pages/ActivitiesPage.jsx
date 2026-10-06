@@ -23,10 +23,21 @@ const ActivityCard = ({ activity, onSelect }) => {
         {/* Card Image Container */}
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/20">
           <img
-            src={activity.imageUrl}
+            src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
             alt={activity.imageAlt || activity.title}
+            onError={(e) => {
+              if (activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya')) {
+                e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+              } else if (activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara')) {
+                e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+              } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
+                e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+              } else if (activity.id === 'chinmaya-yuva-kendra' || activity.title?.toLowerCase().includes('chyk')) {
+                e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+              }
+            }}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
           
@@ -83,10 +94,13 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
         <div className="lg:col-span-5 order-1">
           <div className="relative rounded-2xl overflow-hidden border-2 border-[var(--orange)] shadow-xl group">
             <img
-              src={activity.imageUrl}
+              src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
               alt={activity.imageAlt || activity.title}
+              onError={(e) => {
+                e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+              }}
               className="w-full h-72 sm:h-[380px] object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
+              loading="eager"
             />
             <span className="absolute top-4 left-4 px-4 py-1.5 rounded-full bg-[var(--orange)] text-white font-extrabold text-xs tracking-wider uppercase shadow-md">
               {activity.category}
@@ -148,7 +162,7 @@ export const ActivitiesPage = () => {
       category: 'Spirituality & Devotion',
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-      imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2',
+      imageUrl: '/assets/images/activity-sanjeevaraya.png',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
       imageSource: 'Chinmaya Mission Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
@@ -174,8 +188,7 @@ export const ActivitiesPage = () => {
       category: 'Culture & Spiritual Learning',
       description:
         "The Devi Group is dedicated to nurturing devotion, spiritual understanding and the preservation of cultural values. Through devotional gatherings, spiritual learning and collective participation in traditional activities, the group encourages members to deepen their spiritual connection and contribute to the Mission's broader vision.",
-      imageUrl:
-        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1000&auto=format&fit=crop',
+      imageUrl: '/assets/images/activity-devigroup.jpg',
       imageAlt: 'Chinmaya Mission Devi Group Devotional Gathering',
       imageSource: 'Devi Group Cultural Learning Wing',
       imageCredit: 'Spiritual Learning & Cultural Preservation',
@@ -257,10 +270,23 @@ export const ActivitiesPage = () => {
         const parsed = JSON.parse(item);
         if (Array.isArray(parsed)) {
           return parsed.map((act) => {
-            if (act.imageUrl === '/assets/images/activity-sanjeevaraya.png') {
-              return { ...act, imageUrl: '/assets/images/activity-sanjeevaraya.png?v=2' };
+            const initialMatch = initialActivities.find(
+              (init) => init.id === act.id || init.title?.toLowerCase() === act.title?.toLowerCase()
+            );
+            // Critical safeguard: if cached imageUrl is missing, undefined, or empty, fallback to initial match
+            let img = act.imageUrl;
+            if (!img || img === 'undefined' || typeof img !== 'string' || img.trim() === '') {
+              img = initialMatch?.imageUrl || '';
+            } else if (img.includes('activity-sanjeevaraya.png')) {
+              img = '/assets/images/activity-sanjeevaraya.png';
+            } else if (img.includes('devi_group_wing') || img.includes('photo-1511632765486')) {
+              img = '/assets/images/activity-devigroup.jpg';
             }
-            return act;
+            return {
+              ...act,
+              imageUrl: img,
+              icon: act.icon || initialMatch?.icon,
+            };
           });
         }
         return parsed;
@@ -329,7 +355,12 @@ export const ActivitiesPage = () => {
                   (idx === 3 && c.id === 'act-4')
               );
               if (matchedCard) {
-                const cleanImg = matchedCard.imageUrl || item.imageUrl;
+                let cleanImg = matchedCard.imageUrl;
+                if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
+                  cleanImg = item.imageUrl;
+                } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
+                  cleanImg = '/assets/images/activity-sanjeevaraya.png';
+                }
 
                 return {
                   ...item,
@@ -347,12 +378,15 @@ export const ActivitiesPage = () => {
               );
             } catch (_) {
               try {
-                // If quota exceeded, omit huge base64 strings so caching still works
-                const cleanForStorage = updated.map((x) => ({
-                  ...x,
-                  icon: undefined,
-                  imageUrl: (x.imageUrl && x.imageUrl.length > 50000) ? undefined : x.imageUrl,
-                }));
+                // If quota exceeded, never set imageUrl to undefined; fall back to clean asset path
+                const cleanForStorage = updated.map((x) => {
+                  const initialMatch = initialActivities.find((init) => init.id === x.id);
+                  return {
+                    ...x,
+                    icon: undefined,
+                    imageUrl: (x.imageUrl && x.imageUrl.length > 50000) ? (initialMatch?.imageUrl || '') : x.imageUrl,
+                  };
+                });
                 localStorage.setItem('cms_mission_activities', JSON.stringify(cleanForStorage));
               } catch (__) {}
             }
