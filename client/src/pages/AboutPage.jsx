@@ -149,8 +149,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA SANJEEVARAYA TEMPLE',
           content:
             'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl:
-            'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+          imageUrl: '/assets/images/activity-sanjeevaraya.png',
           badge: 'SPIRITUAL TEMPLE',
           iconName: 'Landmark',
         },
@@ -159,8 +158,7 @@ export const AboutPage = () => {
           title: 'SHANTA MALLESHWARA TEMPLE',
           content:
             'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
-          imageUrl:
-            'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=800&auto=format&fit=crop',
+          imageUrl: '/assets/images/activity-shantamalleshwara.webp',
           badge: 'SACRED CENTRE',
           iconName: 'Flame',
         },
@@ -179,8 +177,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA YUVA KENDRA (CHYK)',
           content:
             'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
-          imageUrl:
-            'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=800&auto=format&fit=crop',
+          imageUrl: '/assets/images/activity-chyk.jpg',
           badge: 'YOUTH WING • FEATURED',
           featured: true,
           iconName: 'Zap',
@@ -209,8 +206,23 @@ export const AboutPage = () => {
       .getContent('about_page')
       .then((res) => {
         if (res.data?.success && res.data?.data) {
-          // Merge with default to ensure all fields exist
-          setContent({ ...defaultContent, ...res.data.data });
+          const apiData = res.data.data;
+          if (apiData.ourActivities?.cards) {
+            apiData.ourActivities.cards = apiData.ourActivities.cards.map((card, idx) => {
+              const defaultCard = defaultContent.ourActivities?.cards?.[idx];
+              const isLegacyStock =
+                card.imageUrl &&
+                (card.imageUrl.includes('photo-1544367567-0f2fcb009e0b') ||
+                  card.imageUrl.includes('photo-1507692049790-de58290a4334') ||
+                  card.imageUrl.includes('photo-1582510003544-4d00b7f74220') ||
+                  card.imageUrl.includes('photo-1526976668912-1a811878dd37'));
+              if (isLegacyStock) {
+                return { ...card, imageUrl: defaultCard?.imageUrl || card.imageUrl };
+              }
+              return card;
+            });
+          }
+          setContent({ ...defaultContent, ...apiData });
         } else {
           setContent(defaultContent);
         }

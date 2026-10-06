@@ -148,8 +148,7 @@ export const ActivitiesPage = () => {
       category: 'Spirituality & Devotion',
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1000&auto=format&fit=crop',
+      imageUrl: '/assets/images/activity-sanjeevaraya.png',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
       imageSource: 'Chinmaya Mission Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
@@ -162,8 +161,7 @@ export const ActivitiesPage = () => {
       category: 'Devotion & Community',
       description:
         'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop',
+      imageUrl: '/assets/images/activity-shantamalleshwara.webp',
       imageAlt: 'Shanta Malleshwara Temple Adoni Worship Center',
       imageSource: 'Shri Shantamalleshwara Swami Temple Adoni',
       imageCredit: 'Official Festival & Devotional Observances',
@@ -192,8 +190,7 @@ export const ActivitiesPage = () => {
         'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives.',
       additionalDescription:
         "CHYK Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.",
-      imageUrl:
-        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop',
+      imageUrl: '/assets/images/activity-chyk.jpg',
       imageAlt: 'Chinmaya Yuva Kendra CHYK Adoni Youth Empowerment',
       imageSource: 'Chinmaya Yuva Kendra (CHYK) Adoni',
       imageCredit: 'Youth Empowerment & Community Leadership',
@@ -296,9 +293,13 @@ export const ActivitiesPage = () => {
                   (idx === 3 && c.id === 'act-4')
               );
               if (matchedCard) {
-                const cleanImg = matchedCard.imageUrl?.includes('photo-1507692049790-de58290a4334')
-                  ? 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000&auto=format&fit=crop'
-                  : (matchedCard.imageUrl || item.imageUrl);
+                const isLegacyStock =
+                  matchedCard.imageUrl?.includes('photo-1544367567-0f2fcb009e0b') ||
+                  matchedCard.imageUrl?.includes('photo-1507692049790-de58290a4334') ||
+                  matchedCard.imageUrl?.includes('photo-1582510003544-4d00b7f74220') ||
+                  matchedCard.imageUrl?.includes('photo-1529156069898-49953e39b3ac');
+
+                const cleanImg = isLegacyStock ? item.imageUrl : (matchedCard.imageUrl || item.imageUrl);
 
                 return {
                   ...item,
