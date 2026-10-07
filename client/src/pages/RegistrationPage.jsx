@@ -32,6 +32,8 @@ export const RegistrationPage = () => {
   // Individual Form State
   const [indForm, setIndForm] = useState({
     fullName: '',
+    age: '',
+    standard: '',
     dateOfBirth: '',
     isStudent: false,
     institutionName: '',
@@ -129,6 +131,8 @@ export const RegistrationPage = () => {
 
       const payload = {
         fullName: indForm.fullName,
+        age: indForm.age ? parseInt(indForm.age, 10) : undefined,
+        standard: indForm.standard || undefined,
         dateOfBirth: indForm.dateOfBirth,
         isStudent: indForm.isStudent,
         institutionName: finalInstitution,
@@ -150,6 +154,8 @@ export const RegistrationPage = () => {
         // Reset Form
         setIndForm({
           fullName: '',
+          age: '',
+          standard: '',
           dateOfBirth: '',
           isStudent: false,
           institutionName: '',
@@ -387,6 +393,39 @@ export const RegistrationPage = () => {
                 />
               </div>
               {indErrors.fullName && <p className="text-xs text-red-500 font-bold mt-1">{indErrors.fullName}</p>}
+            </div>
+
+            {/* Age & Standard / Class */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                  Age (Years)
+                </label>
+                <input
+                  type="number"
+                  min="5"
+                  max="100"
+                  disabled={!isRegistrationOpen}
+                  value={indForm.age}
+                  onChange={(e) => setIndForm({ ...indForm, age: e.target.value })}
+                  placeholder="e.g. 14"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                  Standard / Class
+                </label>
+                <input
+                  type="text"
+                  disabled={!isRegistrationOpen}
+                  value={indForm.standard}
+                  onChange={(e) => setIndForm({ ...indForm, standard: e.target.value })}
+                  placeholder="e.g. 8th, 9th, 10th, Inter, Degree..."
+                  className="w-full px-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                />
+              </div>
             </div>
 
             {/* Date of Birth & Student Toggle */}

@@ -13,6 +13,11 @@ import {
 import { HomePageManager } from './admin/HomePageManager';
 import { FooterManager } from './admin/FooterManager';
 import { AdminImagesPage } from './admin/AdminImagesPage';
+import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
+import { TshirtSummary } from '../components/admin/TshirtSummary';
+import { ClassSummary } from '../components/admin/ClassSummary';
+import { RegistrationDetailsModal } from '../components/admin/RegistrationDetailsModal';
+import { RegistrationEditModal } from '../components/admin/RegistrationEditModal';
 import {
   Shield,
   Users,
@@ -36,6 +41,8 @@ import {
   Trash2,
   Eye,
   Shirt,
+  Pencil,
+  GraduationCap,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -53,15 +60,19 @@ export const AdminDashboardPage = ({ defaultTab }) => {
   const [loadingStats, setLoadingStats] = useState(true);
 
   // Registrations Tab State
-  const [regType, setRegType] = useState('FORM'); // FORM | SCHOOL_COLLEGE
+  const [regType, setRegType] = useState('ALL'); // ALL | INDIVIDUAL | SCHOOL_COLLEGE | BATCHES
   const [registrations, setRegistrations] = useState([]);
   const [regPagination, setRegPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [searchTerm, setSearchTerm] = useState('');
   const [filterInstitution, setFilterInstitution] = useState('ALL');
   const [filterSize, setFilterSize] = useState('ALL');
+  const [filterStandard, setFilterStandard] = useState('ALL');
   const [institutions, setInstitutions] = useState([]);
   const [summaryData, setSummaryData] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [loadingRegistrations, setLoadingRegistrations] = useState(false);
+  const [viewingRegistration, setViewingRegistration] = useState(null);
+  const [editingRegistration, setEditingRegistration] = useState(null);
 
   // Batches Tab State
   const [batches, setBatches] = useState([]);
@@ -125,33 +136,40 @@ export const AdminDashboardPage = ({ defaultTab }) => {
   // Fetch Registrations or Bulk Batches
   useEffect(() => {
     if (activeTab === 'REGISTRATIONS') {
-      if (regType === 'FORM') {
-        adminService
-          .getRegistrations({
-            type: 'FORM',
-            search: searchTerm,
-            institution: filterInstitution,
-            size: filterSize,
-            page: regPagination.page,
-          })
-          .then((res) => {
-            if (res.data?.success) {
-              setRegistrations(res.data.data.items);
-              setRegPagination(res.data.data.pagination);
-            }
-          })
-          .catch(() => {});
-        loadRegistrationSummary();
-      } else if (regType === 'SCHOOL_COLLEGE') {
+      if (regType === 'BATCHES') {
         loadBatches();
+      } else {
+        loadRegistrations();
       }
+      loadRegistrationSummary();
     }
-  }, [activeTab, regType, searchTerm, filterInstitution, filterSize, regPagination.page]);
+  }, [activeTab, regType, searchTerm, filterStandard, filterInstitution, filterSize, regPagination.page]);
+
+  const loadRegistrations = () => {
+    setLoadingRegistrations(true);
+    adminService
+      .getRegistrations({
+        type: regType === 'ALL' ? undefined : regType,
+        search: searchTerm,
+        standard: filterStandard !== 'ALL' ? filterStandard : undefined,
+        institution: filterInstitution !== 'ALL' ? filterInstitution : undefined,
+        size: filterSize !== 'ALL' ? filterSize : undefined,
+        page: regPagination.page,
+      })
+      .then((res) => {
+        if (res.data?.success) {
+          setRegistrations(res.data.data.items);
+          setRegPagination(res.data.data.pagination);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingRegistrations(false));
+  };
 
   const loadRegistrationSummary = () => {
     setLoadingSummary(true);
     adminService
-      .getRegistrationSummary('FORM')
+      .getRegistrationSummary()
       .then((res) => {
         if (res.data?.success) {
           setSummaryData(res.data.data);
@@ -159,6 +177,33 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       })
       .catch(() => {})
       .finally(() => setLoadingSummary(false));
+  };
+
+  const handleDeleteRegistration = async (id, name) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete registration ${id} (${name})? The record will be permanently deleted, and the ID sequence will continue safely without reuse.`
+      )
+    ) {
+      return;
+    }
+    try {
+      const res = await adminService.deleteRegistration(id);
+      if (res.data?.success) {
+        alert(res.data.message || 'Registration deleted successfully.');
+        loadRegistrations();
+        loadRegistrationSummary();
+        loadDashboardStats();
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete registration.');
+    }
+  };
+
+  const handleRegistrationUpdated = (updated) => {
+    alert(`Registration ${updated.registrationId} updated successfully.`);
+    loadRegistrations();
+    loadRegistrationSummary();
   };
 
   const loadBatches = () => {
@@ -332,18 +377,22 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
   // Export CSV Helper
   const exportRegistrationsCSV = () => {
-    if (regType === 'FORM') {
-      if (registrations.length === 0) return;
-      let csv = 'Registration ID,Full Name,Date of Birth,Institution,Contact Number,T-Shirt Size,Type,Date\n';
+    if (regType !== 'BATCHES') {
+      if (registrations.length === 0) {
+        alert('No registration records to export.');
+        return;
+      }
+      let csv = 'Registration ID,Student Name,Age,Standard / Class,Contact Number,School / College,T-Shirt Size,Type,Date\n';
       registrations.forEach((r) => {
-        csv += `"${r.registrationId}","${r.fullName}","${r.dateOfBirth ? new Date(r.dateOfBirth).toISOString().split('T')[0] : 'N/A'}","${r.institutionName}","${r.contactNumber}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
+        csv += `"${r.registrationId}","${r.fullName}","${r.age ?? 'N/A'}","${r.standard ?? 'N/A'}","${r.contactNumber}","${r.institutionName}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Registrations_Form_${Date.now()}.csv`;
+      a.download = `Registrations_${regType}_${Date.now()}.csv`;
       a.click();
+      URL.revokeObjectURL(url);
     } else {
       if (batches.length === 0) return;
       let csv = 'Batch ID,Institution Name,Institution Type,Contact Person,Phone,Total Students,Uploaded File,Submission Date\n';
@@ -356,6 +405,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       a.href = url;
       a.download = `School_College_Batches_${Date.now()}.csv`;
       a.click();
+      URL.revokeObjectURL(url);
     }
   };
 
@@ -538,64 +588,175 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
       {/* TAB 2: REGISTRATIONS MANAGEMENT */}
       {activeTab === 'REGISTRATIONS' && (
-        <div className="glass-card p-6 rounded-3xl border border-[var(--border-color)] space-y-6 animate-in fade-in">
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] space-y-8 animate-in fade-in">
           
-          {/* Sub Tabs: Form vs School/College */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
-            <div className="flex items-center gap-2 p-1 rounded-xl bg-[var(--bg-tertiary)]">
+          {/* Header & Export Controls */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)]">
+                  <Award className="w-5 h-5" />
+                </span>
+                <h3 className="text-2xl font-black font-heading text-[var(--text-primary)]">
+                  Registration Management
+                </h3>
+              </div>
+              <p className="text-xs text-[var(--text-muted)] font-medium mt-1">
+                Manage all marathon registrations, track sequential IDs (CMA2026IN / CMA2026SC), T-shirts, and class breakdown.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
               <button
-                onClick={() => setRegType('FORM')}
-                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all ${
-                  regType === 'FORM'
-                    ? 'bg-[var(--orange)] text-white shadow'
-                    : 'text-[var(--text-primary)]'
-                }`}
+                onClick={() => {
+                  loadRegistrations();
+                  loadRegistrationSummary();
+                  if (regType === 'BATCHES') loadBatches();
+                }}
+                className="btn-secondary py-2.5 px-4 text-xs flex items-center gap-2"
+                title="Refresh registrations and summary counts"
               >
-                1. FORM REGISTRATIONS
+                <RefreshCw className={`w-3.5 h-3.5 ${loadingRegistrations || loadingSummary ? 'animate-spin' : ''}`} />
+                <span>REFRESH</span>
               </button>
+
               <button
-                onClick={() => setRegType('SCHOOL_COLLEGE')}
-                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all ${
-                  regType === 'SCHOOL_COLLEGE'
-                    ? 'bg-[var(--cyan)] text-white shadow'
-                    : 'text-[var(--text-primary)]'
+                onClick={exportRegistrationsCSV}
+                className="btn-secondary py-2.5 px-4 text-xs border-[var(--green)] text-[var(--green)] hover:bg-[var(--green)]/10 flex items-center gap-2 shadow-sm"
+              >
+                <Download className="w-4 h-4" />
+                <span>EXPORT TO CSV</span>
+              </button>
+            </div>
+          </div>
+
+          {/* DYNAMIC REGISTRATION SUMMARY SECTION */}
+          <div className="space-y-4">
+            <RegistrationSummaryCards summary={summaryData} loading={loadingSummary} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <TshirtSummary summary={summaryData} loading={loadingSummary} />
+              <ClassSummary summary={summaryData} loading={loadingSummary} />
+            </div>
+          </div>
+
+          {/* REGISTRATION TYPE FILTER TABS */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[var(--border-color)]">
+            <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
+              <button
+                onClick={() => {
+                  setRegType('ALL');
+                  setRegPagination((prev) => ({ ...prev, page: 1 }));
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider transition-all ${
+                  regType === 'ALL'
+                    ? 'bg-[var(--orange)] text-white shadow-md'
+                    : 'text-[var(--text-primary)] hover:text-[var(--orange)]'
                 }`}
               >
-                2. SCHOOL / COLLEGE BULK
+                ALL REGISTRATIONS
+              </button>
+
+              <button
+                onClick={() => {
+                  setRegType('INDIVIDUAL');
+                  setRegPagination((prev) => ({ ...prev, page: 1 }));
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider transition-all ${
+                  regType === 'INDIVIDUAL'
+                    ? 'bg-[var(--orange)] text-white shadow-md'
+                    : 'text-[var(--text-primary)] hover:text-[var(--orange)]'
+                }`}
+              >
+                INDIVIDUAL (IN)
+              </button>
+
+              <button
+                onClick={() => {
+                  setRegType('SCHOOL_COLLEGE');
+                  setRegPagination((prev) => ({ ...prev, page: 1 }));
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider transition-all ${
+                  regType === 'SCHOOL_COLLEGE'
+                    ? 'bg-[var(--cyan)] text-white shadow-md'
+                    : 'text-[var(--text-primary)] hover:text-[var(--cyan)]'
+                }`}
+              >
+                SCHOOL / COLLEGE (SC)
+              </button>
+
+              <button
+                onClick={() => setRegType('BATCHES')}
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider transition-all ${
+                  regType === 'BATCHES'
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-[var(--text-primary)] hover:text-emerald-500'
+                }`}
+              >
+                BATCH SPREADSHEETS
               </button>
             </div>
 
-            <button
-              onClick={exportRegistrationsCSV}
-              className="btn-secondary py-2 px-4 text-xs border-[var(--green)] text-[var(--green)]"
-            >
-              <Download className="w-4 h-4" />
-              <span>EXPORT TO CSV</span>
-            </button>
+            <div className="text-xs font-bold text-[var(--text-muted)]">
+              {regType === 'BATCHES' ? (
+                <span>Showing {batches.length} institution uploads</span>
+              ) : (
+                <span>Total: <strong className="text-[var(--text-primary)]">{regPagination.total}</strong> records</span>
+              )}
+            </div>
           </div>
 
-          {/* 1. FORM REGISTRATIONS VIEW */}
-          {regType === 'FORM' && (
-            <>
+          {/* VIEW 1: REGISTRATIONS TABLE (ALL, INDIVIDUAL, SCHOOL_COLLEGE) */}
+          {regType !== 'BATCHES' && (
+            <div className="space-y-4">
+              
               {/* Search & Filter Controls */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="relative">
-                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5" />
+                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-3.5" />
                   <input
                     type="text"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search ID, name, phone, institution..."
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setRegPagination((prev) => ({ ...prev, page: 1 }));
+                    }}
+                    placeholder="Search ID, student name, phone, school..."
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
                   />
                 </div>
 
                 <select
-                  value={filterInstitution}
-                  onChange={(e) => setFilterInstitution(e.target.value)}
-                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
+                  value={filterStandard}
+                  onChange={(e) => {
+                    setFilterStandard(e.target.value);
+                    setRegPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none focus:border-[var(--orange)]"
                 >
-                  <option value="ALL">ALL INSTITUTIONS</option>
+                  <option value="ALL">ALL CLASSES / STANDARDS</option>
+                  {summaryData?.classWise &&
+                    Object.keys(summaryData.classWise).map((cls) => (
+                      <option key={cls} value={cls}>Class: {cls}</option>
+                    ))}
+                  {(!summaryData?.classWise || Object.keys(summaryData.classWise).length === 0) && (
+                    <>
+                      <option value="8th">8th Class</option>
+                      <option value="9th">9th Class</option>
+                      <option value="10th">10th Class</option>
+                    </>
+                  )}
+                </select>
+
+                <select
+                  value={filterInstitution}
+                  onChange={(e) => {
+                    setFilterInstitution(e.target.value);
+                    setRegPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none focus:border-[var(--orange)]"
+                >
+                  <option value="ALL">ALL SCHOOLS / COLLEGES</option>
                   {institutions.map((inst) => (
                     <option key={inst} value={inst}>{inst}</option>
                   ))}
@@ -603,8 +764,11 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
                 <select
                   value={filterSize}
-                  onChange={(e) => setFilterSize(e.target.value)}
-                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none"
+                  onChange={(e) => {
+                    setFilterSize(e.target.value);
+                    setRegPagination((prev) => ({ ...prev, page: 1 }));
+                  }}
+                  className="py-2.5 px-3 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold focus:outline-none focus:border-[var(--orange)]"
                 >
                   <option value="ALL">ALL T-SHIRT SIZES</option>
                   {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((sz) => (
@@ -613,46 +777,101 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                 </select>
               </div>
 
-              {/* Registrations Data Table */}
+              {/* Table */}
               <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
+                  <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase tracking-wider">
                     <tr>
-                      <th className="p-3">Reg ID</th>
-                      <th className="p-3">Student Name</th>
-                      <th className="p-3">DOB</th>
-                      <th className="p-3">Institution</th>
-                      <th className="p-3">Phone</th>
-                      <th className="p-3">T-Shirt</th>
-                      <th className="p-3">Date</th>
-                      <th className="p-3">Sheets Sync</th>
+                      <th className="p-3.5">Registration ID</th>
+                      <th className="p-3.5">Student Name</th>
+                      <th className="p-3.5 text-center">Age</th>
+                      <th className="p-3.5">Standard / Class</th>
+                      <th className="p-3.5">Parent's Phone</th>
+                      <th className="p-3.5">School / College</th>
+                      <th className="p-3.5 text-center">T-Shirt</th>
+                      <th className="p-3.5">Date & Time</th>
+                      <th className="p-3.5 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--border-color)]/30 text-[var(--text-primary)]">
-                    {registrations.length > 0 ? (
-                      registrations.map((item) => (
-                        <tr key={item._id}>
-                          <td className="p-3 font-mono font-bold text-[var(--orange)]">{item.registrationId}</td>
-                          <td className="p-3 font-extrabold">{item.fullName}</td>
-                          <td className="p-3">{item.dateOfBirth ? new Date(item.dateOfBirth).toLocaleDateString('en-IN') : 'N/A'}</td>
-                          <td className="p-3 font-medium">{item.institutionName}</td>
-                          <td className="p-3">{item.contactNumber}</td>
-                          <td className="p-3 font-bold text-[var(--yellow)]">{item.tShirtSize}</td>
-                          <td className="p-3">{new Date(item.createdAt).toLocaleDateString('en-IN')}</td>
-                          <td className="p-3">
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
-                              item.googleSheetsSync?.status === 'success'
-                                ? 'bg-emerald-500/15 text-emerald-500'
-                                : 'bg-amber-500/15 text-amber-500'
-                            }`}>
-                              {item.googleSheetsSync?.status || 'saved'}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
+                    {loadingRegistrations ? (
+                      <tr>
+                        <td colSpan={9} className="p-8 text-center text-[var(--text-muted)] font-bold animate-pulse">
+                          Loading registrations from database...
+                        </td>
+                      </tr>
+                    ) : registrations.length > 0 ? (
+                      registrations.map((item) => {
+                        const isIN = item.registrationId?.includes('IN');
+                        return (
+                          <tr key={item._id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                            <td className="p-3.5 font-mono font-black">
+                              <span className={`px-2.5 py-1 rounded-lg text-xs tracking-wider ${
+                                isIN
+                                  ? 'bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30'
+                                  : 'bg-[var(--cyan)]/15 text-[var(--cyan)] border border-[var(--cyan)]/30'
+                              }`}>
+                                {item.registrationId}
+                              </span>
+                            </td>
+                            <td className="p-3.5 font-black text-sm">
+                              {item.fullName}
+                            </td>
+                            <td className="p-3.5 text-center font-bold text-[var(--text-muted)]">
+                              {item.age ?? '—'}
+                            </td>
+                            <td className="p-3.5 font-bold text-[var(--orange)]">
+                              {item.standard || '—'}
+                            </td>
+                            <td className="p-3.5 font-mono font-semibold">
+                              {item.contactNumber}
+                            </td>
+                            <td className="p-3.5 font-medium max-w-[200px] truncate" title={item.institutionName}>
+                              {item.institutionName}
+                            </td>
+                            <td className="p-3.5 text-center font-black">
+                              <span className="px-2.5 py-1 rounded-md bg-[var(--yellow)]/15 text-[var(--yellow)] font-bold">
+                                {item.tShirtSize}
+                              </span>
+                            </td>
+                            <td className="p-3.5 text-[var(--text-muted)] font-medium">
+                              {new Date(item.createdAt).toLocaleDateString('en-IN', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              })}
+                            </td>
+                            <td className="p-3.5 text-right">
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => setViewingRegistration(item)}
+                                  title="View Details"
+                                  className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--cyan)] hover:text-[var(--cyan)] transition-colors"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => setEditingRegistration(item)}
+                                  title="Edit Registration"
+                                  className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--orange)] hover:text-[var(--orange)] transition-colors"
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteRegistration(item.registrationId, item.fullName)}
+                                  title="Delete Registration"
+                                  className="p-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
                     ) : (
                       <tr>
-                        <td colSpan={8} className="p-8 text-center text-[var(--text-muted)] font-bold">
+                        <td colSpan={9} className="p-8 text-center text-[var(--text-muted)] font-bold">
                           No registrations found matching your criteria.
                         </td>
                       </tr>
@@ -661,24 +880,24 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                 </table>
               </div>
 
-              {/* Pagination Controls */}
+              {/* Pagination */}
               {regPagination.pages > 1 && (
                 <div className="flex items-center justify-between text-xs pt-2">
                   <span className="text-[var(--text-muted)] font-bold">
-                    Page {regPagination.page} of {regPagination.pages} ({regPagination.total} records)
+                    Page {regPagination.page} of {regPagination.pages} ({regPagination.total} total records)
                   </span>
                   <div className="flex gap-2">
                     <button
                       disabled={regPagination.page === 1}
                       onClick={() => setRegPagination({ ...regPagination, page: regPagination.page - 1 })}
-                      className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                      className="px-3.5 py-1.5 rounded-xl border border-[var(--border-color)] font-bold disabled:opacity-40 hover:bg-[var(--bg-tertiary)]"
                     >
                       Prev
                     </button>
                     <button
                       disabled={regPagination.page === regPagination.pages}
                       onClick={() => setRegPagination({ ...regPagination, page: regPagination.page + 1 })}
-                      className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] font-bold disabled:opacity-40"
+                      className="px-3.5 py-1.5 rounded-xl border border-[var(--border-color)] font-bold disabled:opacity-40 hover:bg-[var(--bg-tertiary)]"
                     >
                       Next
                     </button>
@@ -686,95 +905,22 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                 </div>
               )}
 
-              {/* REGISTRATION & T-SHIRT SUMMARY (BOTTOM OF FORM REGISTRATIONS) */}
-              <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
-                <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] space-y-6 shadow-xl">
-                  <div className="text-center pb-4 border-b border-[var(--border-color)]">
-                    <h4 className="text-sm sm:text-base font-black font-heading tracking-widest uppercase text-[var(--orange)]">
-                      REGISTRATION SUMMARY
-                    </h4>
-                    <p className="text-[11px] text-[var(--text-muted)] font-medium mt-1">
-                      Dynamic count across all individual registrations in the database
-                    </p>
-                  </div>
-
-                  {/* 1. Total Registrations */}
-                  <div className="p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-center space-y-1">
-                    <span className="text-xs font-black uppercase tracking-wider text-[var(--text-muted)] block">
-                      TOTAL REGISTRATIONS
-                    </span>
-                    <div className="text-3xl sm:text-4xl font-black font-heading text-[var(--text-primary)]">
-                      {summaryData
-                        ? Number(summaryData.totalRegistrations).toLocaleString('en-IN')
-                        : (loadingSummary ? '...' : '0')}
-                    </div>
-                  </div>
-
-                  {/* 2. T-Shirt Summary Header */}
-                  <div className="pt-2 space-y-4">
-                    <div className="flex items-center justify-center gap-2">
-                      <Shirt className="w-4 h-4 text-[var(--cyan)]" />
-                      <h5 className="text-xs font-black uppercase tracking-widest text-[var(--cyan)]">
-                        T-SHIRT SUMMARY
-                      </h5>
-                    </div>
-
-                    {/* Breakdown: S, M, L, XL */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {['S', 'M', 'L', 'XL'].map((size) => (
-                        <div
-                          key={size}
-                          className="p-5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-center shadow-sm transition-all hover:border-[var(--cyan)]/40"
-                        >
-                          <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-[var(--cyan)]/15 text-[var(--cyan)] mb-2">
-                            {size}
-                          </span>
-                          <div className="text-2xl sm:text-3xl font-black font-heading text-[var(--text-primary)]">
-                            {summaryData && summaryData.sizes?.[size] !== undefined
-                              ? Number(summaryData.sizes[size]).toLocaleString('en-IN')
-                              : (loadingSummary ? '...' : '0')}
-                          </div>
-                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider block mt-1">
-                            Size {size}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* 3. Total T-Shirts Required */}
-                    <div className="p-6 rounded-2xl bg-[var(--bg-primary)] border-2 border-[var(--cyan)]/40 text-center space-y-1">
-                      <span className="text-xs font-black uppercase tracking-wider text-[var(--cyan)] block">
-                        TOTAL T-SHIRTS
-                      </span>
-                      <div className="text-3xl sm:text-4xl font-black font-heading text-[var(--cyan)]">
-                        {summaryData
-                          ? Number(summaryData.totalTshirts).toLocaleString('en-IN')
-                          : (loadingSummary ? '...' : '0')}
-                      </div>
-                      <span className="text-[10px] text-[var(--text-muted)] font-medium block">
-                        Total T-shirts required (S + M + L + XL)
-                      </span>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </>
+            </div>
           )}
 
-          {/* 2. SCHOOL / COLLEGE BULK SUBMISSIONS VIEW */}
-          {regType === 'SCHOOL_COLLEGE' && (
-            <>
-              {/* Search & Filter Controls */}
+          {/* VIEW 2: SCHOOL / COLLEGE BATCHES SPREADSHEETS */}
+          {regType === 'BATCHES' && (
+            <div className="space-y-4">
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="relative">
-                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5" />
+                  <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-3.5" />
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search batch ID, school/college, contact person, file..."
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none"
                   />
                 </div>
 
@@ -790,7 +936,6 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                 </select>
               </div>
 
-              {/* Batches Data Table */}
               <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase">
@@ -886,10 +1031,29 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                   </tbody>
                 </table>
               </div>
-            </>
+
+            </div>
           )}
 
-          {/* Batch Students Detail Modal */}
+          {/* VIEW DETAILS MODAL */}
+          {viewingRegistration && (
+            <RegistrationDetailsModal
+              registration={viewingRegistration}
+              onClose={() => setViewingRegistration(null)}
+              onEdit={(item) => setEditingRegistration(item)}
+            />
+          )}
+
+          {/* EDIT REGISTRATION MODAL */}
+          {editingRegistration && (
+            <RegistrationEditModal
+              registration={editingRegistration}
+              onClose={() => setEditingRegistration(null)}
+              onUpdated={handleRegistrationUpdated}
+            />
+          )}
+
+          {/* BATCH STUDENTS MODAL */}
           {selectedBatchStudents && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
               <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-3xl max-w-3xl w-full p-6 space-y-4 max-h-[85vh] overflow-y-auto">
@@ -908,6 +1072,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                       <tr>
                         <th className="p-2">Registration ID</th>
                         <th className="p-2">Name</th>
+                        <th className="p-2">Age</th>
+                        <th className="p-2">Standard</th>
                         <th className="p-2">T-Shirt Size</th>
                         <th className="p-2">Phone</th>
                       </tr>
@@ -915,9 +1081,11 @@ export const AdminDashboardPage = ({ defaultTab }) => {
                     <tbody className="divide-y divide-[var(--border-color)]">
                       {selectedBatchStudents.map((st) => (
                         <tr key={st._id}>
-                          <td className="p-2 font-mono font-bold text-[var(--orange)]">{st.registrationId}</td>
+                          <td className="p-2 font-mono font-bold text-[var(--cyan)]">{st.registrationId}</td>
                           <td className="p-2 font-bold">{st.fullName}</td>
-                          <td className="p-2">{st.tShirtSize}</td>
+                          <td className="p-2">{st.age ?? 'N/A'}</td>
+                          <td className="p-2">{st.standard ?? 'N/A'}</td>
+                          <td className="p-2 font-bold text-[var(--yellow)]">{st.tShirtSize}</td>
                           <td className="p-2">{st.contactNumber}</td>
                         </tr>
                       ))}

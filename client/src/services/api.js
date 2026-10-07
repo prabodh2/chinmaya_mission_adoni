@@ -64,10 +64,12 @@ export const bannerService = {
 
 export const registrationService = {
   getInstitutions: () => api.get('/registrations/institutions'),
-  submitForm: (data) => api.post('/registrations/form', data),
+  submitForm: (data) => api.post('/registrations/individual', data),
+  submitIndividual: (data) => api.post('/registrations/individual', data),
+  submitSchoolCollege: (data) => api.post('/registrations/school-college', data),
   submitBulk: (data) =>
     api.post(
-      '/registrations/bulk',
+      '/registrations/school-college',
       data,
       data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
     ),
@@ -76,7 +78,12 @@ export const registrationService = {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
   getUserRegistrations: () => api.get('/registrations/my-registrations'),
-  getDetails: (id) => api.get(`/registrations/details/${id}`),
+  getDetails: (id) => api.get(`/registrations/${id}`),
+  getSummary: (year) => api.get('/registrations/summary', { params: { year } }),
+  getCounts: () => api.get('/registrations/counts'),
+  getAll: (params) => api.get('/registrations', { params }),
+  update: (id, data) => api.put(`/registrations/${id}`, data),
+  delete: (id) => api.delete(`/registrations/${id}`),
 };
 
 export const activityService = {
@@ -101,14 +108,17 @@ export const faqService = {
 export const adminService = {
   getStats: () => api.get('/admin/dashboard-stats'),
   getRegistrations: (params) => api.get('/admin/registrations', { params }),
+  getRegistrationById: (id) => api.get(`/admin/registrations/${id}`),
+  updateRegistration: (id, data) => api.put(`/admin/registrations/${id}`, data),
+  deleteRegistration: (id) => api.delete(`/admin/registrations/${id}`),
   getBatches: (params) => api.get('/admin/batches', { params }),
   getBatchStudents: (batchId) => api.get(`/admin/batches/${batchId}/students`),
   downloadBatchSpreadsheet: (batchId) =>
     api.get(`/admin/batches/${batchId}/download`, { responseType: 'blob' }),
   deleteBatch: (batchId) => api.delete(`/admin/batches/${batchId}`),
   retrySheetsSync: (id) => api.post(`/admin/registrations/${id}/sync-sheets`),
-  getRegistrationSummary: (type = 'FORM') =>
-    api.get('/admin/registrations/individual/summary', { params: { type } }),
+  getRegistrationSummary: (year) =>
+    api.get('/admin/registrations/summary', { params: { year } }),
 };
 
 export const contactService = {

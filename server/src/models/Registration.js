@@ -2,11 +2,22 @@ import mongoose from 'mongoose';
 
 const registrationSchema = new mongoose.Schema(
   {
-    registrationId: { type: String, required: true, unique: true, index: true },
+    registrationId: {
+      type: String,
+      required: true,
+      unique: true,
+      uppercase: true,
+      trim: true,
+      index: true,
+    },
+    registrationYear: { type: Number, index: true },
+    registrationIndex: { type: Number },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
     fullName: { type: String, required: true, trim: true },
+    age: { type: Number, default: null },
+    standard: { type: String, default: null, trim: true }, // e.g. "8th", "9th", "10th"
     dateOfBirth: { type: Date },
-    isStudent: { type: Boolean, default: false },
+    isStudent: { type: Boolean, default: true },
     institutionName: { type: String, default: 'N/A', trim: true },
     contactNumber: { type: String, required: true, trim: true, index: true },
     tShirtSize: {
@@ -16,8 +27,8 @@ const registrationSchema = new mongoose.Schema(
     },
     registrationType: {
       type: String,
-      enum: ['FORM', 'SCHOOL_COLLEGE'],
-      default: 'FORM',
+      enum: ['individual', 'school_college', 'FORM', 'SCHOOL_COLLEGE'],
+      default: 'individual',
       index: true,
     },
     institutionType: {
@@ -50,5 +61,8 @@ const registrationSchema = new mongoose.Schema(
 registrationSchema.index({ status: 1, createdAt: -1 });
 registrationSchema.index({ registrationType: 1, status: 1, createdAt: -1 });
 registrationSchema.index({ institutionName: 1 });
+registrationSchema.index({ standard: 1 });
+registrationSchema.index({ tShirtSize: 1 });
+registrationSchema.index({ registrationYear: 1, registrationType: 1 });
 
 export default mongoose.model('Registration', registrationSchema);

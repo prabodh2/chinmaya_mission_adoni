@@ -2,14 +2,27 @@ import Registration from '../models/Registration.js';
 import BulkBatch from '../models/BulkBatch.js';
 import Institution from '../models/Institution.js';
 import User from '../models/User.js';
+import registrationService from '../services/registrationService.js';
 import { syncRegistrationToGoogleSheets } from '../config/googleSheets.js';
 import * as XLSX from 'xlsx';
 
 export const getDashboardStats = async (req, res) => {
   try {
     const totalRegistrations = await Registration.countDocuments({ status: 'CONFIRMED' });
-    const formRegistrations = await Registration.countDocuments({ registrationType: 'FORM', status: 'CONFIRMED' });
-    const schoolCollegeRegistrations = await Registration.countDocuments({ registrationType: 'SCHOOL_COLLEGE', status: 'CONFIRMED' });
+    const formRegistrations = await Registration.countDocuments({
+      status: 'CONFIRMED',
+      $or: [
+        { registrationType: { $in: ['individual', 'FORM'] } },
+        { registrationId: { $regex: /^CMA\d{4}IN/i } },
+      ],
+    });
+    const schoolCollegeRegistrations = await Registration.countDocuments({
+      status: 'CONFIRMED',
+      $or: [
+        { registrationType: { $in: ['school_college', 'SCHOOL_COLLEGE'] } },
+        { registrationId: { $regex: /^CMA\d{4}SC/i } },
+      ],
+    });
 
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
@@ -27,13 +40,14 @@ export const getDashboardStats = async (req, res) => {
     const recentRegistrations = await Registration.find()
       .sort({ createdAt: -1 })
       .limit(8)
-      .select('registrationId fullName institutionName contactNumber tShirtSize registrationType createdAt status');
+      .select('registrationId fullName age standard institutionName contactNumber tShirtSize registrationType createdAt status');
 
     res.json({
       success: true,
       data: {
         totalRegistrations,
         formRegistrations,
+        individualRegistrations: formRegistrations,
         schoolCollegeRegistrations,
         todayRegistrations,
         totalSchools,
@@ -50,58 +64,50 @@ export const getDashboardStats = async (req, res) => {
 
 export const getAdminRegistrations = async (req, res) => {
   try {
-    const { type, search, institution, size, page = 1, limit = 20, sortBy = 'createdAt', order = 'desc' } = req.query;
-
-    const query = { status: 'CONFIRMED' };
-
-    if (type && ['FORM', 'SCHOOL_COLLEGE'].includes(type.toUpperCase())) {
-      query.registrationType = type.toUpperCase();
-    }
-
-    if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { registrationId: searchRegex },
-        { fullName: searchRegex },
-        { contactNumber: searchRegex },
-        { institutionName: searchRegex },
-      ];
-    }
-
-    if (institution && institution !== 'ALL') {
-      query.institutionName = new RegExp(institution.trim(), 'i');
-    }
-
-    if (size && size !== 'ALL') {
-      query.tShirtSize = size.toUpperCase();
-    }
-
-    const sortOrder = order === 'asc' ? 1 : -1;
-    const sortObj = { [sortBy]: sortOrder };
-
-    const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10);
-    const skip = (pageNum - 1) * limitNum;
-
-    const [items, total] = await Promise.all([
-      Registration.find(query).sort(sortObj).skip(skip).limit(limitNum),
-      Registration.countDocuments(query),
-    ]);
-
+    const result = await registrationService.getRegistrations(req.query);
     res.json({
       success: true,
-      data: {
-        items,
-        pagination: {
-          total,
-          page: pageNum,
-          pages: Math.ceil(total / limitNum) || 1,
-          limit: limitNum,
-        },
-      },
+      data: result,
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const getAdminRegistrationById = async (req, res) => {
+  try {
+    const registration = await registrationService.getRegistrationById(req.params.id);
+    if (!registration) {
+      return res.status(404).json({ success: false, message: 'Registration not found' });
+    }
+    res.json({ success: true, data: registration });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const updateAdminRegistration = async (req, res) => {
+  try {
+    const updated = await registrationService.updateRegistration(req.params.id, req.body);
+    res.json({
+      success: true,
+      message: 'Registration updated successfully',
+      data: updated,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const deleteAdminRegistration = async (req, res) => {
+  try {
+    await registrationService.deleteRegistration(req.params.id);
+    res.json({
+      success: true,
+      message: 'Registration deleted successfully. ID sequence preserved.',
+    });
+  } catch (err) {
+    res.status(404).json({ success: false, message: err.message });
   }
 };
 
@@ -117,7 +123,7 @@ export const getBulkBatches = async (req, res) => {
 export const getBatchStudents = async (req, res) => {
   try {
     const { batchId } = req.params;
-    const students = await Registration.find({ batchId }).sort({ fullName: 1 });
+    const students = await Registration.find({ batchId }).sort({ registrationIndex: 1, createdAt: 1, fullName: 1 });
     res.json({ success: true, data: students });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -143,17 +149,18 @@ export const downloadBatchSpreadsheet = async (req, res) => {
     }
 
     // Fallback: Generate spreadsheet from stored student records for this batch
-    const students = await Registration.find({ batchId }).sort({ createdAt: 1 });
+    const students = await Registration.find({ batchId }).sort({ registrationIndex: 1, createdAt: 1 });
     const rows = students.map((s, idx) => ({
       'S.No': idx + 1,
       'Registration ID': s.registrationId,
-      'Full Name': s.fullName,
-      'Date of Birth': s.dateOfBirth ? new Date(s.dateOfBirth).toISOString().split('T')[0] : 'N/A',
-      'Contact Number': s.contactNumber,
+      'Student Name': s.fullName,
+      'Age': s.age || 'N/A',
+      'Standard / Class': s.standard || 'N/A',
+      'Parent Phone': s.contactNumber,
+      'School / College': s.institutionName,
       'T-Shirt Size': s.tShirtSize,
-      'Institution': s.institutionName,
       'Institution Type': s.institutionType,
-      'Contact Person': s.contactPersonName || batch.contactPersonName,
+      'Registration Date': new Date(s.createdAt).toISOString().split('T')[0],
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -207,51 +214,13 @@ export const retrySheetsSync = async (req, res) => {
 
 export const getIndividualRegistrationSummary = async (req, res) => {
   try {
-    const { type = 'FORM' } = req.query;
-    const matchQuery = { status: 'CONFIRMED' };
-    if (type && type.toUpperCase() !== 'ALL') {
-      matchQuery.registrationType = type.toUpperCase();
-    }
-
-    // Dynamic count for total registrations from database
-    const totalRegistrations = await Registration.countDocuments(matchQuery);
-
-    // Dynamic database aggregation grouping by tShirtSize
-    const sizeCounts = await Registration.aggregate([
-      { $match: matchQuery },
-      {
-        $group: {
-          _id: '$tShirtSize',
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-
-    const sizes = {
-      S: 0,
-      M: 0,
-      L: 0,
-      XL: 0,
-    };
-
-    sizeCounts.forEach((item) => {
-      if (item._id) {
-        const sizeKey = String(item._id).trim().toUpperCase();
-        if (Object.prototype.hasOwnProperty.call(sizes, sizeKey)) {
-          sizes[sizeKey] = item.count;
-        }
-      }
-    });
-
-    // Total T-Shirts = S + M + L + XL
-    const totalTshirts = sizes.S + sizes.M + sizes.L + sizes.XL;
+    const summary = await registrationService.getSummary(req.query.year);
 
     res.json({
       success: true,
       data: {
-        totalRegistrations,
-        totalTshirts,
-        sizes,
+        ...summary,
+        sizes: summary.tshirtSizes, // backward compatibility
       },
     });
   } catch (err) {

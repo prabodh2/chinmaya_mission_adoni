@@ -1,118 +1,61 @@
+import registrationService from '../services/registrationService.js';
 import Registration from '../models/Registration.js';
-import BulkBatch from '../models/BulkBatch.js';
 import Institution from '../models/Institution.js';
 import EventConfig from '../models/EventConfig.js';
-import { syncRegistrationToGoogleSheets } from '../config/googleSheets.js';
 import { adoniInstitutionsList } from '../utils/seedData.js';
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
-const generateRegistrationId = () => {
-  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let rand = '';
-  for (let i = 0; i < 5; i++) {
-    rand += chars.charAt(Math.floor(Math.random() * chars.length));
+/**
+ * Check if marathon registration is currently open in EventConfig
+ */
+const checkEventRegistrationOpen = async () => {
+  const config = await EventConfig.findOne();
+  if (config) {
+    const now = new Date();
+    const isPastDeadline = config.registrationEndDate && now > new Date(config.registrationEndDate);
+    if (!config.registrationOpen || isPastDeadline) {
+      return {
+        isOpen: false,
+        message: isPastDeadline
+          ? 'Registration closed. The last date to register was 30 November 2026 (30/11/2026).'
+          : 'Registration is currently closed by the organizers.',
+      };
+    }
   }
-  return `ADM2026${rand}`;
+  return { isOpen: true };
 };
 
-const generateBatchId = () => {
-  const num = Math.floor(1000 + Math.random() * 9000);
-  return `BATCH-2026-${num}`;
-};
-
+/**
+ * Submit Individual Registration
+ * Endpoint: POST /api/registrations/individual (and POST /api/registrations/form)
+ */
 export const submitIndividualRegistration = async (req, res) => {
   try {
-    // Check if registration is open in EventConfig and deadline has not passed
-    const config = await EventConfig.findOne();
-    if (config) {
-      const now = new Date();
-      const isPastDeadline = config.registrationEndDate && now > new Date(config.registrationEndDate);
-      if (!config.registrationOpen || isPastDeadline) {
-        return res.status(400).json({
-          success: false,
-          message: isPastDeadline
-            ? 'Registration closed. The last date to register was 30 November 2026 (30/11/2026).'
-            : 'Registration is currently closed by the organizers',
-          errorCode: 'REGISTRATION_CLOSED',
-        });
-      }
-    }
-
-    const { fullName, dateOfBirth, isStudent, institutionName, contactNumber, tShirtSize } = req.body;
-
-    if (!fullName || !contactNumber || !tShirtSize) {
+    const eventCheck = await checkEventRegistrationOpen();
+    if (!eventCheck.isOpen) {
       return res.status(400).json({
         success: false,
-        message: 'Full Name, Contact Number, and T-Shirt Size are required',
-        errorCode: 'VALIDATION_ERROR',
+        message: eventCheck.message,
+        errorCode: 'REGISTRATION_CLOSED',
       });
     }
 
-    // Indian phone regex check
-    let cleanPhone = contactNumber.replace(/\D/g, '');
-    if (cleanPhone.startsWith('91') && cleanPhone.length > 10) {
-      cleanPhone = cleanPhone.slice(2);
-    }
-    if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid 10-digit Indian mobile number',
-        errorCode: 'INVALID_PHONE',
-      });
-    }
-
-    let parsedDob = null;
-    if (dateOfBirth) {
-      const d = new Date(dateOfBirth);
-      if (!isNaN(d.getTime())) parsedDob = d;
-    }
-
-    let saved = false;
-    let registration;
-    let attempts = 0;
-
-    while (!saved && attempts < 5) {
-      try {
-        attempts++;
-        const registrationId = generateRegistrationId();
-        registration = new Registration({
-          registrationId,
-          userId: req.user ? req.user._id : null,
-          fullName: fullName.trim(),
-          dateOfBirth: parsedDob,
-          isStudent: Boolean(isStudent),
-          institutionName: isStudent ? (institutionName || 'N/A').trim() : 'N/A',
-          contactNumber: cleanPhone,
-          tShirtSize: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(tShirtSize) ? tShirtSize : 'M',
-          registrationType: 'FORM',
-          institutionType: 'OTHER',
-        });
-
-        await registration.save();
-        saved = true;
-      } catch (err) {
-        if (err.code === 11000 && attempts < 5) {
-          continue;
-        }
-        throw err;
-      }
-    }
-
-    // Trigger Google Sheets sync asynchronously without failing the request
-    syncRegistrationToGoogleSheets(registration).then(async (syncResult) => {
-      try {
-        registration.googleSheetsSync = syncResult;
-        await registration.save();
-      } catch (e) {}
-    });
+    const registration = await registrationService.createIndividualRegistration(
+      req.body,
+      req.user ? req.user._id : null
+    );
 
     res.status(201).json({
       success: true,
       message: 'Registration successful',
       data: {
         registrationId: registration.registrationId,
+        registrationYear: registration.registrationYear,
+        registrationType: registration.registrationType,
         fullName: registration.fullName,
+        age: registration.age,
+        standard: registration.standard,
         isStudent: registration.isStudent,
         institutionName: registration.institutionName,
         contactNumber: registration.contactNumber,
@@ -121,7 +64,8 @@ export const submitIndividualRegistration = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({
+    console.error('[Individual Registration Error]:', err.message);
+    res.status(400).json({
       success: false,
       message: err.message || 'Registration failed',
       errorCode: 'REGISTRATION_ERROR',
@@ -129,33 +73,24 @@ export const submitIndividualRegistration = async (req, res) => {
   }
 };
 
-export const submitBulkRegistration = async (req, res) => {
+/**
+ * Submit School / College Registration (supports both single student and bulk uploads)
+ * Endpoint: POST /api/registrations/school-college (and POST /api/registrations/bulk)
+ */
+export const submitSchoolCollegeRegistration = async (req, res) => {
   try {
-    const config = await EventConfig.findOne();
-    if (config) {
-      const now = new Date();
-      const isPastDeadline = config.registrationEndDate && now > new Date(config.registrationEndDate);
-      if (!config.registrationOpen || isPastDeadline) {
-        return res.status(400).json({
-          success: false,
-          message: isPastDeadline
-            ? 'Registration closed. The last date to register was 30 November 2026 (30/11/2026).'
-            : 'Registration is currently closed by the organizers',
-          errorCode: 'REGISTRATION_CLOSED',
-        });
-      }
+    const eventCheck = await checkEventRegistrationOpen();
+    if (!eventCheck.isOpen) {
+      return res.status(400).json({
+        success: false,
+        message: eventCheck.message,
+        errorCode: 'REGISTRATION_CLOSED',
+      });
     }
 
     const { contactPersonName, phone, institutionType, institutionName, studentsData } = req.body;
 
-    if (!contactPersonName || !phone || !institutionName) {
-      return res.status(400).json({
-        success: false,
-        message: 'Contact person name, phone number, and institution name are required',
-        errorCode: 'VALIDATION_ERROR',
-      });
-    }
-
+    // Check if this is a bulk registration request (either studentsData is present or a file is attached)
     let parsedStudents = [];
     if (studentsData) {
       if (typeof studentsData === 'string') {
@@ -169,7 +104,6 @@ export const submitBulkRegistration = async (req, res) => {
       }
     }
 
-    // If studentsData not provided or empty, attempt parsing from attached req.file
     if ((!parsedStudents || parsedStudents.length === 0) && req.file) {
       const buffer = req.file.buffer;
       if (req.file.originalname.match(/\.csv$/i)) {
@@ -184,101 +118,176 @@ export const submitBulkRegistration = async (req, res) => {
       }
     }
 
-    if (!parsedStudents || parsedStudents.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'No student records found. Please upload a valid spreadsheet file containing student data.',
-        errorCode: 'EMPTY_BULK_DATA',
+    // BULK REGISTRATION FLOW
+    if (parsedStudents && parsedStudents.length > 0) {
+      const result = await registrationService.createBulkSchoolCollegeRegistrations({
+        contactPersonName: contactPersonName || req.body.fullName || 'Institution Coordinator',
+        phone: phone || req.body.contactNumber,
+        institutionType: institutionType || 'SCHOOL',
+        institutionName: institutionName || req.body.schoolName || 'School/College',
+        students: parsedStudents,
+        file: req.file,
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: `Successfully registered ${result.validCount} students under Batch ${result.batchId}`,
+        data: {
+          batchId: result.batchId,
+          totalStudents: result.totalStudents,
+          validRecords: result.validCount,
+          failedRecords: result.failedCount,
+          fileName: result.bulkBatch.fileName,
+        },
       });
     }
 
-    const batchId = generateBatchId();
-    let validCount = 0;
-    let failedCount = 0;
-    const createdRegistrations = [];
-
-    for (const student of parsedStudents) {
-      const name = student.fullName || student.name || student['Full Name'] || student.FullName || student['Student Name'] || student['student name'];
-      const phoneNum = (student.phone || student.contactNumber || student['Phone Number'] || student["Parent's Phone Number"] || phone).toString().replace(/\D/g, '');
-      const tShirt = (student.tShirtSize || student.size || student['T-Shirt Size'] || 'M').toUpperCase();
-      const dob = student.dob || student.dateOfBirth || student['Date of Birth'] || null;
-      const age = student.age || student['Age'] || null;
-      const standard = student.standard || student['Standard / Class'] || student['Class'] || null;
-      const school = student.school || student['School / College'] || null;
-
-      if (!name) {
-        failedCount++;
-        continue;
-      }
-
-      const regId = generateRegistrationId();
-      const reg = new Registration({
-        registrationId: regId,
-        fullName: name.trim(),
-        dateOfBirth: dob ? new Date(dob) : null,
-        isStudent: true,
-        institutionName: institutionName.trim(),
-        contactNumber: phoneNum.length === 10 ? phoneNum : phone,
-        tShirtSize: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(tShirt) ? tShirt : 'M',
-        registrationType: 'SCHOOL_COLLEGE',
-        institutionType: institutionType === 'COLLEGE' ? 'COLLEGE' : 'SCHOOL',
-        batchId,
-        contactPersonName: contactPersonName.trim(),
-      });
-
-      await reg.save();
-      createdRegistrations.push(reg);
-      validCount++;
-
-      // Trigger sync in background
-      syncRegistrationToGoogleSheets(reg).then(async (res) => {
-        reg.googleSheetsSync = res;
-        await reg.save();
-      }).catch(() => {});
-    }
-
-    let cleanBulkPhone = phone.replace(/\D/g, '');
-    if (cleanBulkPhone.startsWith('91') && cleanBulkPhone.length > 10) {
-      cleanBulkPhone = cleanBulkPhone.slice(2);
-    }
-
-    const bulkBatch = new BulkBatch({
-      batchId,
-      institutionName: institutionName.trim(),
-      institutionType: institutionType === 'COLLEGE' ? 'COLLEGE' : 'SCHOOL',
-      contactPersonName: contactPersonName.trim(),
-      phone: cleanBulkPhone,
-      totalStudents: parsedStudents.length,
-      validRecords: validCount,
-      failedRecords: failedCount,
-      fileName: req.file ? req.file.originalname : `Batch_${batchId}.csv`,
-      fileMimeType: req.file ? req.file.mimetype : 'text/csv',
-      fileSize: req.file ? req.file.size : 0,
-      fileData: req.file ? req.file.buffer.toString('base64') : null,
-    });
-
-    await bulkBatch.save();
+    // SINGLE STUDENT SCHOOL / COLLEGE REGISTRATION FLOW
+    const registration = await registrationService.createSchoolCollegeRegistration(
+      req.body,
+      req.user ? req.user._id : null
+    );
 
     res.status(201).json({
       success: true,
-      message: `Successfully processed bulk registration for ${validCount} students under Batch ${batchId}`,
+      message: 'School / College registration successful',
       data: {
-        batchId,
-        totalStudents: parsedStudents.length,
-        validRecords: validCount,
-        failedRecords: failedCount,
-        fileName: bulkBatch.fileName,
+        registrationId: registration.registrationId,
+        registrationYear: registration.registrationYear,
+        registrationType: registration.registrationType,
+        fullName: registration.fullName,
+        age: registration.age,
+        standard: registration.standard,
+        institutionName: registration.institutionName,
+        contactNumber: registration.contactNumber,
+        tShirtSize: registration.tShirtSize,
+        createdAt: registration.createdAt,
       },
     });
   } catch (err) {
-    res.status(500).json({
+    console.error('[School / College Registration Error]:', err.message);
+    res.status(400).json({
       success: false,
-      message: err.message || 'Bulk registration processing failed',
-      errorCode: 'BULK_REGISTRATION_ERROR',
+      message: err.message || 'School / College registration failed',
+      errorCode: 'REGISTRATION_ERROR',
     });
   }
 };
 
+/**
+ * Backward compatibility alias for submitBulkRegistration
+ */
+export const submitBulkRegistration = submitSchoolCollegeRegistration;
+
+/**
+ * Get all registrations with filtering, searching, and pagination
+ * Endpoint: GET /api/registrations
+ */
+export const getRegistrations = async (req, res) => {
+  try {
+    const result = await registrationService.getRegistrations(req.query);
+    res.json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    console.error('[Get Registrations Error]:', err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Get single registration by ID
+ * Endpoint: GET /api/registrations/:registrationId
+ */
+export const getRegistrationById = async (req, res) => {
+  try {
+    const id = req.params.registrationId || req.params.id;
+    const registration = await registrationService.getRegistrationById(id);
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        message: `Registration not found with ID: ${id}`,
+      });
+    }
+    res.json({ success: true, data: registration });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Update a registration (Registration ID is immutable)
+ * Endpoint: PUT /api/registrations/:registrationId
+ */
+export const updateRegistration = async (req, res) => {
+  try {
+    const id = req.params.registrationId || req.params.id;
+    const updated = await registrationService.updateRegistration(id, req.body);
+    res.json({
+      success: true,
+      message: 'Registration updated successfully',
+      data: updated,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Delete a registration (Atomic counter is not decremented)
+ * Endpoint: DELETE /api/registrations/:registrationId
+ */
+export const deleteRegistration = async (req, res) => {
+  try {
+    const id = req.params.registrationId || req.params.id;
+    await registrationService.deleteRegistration(id);
+    res.json({
+      success: true,
+      message: `Registration ${id} deleted successfully. ID sequence preserved.`,
+    });
+  } catch (err) {
+    res.status(404).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Dynamic summary calculation
+ * Endpoint: GET /api/registrations/summary
+ */
+export const getRegistrationSummary = async (req, res) => {
+  try {
+    const summary = await registrationService.getSummary(req.query.year);
+    res.json({
+      success: true,
+      data: summary,
+    });
+  } catch (err) {
+    console.error('[Registration Summary Error]:', err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Quick counts
+ * Endpoint: GET /api/registrations/counts
+ */
+export const getRegistrationCounts = async (req, res) => {
+  try {
+    const counts = await registrationService.getCounts();
+    res.json({
+      success: true,
+      data: counts,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Parse uploaded spreadsheet file for bulk preview
+ * Endpoint: POST /api/registrations/parse-file
+ */
 export const parseSpreadsheetFile = async (req, res) => {
   try {
     if (!req.file) {
@@ -299,19 +308,30 @@ export const parseSpreadsheetFile = async (req, res) => {
       rows = XLSX.utils.sheet_to_json(sheet);
     }
 
-    // Validate rows
     let validRows = 0;
     let invalidRows = 0;
     const validatedList = [];
 
     rows.forEach((row, idx) => {
-      const name = row['Full Name'] || row['fullName'] || row['Name'] || row['name'] || row['STUDENT NAME'] || row['Student Name'] || row['student name'];
-      const phone = row['Phone Number'] || row['phone'] || row['Contact'] || row['contactNumber'] || row["Parent's Phone Number"];
+      const name =
+        row['Full Name'] ||
+        row['fullName'] ||
+        row['Name'] ||
+        row['name'] ||
+        row['STUDENT NAME'] ||
+        row['Student Name'] ||
+        row['student name'];
+      const phone =
+        row['Phone Number'] ||
+        row['phone'] ||
+        row['Contact'] ||
+        row['contactNumber'] ||
+        row["Parent's Phone Number"];
       const size = row['T-Shirt Size'] || row['tShirtSize'] || row['Size'] || row['size'] || 'M';
-      const dob = row['Date of Birth'] || row['dob'] || row['DOB'];
       const age = row['Age'] || row['age'] || '';
       const standard = row['Standard / Class'] || row['Class'] || row['class'] || '';
       const school = row['School / College'] || row['school'] || '';
+      const dob = row['Date of Birth'] || row['dob'] || '';
 
       const isValid = Boolean(name && name.toString().trim().length > 0);
       if (isValid) {
@@ -323,10 +343,10 @@ export const parseSpreadsheetFile = async (req, res) => {
       validatedList.push({
         rowNumber: idx + 1,
         fullName: name ? name.toString().trim() : '',
-        age: age || '',
-        standard: standard || '',
+        age: age ? String(age).trim() : '',
+        standard: standard ? String(standard).trim() : '',
         phone: phone ? phone.toString().replace(/\D/g, '') : '',
-        school: school || '',
+        school: school ? school.toString().trim() : '',
         tShirtSize: (size || 'M').toString().toUpperCase(),
         dob: dob || '',
         isValid,
@@ -351,11 +371,14 @@ export const parseSpreadsheetFile = async (req, res) => {
   }
 };
 
+/**
+ * Get institutions list
+ * Endpoint: GET /api/registrations/institutions
+ */
 export const getInstitutions = async (req, res) => {
   try {
     const list = await Institution.find().sort({ name: 1 });
     const names = list.map((item) => item.name);
-    // Guarantee fallback list if empty
     const finalNames = names.length > 0 ? names : adoniInstitutionsList;
     res.json({ success: true, data: finalNames });
   } catch (err) {
@@ -363,27 +386,18 @@ export const getInstitutions = async (req, res) => {
   }
 };
 
+/**
+ * Get logged-in user registrations
+ * Endpoint: GET /api/registrations/my-registrations
+ */
 export const getUserRegistrations = async (req, res) => {
   try {
     const userPhone = req.user.phone;
-    const userEmail = req.user.email;
     const registrations = await Registration.find({
       $or: [{ userId: req.user._id }, { contactNumber: userPhone }],
     }).sort({ createdAt: -1 });
 
     res.json({ success: true, data: registrations });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-
-export const getRegistrationById = async (req, res) => {
-  try {
-    const reg = await Registration.findOne({ registrationId: req.params.id.toUpperCase() });
-    if (!reg) {
-      return res.status(404).json({ success: false, message: 'Registration not found' });
-    }
-    res.json({ success: true, data: reg });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
