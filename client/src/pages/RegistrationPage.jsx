@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { registrationService, eventService } from '../services/api';
 import { SearchableSelect } from '../components/SearchableSelect';
-import { RegistrationReceiptModal } from '../components/RegistrationReceiptModal';
+import { EntryPassModal } from '../components/EntryPassModal';
 import { MarathonRouteMap } from '../components/MarathonRouteMap';
 import { adoniInstitutionsList } from '../utils/constants';
 import { formatPhoneInput, getCleanPhoneNumber } from '../utils/phoneUtils';
@@ -854,10 +854,11 @@ export const RegistrationPage = () => {
         <MarathonRouteMap />
       </div>
 
-      {/* Confirmation Pass Receipt Modal */}
+      {/* Official Entry Pass Confirmation Modal */}
       {receiptData && (
-        <RegistrationReceiptModal
+        <EntryPassModal
           data={receiptData}
+          eventConfig={eventConfig}
           onClose={() => setReceiptData(null)}
         />
       )}

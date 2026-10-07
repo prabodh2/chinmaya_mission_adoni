@@ -1,7 +1,9 @@
-import React from 'react';
-import { X, User, Phone, Building, Calendar, Shirt, Award, Hash, CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, User, Phone, Building, Calendar, Shirt, Award, Hash, CheckCircle, AlertCircle, FileText } from 'lucide-react';
+import { EntryPassModal } from '../EntryPassModal';
 
 export const RegistrationDetailsModal = ({ registration, onClose, onEdit }) => {
+  const [showPass, setShowPass] = useState(false);
   if (!registration) return null;
 
   const isIndividual =
@@ -127,6 +129,13 @@ export const RegistrationDetailsModal = ({ registration, onClose, onEdit }) => {
         {/* Footer Actions */}
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border-color)]">
           <button
+            onClick={() => setShowPass(true)}
+            className="btn-secondary py-2 px-4 text-xs border-[var(--cyan)] text-[var(--cyan)] hover:bg-[var(--cyan)]/10 flex items-center gap-1.5"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>VIEW ENTRY PASS</span>
+          </button>
+          <button
             onClick={() => {
               onClose();
               if (onEdit) onEdit(registration);
@@ -144,6 +153,14 @@ export const RegistrationDetailsModal = ({ registration, onClose, onEdit }) => {
         </div>
 
       </div>
+
+      {/* Entry Pass Modal for this registration */}
+      {showPass && (
+        <EntryPassModal
+          data={registration}
+          onClose={() => setShowPass(false)}
+        />
+      )}
     </div>
   );
 };
