@@ -198,10 +198,13 @@ export const submitBulkRegistration = async (req, res) => {
     const createdRegistrations = [];
 
     for (const student of parsedStudents) {
-      const name = student.fullName || student.name || student['Full Name'] || student.FullName;
-      const phoneNum = (student.phone || student.contactNumber || student['Phone Number'] || phone).toString().replace(/\D/g, '');
+      const name = student.fullName || student.name || student['Full Name'] || student.FullName || student['Student Name'] || student['student name'];
+      const phoneNum = (student.phone || student.contactNumber || student['Phone Number'] || student["Parent's Phone Number"] || phone).toString().replace(/\D/g, '');
       const tShirt = (student.tShirtSize || student.size || student['T-Shirt Size'] || 'M').toUpperCase();
       const dob = student.dob || student.dateOfBirth || student['Date of Birth'] || null;
+      const age = student.age || student['Age'] || null;
+      const standard = student.standard || student['Standard / Class'] || student['Class'] || null;
+      const school = student.school || student['School / College'] || null;
 
       if (!name) {
         failedCount++;
@@ -302,10 +305,13 @@ export const parseSpreadsheetFile = async (req, res) => {
     const validatedList = [];
 
     rows.forEach((row, idx) => {
-      const name = row['Full Name'] || row['fullName'] || row['Name'] || row['name'] || row['STUDENT NAME'];
-      const phone = row['Phone Number'] || row['phone'] || row['Contact'] || row['contactNumber'];
+      const name = row['Full Name'] || row['fullName'] || row['Name'] || row['name'] || row['STUDENT NAME'] || row['Student Name'] || row['student name'];
+      const phone = row['Phone Number'] || row['phone'] || row['Contact'] || row['contactNumber'] || row["Parent's Phone Number"];
       const size = row['T-Shirt Size'] || row['tShirtSize'] || row['Size'] || row['size'] || 'M';
       const dob = row['Date of Birth'] || row['dob'] || row['DOB'];
+      const age = row['Age'] || row['age'] || '';
+      const standard = row['Standard / Class'] || row['Class'] || row['class'] || '';
+      const school = row['School / College'] || row['school'] || '';
 
       const isValid = Boolean(name && name.toString().trim().length > 0);
       if (isValid) {
@@ -317,11 +323,14 @@ export const parseSpreadsheetFile = async (req, res) => {
       validatedList.push({
         rowNumber: idx + 1,
         fullName: name ? name.toString().trim() : '',
+        age: age || '',
+        standard: standard || '',
         phone: phone ? phone.toString().replace(/\D/g, '') : '',
+        school: school || '',
         tShirtSize: (size || 'M').toString().toUpperCase(),
         dob: dob || '',
         isValid,
-        error: isValid ? null : 'Missing Full Name',
+        error: isValid ? null : 'Missing Student Name',
       });
     });
 
