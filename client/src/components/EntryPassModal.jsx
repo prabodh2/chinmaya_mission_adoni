@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { CheckCircle, Download, Printer, X } from 'lucide-react';
 import { EntryPass } from './EntryPass';
 import { downloadEntryPassAsImage, printEntryPass } from '../utils/entryPassGenerator';
@@ -10,21 +10,33 @@ import { downloadEntryPassAsImage, printEntryPass } from '../utils/entryPassGene
 export const EntryPassModal = ({ data, eventConfig, onClose }) => {
   const [downloading, setDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const isSavingRef = useRef(false);
 
   if (!data) return null;
 
-  const handleSaveEntryPass = async () => {
+  const handleSaveEntryPass = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isSavingRef.current || downloading) return;
+
+    isSavingRef.current = true;
+    setDownloading(true);
+
     try {
-      setDownloading(true);
-      await downloadEntryPassAsImage('official-entry-pass', data.registrationId);
-      setDownloadSuccess(true);
-      setTimeout(() => setDownloadSuccess(false), 4000);
+      const success = await downloadEntryPassAsImage('official-entry-pass', data.registrationId);
+      if (success) {
+        setDownloadSuccess(true);
+        setTimeout(() => setDownloadSuccess(false), 4000);
+      }
     } catch (err) {
       console.error('Failed to download entry pass:', err);
       // Fallback to print dialog if canvas fails
       printEntryPass();
     } finally {
       setDownloading(false);
+      isSavingRef.current = false;
     }
   };
 
@@ -105,9 +117,12 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
         {/* 2. PROMINENT SAVE ENTRY PASS BUTTON */}
         <div className="space-y-2 pt-1">
           <button
+            type="button"
             onClick={handleSaveEntryPass}
             disabled={downloading}
-            className="w-full btn-primary justify-center py-4 text-base font-extrabold shadow-xl hover:scale-[1.01] transition-all flex items-center gap-2.5 bg-gradient-to-r from-[var(--orange)] to-amber-600 text-white"
+            className={`w-full btn-primary justify-center py-4 text-base font-extrabold shadow-xl transition-all flex items-center gap-2.5 bg-gradient-to-r from-[var(--orange)] to-amber-600 text-white ${
+              downloading ? 'opacity-50 pointer-events-none cursor-not-allowed' : 'hover:scale-[1.01]'
+            }`}
           >
             <Download className={`w-5 h-5 ${downloading ? 'animate-bounce' : ''}`} />
             <span>{downloading ? 'GENERATING ENTRY PASS...' : 'Save Entry Pass'}</span>
