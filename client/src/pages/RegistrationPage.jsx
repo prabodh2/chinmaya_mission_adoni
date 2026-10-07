@@ -198,10 +198,12 @@ export const RegistrationPage = () => {
   // Download Sample Excel/CSV Template
   const downloadSampleTemplate = () => {
     const csvContent =
-      'Full Name,Date of Birth,Phone Number,T-Shirt Size\n' +
-      'Ramesh Kumar,2006-05-15,9876543210,M\n' +
-      'Sowmya Reddy,2007-08-20,9123456789,S\n' +
-      'Karthik V,2005-11-10,9988776655,L\n';
+      'Student Name,Age,Standard / Class,Parent\'s Phone Number,School / College,T-Shirt Size\n' +
+      'Dummy Name 1,13,8th,+91 9876543212,XYZ High School,S\n' +
+      'Dummy Name 2,14,9th,+91 9123456780,ABC Public School,M\n' +
+      'Dummy Name 3,15,10th,+91 9988776655,PQR High School,L\n' +
+      'Dummy Name 4,13,8th,+91 9012345678,Sunrise High School,S\n' +
+      'Dummy Name 5,14,9th,+91 9090909090,Green Valley School,M\n';
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -564,7 +566,7 @@ export const RegistrationPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
               <h3 className="text-2xl font-extrabold font-heading text-[var(--text-primary)]">
-                INSTITUTION BULK STUDENT REGISTRATION
+                Student Details School/College
               </h3>
               <p className="text-xs text-[var(--text-muted)] font-medium">
                 Upload student records via Excel (.xlsx, .xls) or CSV template.
