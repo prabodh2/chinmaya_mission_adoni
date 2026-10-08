@@ -63,7 +63,7 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
             transform: translateX(-50%) !important;
             width: 480px !important;
             margin: 0 auto !important;
-            border: 2px solid #fca590 !important;
+            border: 2px solid #ea580c !important;
             box-shadow: none !important;
             background-color: #ffffff !important;
             page-break-inside: avoid !important;
