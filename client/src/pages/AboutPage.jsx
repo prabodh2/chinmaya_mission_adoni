@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { contentService } from '../services/api';
+import { MilestoneJourney } from '../components/milestones/MilestoneJourney';
 import {
   Flame,
   Sparkles,
@@ -310,8 +311,8 @@ export const AboutPage = () => {
             </p>
 
             <div className="pt-2 flex flex-wrap gap-4">
-              <a href="#who-we-are" className="btn-primary py-3.5 px-7 text-sm font-extrabold text-decoration-none shadow-xl">
-                <span>LEARN OUR STORY</span>
+              <a href="#our-milestones" className="btn-primary py-3.5 px-7 text-sm font-extrabold text-decoration-none shadow-xl">
+                <span>EXPLORE OUR MILESTONES</span>
                 <ChevronRight className="w-4 h-4" />
               </a>
               <Link to="/activities" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
@@ -403,61 +404,8 @@ export const AboutPage = () => {
         </div>
       </section>
 
-      {/* 3. OUR STORY SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-            OUR JOURNEY THROUGH TIME
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-            {data.ourStory.heading}
-          </h2>
-          <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-            {data.ourStory.p1}
-          </p>
-        </div>
-
-        {/* Clean Visual Timeline */}
-        <div className="relative">
-          {/* Vertical Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-1 -translate-x-1/2 bg-gradient-to-b from-[var(--orange)] via-[var(--yellow)] to-[var(--cyan)] opacity-30 rounded-full" />
-
-          <div className="space-y-8 relative">
-            {data.ourStory.timeline.map((item, idx) => {
-              const isEven = idx % 2 === 0;
-              return (
-                <div
-                  key={idx}
-                  className={`flex flex-col md:flex-row items-center gap-6 ${
-                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                >
-                  <div className={`w-full md:w-1/2 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
-                    <div className="p-6 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:border-[var(--orange)] transition-all group">
-                      <span className="inline-block px-3 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] text-xs font-extrabold font-heading mb-2">
-                        {item.year}
-                      </span>
-                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] font-heading mb-2 group-hover:text-[var(--orange)] transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Timeline Badge Dot */}
-                  <div className="w-10 h-10 rounded-full bg-[var(--orange)] text-white font-extrabold text-xs flex items-center justify-center border-4 border-[var(--bg-primary)] shadow-md z-10 flex-shrink-0">
-                    {idx + 1}
-                  </div>
-
-                  <div className="w-full md:w-1/2 hidden md:block" />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* 3. OUR MILESTONES (INTERACTIVE ROAD JOURNEY THROUGH TIME) */}
+      <MilestoneJourney />
 
       {/* 4. OUR VISION SECTION */}
       <section className="px-4 max-w-5xl mx-auto">
