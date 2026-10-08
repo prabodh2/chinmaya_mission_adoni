@@ -49,12 +49,12 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[var(--glass-bg,#FFFFFF)]/95 backdrop-blur-md border-b border-[var(--glass-border,rgba(11,35,64,0.1))] shadow-sm transition-all duration-200">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[var(--glass-bg,#FFFFFF)]/95 backdrop-blur-md border-b border-[var(--glass-border,rgba(11,35,64,0.1))] shadow-sm transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-4">
+        <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 gap-3 sm:gap-4">
 
           {/* LEFT CORNER: Official Logo Emblem */}
-          <div className="flex items-center shrink-0">
+          <div className="flex items-center shrink-0 h-full py-2">
             <LeftLogo />
           </div>
 
@@ -65,8 +65,8 @@ export const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 className={`text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none ${isActive(link.path)
-                    ? 'text-[var(--orange)] font-extrabold'
-                    : 'text-[var(--text-primary)] opacity-85'
+                  ? 'text-[var(--orange)] font-extrabold'
+                  : 'text-[var(--text-primary)] opacity-85'
                   }`}
               >
                 {link.name}
@@ -155,8 +155,8 @@ export const Navbar = () => {
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-base font-bold px-3 py-2 rounded-xl text-decoration-none ${isActive(link.path)
-                    ? 'bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold'
-                    : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
+                  ? 'bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold'
+                  : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                   }`}
               >
                 {link.name}
