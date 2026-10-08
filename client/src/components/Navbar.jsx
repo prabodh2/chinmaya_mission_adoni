@@ -49,12 +49,12 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full transition-colors duration-300 bg-[var(--glass-bg)] backdrop-blur-md border-b border-[var(--glass-border)] shadow-md">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-2 sm:py-3 min-h-[64px] sm:min-h-[72px] gap-2 sm:gap-4">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[var(--glass-bg,#FFFFFF)]/95 backdrop-blur-md border-b border-[var(--glass-border,rgba(11,35,64,0.1))] shadow-sm transition-all duration-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-4">
 
           {/* LEFT CORNER: Official Logo Emblem */}
-          <div className="flex items-center">
+          <div className="flex items-center shrink-0">
             <LeftLogo />
           </div>
 

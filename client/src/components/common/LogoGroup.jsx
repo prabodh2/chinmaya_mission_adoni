@@ -16,7 +16,7 @@ export const LeftLogo = ({ className = '' }) => {
         alt="Chinmaya Mission Adoni"
         loading="eager"
         decoding="async"
-        className="h-6 sm:h-7 md:h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-sm"
+        className="h-7 sm:h-9 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-sm shrink-0"
         onError={(e) => {
           e.target.onerror = null;
           e.target.style.display = 'none';
