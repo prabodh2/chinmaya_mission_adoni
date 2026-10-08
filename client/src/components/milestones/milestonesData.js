@@ -1,6 +1,7 @@
 /**
  * Milestones Data for Chinmaya Mission Adoni Journey
  * Chronological record of key events, temples, youth activities and cultural milestones.
+ * NOTE: All "KM" references have been completely removed.
  */
 
 export const MILESTONES_DATA = [
@@ -12,8 +13,9 @@ export const MILESTONES_DATA = [
     description: 'Chinmaya Mission, Adoni, was established.',
     type: 'foundation',
     tag: 'Foundation Stop',
-    km: 'KM 01',
+    era: 'beginning',
     icon: 'Sparkles',
+    side: 'left',
   },
   {
     id: 2,
@@ -23,9 +25,10 @@ export const MILESTONES_DATA = [
     description: 'Chinmaya Geeta Chanting Competitions have been conducted from 1993 onwards, continuing through 2026.',
     type: 'continuing',
     tag: 'Continuing Tradition',
+    era: 'culture',
     isContinuing: true,
-    km: 'KM 02',
     icon: 'BookOpen',
+    side: 'right',
   },
   {
     id: 3,
@@ -36,8 +39,9 @@ export const MILESTONES_DATA = [
     highlightBadge: 'BEST UPCOMING CENTER',
     type: 'award',
     tag: 'Youth Camp & Award',
-    km: 'KM 03',
+    era: 'youth',
     icon: 'Award',
+    side: 'left',
   },
   {
     id: 4,
@@ -47,8 +51,9 @@ export const MILESTONES_DATA = [
     description: 'Development of Sri Shantamalleswara Swamy Temple is recorded.',
     type: 'temple',
     tag: 'Temple Development',
-    km: 'KM 04',
+    era: 'temple',
     icon: 'Landmark',
+    side: 'right',
   },
   {
     id: 5,
@@ -58,8 +63,9 @@ export const MILESTONES_DATA = [
     description: 'Establishment of the Chinmaya Cultural Complex. Inaugurated by Pujya Sw. Tejomayanada ji.',
     type: 'complex',
     tag: 'Inauguration by Pujya Sw. Tejomayananda',
-    km: 'KM 05',
+    era: 'heritage',
     icon: 'Building2',
+    side: 'left',
   },
   {
     id: 6,
@@ -69,8 +75,9 @@ export const MILESTONES_DATA = [
     description: 'Construction of a bridge at the Shantamalleswara Temple.',
     type: 'infrastructure',
     tag: 'Bridge Infrastructure',
-    km: 'KM 06',
+    era: 'community',
     icon: 'Layers',
+    side: 'right',
   },
   {
     id: 7,
@@ -80,8 +87,9 @@ export const MILESTONES_DATA = [
     description: 'Construction of foot path bridge at Sri Shantamalleswara Temple.',
     type: 'infrastructure',
     tag: 'Devotee Pathway',
-    km: 'KM 07',
+    era: 'community',
     icon: 'Navigation',
+    side: 'left',
   },
   {
     id: 8,
@@ -91,8 +99,9 @@ export const MILESTONES_DATA = [
     description: 'Construction of Sri Chinmaya Sanjeevaraya Swami Temple.',
     type: 'temple',
     tag: 'Temple Construction',
-    km: 'KM 08',
+    era: 'temple',
     icon: 'Landmark',
+    side: 'right',
   },
   {
     id: 9,
@@ -102,8 +111,9 @@ export const MILESTONES_DATA = [
     description: 'Kumbhabhishekam at Sri Chinmaya Sanjeevaraya Swami Temple.',
     type: 'spiritual',
     tag: 'Maha Kumbhabhishekam',
-    km: 'KM 09',
+    era: 'spiritual',
     icon: 'Flame',
+    side: 'left',
   },
   {
     id: 10,
@@ -113,9 +123,10 @@ export const MILESTONES_DATA = [
     description: 'Every summer, Balavihar Camps for children and Youth Camps have been conducted to promote Indian culture, values and spiritual learning.',
     type: 'recurring',
     tag: 'Recurring Annual Programme',
+    era: 'education',
     isRecurring: true,
-    km: 'KM 10',
     icon: 'Sun',
+    side: 'right',
   },
   {
     id: 11,
@@ -125,8 +136,9 @@ export const MILESTONES_DATA = [
     description: 'Chinmaya Vani inaugurated by Sw. Swaroopanandaji.',
     type: 'inauguration',
     tag: 'Inaugurated by Sw. Swaroopanandaji',
-    km: 'KM 11',
+    era: 'modern',
     icon: 'Mic',
+    side: 'left',
   },
   {
     id: 12,
@@ -136,8 +148,9 @@ export const MILESTONES_DATA = [
     description: 'Kumbhabhishekam at Sri Shantamalleswara Swami.',
     type: 'spiritual',
     tag: 'Maha Kumbhabhishekam',
-    km: 'KM 12',
+    era: 'contemporary',
     icon: 'Flame',
+    side: 'right',
   },
   {
     id: 13,
@@ -147,7 +160,8 @@ export const MILESTONES_DATA = [
     description: 'The Mission conducted District-Level Chinmaya Geeta Chanting Competitions, continuing its long-standing commitment to value-based education and cultural activities.',
     type: 'continuing',
     tag: 'District Cultural Initiative',
-    km: 'KM 13',
+    era: 'celebration',
     icon: 'Trophy',
+    side: 'center',
   },
 ];
