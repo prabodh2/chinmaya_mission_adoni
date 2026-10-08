@@ -141,6 +141,51 @@ export const AboutPage = () => {
         'Since its inauguration in 2001 by Pujya Swami Tejomayananda, Chinmaya Mission Adoni has been part of the continuing effort to share the vision and teachings of Pujya Gurudev Swami Chinmayananda. Guided by the principles of knowledge, devotion and selfless service, the Mission aspires to inspire individuals, empower youth and contribute to the spiritual and cultural enrichment of Adoni.',
       highlights: ['2001', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
     },
+    ourVision: {
+      heading: 'OUR VISION',
+      quote:
+        'To spread the timeless wisdom of Vedanta and inspire individuals to live purposeful, value-based lives rooted in knowledge, devotion and selfless service.',
+    },
+    ourMission: {
+      heading: 'OUR MISSION',
+      items: [
+        {
+          id: 'mission-1',
+          title: 'Spiritual Knowledge',
+          description:
+            'Sharing the timeless teachings of Vedanta and the Bhagavad Gita to inspire self-transformation and inner growth.',
+          iconName: 'BookOpen',
+        },
+        {
+          id: 'mission-2',
+          title: 'Youth Empowerment',
+          description:
+            'Nurturing young minds through CHYK programmes, leadership camps and cultural activities that build character and confidence.',
+          iconName: 'Zap',
+        },
+        {
+          id: 'mission-3',
+          title: 'Cultural Preservation',
+          description:
+            'Preserving and promoting Indian cultural heritage through festivals, arts and traditional practices.',
+          iconName: 'Sparkles',
+        },
+        {
+          id: 'mission-4',
+          title: 'Community Service',
+          description:
+            'Serving the community through welfare initiatives, medical camps and educational programmes that uplift society.',
+          iconName: 'HeartHandshake',
+        },
+        {
+          id: 'mission-5',
+          title: 'Value-Based Living',
+          description:
+            'Encouraging individuals to integrate spiritual wisdom into daily life for a more compassionate and purposeful existence.',
+          iconName: 'Shield',
+        },
+      ],
+    },
     closingCta: {
       title: 'Timeless Wisdom.\nInspired Youth.\nMeaningful Service.',
       subtext:
@@ -249,7 +294,7 @@ export const AboutPage = () => {
     };
   }, []);
 
-  const data = content || defaultContent;
+  const data = { ...defaultContent, ...content };
 
   const getMissionIcon = (name) => {
     switch (name) {

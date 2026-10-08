@@ -1,37 +1,31 @@
 import React from 'react';
 
 /**
- * JourneyBus Component
- * Responsive SVG Tour Coach that steers and rotates smoothly along the road tangent angle.
+ * JourneyBus Component (Straight Travel Coach)
+ * Travels strictly along the straight vertical central highway.
+ * Casts headlights forward down the road, and displays the active destination year badge.
  * 
  * @param {object} props
- * @param {number} [props.angle] - Rotation angle in degrees (-45° to +45°) based on road curvature
  * @param {boolean} [props.isMoving] - True when scrolling/moving
  * @param {string} [props.currentYear] - Current milestone year
  * @param {string} [props.className] - Additional classes
  */
 export const JourneyBus = ({
-  angle = 0,
   isMoving = false,
   currentYear = '1992',
   className = '',
 }) => {
-  // Clamp angle to natural vehicle turning range (-45 to 45 deg)
-  const clampedAngle = Math.max(-50, Math.min(50, angle));
-
   return (
     <div
-      className={`relative z-40 select-none pointer-events-none transition-transform duration-150 ease-out ${className}`}
+      className={`relative z-40 select-none pointer-events-none ${className}`}
       style={{
-        width: '58px',
+        width: '56px',
         height: '96px',
-        transform: `rotate(${clampedAngle}deg)`,
-        transformOrigin: 'center 45%',
       }}
       aria-label="Chinmaya Mission Tour Bus"
     >
-      {/* 1. Forward Headlight Beams (Shooting forward along driving vector) */}
-      <div className="absolute top-[78px] left-1/2 -translate-x-1/2 w-28 h-36 pointer-events-none overflow-visible">
+      {/* 1. Forward Headlight Beams (Shooting straight forward down the vertical road) */}
+      <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-28 h-36 pointer-events-none overflow-visible">
         <svg
           viewBox="0 0 100 130"
           className="w-full h-full opacity-80"
@@ -64,14 +58,9 @@ export const JourneyBus = ({
       </div>
 
       {/* 2. Soft Dynamic Vehicle Shadow on Road */}
-      <div
-        className="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-22 bg-black/40 rounded-2xl blur-md pointer-events-none transition-opacity"
-        style={{
-          transform: `translate(${clampedAngle * 0.15}px, 4px)`,
-        }}
-      />
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-22 bg-black/40 rounded-2xl blur-md pointer-events-none" />
 
-      {/* 3. Coach Body Vector Graphic (Top-Down Coach with Direction Indicator) */}
+      {/* 3. Coach Body Vector Graphic (Top-Down Coach facing straight down) */}
       <svg
         viewBox="0 0 70 120"
         className="w-full h-full relative z-10 drop-shadow-2xl"
@@ -172,12 +161,7 @@ export const JourneyBus = ({
       </svg>
 
       {/* 4. Active Stop Tag Floating Above the Bus */}
-      <div
-        className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#0B2340] text-[#FFC107] text-[10px] font-black tracking-wider px-2.5 py-0.5 rounded-full shadow-lg border border-[#FFC107]/40 flex items-center gap-1.5 transition-transform"
-        style={{
-          transform: `translateX(-50%) rotate(${-clampedAngle}deg)`, // Keep text level
-        }}
-      >
+      <div className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#0B2340] text-[#FFC107] text-[10px] font-black tracking-wider px-2.5 py-0.5 rounded-full shadow-lg border border-[#FFC107]/40 flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
         <span>{currentYear}</span>
       </div>

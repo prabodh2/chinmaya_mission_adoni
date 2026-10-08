@@ -162,6 +162,6 @@ export const MILESTONES_DATA = [
     tag: 'District Cultural Initiative',
     era: 'celebration',
     icon: 'Trophy',
-    side: 'center',
+    side: 'left',
   },
 ];

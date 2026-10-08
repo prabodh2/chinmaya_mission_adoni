@@ -1,0 +1,467 @@
+.milestone-journey {
+  position: relative;
+  width: 100%;
+  height: 600vh;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff3c9 0%,
+      #fff0bd 50%,
+      #fff5d7 100%
+    );
+}
+
+/* =========================================
+   STICKY JOURNEY
+========================================= */
+
+.journey-sticky {
+  position: sticky;
+  top: 0;
+
+  height: 100vh;
+  width: 100%;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.journey-header {
+  position: absolute;
+
+  top: 30px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: min(700px, 90%);
+
+  text-align: center;
+
+  z-index: 20;
+}
+
+.journey-header span {
+  display: inline-block;
+
+  padding: 7px 18px;
+
+  border-radius: 30px;
+
+  background: #ffe3d7;
+
+  color: #ef5426;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+.journey-header h2 {
+  margin: 10px 0;
+
+  color: #082746;
+
+  font-size: clamp(30px, 4vw, 52px);
+
+  font-weight: 800;
+}
+
+.journey-header p {
+  margin: 0 auto;
+
+  max-width: 650px;
+
+  color: #315879;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+/* =========================================
+   SVG
+========================================= */
+
+.journey-svg {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+/* =========================================
+   ROAD SHADOW
+========================================= */
+
+.road-shadow {
+  fill: none;
+
+  stroke: rgba(20, 35, 50, 0.15);
+
+  stroke-width: 150;
+
+  stroke-linecap: round;
+
+  filter: blur(12px);
+}
+
+/* =========================================
+   ROAD
+========================================= */
+
+.road {
+  fill: none;
+
+  stroke: #303846;
+
+  stroke-width: 130;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+/* =========================================
+   ROAD CENTER
+========================================= */
+
+.road-center {
+  fill: none;
+
+  stroke: #f6c82e;
+
+  stroke-width: 10;
+
+  stroke-linecap: round;
+
+  stroke-dasharray: 45 45;
+}
+
+/* =========================================
+   MILESTONE
+========================================= */
+
+.milestone {
+  opacity: 0.3;
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.milestone.active {
+  opacity: 1;
+}
+
+.milestone-dot {
+  fill: #f45125;
+
+  stroke: white;
+
+  stroke-width: 5;
+}
+
+.milestone-ring {
+  fill: none;
+
+  stroke: #f45125;
+
+  stroke-width: 3;
+
+  opacity: 0.25;
+}
+
+.milestone.active .milestone-ring {
+  animation: milestonePulse 1.8s infinite;
+}
+
+@keyframes milestonePulse {
+  0% {
+    r: 28;
+    opacity: 0.2;
+  }
+
+  50% {
+    r: 42;
+    opacity: 0.05;
+  }
+
+  100% {
+    r: 28;
+    opacity: 0.2;
+  }
+}
+
+.milestone-year {
+  fill: #082746;
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+  paint-order: stroke;
+
+  stroke: #fff3c9;
+
+  stroke-width: 8px;
+
+  stroke-linejoin: round;
+}
+
+/* =========================================
+   BUS
+========================================= */
+
+.bus {
+  pointer-events: none;
+
+  transform-origin: center;
+
+  transition:
+    transform 0.08s linear;
+}
+
+/* bus shadow */
+
+.bus-shadow {
+  fill: rgba(0, 0, 0, 0.2);
+}
+
+/* bus body */
+
+.bus-body {
+  fill: #f45125;
+
+  stroke: #092744;
+
+  stroke-width: 4;
+}
+
+/* front */
+
+.bus-front {
+  fill: #ff7a45;
+}
+
+/* windows */
+
+.bus-window {
+  fill: #dcecf4;
+
+  stroke: #092744;
+
+  stroke-width: 2;
+}
+
+/* lower body */
+
+.bus-lower {
+  fill: #f7c936;
+}
+
+/* wheels */
+
+.bus-wheel {
+  fill: #111827;
+
+  stroke: white;
+
+  stroke-width: 3;
+}
+
+/* =========================================
+   ACTIVE MILESTONE CONTENT
+========================================= */
+
+.active-milestone-content {
+  position: absolute;
+
+  bottom: 40px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: min(600px, 90%);
+
+  padding: 22px 28px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.12);
+
+  text-align: center;
+
+  z-index: 30;
+}
+
+.active-year {
+  display: inline-block;
+
+  padding: 5px 14px;
+
+  border-radius: 20px;
+
+  background: #ffe0d5;
+
+  color: #f45125;
+
+  font-weight: 800;
+
+  margin-bottom: 8px;
+}
+
+.active-milestone-content h3 {
+  margin: 5px 0 8px;
+
+  color: #082746;
+
+  font-size: 22px;
+}
+
+.active-milestone-content p {
+  margin: 0;
+
+  color: #41627d;
+
+  line-height: 1.5;
+}
+
+/* =========================================
+   FINAL DESTINATION
+========================================= */
+
+.final-destination {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: min(650px, 90%);
+
+  padding: 45px;
+
+  background: white;
+
+  border-radius: 30px;
+
+  text-align: center;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.15);
+
+  z-index: 50;
+
+  animation: destinationAppear 0.8s ease;
+}
+
+.final-destination span {
+  color: #f45125;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.final-destination h2 {
+  margin: 10px 0;
+
+  color: #082746;
+
+  font-size: clamp(28px, 4vw, 48px);
+}
+
+.final-destination p {
+  color: #41627d;
+
+  line-height: 1.6;
+}
+
+@keyframes destinationAppear {
+  from {
+    opacity: 0;
+    transform:
+      translate(-50%, -45%)
+      scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      scale(1);
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  .journey-header {
+    top: 18px;
+  }
+
+  .journey-header h2 {
+    font-size: 32px;
+  }
+
+  .journey-header p {
+    font-size: 13px;
+  }
+
+  .road {
+    stroke-width: 180;
+  }
+
+  .road-shadow {
+    stroke-width: 200;
+  }
+
+  .road-center {
+    stroke-width: 12;
+
+    stroke-dasharray: 40 40;
+  }
+
+  .milestone-year {
+    font-size: 20px;
+  }
+
+  .active-milestone-content {
+    bottom: 20px;
+
+    padding: 18px;
+  }
+
+  .active-milestone-content h3 {
+    font-size: 18px;
+  }
+
+  .active-milestone-content p {
+    font-size: 13px;
+  }
+
+  .final-destination {
+    padding: 30px 20px;
+  }
+}

@@ -29,20 +29,21 @@ const HeritageLamp = ({ x, y, active = false }) => (
 );
 
 /**
- * JourneyRoad Component
- * Renders the continuous SVG zig-zag road with asphalt surfaces, lane markings, and roadside landscape.
+ * JourneyRoad Component (Straight Vertical Highway)
+ * Renders a completely straight vertical road through the center of the timeline with
+ * horizontal milestone connectors, station nodes, asphalt layers, dashed center line, and roadside greenery.
  * 
  * @param {object} props
- * @param {string} props.pathD - SVG path d string for the continuous winding road
+ * @param {string} props.pathD - SVG straight line path string ("M 500 0 L 500 totalHeight")
  * @param {number} props.totalHeight - Total height of the road track in px
- * @param {Array} props.stopPoints - Array of {x, y, id, year} coordinate points along the road
+ * @param {Array} props.stopPoints - Array of {x, y, id, year, side} coordinate points along the straight road
  * @param {number} props.activeStopIndex - Index of currently active milestone
  * @param {Function} props.onStopClick - Callback when a road node is clicked
- * @param {React.RefObject} props.pathRef - Ref to the main SVG path for tangent calculations
+ * @param {React.RefObject} props.pathRef - Ref to the main straight SVG path
  */
 export const JourneyRoad = ({
   pathD,
-  totalHeight = 3800,
+  totalHeight = 3600,
   stopPoints = [],
   activeStopIndex = 0,
   onStopClick,
@@ -58,11 +59,11 @@ export const JourneyRoad = ({
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          <filter id="roadShadow" x="-20%" y="-10%" width="140%" height="120%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
+          <filter id="straightRoadShadow" x="-30%" y="-5%" width="160%" height="110%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
             <feColorMatrix
               type="matrix"
-              values="0 0 0 0 0.04   0 0 0 0 0.14   0 0 0 0 0.25  0 0 0 0.16 0"
+              values="0 0 0 0 0.04   0 0 0 0 0.14   0 0 0 0 0.25  0 0 0 0.18 0"
             />
           </filter>
         </defs>
@@ -71,99 +72,133 @@ export const JourneyRoad = ({
         <path
           d={pathD}
           stroke="#0B2340"
-          strokeWidth="74"
+          strokeWidth="76"
           strokeLinecap="round"
-          strokeLinejoin="round"
-          filter="url(#roadShadow)"
-          opacity="0.3"
+          filter="url(#straightRoadShadow)"
+          opacity="0.35"
         />
 
-        {/* 2. Road Kerbs / Outer Gravel Shoulder */}
+        {/* 2. Road Outer Curbs / Concrete Shoulder */}
         <path
           d={pathD}
           stroke="#64748B"
           strokeWidth="60"
           strokeLinecap="round"
-          strokeLinejoin="round"
         />
 
-        {/* 3. Main Asphalt Road Surface (Dark Charcoal/Slate Highway) */}
+        {/* 3. Main Asphalt Highway Surface (Straight Dark Slate/Charcoal) */}
         <path
           d={pathD}
           stroke="#1E293B"
           strokeWidth="50"
           strokeLinecap="round"
-          strokeLinejoin="round"
         />
 
         {/* 4. White Highway Lane Boundary Edge Stripes */}
         <path
           d={pathD}
-          stroke="rgba(255, 255, 255, 0.45)"
+          stroke="rgba(255, 255, 255, 0.4)"
           strokeWidth="44"
           strokeLinecap="round"
-          strokeLinejoin="round"
         />
-        {/* Core Asphalt Layer to isolate edge stripes */}
+        {/* Core Asphalt Inner Layer */}
         <path
           d={pathD}
           stroke="#1E293B"
           strokeWidth="38"
           strokeLinecap="round"
-          strokeLinejoin="round"
         />
 
-        {/* 5. Center Dashed Highway Line (Golden Yellow) */}
+        {/* 5. Center Dashed Highway Dividing Line (Yellow, Perfectly Vertical) */}
         <path
           ref={pathRef}
-          id="zig-zag-road-path"
+          id="straight-road-path"
           d={pathD}
           stroke="#FBBF24"
           strokeWidth="2.8"
-          strokeDasharray="14 12"
+          strokeDasharray="16 14"
           strokeLinecap="round"
-          strokeLinejoin="round"
         />
 
-        {/* 6. Roadside Landscape Elements Placed Along Natural Bends */}
-        <LandscapeTree x={190} y={120} flip={false} />
-        <HeritageLamp x={780} y={410} active={activeStopIndex >= 1} />
-        <LandscapeTree x={180} y={690} flip={true} />
-        <LandscapeTree x={810} y={970} flip={false} />
-        <HeritageLamp x={190} y={1250} active={activeStopIndex >= 4} />
-        <LandscapeTree x={800} y={1530} flip={true} />
-        <LandscapeTree x={190} y={1810} flip={false} />
-        <HeritageLamp x={810} y={2090} active={activeStopIndex >= 7} />
-        <LandscapeTree x={180} y={2370} flip={true} />
-        <LandscapeTree x={800} y={2650} flip={false} />
-        <HeritageLamp x={200} y={2930} active={activeStopIndex >= 10} />
-        <LandscapeTree x={800} y={3210} flip={true} />
+        {/* 6. Horizontal Milestone Road Connectors (Straight horizontal lines: Road -> Milestone) */}
+        {stopPoints.map((pt, idx) => {
+          const isActive = activeStopIndex === idx;
+          const isPassed = activeStopIndex > idx;
+          const isLeft = pt.side === 'left';
+          const connectorEndX = isLeft ? 380 : 620;
 
-        {/* 7. Road Stop Station Node Markers */}
+          return (
+            <g key={`connector-${idx}`} className="transition-opacity duration-300">
+              {/* Horizontal Connecting Line */}
+              <line
+                x1="500"
+                y1={pt.y}
+                x2={connectorEndX}
+                y2={pt.y}
+                stroke={isActive ? '#F4511E' : isPassed ? '#FFC107' : '#CBD5E1'}
+                strokeWidth={isActive ? '3' : '2'}
+                strokeDasharray={isActive ? 'none' : '4 4'}
+                className="transition-colors duration-300"
+              />
+
+              {/* Small Connector Endpoint Circle near Milestone Card */}
+              <circle
+                cx={connectorEndX}
+                cy={pt.y}
+                r={isActive ? '4' : '3'}
+                fill={isActive ? '#F4511E' : isPassed ? '#FFC107' : '#94A3B8'}
+                className="transition-all duration-300"
+              />
+            </g>
+          );
+        })}
+
+        {/* 7. Roadside Natural Landscape Scatter (Trees & Heritage Lamps on Left and Right) */}
+        {stopPoints.map((pt, idx) => {
+          const showTreeLeft = idx % 2 === 0;
+          const showTreeRight = idx % 2 !== 0;
+          const offset = 40;
+
+          return (
+            <g key={`decor-${idx}`}>
+              {showTreeLeft && (
+                <LandscapeTree x={425} y={pt.y - offset} flip={idx % 4 === 0} />
+              )}
+              {showTreeRight && (
+                <LandscapeTree x={545} y={pt.y + offset} flip={idx % 4 !== 0} />
+              )}
+              {idx % 3 === 0 && (
+                <HeritageLamp x={540} y={pt.y - 30} active={activeStopIndex >= idx} />
+              )}
+            </g>
+          );
+        })}
+
+        {/* 8. Road Stop Station Node Beacons on the Center Road */}
         {stopPoints.map((pt, idx) => {
           const isActive = activeStopIndex === idx;
           const isPassed = activeStopIndex > idx;
 
           return (
             <g
-              key={idx}
-              transform={`translate(${pt.x}, ${pt.y})`}
+              key={`node-${idx}`}
+              transform={`translate(500, ${pt.y})`}
               className="pointer-events-auto cursor-pointer"
               onClick={() => onStopClick && onStopClick(idx)}
             >
-              {/* Outer Pulse Ring when Active */}
+              {/* Outer Pulse Wave when Active */}
               {isActive && (
                 <circle
                   cx="0"
                   cy="0"
                   r="22"
                   fill="#F4511E"
-                  opacity="0.25"
+                  opacity="0.3"
                   className="animate-ping"
                 />
               )}
 
-              {/* Station Outer Ring */}
+              {/* Station Outer Ring / Base */}
               <circle
                 cx="0"
                 cy="0"
@@ -174,7 +209,7 @@ export const JourneyRoad = ({
                 filter="drop-shadow(0 3px 6px rgba(0,0,0,0.25))"
               />
 
-              {/* Station Stop Number */}
+              {/* Stop Number text */}
               <text
                 x="0"
                 y="3.5"
