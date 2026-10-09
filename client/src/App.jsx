@@ -10,7 +10,6 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
-import { CommunityServicesPage } from './pages/CommunityServicesPage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 
@@ -56,7 +55,6 @@ export function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/about-me" element={<AboutPage />} />
                 <Route path="/activities" element={<ActivitiesPage />} />
-                <Route path="/services" element={<CommunityServicesPage />} />
                 <Route path="/lets-connect" element={<LetsConnectPage />} />
                 <Route path="/register" element={<RegistrationPage />} />
 
@@ -89,14 +87,7 @@ export function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/my-services"
-                  element={
-                    <ProtectedRoute>
-                      <MyActivityPage />
-                    </ProtectedRoute>
-                  }
-                />
+
 
                 {/* Dedicated Admin Routes */}
                 <Route path="/admin/login" element={<AdminLoginPage />} />

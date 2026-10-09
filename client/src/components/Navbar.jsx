@@ -46,7 +46,6 @@ export const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Activities', path: '/activities' },
-    { name: 'Services', path: '/services' },
     { name: "Let's Connect", path: '/lets-connect' },
   ];
 
@@ -140,15 +139,6 @@ export const Navbar = () => {
                         >
                           <Activity className="w-3.5 h-3.5 text-emerald-500" />
                           <span>My Activity & Passes</span>
-                        </Link>
-
-                        <Link
-                          to="/services?offer=true"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--cyan)] text-decoration-none transition-colors"
-                        >
-                          <HeartHandshake className="w-3.5 h-3.5 text-[var(--cyan)]" />
-                          <span>Offer a Service</span>
                         </Link>
 
                         {isAdmin && (
@@ -280,15 +270,6 @@ export const Navbar = () => {
                 >
                   <Activity className="w-4 h-4 text-emerald-500" />
                   <span>My Activity & Passes</span>
-                </Link>
-
-                <Link
-                  to="/services?offer=true"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-bold px-3 py-2 rounded-xl text-decoration-none flex items-center gap-2 text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
-                >
-                  <HeartHandshake className="w-4 h-4 text-[var(--cyan)]" />
-                  <span>Offer A Service</span>
                 </Link>
               </>
             )}
