@@ -350,50 +350,24 @@ export const RegistrationPage = () => {
           Last date of registration is <strong className="text-[var(--text-primary)] font-bold">30 November 2026 (30/11/2026)</strong>. Details will be used to generate your official marathon pass and certificate.
         </p>
 
-        {/* Account Link Banner */}
-        {isAuthenticated ? (
-          <div className="p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
-                {user?.fullName?.charAt(0) || '✓'}
-              </div>
-              <div className="text-left">
-                <span className="font-bold text-[var(--text-primary)]">Logged in as {user?.fullName}</span>
-                <span className="text-[var(--text-muted)] block text-[11px]">+91 {user?.phone} • Details auto-filled below</span>
-              </div>
+        {/* Authenticated Member Session Banner */}
+        <div className="p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-black text-sm">
+              {user?.fullName?.charAt(0) || '✓'}
             </div>
-            <Link
-              to="/my-activity"
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 text-white font-bold text-[11px] hover:bg-emerald-600 transition-colors text-decoration-none whitespace-nowrap"
-            >
-              My Activity & Passes →
-            </Link>
-          </div>
-        ) : (
-          <div className="p-4 rounded-3xl bg-[var(--orange)]/10 border border-[var(--orange)]/25 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-[var(--orange)] shrink-0" />
-              <div className="text-left">
-                <span className="font-bold text-[var(--text-primary)]">Have an account or want easy pass access?</span>
-                <span className="text-[var(--text-muted)] block text-[11px]">Sign in to automatically save your entry pass to your dashboard</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Link
-                to="/login?redirect=/register"
-                className="px-3 py-1.5 rounded-xl bg-[var(--orange)] text-white font-bold text-[11px] hover:bg-[var(--orange)]/90 transition-colors text-decoration-none"
-              >
-                Log In
-              </Link>
-              <Link
-                to="/signup?redirect=/register"
-                className="px-3 py-1.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold text-[11px] text-decoration-none"
-              >
-                Sign Up
-              </Link>
+            <div className="text-left">
+              <span className="font-bold text-[var(--text-primary)]">Logged in as {user?.fullName}</span>
+              <span className="text-[var(--text-muted)] block text-[11px]">+91 {user?.phone} • Your pass will be saved to My Activity</span>
             </div>
           </div>
-        )}
+          <Link
+            to="/my-activity"
+            className="px-3.5 py-1.5 rounded-xl bg-emerald-500 text-white font-bold text-[11px] hover:bg-emerald-600 transition-colors text-decoration-none whitespace-nowrap"
+          >
+            My Activity & Passes →
+          </Link>
+        </div>
       </div>
 
 

@@ -56,7 +56,16 @@ export function App() {
                 <Route path="/about-me" element={<AboutPage />} />
                 <Route path="/activities" element={<ActivitiesPage />} />
                 <Route path="/lets-connect" element={<LetsConnectPage />} />
-                <Route path="/register" element={<RegistrationPage />} />
+                
+                {/* Protected Registration Route (Requires Signup / Login First) */}
+                <Route
+                  path="/register"
+                  element={
+                    <ProtectedRoute redirectTo="/signup">
+                      <RegistrationPage />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Authentication Routes */}
                 <Route path="/login" element={<LoginPage />} />

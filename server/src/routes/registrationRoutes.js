@@ -20,12 +20,12 @@ import { registrationLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-// Public Form Submissions (with optional user session attachment)
-router.post('/individual', registrationLimiter, optionalAuth, submitIndividualRegistration);
-router.post('/form', registrationLimiter, optionalAuth, submitIndividualRegistration); // alias
-router.post('/school-college', registrationLimiter, optionalAuth, uploadSpreadsheet, submitSchoolCollegeRegistration);
-router.post('/bulk', registrationLimiter, optionalAuth, uploadSpreadsheet, submitBulkRegistration); // alias
-router.post('/parse-file', uploadSpreadsheet, parseSpreadsheetFile);
+// Protected Form Submissions (Requires user authentication/signup)
+router.post('/individual', registrationLimiter, protect, submitIndividualRegistration);
+router.post('/form', registrationLimiter, protect, submitIndividualRegistration); // alias
+router.post('/school-college', registrationLimiter, protect, uploadSpreadsheet, submitSchoolCollegeRegistration);
+router.post('/bulk', registrationLimiter, protect, uploadSpreadsheet, submitBulkRegistration); // alias
+router.post('/parse-file', protect, uploadSpreadsheet, parseSpreadsheetFile);
 
 
 // Metadata & Calculations

@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export const ProtectedRoute = ({ children, requireAdmin = false }) => {
+export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/signup' }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   const location = useLocation();
 
@@ -16,7 +16,7 @@ export const ProtectedRoute = ({ children, requireAdmin = false }) => {
 
   if (!isAuthenticated) {
     const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
-    return <Navigate to={`/login?redirect=${returnUrl}`} replace />;
+    return <Navigate to={`${redirectTo}?redirect=${returnUrl}`} replace />;
   }
 
   if (requireAdmin && !isAdmin) {
