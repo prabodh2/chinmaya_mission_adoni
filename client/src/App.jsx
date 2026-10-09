@@ -4,11 +4,25 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+
+// Public Pages
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
+import { CommunityServicesPage } from './pages/CommunityServicesPage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
+
+// Authentication Pages
+import { LoginPage } from './pages/LoginPage';
+import { SignupPage } from './pages/SignupPage';
+
+// User Account Pages (Protected)
+import { ProfilePage } from './pages/ProfilePage';
+import { MyActivityPage } from './pages/MyActivityPage';
+
+// Admin Pages
 import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
@@ -35,22 +49,89 @@ export function App() {
           <ScrollToTop />
           <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white">
             <Navbar />
-            <main className="flex-grow pt-20 sm:pt-24 lg:pt-28">
+            <main className="flex-grow pt-18 sm:pt-22 lg:pt-26">
               <Routes>
-                {/* Public Event Routes */}
+                {/* Public Routes (Freely Accessible) */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/about-me" element={<AboutPage />} />
                 <Route path="/activities" element={<ActivitiesPage />} />
+                <Route path="/services" element={<CommunityServicesPage />} />
                 <Route path="/lets-connect" element={<LetsConnectPage />} />
                 <Route path="/register" element={<RegistrationPage />} />
 
+                {/* Authentication Routes */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+
+                {/* Protected User Account Routes */}
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/my-activity"
+                  element={
+                    <ProtectedRoute>
+                      <MyActivityPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/my-registrations"
+                  element={
+                    <ProtectedRoute>
+                      <MyActivityPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/my-services"
+                  element={
+                    <ProtectedRoute>
+                      <MyActivityPage />
+                    </ProtectedRoute>
+                  }
+                />
+
                 {/* Dedicated Admin Routes */}
                 <Route path="/admin/login" element={<AdminLoginPage />} />
-                <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-                <Route path="/admin/images" element={<AdminDashboardPage defaultTab="IMAGES" />} />
-                <Route path="/admin/home" element={<AdminDashboardPage defaultTab="HOME_PAGE" />} />
-                <Route path="/admin/footer" element={<AdminDashboardPage defaultTab="FOOTER_CMS" />} />
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/images"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="IMAGES" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/home"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="HOME_PAGE" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/footer"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="FOOTER_CMS" />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Catch-all Redirect */}
                 <Route path="*" element={<Navigate to="/" replace />} />

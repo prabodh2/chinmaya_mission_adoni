@@ -239,6 +239,7 @@ export const registrationService = {
     institutionName,
     students,
     file,
+    userId = null,
   }) {
     if (!contactPersonName || !phone || !institutionName) {
       throw new Error('Contact person name, phone number, and institution name are required.');
@@ -301,6 +302,7 @@ export const registrationService = {
         registrationId,
         registrationYear: regYear,
         registrationIndex: regIndex,
+        userId,
         fullName: studentName,
         age: isNaN(studentAge) ? null : studentAge,
         standard: studentStandard,

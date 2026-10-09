@@ -36,15 +36,51 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('marathon_token');
-      localStorage.removeItem('marathon_user');
-      if (window.location.pathname.startsWith('/admin') && !window.location.pathname.includes('/admin/login')) {
-        window.location.href = '/admin/login';
+      // Don't auto redirect on public endpoint checks
+      const isAuthRoute =
+        window.location.pathname.startsWith('/profile') ||
+        window.location.pathname.startsWith('/my-activity') ||
+        window.location.pathname.startsWith('/admin/dashboard');
+
+      if (isAuthRoute) {
+        localStorage.removeItem('marathon_token');
+        localStorage.removeItem('marathon_user');
+        const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+        if (window.location.pathname.startsWith('/admin')) {
+          window.location.href = `/admin/login?redirect=${returnUrl}`;
+        } else {
+          window.location.href = `/login?redirect=${returnUrl}`;
+        }
       }
     }
     return Promise.reject(error);
   }
 );
+
+export const authService = {
+  signup: (data) => api.post('/auth/signup', data),
+  login: (data) => api.post('/auth/login', data),
+  loginAdmin: (data) => api.post('/auth/admin/login', data),
+  getMe: () => api.get('/auth/me'),
+  getProfile: () => api.get('/auth/profile'),
+  updateProfile: (data) => api.put('/auth/profile', data),
+  changePassword: (data) => api.put('/auth/change-password', data),
+};
+
+export const userService = {
+  getActivities: () => api.get('/users/activities'),
+  getRegistrations: () => api.get('/users/registrations'),
+  getServices: () => api.get('/users/services'),
+  getConnections: () => api.get('/users/connections'),
+};
+
+export const communityService = {
+  getServices: (params) => api.get('/community-services', { params }),
+  getServiceById: (id) => api.get(`/community-services/${id}`),
+  createService: (data) => api.post('/community-services', data),
+  updateService: (id, data) => api.put(`/community-services/${id}`, data),
+  deleteService: (id) => api.delete(`/community-services/${id}`),
+};
 
 export const eventService = {
   getConfig: () => api.get('/events/config'),
@@ -123,6 +159,7 @@ export const adminService = {
 
 export const contactService = {
   submitMessage: (data) => api.post('/contact', data),
+  getMyMessages: () => api.get('/contact/my-messages'),
   getMessagesAdmin: () => api.get('/contact/admin/all'),
 };
 

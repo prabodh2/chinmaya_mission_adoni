@@ -127,6 +127,7 @@ export const submitSchoolCollegeRegistration = async (req, res) => {
         institutionName: institutionName || req.body.schoolName || 'School/College',
         students: parsedStudents,
         file: req.file,
+        userId: req.user ? req.user._id : null,
       });
 
       return res.status(201).json({

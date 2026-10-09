@@ -4,8 +4,32 @@ import bcrypt from 'bcryptjs';
 const userSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    phone: { type: String, required: true, trim: true },
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      index: true,
+    },
+    age: {
+      type: Number,
+      required: true,
+      min: 5,
+      max: 120,
+    },
+    profession: {
+      type: String,
+      required: true,
+      trim: true,
+      default: '',
+    },
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      sparse: true,
+      default: null,
+    },
     password: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
   },
@@ -24,3 +48,4 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 };
 
 export default mongoose.model('User', userSchema);
+

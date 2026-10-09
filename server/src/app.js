@@ -14,8 +14,11 @@ import contactRoutes from './routes/contactRoutes.js';
 import homepageRoutes from './routes/homepageRoutes.js';
 import footerRoutes from './routes/footerRoutes.js';
 import mediaRoutes from './routes/mediaRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import communityServiceRoutes from './routes/communityServiceRoutes.js';
 
 const app = express();
+
 
 // Security Headers & CORS
 app.use(helmet({ crossOriginResourcePolicy: false }));
@@ -73,6 +76,8 @@ app.get('/api/health', (req, res) => {
 
 // Mount API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/community-services', communityServiceRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/banners', bannerRoutes);
@@ -84,6 +89,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/homepage', homepageRoutes);
 app.use('/api/footer', footerRoutes);
 app.use('/api/media', mediaRoutes);
+
 
 // Global 404 Route
 app.use((req, res) => {

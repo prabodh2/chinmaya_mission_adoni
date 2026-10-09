@@ -13,19 +13,20 @@ import {
   getRegistrationSummary,
   getRegistrationCounts,
 } from '../controllers/registrationController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
 import { uploadSpreadsheet } from '../middleware/uploadMiddleware.js';
 import { registrationLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-// Public Form Submissions
-router.post('/individual', registrationLimiter, submitIndividualRegistration);
-router.post('/form', registrationLimiter, submitIndividualRegistration); // alias
-router.post('/school-college', registrationLimiter, uploadSpreadsheet, submitSchoolCollegeRegistration);
-router.post('/bulk', registrationLimiter, uploadSpreadsheet, submitBulkRegistration); // alias
+// Public Form Submissions (with optional user session attachment)
+router.post('/individual', registrationLimiter, optionalAuth, submitIndividualRegistration);
+router.post('/form', registrationLimiter, optionalAuth, submitIndividualRegistration); // alias
+router.post('/school-college', registrationLimiter, optionalAuth, uploadSpreadsheet, submitSchoolCollegeRegistration);
+router.post('/bulk', registrationLimiter, optionalAuth, uploadSpreadsheet, submitBulkRegistration); // alias
 router.post('/parse-file', uploadSpreadsheet, parseSpreadsheetFile);
+
 
 // Metadata & Calculations
 router.get('/institutions', getInstitutions);

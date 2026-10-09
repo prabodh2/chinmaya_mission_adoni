@@ -155,7 +155,7 @@ export const MilestoneJourney = () => {
     <section
       ref={containerRef}
       id="our-milestones"
-      className="relative py-16 sm:py-24 bg-[var(--bg-primary,#FFFDF7)] overflow-hidden transition-colors scroll-mt-24 sm:scroll-mt-28"
+      className="relative py-16 sm:py-24 bg-[var(--bg-primary,#FFFDF7)] overflow-hidden transition-colors"
       style={{
         backgroundImage: `
           radial-gradient(circle at 10% 15%, rgba(244, 81, 30, 0.05) 0%, transparent 40%),
@@ -165,7 +165,7 @@ export const MilestoneJourney = () => {
       }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
-        
+
         {/* 1. HERO / INTRO HEADER */}
         <JourneyIntro />
 
@@ -176,13 +176,12 @@ export const MilestoneJourney = () => {
               key={item.id}
               onClick={() => scrollToMilestone(idx)}
               type="button"
-              className={`px-3 py-1 rounded-full text-[11px] font-black transition-all shrink-0 ${
-                activeStopIndex === idx
+              className={`px-3 py-1 rounded-full text-[11px] font-black transition-all shrink-0 ${activeStopIndex === idx
                   ? 'bg-[#F4511E] text-white shadow-md scale-105'
                   : idx <= activeStopIndex
-                  ? 'bg-[#0B2340]/10 text-[#0B2340] hover:bg-[#0B2340]/20'
-                  : 'bg-white/80 text-[#3D607E] hover:text-[#0B2340] border border-[#EBD6A2]'
-              }`}
+                    ? 'bg-[#0B2340]/10 text-[#0B2340] hover:bg-[#0B2340]/20'
+                    : 'bg-white/80 text-[#3D607E] hover:text-[#0B2340] border border-[#EBD6A2]'
+                }`}
             >
               {item.year.includes('Summer') ? 'Summer' : item.year}
             </button>
@@ -238,12 +237,11 @@ export const MilestoneJourney = () => {
               >
                 {/* 2-Column Desktop Grid with Straight Road in Center */}
                 <div className="w-full flex flex-col md:flex-row items-center px-2 sm:px-4">
-                  
+
                   {/* LEFT Column */}
                   <div
-                    className={`w-full md:w-1/2 flex flex-col ${
-                      isLeft ? 'items-start md:items-end' : 'hidden md:flex'
-                    } ${isLeft ? 'pointer-events-auto' : ''} md:pr-14 lg:pr-20`}
+                    className={`w-full md:w-1/2 flex flex-col ${isLeft ? 'items-start md:items-end' : 'hidden md:flex'
+                      } ${isLeft ? 'pointer-events-auto' : ''} md:pr-14 lg:pr-20`}
                   >
                     {isLeft && (
                       <div className="space-y-2 w-full max-w-md">
@@ -270,9 +268,8 @@ export const MilestoneJourney = () => {
 
                   {/* RIGHT Column */}
                   <div
-                    className={`w-full md:w-1/2 flex flex-col ${
-                      !isLeft ? 'items-start' : 'hidden md:flex'
-                    } ${!isLeft ? 'pointer-events-auto' : ''} md:pl-14 lg:pl-20 mt-4 md:mt-0`}
+                    className={`w-full md:w-1/2 flex flex-col ${!isLeft ? 'items-start' : 'hidden md:flex'
+                      } ${!isLeft ? 'pointer-events-auto' : ''} md:pl-14 lg:pl-20 mt-4 md:mt-0`}
                   >
                     {!isLeft && (
                       <div className="space-y-2 w-full max-w-md">

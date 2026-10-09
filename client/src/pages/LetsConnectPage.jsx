@@ -1,16 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { contactService } from '../services/api';
-import { MapPin, Phone, Mail, Send, CheckCircle, Flame, MessageSquare, Clock, ExternalLink } from 'lucide-react';
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Send,
+  CheckCircle,
+  Flame,
+  MessageSquare,
+  Clock,
+  ExternalLink,
+  Sparkles,
+  HeartHandshake,
+} from 'lucide-react';
 import { formatPhoneInput } from '../utils/phoneUtils';
 
 export const LetsConnectPage = () => {
+  const { user, isAuthenticated } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     phone: '',
+    category: 'General Inquiry',
     message: '',
   });
   const [status, setStatus] = useState({ loading: false, success: false, error: null });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user.fullName || '',
+        email: prev.email || user.email || '',
+        phone: prev.phone || (user.phone ? formatPhoneInput(user.phone) : ''),
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +52,13 @@ export const LetsConnectPage = () => {
       const res = await contactService.submitMessage(formData);
       if (res.data?.success) {
         setStatus({ loading: false, success: true, error: null });
-        setFormData({ fullName: '', email: '', phone: '', message: '' });
+        setFormData({
+          fullName: user?.fullName || '',
+          email: user?.email || '',
+          phone: user?.phone ? formatPhoneInput(user.phone) : '',
+          category: 'General Inquiry',
+          message: '',
+        });
       }
     } catch (err) {
       setStatus({
@@ -37,7 +71,6 @@ export const LetsConnectPage = () => {
 
   return (
     <div className="min-h-screen py-16 px-4 max-w-7xl mx-auto space-y-16">
-      
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
@@ -48,12 +81,35 @@ export const LetsConnectPage = () => {
           LET'S CONNECT <span className="text-[var(--orange)]">WITH ADONI</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">
-          Have questions regarding marathon registration, school bulk participation, or volunteer opportunities? Reach out to our Chinmaya Mission Adoni team.
+          Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission Adoni team.
         </p>
+
+        {/* Account notice */}
+        {isAuthenticated ? (
+          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs max-w-xl mx-auto">
+            <span className="font-semibold text-emerald-500">
+              Connected as <strong>{user?.fullName}</strong> — Your inquiries are tracked under My Activity.
+            </span>
+            <Link to="/my-activity" className="text-emerald-500 font-bold underline whitespace-nowrap">
+              My Activity →
+            </Link>
+          </div>
+        ) : (
+          <div className="p-3.5 rounded-2xl bg-[var(--orange)]/10 border border-[var(--orange)]/25 flex items-center justify-between gap-3 text-xs max-w-xl mx-auto">
+            <span className="font-semibold text-[var(--text-primary)]">
+              Have an account? Sign in so you can track your request status anytime.
+            </span>
+            <Link
+              to="/login?redirect=/lets-connect"
+              className="px-3 py-1 rounded-xl bg-[var(--orange)] text-white font-bold text-[11px] text-decoration-none whitespace-nowrap"
+            >
+              Sign In
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        
         {/* Contact Form */}
         <div className="glass-card p-8 sm:p-10 rounded-3xl border border-[var(--border-color)] shadow-2xl space-y-6">
           <div className="space-y-2">
@@ -68,7 +124,7 @@ export const LetsConnectPage = () => {
           {status.success && (
             <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 font-extrabold text-xs flex items-center gap-3">
               <CheckCircle className="w-5 h-5 flex-shrink-0" />
-              <span>Message submitted successfully! Thank you for connecting with us.</span>
+              <span>Message submitted successfully! Our team will contact you shortly.</span>
             </div>
           )}
 
@@ -89,7 +145,7 @@ export const LetsConnectPage = () => {
                 required
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="e.g. XYZ"
+                placeholder="e.g. Ramesh Kumar"
                 className="w-full py-3 px-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
               />
             </div>
@@ -105,7 +161,7 @@ export const LetsConnectPage = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="xyz@example.com"
+                  placeholder="ramesh@example.com"
                   className="w-full py-3 px-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
                 />
               </div>
@@ -129,7 +185,26 @@ export const LetsConnectPage = () => {
 
             <div>
               <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                Your Message / Inquiry *
+                Inquiry / Category
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full py-3 px-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+              >
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Volunteering & Event Help">Volunteering & Event Help</option>
+                <option value="Marathon Registration Inquiry">Marathon Registration Inquiry</option>
+                <option value="Youth Programs & CHYK">Youth Programs & CHYK</option>
+                <option value="Spiritual Classes & Discourses">Spiritual Classes & Discourses</option>
+                <option value="Community Service">Community Service Offerings</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                Your Message *
               </label>
               <textarea
                 name="message"
@@ -148,14 +223,13 @@ export const LetsConnectPage = () => {
               className="btn-primary w-full justify-center text-sm py-3.5"
             >
               <Send className="w-4 h-4" />
-              <span>{status.loading ? 'SUBMITTING...' : 'JOIN THE MOVEMENT'}</span>
+              <span>{status.loading ? 'SUBMITTING...' : 'SEND MESSAGE'}</span>
             </button>
           </form>
         </div>
 
         {/* Location & Details Side */}
         <div className="space-y-8">
-          
           <div className="glass-card p-8 rounded-3xl border border-[var(--border-color)] shadow-xl space-y-6">
             <h3 className="text-xl font-extrabold font-heading text-[var(--text-primary)]">
               ORGANIZATION DETAILS
@@ -178,68 +252,25 @@ export const LetsConnectPage = () => {
                 </div>
                 <div>
                   <h4 className="font-extrabold text-[var(--text-primary)]">Helpline & Registration Desk</h4>
-                  <p>+91 98765 43210 • +91 85122 34567</p>
+                  <p>+91 94402 85934 / +91 98490 12345</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-2xl bg-[var(--green)]/15 text-[var(--green)] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-extrabold text-[var(--text-primary)]">Official Email</h4>
-                  <p>contact@chinmayamissionadoni.org</p>
+                  <p>chinmayamissionadoni@gmail.com</p>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Interactive Map Card with Direct Google Maps Link */}
-          <a
-            href="https://maps.app.goo.gl/vU75mmpoXaYy68WK6"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block group rounded-3xl overflow-hidden border-2 border-[var(--orange)]/40 hover:border-[var(--orange)] shadow-2xl relative h-72 text-decoration-none cursor-pointer transition-all duration-300 hover:scale-[1.02]"
-            title="Click to open Chinmaya Mission Adoni on Google Maps"
-          >
-            {/* Map Preview Image */}
-            <img
-              src="/assets/images/map-preview.jpg"
-              alt="Chinmaya Mission Adoni Map Location"
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            />
-
-            {/* Dark Gradient Overlay for Contrast */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B2340] via-[#0B2340]/75 to-black/50 group-hover:via-[#0B2340]/65 transition-colors" />
-
-            {/* Overlay Content */}
-            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-6 text-white space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-[var(--orange)]/20 border border-[var(--orange)]/40 backdrop-blur-md flex items-center justify-center text-[var(--orange)] group-hover:bg-[var(--orange)] group-hover:text-white transition-colors shadow-lg">
-                <MapPin className="w-7 h-7 animate-bounce" />
-              </div>
-
-              <div>
-                <h4 className="text-xl font-black font-heading text-white tracking-wide">
-                  ADONI, ANDHRA PRADESH
-                </h4>
-                <p className="text-xs text-slate-300 font-semibold mt-1">
-                  Chinmaya Mission Adoni • Arts College Road
-                </p>
-              </div>
-
-              <div className="pt-2">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--orange)] text-white text-xs font-extrabold shadow-xl group-hover:bg-[#FF7043] transition-colors">
-                  <span>OPEN IN GOOGLE MAPS</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </span>
-              </div>
-            </div>
-          </a>
-
         </div>
-
       </div>
-
     </div>
   );
 };
+
+export default LetsConnectPage;
