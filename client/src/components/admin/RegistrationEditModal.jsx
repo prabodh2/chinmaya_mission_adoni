@@ -9,6 +9,7 @@ export const RegistrationEditModal = ({ registration, onClose, onUpdated }) => {
     fullName: registration.fullName || '',
     age: registration.age ?? '',
     standard: registration.standard || '',
+    profession: registration.profession || '',
     contactNumber: registration.contactNumber || '',
     institutionName: registration.institutionName || '',
     tShirtSize: registration.tShirtSize || 'M',
@@ -32,6 +33,7 @@ export const RegistrationEditModal = ({ registration, onClose, onUpdated }) => {
         fullName: form.fullName.trim(),
         age: form.age !== '' ? parseInt(form.age, 10) : null,
         standard: form.standard ? form.standard.trim() : null,
+        profession: form.profession ? form.profession.trim() : null,
         contactNumber: form.contactNumber.trim(),
         institutionName: form.institutionName.trim(),
         tShirtSize: form.tShirtSize,
@@ -126,6 +128,19 @@ export const RegistrationEditModal = ({ registration, onClose, onUpdated }) => {
                 className="w-full py-2.5 px-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] font-semibold text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block font-bold text-[var(--text-primary)] uppercase mb-1">
+              Profession / Occupation
+            </label>
+            <input
+              type="text"
+              value={form.profession}
+              onChange={(e) => setForm({ ...form, profession: e.target.value })}
+              placeholder="e.g. Student, Software Engineer, Teacher..."
+              className="w-full py-2.5 px-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] font-semibold text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">

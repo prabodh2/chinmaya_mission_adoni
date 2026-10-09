@@ -52,6 +52,7 @@ export const registrationService = {
       name,
       age,
       standard,
+      profession,
       dateOfBirth,
       isStudent = true,
       institutionName,
@@ -82,6 +83,7 @@ export const registrationService = {
     const finalInstitution = (institutionName || schoolName || school || 'N/A').trim();
     const parsedAge = age ? parseInt(age, 10) : null;
     const finalStandard = standard ? String(standard).trim() : null;
+    const finalProfession = profession ? String(profession).trim() : null;
 
     let parsedDob = null;
     if (dateOfBirth) {
@@ -111,6 +113,7 @@ export const registrationService = {
       fullName: finalName,
       age: isNaN(parsedAge) ? null : parsedAge,
       standard: finalStandard,
+      profession: finalProfession,
       dateOfBirth: parsedDob,
       isStudent: Boolean(isStudent),
       institutionName: finalInstitution,

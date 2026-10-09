@@ -16,6 +16,7 @@ const registrationSchema = new mongoose.Schema(
     fullName: { type: String, required: true, trim: true },
     age: { type: Number, default: null },
     standard: { type: String, default: null, trim: true }, // e.g. "8th", "9th", "10th"
+    profession: { type: String, default: null, trim: true },
     dateOfBirth: { type: Date },
     isStudent: { type: Boolean, default: true },
     institutionName: { type: String, default: 'N/A', trim: true },

@@ -56,6 +56,7 @@ export const submitIndividualRegistration = async (req, res) => {
         fullName: registration.fullName,
         age: registration.age,
         standard: registration.standard,
+        profession: registration.profession,
         isStudent: registration.isStudent,
         institutionName: registration.institutionName,
         contactNumber: registration.contactNumber,

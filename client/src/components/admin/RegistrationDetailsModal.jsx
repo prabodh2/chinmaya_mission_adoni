@@ -79,6 +79,11 @@ export const RegistrationDetailsModal = ({ registration, onClose, onEdit }) => {
             <span className="text-sm font-black text-[var(--text-primary)] mt-0.5 block">{registration.standard || 'N/A'}</span>
           </div>
 
+          <div className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)]">
+            <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">Profession / Occupation</span>
+            <span className="text-sm font-black text-[var(--cyan)] mt-0.5 block">{registration.profession || 'N/A'}</span>
+          </div>
+
           <div className="p-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] sm:col-span-2">
             <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">School / College Name</span>
             <span className="text-sm font-black text-[var(--text-primary)] mt-0.5 block">{registration.institutionName || 'N/A'}</span>

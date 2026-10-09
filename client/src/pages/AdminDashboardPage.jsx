@@ -385,9 +385,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
         alert('No registration records to export.');
         return;
       }
-      let csv = 'Registration ID,Student Name,Age,Standard / Class,Contact Number,School / College,T-Shirt Size,Type,Date\n';
+      let csv = 'Registration ID,Student Name,Age,Standard / Class,Profession,Contact Number,School / College,T-Shirt Size,Type,Date\n';
       registrations.forEach((r) => {
-        csv += `"${r.registrationId}","${r.fullName}","${r.age ?? 'N/A'}","${r.standard ?? 'N/A'}","${r.contactNumber}","${r.institutionName}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
+        csv += `"${r.registrationId}","${r.fullName}","${r.age ?? 'N/A'}","${r.standard ?? 'N/A'}","${r.profession ?? 'N/A'}","${r.contactNumber}","${r.institutionName}","${r.tShirtSize}","${r.registrationType}","${new Date(r.createdAt).toISOString()}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);

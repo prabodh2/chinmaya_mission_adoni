@@ -19,6 +19,7 @@ import {
   AlertCircle,
   Phone,
   Calendar,
+  Briefcase,
   Shirt,
   Sparkles,
   ShieldCheck,
@@ -38,7 +39,7 @@ export const RegistrationPage = () => {
     fullName: '',
     age: '',
     standard: '',
-    dateOfBirth: '',
+    profession: '',
     isStudent: false,
     institutionName: '',
     otherInstitution: '',
@@ -155,7 +156,7 @@ export const RegistrationPage = () => {
         fullName: indForm.fullName,
         age: indForm.age ? parseInt(indForm.age, 10) : undefined,
         standard: indForm.standard || undefined,
-        dateOfBirth: indForm.dateOfBirth,
+        profession: indForm.profession ? indForm.profession.trim() : undefined,
         isStudent: indForm.isStudent,
         institutionName: finalInstitution,
         contactNumber: indForm.contactNumber,
@@ -178,7 +179,7 @@ export const RegistrationPage = () => {
           fullName: '',
           age: '',
           standard: '',
-          dateOfBirth: '',
+          profession: '',
           isStudent: false,
           institutionName: '',
           otherInstitution: '',
@@ -470,20 +471,21 @@ export const RegistrationPage = () => {
               </div>
             </div>
 
-            {/* Date of Birth & Student Toggle */}
+            {/* Profession & Student Toggle */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               <div>
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                  Date of Birth
+                  Profession / Occupation
                 </label>
                 <div className="relative">
-                  <Calendar className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
+                  <Briefcase className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
                   <input
-                    type="date"
+                    type="text"
                     disabled={!isRegistrationOpen}
-                    value={indForm.dateOfBirth}
-                    onChange={(e) => setIndForm({ ...indForm, dateOfBirth: e.target.value })}
+                    value={indForm.profession}
+                    onChange={(e) => setIndForm({ ...indForm, profession: e.target.value })}
+                    placeholder="e.g. Student, Teacher, Engineer, Business..."
                     className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
                   />
                 </div>
