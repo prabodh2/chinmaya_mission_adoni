@@ -53,37 +53,37 @@ export const TransformationSection = () => {
       </div>
 
       {/* Side-by-Side Visual Storytelling Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-7 items-stretch max-w-5xl mx-auto">
         
         {/* Dark / Negative Side Card */}
-        <div className="gradient-negative p-8 sm:p-10 rounded-3xl relative overflow-hidden shadow-2xl flex flex-col justify-between border border-red-500/20 group">
+        <div className="gradient-negative p-6 sm:p-7 rounded-[24px] relative overflow-hidden shadow-lg flex flex-col justify-between border border-red-500/20 group card-standard">
           <div className="absolute top-0 right-0 w-48 h-48 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
           
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-500/20 text-red-400 font-extrabold text-xs uppercase tracking-wider mb-6 border border-red-500/30">
-              <AlertTriangle className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 font-extrabold text-[11px] uppercase tracking-wider mb-5 border border-red-500/30">
+              <AlertTriangle className="w-3.5 h-3.5" />
               THE DARK SIDE • THE TRAP
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 font-heading">
+            <h3 className="text-xl sm:text-2xl font-black text-white mb-2 font-heading">
               Peer Pressure & Addiction
             </h3>
-            <p className="text-slate-300 text-sm mb-8 leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm mb-6 leading-relaxed">
               Curiosity, stress, and negative influences lead young minds down a dangerous spiral, robbing youth of their dreams and peace.
             </p>
 
             {/* List of Negative Factors */}
-            <div className="space-y-4">
-              {negativeTraits.map((trait, idx) => {
+            <div className="space-y-3">
+              {negativeTraits.map((trait) => {
                 const IconComponent = trait.icon;
                 return (
-                  <div key={trait.name} className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                    <div className="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <IconComponent className="w-4 h-4" />
+                  <div key={trait.name} className="flex items-start gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="w-7 h-7 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <IconComponent className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-100">{trait.name}</h4>
-                      <p className="text-xs text-slate-400">{trait.desc}</p>
+                      <h4 className="text-xs font-bold text-slate-100">{trait.name}</h4>
+                      <p className="text-[11px] text-slate-400">{trait.desc}</p>
                     </div>
                   </div>
                 );
@@ -91,54 +91,54 @@ export const TransformationSection = () => {
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
+          <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider">
             <span>DARK ESCAPE</span>
             <span className="text-red-400">CHOOSE TO BREAK FREE →</span>
           </div>
         </div>
 
         {/* Bright / Positive Side Card */}
-        <div className="bg-white p-8 sm:p-10 rounded-3xl relative overflow-hidden shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] flex flex-col justify-between border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] group">
+        <div className="bg-white p-6 sm:p-7 rounded-[24px] relative overflow-hidden shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] flex flex-col justify-between border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] group card-standard">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--yellow)]/15 rounded-full blur-3xl pointer-events-none" />
 
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs uppercase tracking-wider mb-6 border border-[var(--orange)]/30">
-              <Sun className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-[11px] uppercase tracking-wider mb-5 border border-[var(--orange)]/30">
+              <Sun className="w-3.5 h-3.5" />
               THE BRIGHT SIDE • THE MOVEMENT
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mb-3 font-heading">
+            <h3 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] mb-2 font-heading">
               Health, Purpose & Brighter Future
             </h3>
-            <p className="text-[var(--text-muted)] text-sm mb-8 leading-relaxed">
+            <p className="text-[var(--text-muted)] text-xs sm:text-sm mb-6 leading-relaxed">
               Running builds physical stamina, mental clarity, genuine friendships, and lasting self-respect.
             </p>
 
             {/* List of Positive Factors */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {positiveTraits.map((trait) => {
                 const IconComp = trait.icon;
                 return (
-                  <div key={trait.name} className="p-3.5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm hover:border-[var(--orange)] transition-colors">
-                    <div className={`w-8 h-8 rounded-xl bg-[var(--orange)]/10 flex items-center justify-center mb-2 ${trait.color}`}>
-                      <IconComp className="w-4 h-4" />
+                  <div key={trait.name} className="p-3 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm hover:border-[var(--orange)] transition-colors">
+                    <div className={`w-7 h-7 rounded-xl bg-[var(--orange)]/10 flex items-center justify-center mb-1.5 ${trait.color}`}>
+                      <IconComp className="w-3.5 h-3.5" />
                     </div>
-                    <h4 className="text-sm font-extrabold text-[var(--text-primary)]">{trait.name}</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">{trait.desc}</p>
+                    <h4 className="text-xs font-extrabold text-[var(--text-primary)]">{trait.name}</h4>
+                    <p className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5">{trait.desc}</p>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
+          <div className="mt-6 pt-5 border-t border-[var(--border-color)] flex items-center justify-between">
             <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-wider">
               RUN FOR A DRUG-FREE ADONI
             </span>
-            <Link to="/register" className="btn-primary py-2.5 px-6 text-xs text-decoration-none inline-flex items-center gap-2">
+            <Link to="/register" className="btn-primary py-2 px-5 text-xs text-decoration-none inline-flex items-center gap-1.5">
               <span>JOIN THE RUN</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 

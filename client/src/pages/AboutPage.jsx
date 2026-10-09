@@ -493,35 +493,35 @@ export const AboutPage = () => {
         </div>
 
         {/* 5 Mission Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {data.ourMission.items.map((item, index) => (
             <div
               key={item.id || index}
-              className={`p-8 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-t-4 border-t-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] hover:border-[var(--orange)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group ${
+              className={`p-6 sm:p-7 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] border-t-4 border-t-[var(--orange)] shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] hover:border-[var(--orange)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group h-full ${
                 index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
               }`}
             >
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                   {getMissionIcon(item.iconName)}
                 </div>
 
-                <span className="text-[10px] font-extrabold text-[var(--orange)] tracking-wider uppercase mb-1 block">
+                <span className="text-[10px] font-black text-[var(--orange)] tracking-wider uppercase mb-1.5 block">
                   PILLAR 0{index + 1}
                 </span>
 
-                <h3 className="text-xl font-extrabold text-[var(--text-primary)] font-heading mb-3 group-hover:text-[var(--orange)] transition-colors">
+                <h3 className="text-lg font-black text-[var(--text-primary)] font-heading mb-2.5 group-hover:text-[var(--orange)] transition-colors leading-snug">
                   {item.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+                <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed font-medium">
                   {item.description}
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[var(--border-color)]/50 flex items-center justify-between text-[11px] font-bold text-[var(--text-muted)] group-hover:text-[var(--orange)]">
+              <div className="mt-5 pt-3.5 border-t border-[rgba(11,35,64,0.06)] flex items-center justify-between text-[11px] font-bold text-[var(--text-muted)] group-hover:text-[var(--orange)]">
                 <span>ACTION IN ADONI</span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3.5 h-3.5" />
               </div>
             </div>
           ))}

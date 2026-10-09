@@ -324,23 +324,23 @@ export const MyActivityPage = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                   {registrations.map((reg) => (
                     <div
                       key={reg._id}
-                      className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[32px] p-6 shadow-md hover:shadow-xl transition-all space-y-5 relative overflow-hidden"
+                      className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-5 sm:p-6 shadow-md hover:shadow-lg transition-all flex flex-col justify-between space-y-4 relative overflow-hidden card-standard"
                     >
                       {/* Top Ribbon */}
-                      <div className="flex items-start justify-between gap-2 border-b border-[var(--border-color)] pb-4">
+                      <div className="flex items-start justify-between gap-2 border-b border-[var(--border-color)] pb-3.5">
                         <div>
                           <span className="text-[10px] font-black uppercase tracking-widest text-[var(--orange)]">
                             MARATHON 2026 PASS
                           </span>
-                          <h3 className="text-lg font-black text-[var(--text-primary)]">{reg.fullName}</h3>
+                          <h3 className="text-base sm:text-lg font-black text-[var(--text-primary)]">{reg.fullName}</h3>
                           <p className="text-xs font-bold text-emerald-500 font-mono mt-0.5">ID: {reg.registrationId}</p>
                         </div>
                         <span
-                          className={`px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
                             reg.status === 'CONFIRMED'
                               ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30'
                               : 'bg-amber-500/15 text-amber-500'
@@ -351,35 +351,35 @@ export const MyActivityPage = () => {
                       </div>
 
                       {/* Participant Details Grid */}
-                      <div className="grid grid-cols-2 gap-3 text-xs">
-                        <div className="p-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
-                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">T-Shirt Size</span>
-                          <span className="font-black text-[var(--text-primary)] flex items-center gap-1.5 mt-0.5">
+                      <div className="grid grid-cols-2 gap-2.5 text-xs">
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
+                          <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase block">T-Shirt Size</span>
+                          <span className="font-black text-[var(--text-primary)] flex items-center gap-1.5 mt-0.5 text-xs">
                             <Shirt className="w-3.5 h-3.5 text-[var(--orange)]" />
                             {reg.tShirtSize || 'M'}
                           </span>
                         </div>
 
-                        <div className="p-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
-                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">Category</span>
-                          <span className="font-bold text-[var(--text-primary)] uppercase mt-0.5 block truncate">
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
+                          <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase block">Category</span>
+                          <span className="font-bold text-[var(--text-primary)] uppercase mt-0.5 block truncate text-xs">
                             {reg.registrationType === 'school_college' ? 'Student Drive' : 'Individual Run'}
                           </span>
                         </div>
 
-                        <div className="p-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] col-span-2">
-                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase block">Institution</span>
-                          <span className="font-bold text-[var(--text-primary)] mt-0.5 block truncate">
+                        <div className="p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] col-span-2">
+                          <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase block">Institution</span>
+                          <span className="font-bold text-[var(--text-primary)] mt-0.5 block truncate text-xs">
                             {reg.institutionName || 'Individual Runner'}
                           </span>
                         </div>
                       </div>
 
                       {/* Action Bar */}
-                      <div className="flex items-center gap-3 pt-2">
+                      <div className="pt-2">
                         <button
                           onClick={() => setSelectedRegistrationForPass(reg)}
-                          className="flex-1 btn-primary py-2.5 rounded-xl justify-center font-bold text-xs uppercase tracking-wider shadow-md shadow-[var(--orange)]/20"
+                          className="w-full btn-primary py-2.5 rounded-xl justify-center font-bold text-xs uppercase tracking-wider shadow-sm"
                         >
                           <Ticket className="w-4 h-4" />
                           <span>View Official Pass</span>

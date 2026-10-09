@@ -249,18 +249,24 @@ img {
   transform: translateY(-2px);
 }
 
-/* Clean Card System */
-.glass-card {
+/* Clean Standardized Card System */
+.glass-card,
+.card-standard {
   background: #FFFFFF;
   border: 1px solid rgba(11, 35, 64, 0.08);
-  border-radius: 1.5rem;
-  box-shadow: 0 1px 3px rgba(11, 35, 64, 0.04), 0 8px 24px rgba(11, 35, 64, 0.06);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px rgba(11, 35, 64, 0.04), 0 1px 3px rgba(11, 35, 64, 0.03);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.glass-card:hover {
-  box-shadow: 0 4px 12px rgba(11, 35, 64, 0.06), 0 16px 40px rgba(11, 35, 64, 0.1);
-  transform: translateY(-2px);
+.glass-card:hover,
+.card-standard:hover {
+  box-shadow: 0 16px 36px rgba(11, 35, 64, 0.09), 0 4px 12px rgba(11, 35, 64, 0.04);
+  border-color: rgba(244, 81, 30, 0.35);
+  transform: translateY(-3px);
 }
 
 .card-gradient {
@@ -269,23 +275,24 @@ img {
 
 /* Accent border card variants */
 .card-accent-orange {
-  border-left: 4px solid var(--orange);
+  border-left: 4px solid var(--orange) !important;
 }
 
 .card-accent-cyan {
-  border-left: 4px solid var(--cyan);
+  border-left: 4px solid var(--cyan) !important;
 }
 
 .card-accent-yellow {
-  border-left: 4px solid var(--yellow);
+  border-left: 4px solid var(--yellow) !important;
 }
 
 .card-accent-green {
-  border-left: 4px solid var(--green);
+  border-left: 4px solid var(--green) !important;
 }
 
-.activity-image-cover {
+.card-media-cover {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
