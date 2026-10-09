@@ -28,10 +28,10 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
   switch (section.type) {
     case 'hero':
       return (
-        <section className="relative min-h-[85vh] flex items-center justify-center py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
+        <section className="relative flex items-center justify-center py-10 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--orange)]/10 pointer-events-none rounded-full blur-3xl" />
           
-          <div className="max-w-7xl mx-auto text-center space-y-8 relative z-10">
+          <div className="max-w-5xl mx-auto text-center space-y-6 sm:space-y-8 relative z-10 w-full flex flex-col items-center">
             {section.badgeText && (
               <div className="flex flex-wrap items-center justify-center gap-3 animate-in fade-in">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
@@ -45,25 +45,25 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
               </div>
             )}
 
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.08]">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
                 {section.title || 'ANTI-DRUG MOVEMENT MARATHON RUN 2026'}
               </h1>
               {section.subtitle && (
-                <p className="text-xl sm:text-3xl font-extrabold font-heading text-[var(--orange)] tracking-wider">
+                <p className="text-lg sm:text-2xl font-extrabold font-heading text-[var(--orange)] tracking-wide">
                   {section.subtitle}
                 </p>
               )}
               {section.description && (
-                <p className="text-base sm:text-xl font-bold text-[var(--text-muted)] max-w-3xl mx-auto leading-relaxed">
+                <p className="text-sm sm:text-lg font-bold text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
                   {section.description}
                 </p>
               )}
             </div>
 
-            <div className="inline-flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] text-xs sm:text-sm font-bold text-[var(--text-primary)]">
+            <div className="inline-flex flex-wrap items-center justify-center gap-4 sm:gap-6 p-3 sm:p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] text-xs sm:text-sm font-bold text-[var(--text-primary)]">
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-[var(--orange)]" />
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--orange)]" />
                 <span>Sunday, 20 December 2026</span>
               </div>
               <div className="h-4 w-px bg-[var(--border-color)] hidden sm:block" />
@@ -72,16 +72,16 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
                 className="flex items-center gap-2 text-decoration-none text-[var(--text-primary)] hover:text-[var(--cyan)] transition-colors cursor-pointer group"
                 title="Click to view 7KM Marathon Route Map"
               >
-                <MapPin className="w-5 h-5 text-[var(--cyan)] group-hover:scale-110 transition-transform" />
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--cyan)] group-hover:scale-110 transition-transform" />
                 <span className="underline decoration-dotted underline-offset-4 font-extrabold">Chinmaya Mission Adoni</span>
               </Link>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-1">
               {section.primaryButtonText && (
                 <Link
                   to={section.primaryButtonLink || '/register'}
-                  className="btn-primary text-base py-4 px-8 text-decoration-none shadow-2xl"
+                  className="btn-primary text-sm sm:text-base py-3.5 sm:py-4 px-8 text-decoration-none shadow-2xl"
                 >
                   <Award className="w-5 h-5" />
                   <span>{section.primaryButtonText}</span>
@@ -90,7 +90,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
               {section.secondaryButtonText && (
                 <a
                   href={section.secondaryButtonLink || '#about'}
-                  className="btn-secondary text-base py-4 px-8 text-decoration-none"
+                  className="btn-secondary text-sm sm:text-base py-3.5 sm:py-4 px-8 text-decoration-none"
                 >
                   <span>{section.secondaryButtonText}</span>
                   <ArrowRight className="w-5 h-5" />
@@ -99,11 +99,11 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
             </div>
 
             {section.imageUrl && (
-              <div className="mt-8 rounded-3xl overflow-hidden border-2 border-[var(--orange)]/30 shadow-2xl max-w-4xl mx-auto">
+              <div className="w-full max-w-4xl mx-auto rounded-3xl overflow-hidden border-2 border-[var(--orange)]/30 shadow-2xl mt-4 bg-black/10 flex justify-center">
                 <img
                   src={section.imageUrl}
                   alt={section.title}
-                  className="w-full max-h-[420px] object-cover"
+                  className="w-full h-auto max-h-[440px] object-cover mx-auto block"
                 />
               </div>
             )}
@@ -113,14 +113,14 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'marathon':
       return (
-        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
+        <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
           <div className="max-w-7xl mx-auto space-y-6 text-center">
             {section.title && (
               <div className="space-y-2">
                 <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
                   {section.badgeText || 'EVENT INFORMATION'}
                 </span>
-                <h2 className="text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+                <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
                   {section.title}
                 </h2>
                 {section.subtitle && (
@@ -138,13 +138,13 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'activities':
       return (
-        <section className="py-16 px-4 max-w-7xl mx-auto space-y-10">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div>
               <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest">
                 {section.subtitle || 'GALLERY & HIGHLIGHTS'}
               </span>
-              <h2 className="text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
                 {section.title || 'MOVEMENT ACTIVITIES'}
               </h2>
             </div>
@@ -157,18 +157,31 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
           </div>
 
           {activities && activities.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {activities.map((act) => (
-                <div key={act._id || act.title} className="rounded-3xl overflow-hidden bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] group hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] hover:-translate-y-1 transition-all duration-300">
-                  <div className="h-48 overflow-hidden relative">
-                    <img src={act.imageUrl} alt={act.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <span className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/70 text-white font-bold text-[10px] backdrop-blur-md">
-                      {act.category}
-                    </span>
-                  </div>
-                  <div className="p-6 space-y-2">
-                    <h4 className="text-base font-extrabold text-[var(--text-primary)] font-heading">{act.title}</h4>
-                    <p className="text-xs text-[var(--text-muted)] line-clamp-2">{act.description}</p>
+                <div
+                  key={act._id || act.title}
+                  className="rounded-3xl overflow-hidden bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] group hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="aspect-[16/10] w-full overflow-hidden relative bg-slate-900/10">
+                      <img
+                        src={act.imageUrl}
+                        alt={act.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 block"
+                      />
+                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 text-white font-extrabold text-[10px] uppercase tracking-wider backdrop-blur-md border border-white/20">
+                        {act.category}
+                      </span>
+                    </div>
+                    <div className="p-6 space-y-2 text-left">
+                      <h4 className="text-base sm:text-lg font-extrabold text-[var(--text-primary)] font-heading leading-snug line-clamp-2">
+                        {act.title}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-[var(--text-muted)] line-clamp-3 leading-relaxed">
+                        {act.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}

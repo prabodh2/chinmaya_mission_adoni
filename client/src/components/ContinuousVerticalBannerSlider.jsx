@@ -1,4 +1,5 @@
 import React from 'react';
+import { Sparkles } from 'lucide-react';
 
 export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
   // Default 7 poster visuals if backend banners are loading or empty
@@ -63,22 +64,26 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
   const duplicatedItems = [...itemsToDisplay, ...itemsToDisplay];
 
   return (
-    <div className="w-full overflow-hidden py-8 bg-[var(--bg-dark-section)] relative border-y border-[var(--border-color)]">
+    <div className="w-full overflow-hidden py-10 sm:py-14 bg-[var(--bg-dark-section)] relative border-y border-[var(--border-color)]">
       
-      {/* Visual Overlay Gradients */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-[var(--bg-dark-section)] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-[var(--bg-dark-section)] to-transparent z-10 pointer-events-none" />
-
-      <div className="mb-4 text-center">
-        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--yellow)] px-3 py-1 rounded-full bg-[var(--yellow)]/10 border border-[var(--yellow)]/30">
-          Chinmaya Mission Adoni
-        </span>
+      {/* Header Container aligned with main layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center space-y-2">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--yellow)]/15 text-[var(--yellow)] font-extrabold text-xs tracking-widest uppercase border border-[var(--yellow)]/30">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>MOVEMENT POSTERS & INSPIRATION</span>
+        </div>
+        <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-white tracking-tight">
+          YOUTH EMPOWERMENT GALLERY
+        </h3>
       </div>
 
+      {/* Visual Overlay Gradients for smooth fade on left/right edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[var(--bg-dark-section)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[var(--bg-dark-section)] to-transparent z-10 pointer-events-none" />
+
       {/* Infinite Right-to-Left Continuous Loop Container */}
-      <div className="animate-scroll gap-4 sm:gap-6 px-4">
+      <div className="animate-scroll gap-5 sm:gap-6 px-4">
         {duplicatedItems.map((item, idx) => {
-          // Remove any occurrence of the word 'marathon' from tag if present
           const cleanTag = (item.tag || item.category || '')
             .replace(/\bmarathon\b\s*/gi, '')
             .replace(/\b2026\b/gi, '')
@@ -87,26 +92,26 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
           return (
             <div
               key={`${item._id || item.id || idx}-${idx}`}
-              className="w-56 sm:w-64 h-80 sm:h-96 flex-shrink-0 rounded-2xl overflow-hidden relative group border border-white/10 shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
+              className="w-64 sm:w-72 h-88 sm:h-96 flex-shrink-0 rounded-3xl overflow-hidden relative group border border-white/15 shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-slate-900"
             >
               <img
                 src={item.imageUrl}
                 alt={item.title || 'Chinmaya Mission Adoni'}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100 block"
                 loading="lazy"
               />
               
               {/* Poster Card Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 sm:p-5 flex flex-col justify-end">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-5 sm:p-6 flex flex-col justify-end text-left space-y-2">
                 {cleanTag && cleanTag.toLowerCase() !== 'banner' ? (
-                  <span className="inline-block self-start px-2.5 py-1 text-[10px] font-extrabold tracking-wider rounded-lg bg-[var(--orange)] text-white mb-2 shadow-md uppercase">
+                  <span className="inline-block self-start px-2.5 py-1 text-[10px] font-black tracking-wider rounded-lg bg-[var(--orange)] text-white shadow-md uppercase">
                     {cleanTag}
                   </span>
                 ) : null}
-                <h4 className="text-sm sm:text-base font-extrabold text-white leading-tight font-heading group-hover:text-[var(--yellow)] transition-colors">
+                <h4 className="text-base font-extrabold text-white leading-snug font-heading group-hover:text-[var(--yellow)] transition-colors line-clamp-2">
                   {item.title}
                 </h4>
-                <p className="text-[11px] text-slate-300 font-medium mt-1">
+                <p className="text-[11px] text-slate-300 font-medium">
                   Chinmaya Mission Adoni
                 </p>
               </div>
