@@ -18,7 +18,7 @@ import {
 // Reusable Activity Card Component
 const ActivityCard = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] overflow-hidden hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
+    <article className="rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] overflow-hidden hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
       <div>
         {/* Card Image Container */}
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/20">
@@ -41,32 +41,32 @@ const ActivityCard = ({ activity, onSelect }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
           
-          <span className="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-black/75 text-white font-extrabold text-[11px] uppercase tracking-wider backdrop-blur-md border border-white/20">
+          <span className="absolute top-3 left-3 px-3 py-0.5 rounded-full bg-black/75 text-white font-extrabold text-[10px] uppercase tracking-wider backdrop-blur-md border border-white/20">
             {activity.category}
           </span>
 
           <button
             onClick={() => onSelect(activity)}
-            className="absolute bottom-4 right-4 p-2.5 rounded-full bg-white/90 text-slate-900 hover:bg-white transition-colors shadow-lg"
+            className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 text-slate-900 hover:bg-white transition-colors shadow-lg"
             title="Enlarge Image"
             aria-label={`Enlarge image for ${activity.title}`}
           >
-            <Maximize2 className="w-4 h-4 text-[var(--orange)]" />
+            <Maximize2 className="w-3.5 h-3.5 text-[var(--orange)]" />
           </button>
         </div>
 
         {/* Card Content Body */}
-        <div className="p-7 space-y-3 text-left">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
-              {activity.icon || <Sparkles className="w-5 h-5" />}
+        <div className="p-5 sm:p-6 space-y-2.5 text-left">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
+              {activity.icon || <Sparkles className="w-4 h-4" />}
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors">
+            <h3 className="text-base sm:text-lg font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug">
               {activity.title}
             </h3>
           </div>
 
-          <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed pt-1">
+          <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
             {activity.description}
           </p>
         </div>
@@ -74,7 +74,7 @@ const ActivityCard = ({ activity, onSelect }) => {
 
       {/* Card Footer Meta */}
       {activity.imageSource && (
-        <div className="px-7 pb-6 pt-2 border-t border-[var(--border-color)]/50 text-[11px] font-semibold text-[var(--text-muted)] flex items-center justify-between">
+        <div className="px-5 pb-4 pt-2 border-t border-[var(--border-color)]/50 text-[10px] font-semibold text-[var(--text-muted)] flex items-center justify-between">
           <span>Source: {activity.imageSource}</span>
           <span className="text-[var(--orange)] font-bold">CHINMAYA MISSION ADONI</span>
         </div>
@@ -461,7 +461,7 @@ export const ActivitiesPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {spiritualDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -488,7 +488,7 @@ export const ActivitiesPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {cultureDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}

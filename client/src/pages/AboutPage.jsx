@@ -603,19 +603,19 @@ export const AboutPage = () => {
           </p>
         </div>
 
-        {/* 4 Interactive Activity Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* 4 Interactive Activity Cards Grid (Compact 4-column layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {data.ourActivities.cards.map((card) => (
             <div
               key={card.id || card.title}
-              className={`rounded-3xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] flex flex-col justify-between ${
+              className={`rounded-2xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] flex flex-col justify-between ${
                 card.featured
                   ? 'bg-white border-2 border-[var(--orange)]'
                   : 'bg-white border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/60'
               }`}
             >
               <div>
-                <div className="h-56 overflow-hidden relative">
+                <div className="h-44 sm:h-48 overflow-hidden relative">
                   <img
                     src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
                     alt={card.title}
@@ -633,34 +633,34 @@ export const AboutPage = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="eager"
                   />
-                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/75 text-white font-extrabold text-[11px] uppercase tracking-wider backdrop-blur-md border border-white/20">
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/75 text-white font-extrabold text-[10px] uppercase tracking-wider backdrop-blur-md border border-white/20">
                     {card.badge}
                   </span>
                 </div>
 
-                <div className="p-7 space-y-3 text-left">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
+                <div className="p-5 space-y-2.5 text-left">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
                       {getActivityIcon(card.iconName)}
                     </div>
-                    <h3 className="text-xl font-extrabold font-heading text-[var(--text-primary)]">
+                    <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] leading-snug line-clamp-2">
                       {card.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed pt-1">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-3">
                     {card.content}
                   </p>
                 </div>
               </div>
 
-              <div className="px-7 pb-7 pt-2">
+              <div className="px-5 pb-5 pt-1">
                 <Link
                   to="/activities"
-                  className="btn-secondary w-full justify-center text-xs py-2.5 text-decoration-none"
+                  className="btn-secondary w-full justify-center text-[11px] py-2 px-3 text-decoration-none"
                 >
-                  <span>LEARN MORE ABOUT ACTIVITIES</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>LEARN MORE</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
