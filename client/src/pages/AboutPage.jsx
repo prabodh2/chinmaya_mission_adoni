@@ -141,6 +141,13 @@ export const AboutPage = () => {
         'Since its inauguration in 2001 by Pujya Swami Tejomayananda, Chinmaya Mission Adoni has been part of the continuing effort to share the vision and teachings of Pujya Gurudev Swami Chinmayananda. Guided by the principles of knowledge, devotion and selfless service, the Mission aspires to inspire individuals, empower youth and contribute to the spiritual and cultural enrichment of Adoni.',
       highlights: ['2001', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
     },
+    conclusion: {
+      heading: 'Conclusion',
+      paragraph1:
+        "Chinmaya Mission, Adoni, has grown from its humble beginnings in 1992 into an important centre for spiritual development, cultural preservation, children's education and youth development. Its sustained Geeta chanting competitions, Balavihar and youth camps, temple-related activities and cultural programmes demonstrate its long-term contribution to the community.",
+      paragraph2:
+        "The Mission's journey reflects a commitment to preserving Indian values and making them relevant to successive generations.",
+    },
     ourVision: {
       heading: 'OUR VISION',
       quote:
@@ -701,6 +708,34 @@ export const AboutPage = () => {
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 9.5 CONCLUSION SECTION */}
+      <section className="px-4 max-w-7xl mx-auto">
+        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--cyan)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-6">
+          <div className="max-w-4xl mx-auto space-y-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-extrabold text-[var(--cyan)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--cyan)]/10 border border-[var(--cyan)]/20">
+                SUMMARY & IMPACT
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
+              {data.conclusion?.heading || 'Conclusion'}
+            </h2>
+            <div className="space-y-4 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+              <p>
+                {data.conclusion?.paragraph1 ||
+                  "Chinmaya Mission, Adoni, has grown from its humble beginnings in 1992 into an important centre for spiritual development, cultural preservation, children's education and youth development. Its sustained Geeta chanting competitions, Balavihar and youth camps, temple-related activities and cultural programmes demonstrate its long-term contribution to the community."}
+              </p>
+              <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border-l-4 border-[var(--orange)]">
+                <p className="font-semibold text-[var(--text-primary)] italic">
+                  {data.conclusion?.paragraph2 ||
+                    "The Mission's journey reflects a commitment to preserving Indian values and making them relevant to successive generations."}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
