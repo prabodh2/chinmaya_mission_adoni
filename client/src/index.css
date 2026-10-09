@@ -1,4 +1,4 @@
-/* Global Reset & Base Setup */
+/* Global Reset & Base Setup
 *,
 *::before,
 *::after {
@@ -36,4 +36,96 @@ body {
   overflow-x: clip;
   position: relative;
   background-color: #FFF0C5;
+} */
+
+
+
+/* Global sizing: prevent elements from exceeding their parent */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let flex and grid children shrink when necessary */
+#root > *,
+main,
+main > *,
+section,
+.container-custom,
+.container-custom > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Keep media within its container */
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+/* Prevent long text from forcing a wider layout */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  overflow-wrap: anywhere;
+}
+
+/* Keep the global container responsive */
+.container-custom {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .container-custom {
+    padding-inline: 1rem;
+  }
 }
