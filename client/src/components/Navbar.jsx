@@ -88,11 +88,18 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Registration CTA */}
-              <Link to="/register" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
-                <Award className="w-3.5 h-3.5" />
-                <span>REGISTER NOW</span>
-              </Link>
+              {/* Registration / Admin CTA */}
+              {isAuthenticated && isAdmin ? (
+                <Link to="/admin/dashboard" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>ADMIN DASHBOARD</span>
+                </Link>
+              ) : (
+                <Link to="/register" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
+                  <Award className="w-3.5 h-3.5" />
+                  <span>REGISTER NOW</span>
+                </Link>
+              )}
 
               {/* Logged in User Dropdown */}
               {isAuthenticated && user ? (
@@ -277,23 +284,23 @@ export const Navbar = () => {
 
           {/* Mobile Bottom CTAs */}
           <div className="pt-3 border-t border-[var(--border-color)] flex flex-col gap-2.5">
-            <Link
-              to="/register"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
-            >
-              <Award className="w-4 h-4" />
-              <span>REGISTER FOR MARATHON</span>
-            </Link>
-
-            {isAuthenticated && isAdmin && (
+            {isAuthenticated && isAdmin ? (
               <Link
                 to="/admin/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[var(--cyan)]/15 text-xs font-bold text-[var(--cyan)] text-decoration-none"
+                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
               >
                 <Shield className="w-4 h-4" />
-                <span>Admin Dashboard</span>
+                <span>ADMIN DASHBOARD</span>
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
+              >
+                <Award className="w-4 h-4" />
+                <span>REGISTER FOR MARATHON</span>
               </Link>
             )}
 

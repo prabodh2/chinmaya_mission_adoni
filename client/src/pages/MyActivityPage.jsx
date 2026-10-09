@@ -93,13 +93,22 @@ export const MyActivityPage = () => {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
 
-          <Link
-            to="/register"
-            className="btn-primary py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wide text-decoration-none shadow-md shadow-[var(--orange)]/20"
-          >
-            <Award className="w-4 h-4" />
-            <span>Register For Marathon</span>
-          </Link>
+          {user?.role === 'admin' ? (
+            <Link
+              to="/admin/dashboard"
+              className="btn-primary py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wide text-decoration-none shadow-md shadow-[var(--orange)]/20"
+            >
+              <span>Admin Dashboard</span>
+            </Link>
+          ) : (
+            <Link
+              to="/register"
+              className="btn-primary py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wide text-decoration-none shadow-md shadow-[var(--orange)]/20"
+            >
+              <Award className="w-4 h-4" />
+              <span>Register For Marathon</span>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -228,9 +237,15 @@ export const MyActivityPage = () => {
                     </p>
                   </div>
                   <div className="flex flex-wrap justify-center gap-3 pt-2">
-                    <Link to="/register" className="btn-primary py-2.5 px-5 rounded-2xl text-xs font-bold text-decoration-none">
-                      Register For Marathon
-                    </Link>
+                    {user?.role === 'admin' ? (
+                      <Link to="/admin/dashboard" className="btn-primary py-2.5 px-5 rounded-2xl text-xs font-bold text-decoration-none">
+                        Admin Dashboard
+                      </Link>
+                    ) : (
+                      <Link to="/register" className="btn-primary py-2.5 px-5 rounded-2xl text-xs font-bold text-decoration-none">
+                        Register For Marathon
+                      </Link>
+                    )}
                     <Link to="/lets-connect" className="px-5 py-2.5 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-xs font-bold text-[var(--text-primary)] text-decoration-none">
                       Connect With Us
                     </Link>
@@ -313,15 +328,31 @@ export const MyActivityPage = () => {
                   <div className="w-16 h-16 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center mx-auto">
                     <Ticket className="w-8 h-8" />
                   </div>
-                  <div className="space-y-1 max-w-md mx-auto">
-                    <h3 className="text-lg font-bold text-[var(--text-primary)]">No registrations found</h3>
-                    <p className="text-xs text-[var(--text-muted)]">
-                      You have not registered for any events yet. Join the upcoming Anti-Drug Movement Marathon Run 2026!
-                    </p>
-                  </div>
-                  <Link to="/register" className="inline-flex btn-primary py-3 px-6 rounded-2xl text-xs font-bold text-decoration-none">
-                    Register Now & Get Entry Pass
-                  </Link>
+                  {user?.role === 'admin' ? (
+                    <>
+                      <div className="space-y-1 max-w-md mx-auto">
+                        <h3 className="text-lg font-bold text-[var(--text-primary)]">Administrator Account</h3>
+                        <p className="text-xs text-[var(--text-muted)]">
+                          You are logged in with administrator privileges. You can view, search, export and manage all marathon participant registrations in the Admin Dashboard.
+                        </p>
+                      </div>
+                      <Link to="/admin/dashboard" className="inline-flex btn-primary py-3 px-6 rounded-2xl text-xs font-bold text-decoration-none">
+                        Open Admin Dashboard
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-1 max-w-md mx-auto">
+                        <h3 className="text-lg font-bold text-[var(--text-primary)]">No registrations found</h3>
+                        <p className="text-xs text-[var(--text-muted)]">
+                          You have not registered for any events yet. Join the upcoming Anti-Drug Movement Marathon Run 2026!
+                        </p>
+                      </div>
+                      <Link to="/register" className="inline-flex btn-primary py-3 px-6 rounded-2xl text-xs font-bold text-decoration-none">
+                        Register Now & Get Entry Pass
+                      </Link>
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
