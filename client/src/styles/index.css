@@ -84,6 +84,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   letter-spacing: -0.02em;
 }
 
+/* Prevent long unbroken text from forcing layout overflow without breaking normal words */
+p, h1, h2, h3, h4, h5, h6, a, span, button {
+  overflow-wrap: break-word;
+}
+
 img {
   max-width: 100%;
   height: auto;

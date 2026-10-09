@@ -428,7 +428,7 @@ export const ActivitiesPage = () => {
     ) || initialActivities[3];
 
   return (
-    <main className="min-h-screen py-12 sm:py-16 px-4 max-w-7xl mx-auto space-y-16 sm:space-y-24">
+    <div className="min-h-screen py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 sm:space-y-24">
       {/* 1. ACTIVITIES PAGE INTRODUCTION */}
       <header className="text-center max-w-4xl mx-auto space-y-5">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
@@ -608,7 +608,7 @@ export const ActivitiesPage = () => {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 };
 
