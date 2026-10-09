@@ -47,153 +47,174 @@ export const EntryPass = ({ registration, eventConfig, id = 'official-entry-pass
   return (
     <div
       id={id}
-      className="entry-pass-container w-full max-w-[460px] mx-auto bg-white rounded-[28px] sm:rounded-[32px] border-[2px] border-[#ea580c] shadow-[0_12px_40px_rgba(0,0,0,0.06)] p-6 sm:p-8 text-slate-800 relative transition-all"
+      className="entry-pass-container w-full max-w-[460px] mx-auto bg-white rounded-[24px] sm:rounded-[28px] border-[2px] border-[#ea580c] shadow-[0_12px_40px_rgba(0,0,0,0.06)] p-6 sm:p-7 text-slate-800 relative transition-all"
       style={{
         backgroundColor: '#ffffff',
+        width: '100%',
+        maxWidth: '460px',
+        margin: '0 auto',
+        boxSizing: 'border-box',
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
       {/* 1. TOP HEADER WITH LOGOS */}
-      <div className="relative pb-3 sm:pb-3.5">
-        <div className="flex items-center justify-between gap-2">
+      <div className="relative pb-3" style={{ borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
           {/* Left: Chinmaya Mission Om Logo */}
-          <div className="shrink-0 w-11 sm:w-12 flex justify-start">
+          <div style={{ flexShrink: 0, width: '44px', display: 'flex', justifyContent: 'flex-start' }}>
             <img
               src="/assets/logos/logo-2.png"
               alt="Chinmaya Mission"
-              className="w-9 sm:w-10 h-13 sm:h-14 object-contain"
+              width="40"
+              height="56"
+              style={{ width: '40px', height: '56px', objectFit: 'contain', display: 'block' }}
               crossOrigin="anonymous"
             />
           </div>
 
           {/* Center: Title & Subtitles */}
-          <div className="flex-1 text-center px-1">
-            <h2 className="text-base sm:text-[17px] font-black uppercase tracking-[0.05em] text-[#0f172a] leading-tight">
+          <div style={{ flex: 1, textAlign: 'center', padding: '0 4px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#0f172a', margin: 0, lineHeight: 1.2 }}>
               CHINMAYA MISSION ADONI
             </h2>
-            <p className="text-xs sm:text-[13px] font-semibold text-[#2563eb] mt-0.5">
-              Chinmaya Yuva Kendra <span className="font-black text-[#0f172a]">Adoni</span>
+            <p style={{ fontSize: '12px', fontWeight: 600, color: '#2563eb', margin: '2px 0 0 0' }}>
+              Chinmaya Yuva Kendra <span style={{ fontWeight: 900, color: '#0f172a' }}>Adoni</span>
             </p>
-            <p className="text-xs sm:text-[13px] font-black text-[#10b981] tracking-[0.16em] uppercase mt-1">
+            <p style={{ fontSize: '12px', fontWeight: 900, color: '#10b981', letterSpacing: '0.16em', textTransform: 'uppercase', margin: '4px 0 0 0' }}>
               ENTRY PASS
             </p>
           </div>
 
           {/* Right: Chyk Logo */}
-          <div className="shrink-0 w-11 sm:w-12 flex justify-end">
+          <div style={{ flexShrink: 0, width: '52px', display: 'flex', justifyContent: 'flex-end' }}>
             <img
               src="/assets/logos/chyk-logo.png"
               alt="Chyk"
-              className="w-11 sm:w-13 h-9 sm:h-10 object-contain"
+              width="48"
+              height="38"
+              style={{ width: '48px', height: '38px', objectFit: 'contain', display: 'block' }}
               crossOrigin="anonymous"
             />
           </div>
         </div>
-
-        {/* Divider below header */}
-        <div className="w-full border-b border-[#e2e8f0] mt-3 sm:mt-3.5" />
       </div>
 
       {/* 2. EVENT TITLE */}
-      <div className="text-center my-3 sm:my-3.5">
-        <h1 className="text-xl sm:text-[22px] font-black text-[#0f172a] tracking-wide uppercase leading-tight font-heading">
+      <div style={{ textAlign: 'center', margin: '14px 0' }}>
+        <h1 style={{ fontSize: '20px', fontWeight: 900, color: '#0f172a', letterSpacing: '0.03em', textTransform: 'uppercase', margin: 0, lineHeight: 1.2 }}>
           ANTI-DRUG MARATHON 2026
         </h1>
-        <p className="text-[11px] sm:text-xs font-bold text-[#ea580c] tracking-[0.2em] uppercase mt-1">
+        <p style={{ fontSize: '11px', fontWeight: 800, color: '#ea580c', letterSpacing: '0.2em', textTransform: 'uppercase', margin: '4px 0 0 0' }}>
           ENTRY PASS
         </p>
       </div>
 
       {/* 3. PARTICIPANT INFORMATION CARD */}
-      <div className="bg-[#f8faff] rounded-2xl border border-[#dbeafe] p-5 sm:p-6 space-y-4 mt-3 sm:mt-4 shadow-sm">
+      <div
+        style={{
+          backgroundColor: '#f8faff',
+          borderRadius: '16px',
+          border: '1px solid #dbeafe',
+          padding: '18px 20px',
+          marginTop: '12px',
+        }}
+      >
         {/* Two-Column Grid for Details */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3.5 text-left">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '20px', rowGap: '14px', textAlign: 'left' }}>
           
           {/* Row 1 Left: REGISTRATION ID */}
           <div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#3b82f6] tracking-wider uppercase block">
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block' }}>
               REGISTRATION ID
             </span>
-            <div className="text-base sm:text-[17px] font-black text-[#0f172a] font-mono tracking-wide mt-0.5 border-b border-[#dbeafe] pb-1 truncate">
+            <div style={{ fontSize: '15px', fontWeight: 900, color: '#0f172a', fontFamily: 'monospace', letterSpacing: '0.05em', marginTop: '2px', borderBottom: '1px solid #dbeafe', paddingBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {registration.registrationId || '—'}
             </div>
           </div>
 
           {/* Row 1 Right: PARTICIPANT NAME */}
           <div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#3b82f6] tracking-wider uppercase block">
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block' }}>
               PARTICIPANT NAME
             </span>
-            <div className="text-base sm:text-[17px] font-black text-[#0f172a] mt-0.5 border-b border-[#dbeafe] pb-1 truncate" title={registration.fullName}>
+            <div style={{ fontSize: '15px', fontWeight: 900, color: '#0f172a', marginTop: '2px', borderBottom: '1px solid #dbeafe', paddingBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={registration.fullName}>
               {registration.fullName || '—'}
             </div>
           </div>
 
           {/* Row 2 Left: T-SHIRT SIZE */}
           <div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#3b82f6] tracking-wider uppercase block">
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block' }}>
               T-SHIRT SIZE
             </span>
-            <div className="text-base sm:text-[17px] font-black text-[#0f172a] mt-0.5 border-b border-[#dbeafe] pb-1">
+            <div style={{ fontSize: '15px', fontWeight: 900, color: '#0f172a', marginTop: '2px', borderBottom: '1px solid #dbeafe', paddingBottom: '3px' }}>
               {registration.tShirtSize || 'M'}
             </div>
           </div>
 
           {/* Row 2 Right: CONTACT NUMBER */}
           <div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#3b82f6] tracking-wider uppercase block">
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block' }}>
               CONTACT NUMBER
             </span>
-            <div className="text-base sm:text-[17px] font-black text-[#0f172a] font-mono mt-0.5 border-b border-[#dbeafe] pb-1 truncate">
+            <div style={{ fontSize: '15px', fontWeight: 900, color: '#0f172a', fontFamily: 'monospace', marginTop: '2px', borderBottom: '1px solid #dbeafe', paddingBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {formattedPhone}
             </div>
           </div>
 
           {/* Row 3 Left: INSTITUTION / TYPE */}
-          <div>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[#3b82f6] tracking-wider uppercase block">
+          <div style={{ gridColumn: 'span 2' }}>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block' }}>
               INSTITUTION / TYPE
             </span>
-            <div className="text-xs sm:text-sm font-black text-[#0f172a] uppercase mt-0.5 truncate" title={institutionDisplay}>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#0f172a', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={institutionDisplay}>
               {institutionDisplay}
             </div>
           </div>
 
-          {/* Row 3 Right: Empty column for symmetry */}
-          <div aria-hidden="true" />
-
         </div>
 
-        {/* 4. EVENT DETAILS LIGHT-GREY BOX */}
-        <div className="bg-white/80 border border-[#dbeafe] rounded-xl p-3 sm:p-3.5 space-y-2 mt-3.5">
+        {/* 4. EVENT DETAILS BOX */}
+        <div
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #dbeafe',
+            borderRadius: '12px',
+            padding: '10px 12px',
+            marginTop: '14px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
+          }}
+        >
           {/* Date Row */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-[13px] font-bold text-[#1e3a8a]">
-            <div className="w-5 h-5 flex items-center justify-center text-[#ea580c] shrink-0">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 700, color: '#1e3a8a' }}>
+            <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ea580c', flexShrink: 0 }}>
               <Calendar className="w-4 h-4 stroke-[2.4]" />
             </div>
-            <span className="truncate">{displayDate}</span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{displayDate}</span>
           </div>
 
           {/* Location Row */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-[13px] font-bold text-[#1e3a8a]">
-            <div className="w-5 h-5 flex items-center justify-center text-[#0284c7] shrink-0">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 700, color: '#1e3a8a' }}>
+            <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7', flexShrink: 0 }}>
               <MapPin className="w-4 h-4 stroke-[2.4]" />
             </div>
-            <span className="truncate">{displayLocation}</span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{displayLocation}</span>
           </div>
         </div>
 
       </div>
 
       {/* 5. FOOTER MESSAGE */}
-      <p className="text-[11px] sm:text-xs font-semibold text-[#3b82f6] text-center mt-5">
+      <p style={{ fontSize: '11px', fontWeight: 600, color: '#3b82f6', textAlign: 'center', margin: '14px 0 0 0' }}>
         Please carry this pass for entry to the marathon.
       </p>
 
       {/* 6. FOOTER DIVIDER & BRANDING */}
-      <div className="w-3/4 mx-auto border-t border-[#dbeafe] mt-3 mb-2.5" />
+      <div style={{ width: '70%', margin: '10px auto 8px auto', borderTop: '1px solid #dbeafe' }} />
 
-      <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-[#3b82f6] text-center">
+      <p style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: '#3b82f6', textAlign: 'center', margin: 0 }}>
         CHINMAYA MISSION ADONI • CHINMAYA YUVA KENDRA ADONI
       </p>
     </div>
