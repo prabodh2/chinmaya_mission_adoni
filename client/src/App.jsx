@@ -109,6 +109,22 @@ export function App() {
                   }
                 />
                 <Route
+                  path="/admin/users"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="USERS" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/profile"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="ADMIN_PROFILE" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/admin/lets-connect"
                   element={
                     <ProtectedRoute requireAdmin={true}>

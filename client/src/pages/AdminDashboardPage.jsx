@@ -14,6 +14,8 @@ import { HomePageManager } from './admin/HomePageManager';
 import { FooterManager } from './admin/FooterManager';
 import { AdminImagesPage } from './admin/AdminImagesPage';
 import { LetsConnectManager } from './admin/LetsConnectManager';
+import { UserManager } from './admin/UserManager';
+import { AdminProfileManager } from './admin/AdminProfileManager';
 import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
 import { TshirtSummary } from '../components/admin/TshirtSummary';
 import { ClassSummary } from '../components/admin/ClassSummary';
@@ -45,6 +47,7 @@ import {
   Pencil,
   GraduationCap,
   MessageSquare,
+  UserCheck,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -53,6 +56,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
   const [activeTab, setActiveTab] = useState(
     defaultTab || (
+      window.location.pathname.includes('/admin/users') ? 'USERS' :
+      window.location.pathname.includes('/admin/profile') ? 'ADMIN_PROFILE' :
       window.location.pathname.includes('/admin/lets-connect') ? 'LETS_CONNECT' :
       window.location.pathname.includes('/admin/images') ? 'IMAGES' :
       window.location.pathname.includes('/admin/footer') ? 'FOOTER_CMS' :
@@ -480,6 +485,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       <div className="flex flex-wrap items-center gap-2 p-2 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
         {[
           { id: 'STATS', label: 'Dashboard Stats', icon: Users },
+          { id: 'USERS', label: 'User Directory', icon: UserCheck },
+          { id: 'ADMIN_PROFILE', label: 'Admin Profile', icon: Shield },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
@@ -508,6 +515,12 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           );
         })}
       </div>
+
+      {/* TAB: USER MANAGEMENT DIRECTORY */}
+      {activeTab === 'USERS' && <UserManager />}
+
+      {/* TAB: DEDICATED ADMIN PROFILE */}
+      {activeTab === 'ADMIN_PROFILE' && <AdminProfileManager />}
 
       {/* TAB: LET'S CONNECT INBOX */}
       {activeTab === 'LETS_CONNECT' && <LetsConnectManager />}

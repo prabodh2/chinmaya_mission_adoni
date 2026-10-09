@@ -234,6 +234,13 @@ export const adminService = {
   retrySheetsSync: (id) => api.post(`/admin/registrations/${id}/sync-sheets`),
   getRegistrationSummary: (year) =>
     api.get('/admin/registrations/summary', { params: { year } }),
+  getUsers: (params) => api.get('/admin/users', { params }),
+  getUserById: (id) => api.get(`/admin/users/${id}`),
+  updateUserRole: (id, role) => api.patch(`/admin/users/${id}/role`, { role }),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  getProfile: () => api.get('/admin/profile', { headers: { 'X-Auth-Scope': 'admin' } }),
+  updateProfile: (data) => api.put('/admin/profile', data, { headers: { 'X-Auth-Scope': 'admin' } }),
+  changePassword: (data) => api.put('/auth/change-password', data, { headers: { 'X-Auth-Scope': 'admin' } }),
 };
 
 export const contactService = {
