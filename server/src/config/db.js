@@ -25,6 +25,20 @@ export const connectDB = async () => {
     });
 
     console.log(`[MongoDB] Connected to host: ${conn.connection.host}`);
+
+    // Drop stale/legacy email_1 index from users collection if present to prevent duplicate null errors
+    try {
+      const usersCol = conn.connection.collection('users');
+      const indexes = await usersCol.indexes();
+      const emailIdx = indexes.find((i) => i.name === 'email_1' || (i.key && i.key.email));
+      if (emailIdx) {
+        await usersCol.dropIndex(emailIdx.name);
+        console.log(`[MongoDB] Cleaned up legacy '${emailIdx.name}' index on users collection.`);
+      }
+    } catch (idxErr) {
+      // Ignore if collection doesn't exist yet or index is already absent
+    }
+
     return true;
   } catch (error) {
     console.error(`[MongoDB Connection Error]: ${error.message}`);
