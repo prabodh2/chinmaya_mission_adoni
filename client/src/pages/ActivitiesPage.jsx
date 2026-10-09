@@ -15,13 +15,13 @@ import {
   Calendar,
 } from 'lucide-react';
 
-// Reusable Activity Card Component
+// Reusable Activity Card Component (Compact 2-per-row design)
 const ActivityCard = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] overflow-hidden hover:border-[var(--orange)]/40 hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
+    <article className="rounded-[24px] bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] hover:border-[var(--orange)]/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between overflow-hidden group">
       <div>
         {/* Card Image Container */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/20">
+        <div className="relative aspect-[16/10] sm:h-48 w-full overflow-hidden bg-slate-900/10">
           <img
             src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
             alt={activity.imageAlt || activity.title}
@@ -36,18 +36,18 @@ const ActivityCard = ({ activity, onSelect }) => {
                 e.currentTarget.src = '/assets/images/activity-chyk.jpg';
               }
             }}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
           
-          <span className="absolute top-3 left-3 px-3 py-0.5 rounded-full bg-black/75 text-white font-extrabold text-[10px] uppercase tracking-wider backdrop-blur-md border border-white/20">
+          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
             {activity.category}
           </span>
 
           <button
             onClick={() => onSelect(activity)}
-            className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 text-slate-900 hover:bg-white transition-colors shadow-lg"
+            className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-md text-slate-900 hover:bg-white transition-all shadow-md hover:scale-105"
             title="Enlarge Image"
             aria-label={`Enlarge image for ${activity.title}`}
           >
@@ -58,15 +58,15 @@ const ActivityCard = ({ activity, onSelect }) => {
         {/* Card Content Body */}
         <div className="p-5 sm:p-6 space-y-2.5 text-left">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
               {activity.icon || <Sparkles className="w-4 h-4" />}
             </div>
-            <h3 className="text-base sm:text-lg font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug">
+            <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1">
               {activity.title}
             </h3>
           </div>
 
-          <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+          <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed line-clamp-3 font-medium">
             {activity.description}
           </p>
         </div>
@@ -74,9 +74,9 @@ const ActivityCard = ({ activity, onSelect }) => {
 
       {/* Card Footer Meta */}
       {activity.imageSource && (
-        <div className="px-5 pb-4 pt-2 border-t border-[var(--border-color)]/50 text-[10px] font-semibold text-[var(--text-muted)] flex items-center justify-between">
-          <span>Source: {activity.imageSource}</span>
-          <span className="text-[var(--orange)] font-bold">CHINMAYA MISSION ADONI</span>
+        <div className="px-5 sm:px-6 pb-4 pt-2.5 border-t border-[rgba(11,35,64,0.06)] text-[10px] font-bold text-[var(--text-muted)] flex items-center justify-between">
+          <span className="truncate max-w-[65%]">Source: {activity.imageSource}</span>
+          <span className="text-[var(--orange)] font-extrabold tracking-wider uppercase whitespace-nowrap">CHINMAYA MISSION</span>
         </div>
       )}
     </article>

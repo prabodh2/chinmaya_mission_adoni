@@ -603,19 +603,19 @@ export const AboutPage = () => {
           </p>
         </div>
 
-        {/* 4 Interactive Activity Cards Grid (Compact 4-column layout) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* 4 Interactive Activity Cards Grid (2 cards per line, remaining cards underneath) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7 max-w-4xl mx-auto">
           {data.ourActivities.cards.map((card) => (
             <div
               key={card.id || card.title}
-              className={`rounded-2xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] flex flex-col justify-between ${
+              className={`rounded-[24px] border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] flex flex-col justify-between group ${
                 card.featured
                   ? 'bg-white border-2 border-[var(--orange)]'
-                  : 'bg-white border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/60'
+                  : 'bg-white border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/50'
               }`}
             >
               <div>
-                <div className="h-44 sm:h-48 overflow-hidden relative">
+                <div className="relative aspect-[16/10] sm:h-48 overflow-hidden bg-slate-900/10">
                   <img
                     src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
                     alt={card.title}
@@ -630,36 +630,38 @@ export const AboutPage = () => {
                         e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                       }
                     }}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="eager"
                   />
-                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/75 text-white font-extrabold text-[10px] uppercase tracking-wider backdrop-blur-md border border-white/20">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
+                  
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
                     {card.badge}
                   </span>
                 </div>
 
-                <div className="p-5 space-y-2.5 text-left">
+                <div className="p-5 sm:p-6 space-y-2.5 text-left">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
                       {getActivityIcon(card.iconName)}
                     </div>
-                    <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] leading-snug line-clamp-2">
+                    <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1">
                       {card.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-3">
+                  <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed line-clamp-3 font-medium">
                     {card.content}
                   </p>
                 </div>
               </div>
 
-              <div className="px-5 pb-5 pt-1">
+              <div className="px-5 sm:px-6 pb-5 pt-1">
                 <Link
                   to="/activities"
-                  className="btn-secondary w-full justify-center text-[11px] py-2 px-3 text-decoration-none"
+                  className="btn-secondary w-full justify-center text-xs py-2.5 px-4 text-decoration-none font-bold"
                 >
-                  <span>LEARN MORE</span>
+                  <span>LEARN MORE ABOUT ACTIVITIES</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
