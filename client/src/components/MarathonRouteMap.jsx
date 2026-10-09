@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
-const TOTAL_KM = 7;
-const PATH_D = "M300 153 L350 168 L590 150 L750 190 L865 196 L860 250 L750 460 L650 640 L530 775 L350 625 L90 425 L65 410 L90 260 L135 205 Z";
+const TOTAL_KM = 3;
+
+// Precise polyline connecting the 7 landmarks smoothly from Municipal School to CM
+const PATH_D = "M580 180 L720 215 L750 240 L710 375 L670 480 L575 565 L480 630 L400 575 L320 500 L245 435 L190 350 L220 255 L270 190";
 
 const CHECKPOINTS = [
-  'CM (Start)',
   'Municipal School',
   'Mohan Reddy Traders',
   'VHP',
@@ -14,18 +15,24 @@ const CHECKPOINTS = [
   'CM (Finish)'
 ];
 
+const CHECKPOINT_KMS = ['0.0', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0'];
+
+// Alternating label placement: some outside, some inside so all 7 are crystal clear without clipping
 const CHECKPOINT_OFFSETS = [
-  { ox: 15, oy: -32, anchor: 'middle' }, // Point 0: CM (Start)
-  { ox: 0, oy: -32, anchor: 'middle' },  // Point 1: Municipal School
-  { ox: 32, oy: -12, anchor: 'start' },  // Point 2: Mohan Reddy Traders
-  { ox: 32, oy: 6, anchor: 'start' },    // Point 3: VHP
-  { ox: 0, oy: 38, anchor: 'middle' },   // Point 4: Anna Canteen
-  { ox: -28, oy: 30, anchor: 'end' },    // Point 5: Grameena Bank
-  { ox: -32, oy: 6, anchor: 'end' },     // Point 6: Reliance Digital
-  { ox: -35, oy: -32, anchor: 'end' }    // Point 7: CM (Finish)
+  { ox: 0, oy: -34, anchor: 'middle', badge: 'START' },   // 1. Municipal School (Outside / Top)
+  { ox: -30, oy: 20, anchor: 'end', badge: null },         // 2. Mohan Reddy Traders (Inside / Left)
+  { ox: 30, oy: 5, anchor: 'start', badge: null },         // 3. VHP (Outside / Right)
+  { ox: 0, oy: 38, anchor: 'middle', badge: null },        // 4. Anna Canteen (Outside / Bottom)
+  { ox: 28, oy: -18, anchor: 'start', badge: null },       // 5. Grameena Bank (Inside / Upper Right)
+  { ox: -28, oy: 5, anchor: 'end', badge: null },          // 6. Reliance Digital (Outside / Left)
+  { ox: 0, oy: -34, anchor: 'middle', badge: 'FINISH' }    // 7. CM (Outside / Top)
 ];
 
-const getCheckpointFraction = (i) => (i === TOTAL_KM ? 0.965 : i / TOTAL_KM);
+const getCheckpointFraction = (i) => {
+  if (i === 0) return 0;
+  if (i === CHECKPOINTS.length - 1) return 1;
+  return i / (CHECKPOINTS.length - 1);
+};
 
 const formatTime = (minutes) => {
   if (isNaN(minutes) || minutes < 0) return '0:00';
@@ -70,7 +77,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
           }
         }
       } catch (err) {
-        // Fallback if SVG animation API is unavailable
+        // Fallback
       }
     }
   }, [isPlaying]);
@@ -83,7 +90,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
 
     if (isPlaying) {
       setFraction((prev) => {
-        const next = prev + delta / 24000;
+        const next = prev + delta / 18000;
         if (next >= 1) {
           setIsPlaying(false);
           return 1;
@@ -111,7 +118,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
 
   // Point lookup helper
   const getPointAtFraction = useCallback((f) => {
-    if (!pathRef.current || pathLength <= 0) return { x: 300, y: 153 };
+    if (!pathRef.current || pathLength <= 0) return { x: 580, y: 180 };
     const clampedF = Math.max(0, Math.min(1, f));
     return pathRef.current.getPointAtLength(clampedF * pathLength);
   }, [pathLength]);
@@ -124,8 +131,8 @@ export const MarathonRouteMap = ({ className = '' }) => {
   // Runner facing direction (flip horizontally when running left vs right)
   const runnerDir = useMemo(() => {
     if (!pathRef.current || pathLength <= 0) return 1;
-    const q2 = getPointAtFraction(Math.min(1, fraction + 0.004));
-    const q3 = getPointAtFraction(Math.max(0, fraction - 0.004));
+    const q2 = getPointAtFraction(Math.min(1, fraction + 0.005));
+    const q3 = getPointAtFraction(Math.max(0, fraction - 0.005));
     return q2.x >= q3.x ? 1 : -1;
   }, [fraction, pathLength, getPointAtFraction]);
 
@@ -152,8 +159,8 @@ export const MarathonRouteMap = ({ className = '' }) => {
       const ox = q.x + offsetConfig.ox;
       const oy = q.y + offsetConfig.oy;
       const textAnchor = offsetConfig.anchor;
-      const parts = [name];
-      return { index: i, name, fraction: f, x: q.x, y: q.y, ox, oy, textAnchor, parts };
+      const kmLabel = CHECKPOINT_KMS[i] || `${(i * 0.5).toFixed(1)}`;
+      return { index: i, name, fraction: f, x: q.x, y: q.y, ox, oy, textAnchor, badge: offsetConfig.badge, kmLabel };
     });
   }, [pathLength]);
 
@@ -164,9 +171,17 @@ export const MarathonRouteMap = ({ className = '' }) => {
   const finishTimeStr = formatTime(TOTAL_KM * pace);
 
   // Checkpoint Info Box Logic
-  const closestIndex = Math.min(TOTAL_KM, Math.round(kmCovered));
-  const isAtCheckpoint = Math.abs(kmCovered - closestIndex) < 0.12 || (closestIndex === TOTAL_KM && fraction > 0.94);
-  const nextCheckpointIndex = Math.ceil(kmCovered);
+  const closestCheckpointIndex = Math.min(
+    CHECKPOINTS.length - 1,
+    Math.round(fraction * (CHECKPOINTS.length - 1))
+  );
+  const isAtCheckpoint =
+    Math.abs(fraction - getCheckpointFraction(closestCheckpointIndex)) < 0.04 ||
+    (fraction > 0.96 && closestCheckpointIndex === CHECKPOINTS.length - 1);
+  const nextCheckpointIndex = Math.min(
+    CHECKPOINTS.length - 1,
+    Math.ceil(fraction * (CHECKPOINTS.length - 1)) || 1
+  );
 
   const handleCheckpointClick = (f) => {
     setIsPlaying(false);
@@ -234,11 +249,14 @@ export const MarathonRouteMap = ({ className = '' }) => {
         
         {/* Header */}
         <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--route)]/15 border border-[var(--route)]/30 text-[var(--route2)] text-xs font-bold font-sans uppercase mb-2">
+            <span>OFFICIAL 3 KM MARATHON ROUTE</span>
+          </div>
           <h2 className="m-0 text-xl sm:text-2xl md:text-3xl font-normal tracking-wide text-[var(--ink)]">
-            🏃 ANTI-DRUG MOVEMENT MARATHON - 7KM
+            🏃 ANTI-DRUG MOVEMENT MARATHON - 3KM
           </h2>
           <p className="text-[var(--mut)] my-1 font-sans text-xs sm:text-sm">
-            Tap any checkpoint or drag the runner. 8 checkpoints, 0 to 7 km. Drag the runner or tap any point.
+            Interactive route map with 7 key landmarks from Municipal School to CM. Tap any checkpoint or drag the runner.
           </p>
         </div>
 
@@ -247,9 +265,9 @@ export const MarathonRouteMap = ({ className = '' }) => {
           <svg
             id="m"
             ref={svgRef}
-            viewBox="0 0 960 820"
+            viewBox="0 0 960 760"
             role="img"
-            aria-label="Loop route map"
+            aria-label="3 KM Marathon Route Map"
             className="w-full h-auto block select-none"
           >
             <defs>
@@ -259,14 +277,14 @@ export const MarathonRouteMap = ({ className = '' }) => {
             </defs>
 
             {/* Grid */}
-            <rect width="960" height="820" fill="url(#g-pattern)" />
+            <rect width="960" height="760" fill="url(#g-pattern)" />
 
-            {/* Watermark */}
-            <text x="480" y="400" textAnchor="middle" fontSize="40" fontWeight="700" fill="var(--line)" fontFamily="Georgia, serif">
-              7 KM
+            {/* Central Watermark */}
+            <text x="480" y="380" textAnchor="middle" fontSize="42" fontWeight="700" fill="var(--line)" fontFamily="Georgia, serif">
+              3 KM
             </text>
-            <text x="480" y="432" textAnchor="middle" fontSize="16" fill="var(--mut)" fontFamily="system-ui, sans-serif">
-              LOOP RACE
+            <text x="480" y="415" textAnchor="middle" fontSize="15" fontWeight="600" fill="var(--mut)" fontFamily="system-ui, sans-serif" letterSpacing="2">
+              MARATHON ROUTE
             </text>
 
             {/* Path outline background */}
@@ -278,6 +296,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
               stroke="var(--ink)"
               strokeWidth="20"
               strokeLinejoin="round"
+              strokeLinecap="round"
               opacity=".15"
             />
 
@@ -302,7 +321,8 @@ export const MarathonRouteMap = ({ className = '' }) => {
               stroke="var(--route)"
               strokeWidth="11"
               strokeLinejoin="round"
-              opacity=".55"
+              strokeLinecap="round"
+              opacity=".65"
             />
 
             {/* Landmark text labels */}
@@ -321,7 +341,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
                     fontWeight="800"
                     fill="var(--ink)"
                     stroke="var(--card)"
-                    strokeWidth="3.5"
+                    strokeWidth="4"
                     strokeLinejoin="round"
                     style={{ paintOrder: 'stroke fill' }}
                     fontFamily="system-ui, sans-serif"
@@ -335,11 +355,13 @@ export const MarathonRouteMap = ({ className = '' }) => {
             {/* Checkpoint KM Circles */}
             <g id="kms">
               {checkpointsData.map((item) => {
+                const isStart = item.index === 0;
+                const isFinish = item.index === CHECKPOINTS.length - 1;
                 const isCrossed = item.index > 0 && fraction >= item.fraction;
                 return (
                   <g
                     key={`km-${item.index}`}
-                    className="cursor-pointer transition-transform hover:scale-105"
+                    className="cursor-pointer transition-transform hover:scale-110"
                     transform={`translate(${item.x},${item.y})`}
                     onClick={() => handleCheckpointClick(item.fraction)}
                   >
@@ -347,8 +369,10 @@ export const MarathonRouteMap = ({ className = '' }) => {
                       rx="22"
                       ry="13"
                       fill={
-                        item.index === 0
+                        isStart
                           ? 'var(--acc)'
+                          : isFinish && isCrossed
+                          ? 'var(--route2)'
                           : isCrossed
                           ? 'var(--route)'
                           : 'var(--card)'
@@ -361,16 +385,16 @@ export const MarathonRouteMap = ({ className = '' }) => {
                       textAnchor="middle"
                       y="4"
                       fontSize="11"
-                      fontWeight="700"
+                      fontWeight="800"
                       fill={
-                        item.index === 0 || isCrossed
+                        isStart || isCrossed
                           ? '#fff'
                           : 'var(--ink)'
                       }
                       fontFamily="system-ui, sans-serif"
                       style={{ transition: 'fill 0.25s ease' }}
                     >
-                      {item.index}/{TOTAL_KM}
+                      {item.index + 1}/7
                     </text>
                   </g>
                 );
@@ -497,7 +521,7 @@ export const MarathonRouteMap = ({ className = '' }) => {
             onClick={handlePlayToggle}
             className="bg-[var(--ink)] text-[var(--bg)] border-0 rounded-lg py-2.5 px-4 font-semibold cursor-pointer hover:opacity-90 transition-opacity"
           >
-            {fraction >= 1 ? '🏁 Again' : isPlaying ? '⏸ Pause' : '▶ Run'}
+            {fraction >= 1 ? '🏁 Restart' : isPlaying ? '⏸ Pause' : '▶ Run'}
           </button>
 
           <input
@@ -551,26 +575,26 @@ export const MarathonRouteMap = ({ className = '' }) => {
         <div className="bg-[var(--card)] border-l-4 border-[var(--route)] rounded-lg p-3 font-sans text-sm min-h-[60px] flex items-center">
           {isAtCheckpoint ? (
             <div>
-              <b>Point {closestIndex}/{TOTAL_KM} · {CHECKPOINTS[closestIndex]}</b>
+              <b>Checkpoint {closestCheckpointIndex + 1}/7 · {CHECKPOINTS[closestCheckpointIndex]} ({CHECKPOINT_KMS[closestCheckpointIndex]} KM)</b>
               <br />
-              {closestIndex === 0
-                ? 'Start line – warm up and flag off.'
-                : closestIndex === TOTAL_KM
-                ? `Finish line! ${finishTimeStr} at your pace.`
-                : `${closestIndex} km done, ${TOTAL_KM - closestIndex} km to go. ETA ${formatTime(closestIndex * pace)} at ${pace} min/km. Next: ${CHECKPOINTS[closestIndex + 1]}.`}
+              {closestCheckpointIndex === 0
+                ? 'Start Line (Municipal School) – Warm up and get ready for flag off!'
+                : closestCheckpointIndex === CHECKPOINTS.length - 1
+                ? `Finish Line (CM)! Total distance 3.0 KM completed in ${finishTimeStr} at your pace.`
+                : `${kmCovered.toFixed(1)} km completed, ${kmRemaining.toFixed(1)} km to go. Next Landmark: ${CHECKPOINTS[closestCheckpointIndex + 1]}.`}
             </div>
           ) : (
             <div>
-              <b>{kmCovered.toFixed(1)} km</b> · heading to Point {nextCheckpointIndex}: {CHECKPOINTS[nextCheckpointIndex]}
+              <b>{kmCovered.toFixed(1)} KM covered</b> · Heading towards Landmark {nextCheckpointIndex + 1}: {CHECKPOINTS[nextCheckpointIndex]} ({CHECKPOINT_KMS[nextCheckpointIndex]} KM)
             </div>
           )}
         </div>
 
         {/* Checkpoint Buttons */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-sans">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 font-sans">
           {CHECKPOINTS.map((n, i) => {
             const f = getCheckpointFraction(i);
-            const at = Math.abs(kmCovered - i) < 0.12 || (i === TOTAL_KM && fraction > 0.94);
+            const at = Math.abs(fraction - f) < 0.04;
             return (
               <button
                 key={i}
@@ -582,15 +606,15 @@ export const MarathonRouteMap = ({ className = '' }) => {
                     : 'border-[var(--line)] bg-[var(--card)] text-[var(--ink)] hover:border-[var(--route2)] hover:bg-[var(--bg)]'
                 }`}
               >
-                <b className="text-[var(--route2)] text-[13px] block">Km {i}</b>
-                <span className="text-xs block truncate">{n}</span>
+                <b className="text-[var(--route2)] text-[12px] block">{CHECKPOINT_KMS[i]} km</b>
+                <span className="text-[11px] block truncate font-medium">{n}</span>
               </button>
             );
           })}
         </div>
 
-        <p className="text-xs text-[var(--mut)] m-0 pt-1 font-sans">
-          Checkpoints are spaced evenly at 1 km each along the traced route. Confirm exact positions with the organisers.
+        <p className="text-xs text-[var(--mut)] m-0 pt-1 font-sans text-center">
+          3.0 KM Official Marathon Course • Flag off at Municipal School and Finish at CM.
         </p>
 
       </div>
