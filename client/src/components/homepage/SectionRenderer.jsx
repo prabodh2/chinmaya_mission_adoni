@@ -138,58 +138,74 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'activities':
       return (
-        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left pb-2 border-b border-slate-200/60">
             <div>
-              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest">
+              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest block mb-1">
                 {section.subtitle || 'GALLERY & HIGHLIGHTS'}
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-                {section.title || 'MOVEMENT ACTIVITIES'}
+                {section.title || 'MOVEMENT ACTIVITIES & HIGHLIGHTS'}
               </h2>
             </div>
             {section.primaryButtonText && (
-              <Link to={section.primaryButtonLink || '/activities'} className="btn-secondary py-2.5 px-6 text-xs text-decoration-none">
+              <Link
+                to={section.primaryButtonLink || '/activities'}
+                className="btn-secondary py-2.5 px-5 text-xs font-bold text-decoration-none whitespace-nowrap shadow-sm hover:shadow"
+              >
                 <span>{section.primaryButtonText}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
           </div>
 
           {activities && activities.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
               {activities.map((act) => (
-                <div
+                <article
                   key={act._id || act.title}
-                  className="rounded-[24px] overflow-hidden bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] hover:border-[var(--orange)]/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 flex flex-col h-full overflow-hidden group"
                 >
-                  <div>
-                    <div className="relative aspect-[16/10] sm:h-48 w-full overflow-hidden bg-slate-900/10">
-                      <img
-                        src={act.imageUrl}
-                        alt={act.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out block"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
-                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+                  {/* Full-width Image Area */}
+                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 block">
+                    <img
+                      src={act.imageUrl}
+                      alt={act.title}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+                    
+                    {act.category && (
+                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
                         {act.category}
                       </span>
-                    </div>
-                    <div className="p-5 sm:p-6 space-y-2 text-left">
-                      <h4 className="text-base font-black font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1">
-                        {act.title}
-                      </h4>
-                      <p className="text-xs sm:text-[13px] text-[var(--text-muted)] line-clamp-3 leading-relaxed font-medium">
-                        {act.description}
-                      </p>
+                    )}
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="p-5 sm:p-6 flex flex-col flex-1 text-left">
+                    <h3 className="text-base sm:text-lg font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-2 mb-2">
+                      {act.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed flex-1">
+                      {act.description}
+                    </p>
+
+                    <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[var(--orange)]">
+                      <span className="text-[11px] uppercase tracking-wider text-slate-500">Movement Drive</span>
+                      <span className="inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                        <span>Learn more</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center text-xs text-[var(--text-muted)] bg-[var(--bg-secondary)] rounded-2xl">
-              Activities will appear here once created.
+            <div className="p-10 text-center text-xs font-semibold text-slate-500 bg-white border border-slate-200 rounded-2xl">
+              Activities will appear here once published.
             </div>
           )}
         </section>

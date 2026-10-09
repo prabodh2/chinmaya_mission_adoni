@@ -15,70 +15,70 @@ import {
   Calendar,
 } from 'lucide-react';
 
-// Reusable Activity Card Component (Compact 2-per-row design)
+// Reusable Activity Card Component (Classic, Clean, Standardized Design)
 const ActivityCard = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-[24px] bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] hover:border-[var(--orange)]/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between overflow-hidden group">
-      <div>
-        {/* Card Image Container */}
-        <div className="relative aspect-[16/10] sm:h-48 w-full overflow-hidden bg-slate-900/10">
-          <img
-            src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
-            alt={activity.imageAlt || activity.title}
-            onError={(e) => {
-              if (activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya')) {
-                e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
-              } else if (activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara')) {
-                e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
-              } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
-                e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-              } else if (activity.id === 'chinmaya-yuva-kendra' || activity.title?.toLowerCase().includes('chyk')) {
-                e.currentTarget.src = '/assets/images/activity-chyk.jpg';
-              }
-            }}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
-          
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+    <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden group">
+      {/* Full-width Image Area (No blank space beside image) */}
+      <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-100 block">
+        <img
+          src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+          alt={activity.imageAlt || activity.title}
+          onError={(e) => {
+            if (activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya')) {
+              e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+            } else if (activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara')) {
+              e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+            } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
+              e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+            } else if (activity.id === 'chinmaya-yuva-kendra' || activity.title?.toLowerCase().includes('chyk')) {
+              e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+            }
+          }}
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+        
+        {activity.category && (
+          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
             {activity.category}
           </span>
+        )}
 
-          <button
-            onClick={() => onSelect(activity)}
-            className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-md text-slate-900 hover:bg-white transition-all shadow-md hover:scale-105"
-            title="Enlarge Image"
-            aria-label={`Enlarge image for ${activity.title}`}
-          >
-            <Maximize2 className="w-3.5 h-3.5 text-[var(--orange)]" />
-          </button>
-        </div>
-
-        {/* Card Content Body */}
-        <div className="p-5 sm:p-6 space-y-2.5 text-left">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
-              {activity.icon || <Sparkles className="w-4 h-4" />}
-            </div>
-            <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1">
-              {activity.title}
-            </h3>
-          </div>
-
-          <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed line-clamp-3 font-medium">
-            {activity.description}
-          </p>
-        </div>
+        <button
+          onClick={() => onSelect(activity)}
+          className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm"
+          title="Enlarge Image"
+          aria-label={`Enlarge image for ${activity.title}`}
+        >
+          <Maximize2 className="w-3.5 h-3.5" />
+        </button>
       </div>
 
-      {/* Card Footer Meta */}
-      {activity.imageSource && (
-        <div className="px-5 sm:px-6 pb-4 pt-2.5 border-t border-[rgba(11,35,64,0.06)] text-[10px] font-bold text-[var(--text-muted)] flex items-center justify-between">
-          <span className="truncate max-w-[65%]">Source: {activity.imageSource}</span>
-          <span className="text-[var(--orange)] font-extrabold tracking-wider uppercase whitespace-nowrap">CHINMAYA MISSION</span>
+      {/* Card Body */}
+      <div className="p-5 sm:p-6 flex flex-col flex-1 text-left">
+        <div className="flex items-center gap-3 mb-2.5">
+          <div className="w-9 h-9 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+            {activity.icon || <Sparkles className="w-4 h-4" />}
+          </div>
+          <h3 className="text-base sm:text-lg font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-2">
+            {activity.title}
+          </h3>
         </div>
-      )}
+
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3 flex-1 mb-4 font-normal">
+          {activity.description}
+        </p>
+
+        {/* Card Footer Meta */}
+        <div className="mt-auto pt-3.5 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+          <span className="truncate max-w-[60%]">
+            {activity.imageSource ? `Source: ${activity.imageSource}` : 'Adoni Wing'}
+          </span>
+          <span className="text-[var(--orange)] font-bold uppercase tracking-wider text-[10px]">Chinmaya Mission</span>
+        </div>
+      </div>
     </article>
   );
 };
@@ -86,51 +86,49 @@ const ActivityCard = ({ activity, onSelect }) => {
 // Reusable CHYK Feature Section Component
 const ChykFeatureSection = ({ activity, onSelect }) => {
   return (
-    <article className="rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] p-6 sm:p-10 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    <article className="rounded-2xl bg-white border border-slate-200/90 shadow-sm p-6 sm:p-10 relative overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left Column: Visual Image */}
         <div className="lg:col-span-5 order-1">
-          <div className="relative rounded-2xl overflow-hidden border-2 border-[var(--orange)] shadow-xl group">
+          <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-100">
             <img
               src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
               alt={activity.imageAlt || activity.title}
               onError={(e) => {
                 e.currentTarget.src = '/assets/images/activity-chyk.jpg';
               }}
-              className="w-full h-72 sm:h-[380px] object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="eager"
+              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 block"
+              loading="lazy"
             />
-            <span className="absolute top-4 left-4 px-4 py-1.5 rounded-full bg-[var(--orange)] text-white font-extrabold text-xs tracking-wider uppercase shadow-md">
+            <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--orange)] text-white font-bold text-[11px] tracking-wider uppercase shadow-sm">
               {activity.category}
             </span>
             <button
               onClick={() => onSelect(activity)}
-              className="absolute bottom-4 right-4 p-3 rounded-full bg-black/80 text-white hover:bg-black transition-colors border border-white/20"
+              className="absolute bottom-3 right-3 p-2.5 rounded-full bg-black/75 backdrop-blur-sm text-white hover:bg-black transition-colors border border-white/20"
               aria-label="Enlarge CHYK Activity Image"
             >
-              <Maximize2 className="w-5 h-5 text-[var(--yellow)]" />
+              <Maximize2 className="w-4 h-4 text-[var(--yellow)]" />
             </button>
           </div>
         </div>
 
         {/* Right Column: CHYK Content */}
-        <div className="lg:col-span-7 space-y-5 text-left order-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs uppercase tracking-widest border border-[var(--orange)]/30">
-            <Zap className="w-4 h-4 fill-current" />
+        <div className="lg:col-span-7 space-y-4 text-left order-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] font-bold text-xs uppercase tracking-widest border border-[var(--orange)]/25">
+            <Zap className="w-3.5 h-3.5 fill-current" />
             <span>CHINMAYA YUVA KENDRA • YOUTH WING</span>
           </div>
 
-          <h3 className="text-2xl sm:text-4xl font-black font-heading text-[var(--text-primary)] leading-tight">
+          <h3 className="text-2xl sm:text-3xl font-bold font-heading text-[var(--text-primary)] leading-tight">
             {activity.title}
           </h3>
 
-          <p className="text-sm sm:text-base text-[var(--text-primary)] font-semibold leading-relaxed p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
+          <p className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed p-4 rounded-xl bg-slate-50 border border-slate-200/80">
             "{activity.description}"
           </p>
 
-          <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
             {activity.additionalDescription}
           </p>
 
@@ -138,7 +136,7 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
             {['KNOWLEDGE', 'DISCIPLINE', 'CONFIDENCE', 'COMPASSION', 'SERVICE'].map((tag) => (
               <span
                 key={tag}
-                className="px-3.5 py-1.5 rounded-xl bg-white border border-[rgba(11,35,64,0.08)] text-[var(--orange)] font-extrabold text-[11px] tracking-wider uppercase shadow-sm"
+                className="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[11px] tracking-wider uppercase border border-slate-200"
               >
                 #{tag}
               </span>
@@ -540,7 +538,7 @@ export const ActivitiesPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
             {movementActivities.map((act) => (
               <ActivityCard
                 key={act.id || act._id || act.title}

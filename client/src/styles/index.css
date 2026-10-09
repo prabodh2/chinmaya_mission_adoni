@@ -249,50 +249,109 @@ img {
   transform: translateY(-2px);
 }
 
-/* Clean Standardized Card System */
-.glass-card,
-.card-standard {
-  background: #FFFFFF;
-  border: 1px solid rgba(11, 35, 64, 0.08);
-  border-radius: 1.25rem;
-  box-shadow: 0 4px 20px rgba(11, 35, 64, 0.04), 0 1px 3px rgba(11, 35, 64, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ==========================================================================
+   Classic, Clean, Professional Card Design System
+   ========================================================================== */
+
+/* Standard Card: White background, subtle border, gentle shadow, flexible flex-col layout */
+.card-standard,
+.glass-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1rem; /* 16px moderate classic radius */
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-standard:hover,
+.glass-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(234, 88, 12, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Card Image Containers: 100% full-width, top-aligned, no blank gaps */
+.card-image-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #F1F5F9;
+  display: block;
+}
+
+.card-image-wrap img,
+.card-media-cover {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease-out;
+}
+
+.card-standard:hover .card-image-wrap img,
+.card-standard:hover .card-media-cover {
+  transform: scale(1.03);
+}
+
+/* Card Content Body: balanced padding, flex growth, clear hierarchy */
+.card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+.card-title {
+  color: #0B2340;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+  overflow-wrap: break-word;
+}
+
+.card-desc {
+  color: #475569;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-weight: 400;
+  flex: 1 1 auto;
+  margin-bottom: 1rem;
+}
+
+/* Card Action / Footer Area: anchored to bottom */
+.card-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
-.glass-card:hover,
-.card-standard:hover {
-  box-shadow: 0 16px 36px rgba(11, 35, 64, 0.09), 0 4px 12px rgba(11, 35, 64, 0.04);
-  border-color: rgba(244, 81, 30, 0.35);
-  transform: translateY(-3px);
-}
-
-.card-gradient {
-  background: #FFFFFF;
-}
-
-/* Accent border card variants */
+/* Accent Card Borders */
 .card-accent-orange {
-  border-left: 4px solid var(--orange) !important;
+  border-left: 3px solid #EA580C !important;
 }
 
-.card-accent-cyan {
-  border-left: 4px solid var(--cyan) !important;
+.card-accent-navy {
+  border-left: 3px solid #0B2340 !important;
 }
 
-.card-accent-yellow {
-  border-left: 4px solid var(--yellow) !important;
-}
-
-.card-accent-green {
-  border-left: 4px solid var(--green) !important;
-}
-
-.card-media-cover {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.card-accent-blue {
+  border-left: 3px solid #0284C7 !important;
 }

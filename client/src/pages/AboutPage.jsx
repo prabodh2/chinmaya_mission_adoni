@@ -493,34 +493,34 @@ export const AboutPage = () => {
         </div>
 
         {/* 5 Mission Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
           {data.ourMission.items.map((item, index) => (
             <div
               key={item.id || index}
-              className={`p-6 sm:p-7 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] border-t-4 border-t-[var(--orange)] shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] hover:border-[var(--orange)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group h-full ${
+              className={`p-6 sm:p-7 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group h-full ${
                 index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
               }`}
             >
               <div>
-                <div className="w-12 h-12 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                <div className="w-11 h-11 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   {getMissionIcon(item.iconName)}
                 </div>
 
-                <span className="text-[10px] font-black text-[var(--orange)] tracking-wider uppercase mb-1.5 block">
+                <span className="text-[10px] font-bold text-[var(--orange)] tracking-wider uppercase mb-1 block">
                   PILLAR 0{index + 1}
                 </span>
 
-                <h3 className="text-lg font-black text-[var(--text-primary)] font-heading mb-2.5 group-hover:text-[var(--orange)] transition-colors leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] font-heading mb-2 group-hover:text-[var(--orange)] transition-colors leading-snug">
                   {item.title}
                 </h3>
 
-                <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                   {item.description}
                 </p>
               </div>
 
-              <div className="mt-5 pt-3.5 border-t border-[rgba(11,35,64,0.06)] flex items-center justify-between text-[11px] font-bold text-[var(--text-muted)] group-hover:text-[var(--orange)]">
-                <span>ACTION IN ADONI</span>
+              <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 group-hover:text-[var(--orange)]">
+                <span>Action in Adoni</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -591,81 +591,84 @@ export const AboutPage = () => {
 
       {/* 8. OUR ACTIVITIES SECTION */}
       <section className="px-4 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 space-y-3">
           <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
             TEMPLES & DEVOTIONAL GROUPS
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
             {data.ourActivities.heading}
           </h2>
-          <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
             {data.ourActivities.intro}
           </p>
         </div>
 
-        {/* 4 Interactive Activity Cards Grid (2 cards per line, remaining cards underneath) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7 max-w-4xl mx-auto">
+        {/* 4 Standardized Activity & Temple Cards (Clean 2-Column Responsive Grid) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
           {data.ourActivities.cards.map((card) => (
-            <div
+            <article
               key={card.id || card.title}
-              className={`rounded-[24px] border overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_rgba(11,35,64,0.04),0_1px_3px_rgba(11,35,64,0.03)] hover:shadow-[0_16px_40px_rgba(11,35,64,0.09)] flex flex-col justify-between group ${
+              className={`bg-white rounded-2xl border transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col h-full overflow-hidden group ${
                 card.featured
-                  ? 'bg-white border-2 border-[var(--orange)]'
-                  : 'bg-white border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/50'
+                  ? 'border-[var(--orange)]/70 ring-1 ring-[var(--orange)]/20'
+                  : 'border-slate-200/90 hover:border-[var(--orange)]/50'
               }`}
             >
-              <div>
-                <div className="relative aspect-[16/10] sm:h-48 overflow-hidden bg-slate-900/10">
-                  <img
-                    src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
-                    alt={card.title}
-                    onError={(e) => {
-                      if (card.id === 'act-1' || card.title?.toLowerCase().includes('sanjeevaraya')) {
-                        e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
-                      } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
-                        e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
-                      } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
-                        e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-                      } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
-                        e.currentTarget.src = '/assets/images/activity-chyk.jpg';
-                      }
-                    }}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    loading="eager"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
-                  
-                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+              {/* Full-width Top Image (Zero blank space beside image) */}
+              <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-100 block">
+                <img
+                  src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+                  alt={card.title}
+                  onError={(e) => {
+                    if (card.id === 'act-1' || card.title?.toLowerCase().includes('sanjeevaraya')) {
+                      e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+                    } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
+                      e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+                    } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
+                      e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                    } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
+                      e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+                    }
+                  }}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+                
+                {card.badge && (
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
                     {card.badge}
                   </span>
-                </div>
+                )}
+              </div>
 
-                <div className="p-5 sm:p-6 space-y-2.5 text-left">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
-                      {getActivityIcon(card.iconName)}
-                    </div>
-                    <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1">
-                      {card.title}
-                    </h3>
+              {/* Card Body with Consistent Padding & Structured Flow */}
+              <div className="p-6 sm:p-7 flex flex-col flex-1 text-left">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+                    {getActivityIcon(card.iconName)}
                   </div>
+                  <h3 className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-2">
+                    {card.title}
+                  </h3>
+                </div>
 
-                  <p className="text-xs sm:text-[13px] text-[var(--text-muted)] leading-relaxed line-clamp-3 font-medium">
-                    {card.content}
-                  </p>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-4 flex-1 mb-6">
+                  {card.content}
+                </p>
+
+                {/* Bottom Action Button Aligned Across Rows */}
+                <div className="mt-auto pt-4 border-t border-slate-100">
+                  <Link
+                    to="/activities"
+                    className="btn-secondary w-full justify-center text-xs py-2.5 px-4 text-decoration-none font-bold shadow-sm"
+                  >
+                    <span>EXPLORE ACTIVITY DETAILS</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
-
-              <div className="px-5 sm:px-6 pb-5 pt-1">
-                <Link
-                  to="/activities"
-                  className="btn-secondary w-full justify-center text-xs py-2.5 px-4 text-decoration-none font-bold"
-                >
-                  <span>LEARN MORE ABOUT ACTIVITIES</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>
