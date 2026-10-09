@@ -445,21 +445,16 @@ export const ActivitiesPage = () => {
 
       {/* 2. SECTION 1: SPIRITUALITY & DEVOTION */}
       <section className="space-y-8">
-        <div className="flex items-center gap-3 pb-4 border-b border-[var(--border-color)]">
-          <div className="w-10 h-10 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center">
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] mx-auto">
             <Landmark className="w-5 h-5" />
           </div>
-          <div>
-            <span className="text-[11px] font-extrabold text-[var(--orange)] uppercase tracking-wider block">
-              SECTION 01
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-              SPIRITUALITY & DEVOTION
-            </h2>
-          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+            SPIRITUALITY & DEVOTION
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
           {spiritualDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -472,21 +467,16 @@ export const ActivitiesPage = () => {
 
       {/* 3. SECTION 2: CULTURE & DEVOTION */}
       <section className="space-y-8">
-        <div className="flex items-center gap-3 pb-4 border-b border-[var(--border-color)]">
-          <div className="w-10 h-10 rounded-2xl bg-[var(--cyan)]/15 text-[var(--cyan)] flex items-center justify-center">
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--cyan)]/10 text-[var(--cyan)] mx-auto">
             <Heart className="w-5 h-5" />
           </div>
-          <div>
-            <span className="text-[11px] font-extrabold text-[var(--cyan)] uppercase tracking-wider block">
-              SECTION 02
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-              CULTURE & DEVOTION
-            </h2>
-          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+            CULTURE & DEVOTION
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
           {cultureDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -499,18 +489,13 @@ export const ActivitiesPage = () => {
 
       {/* 4. SECTION 3: YOUTH & LEADERSHIP (SPECIAL CHYK SECTION) */}
       <section className="space-y-8">
-        <div className="flex items-center gap-3 pb-4 border-b border-[var(--border-color)]">
-          <div className="w-10 h-10 rounded-2xl bg-[var(--orange)] text-white flex items-center justify-center shadow-lg">
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)] text-white mx-auto shadow-sm">
             <Zap className="w-5 h-5 fill-current" />
           </div>
-          <div>
-            <span className="text-[11px] font-extrabold text-[var(--orange)] uppercase tracking-wider block">
-              SECTION 03
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-              YOUTH & LEADERSHIP
-            </h2>
-          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+            YOUTH & LEADERSHIP
+          </h2>
         </div>
 
         {chykActivity && (
@@ -521,21 +506,16 @@ export const ActivitiesPage = () => {
         )}
       </section>
 
-      {/* 5. SECTION 4: MOVEMENT & COMMUNITY INITIATIVES */}
+      {/* 5. SECTION 4: COMMUNITY & MOVEMENT INITIATIVES */}
       {movementActivities.length > 0 && (
         <section className="space-y-8">
-          <div className="flex items-center gap-3 pb-4 border-b border-[var(--border-color)]">
-            <div className="w-10 h-10 rounded-2xl bg-[var(--yellow)]/15 text-[var(--orange)] flex items-center justify-center">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--yellow)]/20 text-[var(--orange)] mx-auto">
               <Sparkles className="w-5 h-5" />
             </div>
-            <div>
-              <span className="text-[11px] font-extrabold text-[var(--orange)] uppercase tracking-wider block">
-                SECTION 04
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
-                COMMUNITY & MOVEMENT INITIATIVES
-              </h2>
-            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+              COMMUNITY & MOVEMENT INITIATIVES
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
