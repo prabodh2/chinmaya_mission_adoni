@@ -402,10 +402,7 @@ export const AboutPage = () => {
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
-              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-                FOUNDATION & PURPOSE
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)] mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
                 {data.whoWeAre.heading}
               </h2>
             </div>
@@ -543,11 +540,6 @@ export const AboutPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)] text-white font-extrabold text-xs tracking-widest uppercase shadow-lg shadow-[var(--orange)]/30">
-                <Zap className="w-4 h-4 fill-current" />
-                <span>YOUTH WING • CHYK ADONI</span>
-              </div>
-
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
                 {data.chykSection.heading}
               </h2>
@@ -598,9 +590,6 @@ export const AboutPage = () => {
       {/* 8. OUR ACTIVITIES SECTION */}
       <section className="px-4 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 space-y-3">
-          <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-            TEMPLES & DEVOTIONAL GROUPS
-          </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
             {data.ourActivities.heading}
           </h2>
@@ -683,9 +672,6 @@ export const AboutPage = () => {
       <section className="px-4 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-              EVERLASTING INSPIRATION
-            </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
               {data.continuingLegacy.heading}
             </h2>
@@ -715,11 +701,6 @@ export const AboutPage = () => {
       <section className="px-4 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--cyan)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-6">
           <div className="max-w-4xl mx-auto space-y-5">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-extrabold text-[var(--cyan)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--cyan)]/10 border border-[var(--cyan)]/20">
-                SUMMARY & IMPACT
-              </span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
               {data.conclusion?.heading || 'Conclusion'}
             </h2>
