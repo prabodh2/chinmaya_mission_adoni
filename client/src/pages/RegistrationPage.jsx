@@ -20,6 +20,7 @@ import {
   Phone,
   Calendar,
   Briefcase,
+  GraduationCap,
   Shirt,
   Sparkles,
   ShieldCheck,
@@ -438,7 +439,7 @@ export const RegistrationPage = () => {
               {indErrors.fullName && <p className="text-xs text-red-500 font-bold mt-1">{indErrors.fullName}</p>}
             </div>
 
-            {/* Age & Standard / Class */}
+            {/* Age & Profession / Occupation */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
@@ -458,24 +459,6 @@ export const RegistrationPage = () => {
 
               <div>
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                  Standard / Class
-                </label>
-                <input
-                  type="text"
-                  disabled={!isRegistrationOpen}
-                  value={indForm.standard}
-                  onChange={(e) => setIndForm({ ...indForm, standard: e.target.value })}
-                  placeholder="e.g. 8th, 9th, 10th, Inter, Degree..."
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
-                />
-              </div>
-            </div>
-
-            {/* Profession & Student Toggle */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
-              <div>
-                <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
                   Profession / Occupation
                 </label>
                 <div className="relative">
@@ -490,45 +473,62 @@ export const RegistrationPage = () => {
                   />
                 </div>
               </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                  Are you a Student? *
-                </label>
-                <div className="grid grid-cols-2 gap-3 pt-1">
-                  <button
-                    type="button"
-                    disabled={!isRegistrationOpen}
-                    onClick={() => setIndForm({ ...indForm, isStudent: true })}
-                    className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
-                      indForm.isStudent
-                        ? 'bg-[var(--orange)]/15 border-[var(--orange)] text-[var(--orange)]'
-                        : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
-                    }`}
-                  >
-                    YES, I AM A STUDENT
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={!isRegistrationOpen}
-                    onClick={() => setIndForm({ ...indForm, isStudent: false, institutionName: '', otherInstitution: '' })}
-                    className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
-                      !indForm.isStudent
-                        ? 'bg-[var(--cyan)]/15 border-[var(--cyan)] text-[var(--cyan)]'
-                        : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
-                    }`}
-                  >
-                    NO, INDIVIDUAL
-                  </button>
-                </div>
-              </div>
-
             </div>
 
-            {/* Institution Searchable Dropdown if Student */}
+            {/* Student Toggle */}
+            <div>
+              <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                Are you a Student? *
+              </label>
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <button
+                  type="button"
+                  disabled={!isRegistrationOpen}
+                  onClick={() => setIndForm({ ...indForm, isStudent: true })}
+                  className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
+                    indForm.isStudent
+                      ? 'bg-[var(--orange)]/15 border-[var(--orange)] text-[var(--orange)]'
+                      : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
+                  }`}
+                >
+                  YES, I AM A STUDENT
+                </button>
+
+                <button
+                  type="button"
+                  disabled={!isRegistrationOpen}
+                  onClick={() => setIndForm({ ...indForm, isStudent: false, standard: '', institutionName: '', otherInstitution: '' })}
+                  className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
+                    !indForm.isStudent
+                      ? 'bg-[var(--cyan)]/15 border-[var(--cyan)] text-[var(--cyan)]'
+                      : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
+                  }`}
+                >
+                  NO, INDIVIDUAL
+                </button>
+              </div>
+            </div>
+
+            {/* Student Specific Fields (Standard/Class & School/College Dropdown) */}
             {indForm.isStudent && (
               <div className="space-y-4 animate-in fade-in">
+                <div>
+                  <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                    Standard / Class
+                  </label>
+                  <div className="relative">
+                    <GraduationCap className="w-5 h-5 text-[var(--orange)] absolute left-3.5 top-3.5" />
+                    <input
+                      type="text"
+                      disabled={!isRegistrationOpen}
+                      value={indForm.standard}
+                      onChange={(e) => setIndForm({ ...indForm, standard: e.target.value })}
+                      placeholder="e.g. 8th, 9th, 10th, Inter, Degree..."
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
                     School / College Name in Adoni *
