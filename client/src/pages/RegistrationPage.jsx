@@ -566,17 +566,20 @@ export const RegistrationPage = () => {
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
                   Contact Mobile Number *
                 </label>
-                <div className="relative">
-                  <Phone className="w-5 h-5 text-[var(--green)] absolute left-3.5 top-3.5" />
+                <div className="relative flex items-center">
+                  <div className="absolute left-3.5 flex items-center gap-1.5 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2.5">
+                    <Phone className="w-4 h-4 text-[var(--orange)]" />
+                    <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                  </div>
                   <input
                     type="tel"
                     required
                     disabled={!isRegistrationOpen}
                     value={indForm.contactNumber}
                     onChange={(e) => setIndForm({ ...indForm, contactNumber: formatPhoneInput(e.target.value) })}
-                    placeholder="+91 98765 43210"
-                    maxLength={15}
-                    className={`w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
+                    placeholder="98765 43210"
+                    maxLength={12}
+                    className={`w-full pl-20 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
                       indErrors.contactNumber ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
                     }`}
                   />
@@ -699,15 +702,21 @@ export const RegistrationPage = () => {
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
                   Contact Phone Number *
                 </label>
-                <input
-                  type="tel"
-                  required
-                  value={bulkForm.phone}
-                  onChange={(e) => setBulkForm({ ...bulkForm, phone: formatPhoneInput(e.target.value) })}
-                  placeholder="+91 98765 43210"
-                  maxLength={15}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
-                />
+                <div className="relative flex items-center">
+                  <div className="absolute left-3.5 flex items-center gap-1.5 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2.5">
+                    <Phone className="w-4 h-4 text-[var(--cyan)]" />
+                    <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                  </div>
+                  <input
+                    type="tel"
+                    required
+                    value={bulkForm.phone}
+                    onChange={(e) => setBulkForm({ ...bulkForm, phone: formatPhoneInput(e.target.value) })}
+                    placeholder="98765 43210"
+                    maxLength={12}
+                    className="w-full pl-20 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
+                  />
+                </div>
               </div>
             </div>
 

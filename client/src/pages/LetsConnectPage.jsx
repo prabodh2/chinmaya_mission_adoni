@@ -170,16 +170,22 @@ export const LetsConnectPage = () => {
                 <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
                   Contact Number *
                 </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: formatPhoneInput(e.target.value) })}
-                  placeholder="+91 98765 43210"
-                  maxLength={15}
-                  className="w-full py-3 px-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
-                />
+                <div className="relative flex items-center">
+                  <div className="absolute left-3.5 flex items-center gap-1.5 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2.5">
+                    <Phone className="w-4 h-4 text-[var(--orange)]" />
+                    <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: formatPhoneInput(e.target.value) })}
+                    placeholder="98765 43210"
+                    maxLength={12}
+                    className="w-full pl-20 pr-4 py-3 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                  />
+                </div>
               </div>
             </div>
 
