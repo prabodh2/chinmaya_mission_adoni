@@ -521,11 +521,6 @@ export const AboutPage = () => {
                   {item.description}
                 </p>
               </div>
-
-              <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500 group-hover:text-[var(--orange)]">
-                <span>Action in Adoni</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </div>
             </div>
           ))}
         </div>
