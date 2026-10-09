@@ -109,6 +109,14 @@ export function App() {
                   }
                 />
                 <Route
+                  path="/admin/lets-connect"
+                  element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboardPage defaultTab="LETS_CONNECT" />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/admin/images"
                   element={
                     <ProtectedRoute requireAdmin={true}>

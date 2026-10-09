@@ -13,6 +13,7 @@ import {
 import { HomePageManager } from './admin/HomePageManager';
 import { FooterManager } from './admin/FooterManager';
 import { AdminImagesPage } from './admin/AdminImagesPage';
+import { LetsConnectManager } from './admin/LetsConnectManager';
 import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
 import { TshirtSummary } from '../components/admin/TshirtSummary';
 import { ClassSummary } from '../components/admin/ClassSummary';
@@ -43,6 +44,7 @@ import {
   Shirt,
   Pencil,
   GraduationCap,
+  MessageSquare,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -51,6 +53,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
   const [activeTab, setActiveTab] = useState(
     defaultTab || (
+      window.location.pathname.includes('/admin/lets-connect') ? 'LETS_CONNECT' :
       window.location.pathname.includes('/admin/images') ? 'IMAGES' :
       window.location.pathname.includes('/admin/footer') ? 'FOOTER_CMS' :
       window.location.pathname.includes('/admin/home') ? 'HOME_PAGE' : 'STATS'
@@ -460,6 +463,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       <div className="flex flex-wrap items-center gap-2 p-2 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
         {[
           { id: 'STATS', label: 'Dashboard Stats', icon: Users },
+          { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
           { id: 'FOOTER_CMS', label: 'Footer CMS', icon: Settings },
@@ -487,6 +491,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           );
         })}
       </div>
+
+      {/* TAB: LET'S CONNECT INBOX */}
+      {activeTab === 'LETS_CONNECT' && <LetsConnectManager />}
 
       {/* TAB: IMAGES & MEDIA LIBRARY */}
       {activeTab === 'IMAGES' && <AdminImagesPage />}

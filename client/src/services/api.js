@@ -161,6 +161,8 @@ export const contactService = {
   submitMessage: (data) => api.post('/contact', data),
   getMyMessages: () => api.get('/contact/my-messages'),
   getMessagesAdmin: () => api.get('/contact/admin/all'),
+  updateStatus: (id, status) => api.patch(`/contact/admin/${id}/status`, { status }),
+  deleteMessage: (id) => api.delete(`/contact/admin/${id}`),
 };
 
 export const contentService = {
