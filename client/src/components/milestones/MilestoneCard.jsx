@@ -145,18 +145,6 @@ export const MilestoneCard = ({
           </div>
         )}
 
-        {/* Active Bus Station Status Indicator */}
-        {isActive && (
-          <div className="mt-2.5 pt-2 flex items-center justify-between text-[10px] font-extrabold text-[#F4511E]">
-            <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F4511E] animate-ping" />
-              BUS STOPPED AT {milestone.year.toUpperCase()}
-            </span>
-            <span className="text-[9px] font-bold text-[#3D607E] font-mono">
-              STOP #{milestone.id} OF 13
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );
