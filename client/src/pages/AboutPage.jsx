@@ -454,7 +454,9 @@ export const AboutPage = () => {
       </section>
 
       {/* 3. OUR MILESTONES (INTERACTIVE ROAD JOURNEY THROUGH TIME) */}
-      <MilestoneJourney />
+      <div className="!mt-4 sm:!mt-6">
+        <MilestoneJourney />
+      </div>
 
       {/* 4. OUR VISION SECTION */}
       <section className="px-4 max-w-5xl mx-auto">

@@ -155,7 +155,7 @@ export const MilestoneJourney = () => {
     <section
       ref={containerRef}
       id="our-milestones"
-      className="relative py-16 sm:py-24 bg-[var(--bg-primary,#FFFDF7)] overflow-hidden transition-colors"
+      className="relative pt-4 pb-16 sm:pt-6 sm:pb-24 bg-[var(--bg-primary,#FFFDF7)] overflow-hidden transition-colors"
       style={{
         backgroundImage: `
           radial-gradient(circle at 10% 15%, rgba(244, 81, 30, 0.05) 0%, transparent 40%),
