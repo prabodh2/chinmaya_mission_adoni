@@ -28,10 +28,10 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
   switch (section.type) {
     case 'hero':
       return (
-        <section className="relative min-h-[85vh] flex items-center justify-center py-16 px-4 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
+        <section className="relative min-h-[85vh] flex items-center justify-center py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--orange)]/10 pointer-events-none rounded-full blur-3xl" />
           
-          <div className="max-w-6xl mx-auto text-center space-y-8 relative z-10">
+          <div className="max-w-7xl mx-auto text-center space-y-8 relative z-10">
             {section.badgeText && (
               <div className="flex flex-wrap items-center justify-center gap-3 animate-in fade-in">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
@@ -113,8 +113,8 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'marathon':
       return (
-        <section className="py-8 px-4 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
-          <div className="max-w-6xl mx-auto space-y-6 text-center">
+        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
+          <div className="max-w-7xl mx-auto space-y-6 text-center">
             {section.title && (
               <div className="space-y-2">
                 <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
