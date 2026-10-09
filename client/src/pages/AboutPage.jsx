@@ -409,9 +409,6 @@ export const AboutPage = () => {
                 {data.whoWeAre.heading}
               </h2>
             </div>
-            <p className="text-xs sm:text-sm font-semibold text-[var(--text-muted)] max-w-md">
-              Rooted in knowledge, values and selfless community service since 2001.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
