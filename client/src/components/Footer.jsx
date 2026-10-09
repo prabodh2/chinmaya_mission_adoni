@@ -64,13 +64,19 @@ const FALLBACK_FOOTER = {
 };
 
 export const Footer = ({ overrideData = null }) => {
-  const [footerData, setFooterData] = useState(overrideData || FALLBACK_FOOTER);
-  const [loading, setLoading] = useState(!overrideData);
+  const [footerData, setFooterData] = useState(() => {
+    if (overrideData) return overrideData;
+    try {
+      const cached = localStorage.getItem('cached_footer_data');
+      return cached ? JSON.parse(cached) : FALLBACK_FOOTER;
+    } catch {
+      return FALLBACK_FOOTER;
+    }
+  });
 
   const loadFooter = () => {
     if (overrideData) {
       setFooterData(overrideData);
-      setLoading(false);
       return;
     }
 
@@ -79,12 +85,14 @@ export const Footer = ({ overrideData = null }) => {
       .then((res) => {
         if (res.data?.success && res.data?.data) {
           setFooterData(res.data.data);
+          try {
+            localStorage.setItem('cached_footer_data', JSON.stringify(res.data.data));
+          } catch {}
         }
       })
       .catch(() => {
-        setFooterData(FALLBACK_FOOTER);
-      })
-      .finally(() => setLoading(false));
+        // keep fallback or existing state
+      });
   };
 
   useEffect(() => {
@@ -105,8 +113,6 @@ export const Footer = ({ overrideData = null }) => {
       window.removeEventListener('focus', handleCmsUpdate);
     };
   }, [overrideData]);
-
-  if (loading) return null;
 
   // Handle Footer Disabled State
   if (footerData.isEnabled === false) {
