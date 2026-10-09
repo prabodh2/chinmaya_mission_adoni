@@ -4,14 +4,25 @@ const TOTAL_KM = 7;
 const PATH_D = "M300 153 L350 168 L590 150 L750 190 L865 196 L860 250 L750 460 L650 640 L530 775 L350 625 L90 425 L65 410 L90 260 L135 205 Z";
 
 const CHECKPOINTS = [
-  'Chinmaya Mission',
-  'Auditorium Front',
-  'Basaveshwara Circle – Brindavan Lodge',
-  'Vimala Residency',
-  'VRK Mall',
-  'Bus Stand',
-  'YMG Circle – Devi Nursing Home',
-  'Reliance Digital'
+  'CM (Start)',
+  'Municipal School',
+  'Mohan Reddy Traders',
+  'VHP',
+  'Anna Canteen',
+  'Grameena Bank',
+  'Reliance Digital',
+  'CM (Finish)'
+];
+
+const CHECKPOINT_OFFSETS = [
+  { ox: 15, oy: -32, anchor: 'middle' }, // Point 0: CM (Start)
+  { ox: 0, oy: -32, anchor: 'middle' },  // Point 1: Municipal School
+  { ox: 32, oy: -12, anchor: 'start' },  // Point 2: Mohan Reddy Traders
+  { ox: 32, oy: 6, anchor: 'start' },    // Point 3: VHP
+  { ox: 0, oy: 38, anchor: 'middle' },   // Point 4: Anna Canteen
+  { ox: -28, oy: 30, anchor: 'end' },    // Point 5: Grameena Bank
+  { ox: -32, oy: 6, anchor: 'end' },     // Point 6: Reliance Digital
+  { ox: -35, oy: -32, anchor: 'end' }    // Point 7: CM (Finish)
 ];
 
 const getCheckpointFraction = (i) => (i === TOTAL_KM ? 0.965 : i / TOTAL_KM);
@@ -137,14 +148,12 @@ export const MarathonRouteMap = ({ className = '' }) => {
     return CHECKPOINTS.map((name, i) => {
       const f = getCheckpointFraction(i);
       const q = pathRef.current.getPointAtLength(f * pathLength);
-      const dx = q.x - 480;
-      const dy = q.y - 420;
-      const m = Math.hypot(dx, dy) || 1;
-      const ox = q.x + (dx / m) * 34;
-      const oy = q.y + (dy / m) * 30;
-      const textAnchor = dx > 60 ? 'start' : dx < -60 ? 'end' : 'middle';
-      const parts = name.length > 22 ? name.split(' – ') : [name];
-      return { index: i, name, fraction: f, x: q.x, y: q.y, dx, dy, ox, oy, textAnchor, parts };
+      const offsetConfig = CHECKPOINT_OFFSETS[i] || { ox: 0, oy: 30, anchor: 'middle' };
+      const ox = q.x + offsetConfig.ox;
+      const oy = q.y + offsetConfig.oy;
+      const textAnchor = offsetConfig.anchor;
+      const parts = [name];
+      return { index: i, name, fraction: f, x: q.x, y: q.y, ox, oy, textAnchor, parts };
     });
   }, [pathLength]);
 
@@ -306,18 +315,18 @@ export const MarathonRouteMap = ({ className = '' }) => {
                 >
                   <text
                     x={item.ox}
-                    y={item.oy + (item.dy > 0 ? 10 : 0) - (item.parts.length - 1) * 8}
+                    y={item.oy}
                     textAnchor={item.textAnchor}
                     fontSize="14"
-                    fontWeight="700"
+                    fontWeight="800"
                     fill="var(--ink)"
+                    stroke="var(--card)"
+                    strokeWidth="3.5"
+                    strokeLinejoin="round"
+                    style={{ paintOrder: 'stroke fill' }}
                     fontFamily="system-ui, sans-serif"
                   >
-                    {item.parts.map((s, j) => (
-                      <tspan key={j} x={item.ox} dy={j ? 16 : 0}>
-                        {s}
-                      </tspan>
-                    ))}
+                    {item.name}
                   </text>
                 </g>
               ))}
