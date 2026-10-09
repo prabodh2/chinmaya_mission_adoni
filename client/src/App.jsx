@@ -46,9 +46,9 @@ export function App() {
       <AuthProvider>
         <Router>
           <ScrollToTop />
-          <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white">
+          <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white w-full max-w-full overflow-x-hidden">
             <Navbar />
-            <main className="flex-grow pt-18 sm:pt-22 lg:pt-26">
+            <main className="flex-grow pt-18 sm:pt-22 lg:pt-26 w-full max-w-full overflow-x-hidden">
               <Routes>
                 {/* Public Routes (Freely Accessible) */}
                 <Route path="/" element={<HomePage />} />

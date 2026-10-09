@@ -25,10 +25,10 @@ export const JourneyBus = ({
       aria-label="Chinmaya Mission Tour Bus"
     >
       {/* 1. Forward Headlight Beams (Shooting straight forward down the vertical road) */}
-      <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-28 h-36 pointer-events-none overflow-visible">
+      <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-28 h-36 pointer-events-none overflow-hidden">
         <svg
           viewBox="0 0 100 130"
-          className="w-full h-full opacity-80"
+          className="w-full h-full opacity-80 overflow-hidden"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >

@@ -50,9 +50,9 @@ export const JourneyRoad = ({
   pathRef,
 }) => {
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
+    <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden">
       <svg
-        className="w-full h-full overflow-visible"
+        className="w-full h-full overflow-hidden"
         viewBox={`0 0 1000 ${totalHeight}`}
         preserveAspectRatio="none"
         fill="none"

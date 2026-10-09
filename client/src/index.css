@@ -8,6 +8,9 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
+  width: 100%;
   background-color: #FFF0C5;
 }
 
@@ -15,15 +18,22 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
   background-color: #FFF0C5;
 }
 
 #root {
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
   background-color: #FFF0C5;
 }
