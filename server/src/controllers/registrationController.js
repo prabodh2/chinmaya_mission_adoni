@@ -215,7 +215,7 @@ export const getRegistrationById = async (req, res) => {
 
     // Strict Authorization: Only the owner or an administrator can view the full record
     const userRole = (req.user?.role || '').toLowerCase();
-    const isAdmin = userRole === 'admin' || userRole === 'super_admin';
+    const isAdmin = userRole === 'admin';
     const isOwner = req.user && (
       (registration.userId && registration.userId.toString() === req.user._id.toString()) ||
       (registration.contactNumber && registration.contactNumber === req.user.phone)

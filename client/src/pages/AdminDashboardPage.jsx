@@ -52,18 +52,31 @@ import {
 
 export const AdminDashboardPage = ({ defaultTab }) => {
   const { adminUser, user, isAdmin, logoutAdmin, logout } = useAuth();
-  const navigate = useNavigate();
+  const getTabFromUrl = () => {
+    if (defaultTab) return defaultTab;
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    if (path.includes('/admin/users')) return 'USERS';
+    if (path.includes('/admin/profile')) return 'ADMIN_PROFILE';
+    if (path.includes('/admin/registrations')) return 'REGISTRATIONS';
+    if (path.includes('/admin/event-config')) return 'EVENT_CONFIG';
+    if (path.includes('/admin/banners')) return 'BANNERS';
+    if (path.includes('/admin/activities')) return 'ACTIVITIES';
+    if (path.includes('/admin/about')) return 'ABOUT_CMS';
+    if (path.includes('/admin/change-password')) return 'PASSWORD';
+    if (path.includes('/admin/lets-connect')) return 'LETS_CONNECT';
+    if (path.includes('/admin/images')) return 'IMAGES';
+    if (path.includes('/admin/footer')) return 'FOOTER_CMS';
+    if (path.includes('/admin/home')) return 'HOME_PAGE';
+    return 'STATS';
+  };
 
-  const [activeTab, setActiveTab] = useState(
-    defaultTab || (
-      window.location.pathname.includes('/admin/users') ? 'USERS' :
-      window.location.pathname.includes('/admin/profile') ? 'ADMIN_PROFILE' :
-      window.location.pathname.includes('/admin/lets-connect') ? 'LETS_CONNECT' :
-      window.location.pathname.includes('/admin/images') ? 'IMAGES' :
-      window.location.pathname.includes('/admin/footer') ? 'FOOTER_CMS' :
-      window.location.pathname.includes('/admin/home') ? 'HOME_PAGE' : 'STATS'
-    )
-  ); // STATS | REGISTRATIONS | BATCHES | EVENT_CONFIG | BANNERS | ACTIVITIES | FAQS | PASSWORD
+  const [activeTab, setActiveTab] = useState(getTabFromUrl);
+
+  useEffect(() => {
+    if (defaultTab) {
+      setActiveTab(defaultTab);
+    }
+  }, [defaultTab]);
   const [stats, setStats] = useState(null);
   const [loadingStats, setLoadingStats] = useState(true);
 

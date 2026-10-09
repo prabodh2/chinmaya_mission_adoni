@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
       if (!saved) return null;
       const parsed = JSON.parse(saved);
       const role = (parsed?.role || '').toLowerCase();
-      return role === 'admin' || role === 'super_admin' ? parsed : null;
+      return role === 'admin' ? parsed : null;
     } catch {
       return null;
     }
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
           if (savedAdmin) {
             const parsed = JSON.parse(savedAdmin);
             const role = (parsed?.role || '').toLowerCase();
-            setAdminUser(role === 'admin' || role === 'super_admin' ? parsed : null);
+            setAdminUser(role === 'admin' ? parsed : null);
           } else {
             setAdminUser(null);
           }
@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }) => {
       if (res.data?.success && res.data?.data) {
         const { token: jwtToken, ...adminData } = res.data.data;
         const role = (adminData.role || '').toLowerCase();
-        if (role !== 'admin' && role !== 'super_admin') {
+        if (role !== 'admin') {
           return {
             success: false,
             message: 'Access denied: Administrator permissions are required.',
@@ -230,7 +230,7 @@ export const AuthProvider = ({ children }) => {
         const res = await authService.verifySession('admin');
         if (res.data?.success && res.data?.data) {
           const role = (res.data.data.role || '').toLowerCase();
-          if (role === 'admin' || role === 'super_admin') {
+          if (role === 'admin') {
             setAdminUser(res.data.data);
             localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(res.data.data));
           } else {
@@ -300,7 +300,7 @@ export const AuthProvider = ({ children }) => {
   const isAdminAuthenticated = Boolean(
     adminUser &&
     adminToken &&
-    ((adminUser.role || '').toLowerCase() === 'admin' || (adminUser.role || '').toLowerCase() === 'super_admin')
+    (adminUser.role || '').toLowerCase() === 'admin'
   );
 
   const isUserAuthenticated = Boolean(normalUser && normalToken);

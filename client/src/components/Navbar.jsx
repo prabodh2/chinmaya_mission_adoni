@@ -98,21 +98,11 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Admin Dashboard Quick Access if Admin Logged In */}
-              {isAdminAuthenticated && (
-                <Link to="/admin/dashboard" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white">
-                  <Shield className="w-3.5 h-3.5" />
-                  <span>ADMIN DASHBOARD</span>
-                </Link>
-              )}
-
-              {/* Registration CTA for Non-Admins */}
-              {!isAdminAuthenticated && (
-                <Link to="/register" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
-                  <Award className="w-3.5 h-3.5" />
-                  <span>REGISTER NOW</span>
-                </Link>
-              )}
+              {/* Registration CTA */}
+              <Link to="/register" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
+                <Award className="w-3.5 h-3.5" />
+                <span>REGISTER NOW</span>
+              </Link>
 
               {/* Logged in User Dropdown */}
               {isUserAuthenticated && normalUser ? (
@@ -282,25 +272,14 @@ export const Navbar = () => {
 
           {/* Mobile Bottom CTAs */}
           <div className="pt-3 border-t border-[var(--border-color)] flex flex-col gap-2.5">
-            {isAdminAuthenticated ? (
-              <Link
-                to="/admin/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white"
-              >
-                <Shield className="w-4 h-4" />
-                <span>ADMIN DASHBOARD</span>
-              </Link>
-            ) : (
-              <Link
-                to="/register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
-              >
-                <Award className="w-4 h-4" />
-                <span>REGISTER FOR MARATHON</span>
-              </Link>
-            )}
+            <Link
+              to="/register"
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
+            >
+              <Award className="w-4 h-4" />
+              <span>REGISTER FOR MARATHON</span>
+            </Link>
 
             {isUserAuthenticated && (
               <button

@@ -8,7 +8,7 @@ export const requireAdmin = (req, res, next) => {
   }
 
   const role = (req.user.role || '').toLowerCase();
-  if (role === 'admin' || role === 'super_admin') {
+  if (role === 'admin') {
     return next();
   }
 
@@ -30,7 +30,7 @@ export const requireRole = (...roles) => (req, res, next) => {
 
   const userRole = (req.user.role || '').toLowerCase();
   const normalized = roles.map((r) => r.toLowerCase());
-  if (normalized.includes(userRole) || userRole === 'admin' || userRole === 'super_admin') {
+  if (normalized.includes(userRole) || userRole === 'admin') {
     return next();
   }
 

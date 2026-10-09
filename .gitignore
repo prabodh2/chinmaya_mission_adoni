@@ -2,6 +2,7 @@
 node_modules/
 client/node_modules/
 server/node_modules/
+admin/node_modules/
 venv/
 .venv/
 
@@ -10,11 +11,13 @@ venv/
 *.env
 server/.env
 client/.env
+admin/.env
 atlas-credentials*.env
 
 # Production Builds & Dist
 dist/
 client/dist/
+admin/dist/
 build/
 server/dist/
 
