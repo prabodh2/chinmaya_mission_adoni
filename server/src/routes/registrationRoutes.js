@@ -36,12 +36,12 @@ router.get('/counts', getRegistrationCounts);
 // User's own registrations
 router.get('/my-registrations', protect, getUserRegistrations);
 
-// Query all registrations (supports admin filtering & search)
-router.get('/', getRegistrations);
+// Query all registrations (Admin only)
+router.get('/', protect, requireAdmin, getRegistrations);
 
-// Specific registration details
-router.get('/details/:id', getRegistrationById);
-router.get('/:registrationId', getRegistrationById);
+// Specific registration details (Protected: Owner or Admin)
+router.get('/details/:id', protect, getRegistrationById);
+router.get('/:registrationId', protect, getRegistrationById);
 
 // Admin-managed Edit & Delete
 router.put('/:registrationId', protect, requireAdmin, updateRegistration);

@@ -1,15 +1,17 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import axios from 'axios';
 import { authService, AUTH_KEYS, getAdminToken, getUserToken } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Admin Session State
+  // 1. Admin Session State (Dedicated to /admin panel)
   const [adminUser, setAdminUser] = useState(() => {
     try {
       const saved = localStorage.getItem(AUTH_KEYS.ADMIN_USER);
-      return saved ? JSON.parse(saved) : null;
+      if (!saved) return null;
+      const parsed = JSON.parse(saved);
+      const role = (parsed?.role || '').toLowerCase();
+      return role === 'admin' || role === 'super_admin' ? parsed : null;
     } catch {
       return null;
     }
@@ -17,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const [adminToken, setAdminToken] = useState(() => getAdminToken());
 
-  // User Session State
+  // 2. User Session State (Dedicated to public website & user panel)
   const [normalUser, setNormalUser] = useState(() => {
     try {
       const saved =
@@ -39,9 +41,17 @@ export const AuthProvider = ({ children }) => {
       if (!e.key || e.key === AUTH_KEYS.ADMIN_TOKEN || e.key === AUTH_KEYS.ADMIN_USER) {
         try {
           const savedAdmin = localStorage.getItem(AUTH_KEYS.ADMIN_USER);
-          setAdminUser(savedAdmin ? JSON.parse(savedAdmin) : null);
+          if (savedAdmin) {
+            const parsed = JSON.parse(savedAdmin);
+            const role = (parsed?.role || '').toLowerCase();
+            setAdminUser(role === 'admin' || role === 'super_admin' ? parsed : null);
+          } else {
+            setAdminUser(null);
+          }
           setAdminToken(getAdminToken());
-        } catch {}
+        } catch {
+          setAdminUser(null);
+        }
       }
 
       if (
@@ -57,7 +67,9 @@ export const AuthProvider = ({ children }) => {
             localStorage.getItem(AUTH_KEYS.LEGACY_USER);
           setNormalUser(savedUser ? JSON.parse(savedUser) : null);
           setNormalToken(getUserToken());
-        } catch {}
+        } catch {
+          setNormalUser(null);
+        }
       }
     };
 
@@ -71,22 +83,22 @@ export const AuthProvider = ({ children }) => {
     return window.location.pathname.startsWith('/admin');
   };
 
-  // Dynamic context user: returns adminUser if on /admin, otherwise normalUser (with smart fallbacks)
+  // Strictly segregated context user: Admin panel ONLY gets adminUser, User panel ONLY gets normalUser
   const activeUser = useMemo(() => {
     if (isCurrentTabAdmin()) {
-      return adminUser || normalUser || null;
+      return adminUser || null;
     }
-    return normalUser || adminUser || null;
+    return normalUser || null;
   }, [adminUser, normalUser]);
 
   const activeToken = useMemo(() => {
     if (isCurrentTabAdmin()) {
-      return adminToken || normalToken || '';
+      return adminToken || '';
     }
-    return normalToken || adminToken || '';
+    return normalToken || '';
   }, [adminToken, normalToken]);
 
-  // Public User Signup Handler
+  // Public User Signup Handler (Always assigns normal user role)
   const signup = async (formData) => {
     setLoading(true);
     try {
@@ -112,7 +124,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // User Login Handler (Phone + Password)
+  // Public User Login Handler (Phone + Password)
   const login = async ({ phone, email, password }) => {
     setLoading(true);
     try {
@@ -138,13 +150,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Dedicated Admin Login Handler (Does NOT overwrite user session)
+  // Dedicated Admin Login Handler (Strictly verifies admin role)
   const loginAdmin = async (email, password) => {
     setLoading(true);
     try {
       const res = await authService.loginAdmin({ email, password });
       if (res.data?.success && res.data?.data) {
         const { token: jwtToken, ...adminData } = res.data.data;
+        const role = (adminData.role || '').toLowerCase();
+        if (role !== 'admin' && role !== 'super_admin') {
+          return {
+            success: false,
+            message: 'Access denied: Administrator permissions are required.',
+          };
+        }
         setAdminUser(adminData);
         setAdminToken(jwtToken);
         localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(adminData));
@@ -155,7 +174,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       return {
         success: false,
-        message: err.response?.data?.message || 'Admin authentication failed',
+        message: err.response?.data?.message || 'Admin authentication failed. Please check your credentials.',
       };
     } finally {
       setLoading(false);
@@ -204,17 +223,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Refresh user data from server
+  // Refresh user data from server with role verification
   const refreshUser = async () => {
     if (adminToken) {
       try {
         const res = await authService.verifySession('admin');
         if (res.data?.success && res.data?.data) {
-          setAdminUser(res.data.data);
-          localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(res.data.data));
+          const role = (res.data.data.role || '').toLowerCase();
+          if (role === 'admin' || role === 'super_admin') {
+            setAdminUser(res.data.data);
+            localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(res.data.data));
+          } else {
+            logoutAdmin();
+          }
         }
       } catch (err) {
-        if (err.response?.status === 401) {
+        if (err.response?.status === 401 || err.response?.status === 403) {
           logoutAdmin();
         }
       }
@@ -273,7 +297,12 @@ export const AuthProvider = ({ children }) => {
     logoutUser();
   }, [logoutAdmin, logoutUser]);
 
-  const isAdminAuthenticated = Boolean(adminUser && adminToken && adminUser.role === 'admin');
+  const isAdminAuthenticated = Boolean(
+    adminUser &&
+    adminToken &&
+    ((adminUser.role || '').toLowerCase() === 'admin' || (adminUser.role || '').toLowerCase() === 'super_admin')
+  );
+
   const isUserAuthenticated = Boolean(normalUser && normalToken);
 
   return (
@@ -298,8 +327,8 @@ export const AuthProvider = ({ children }) => {
         logoutAll,
         isAdminAuthenticated,
         isUserAuthenticated,
-        isAuthenticated: isCurrentTabAdmin() ? isAdminAuthenticated : (isUserAuthenticated || isAdminAuthenticated),
-        isAdmin: isCurrentTabAdmin() ? isAdminAuthenticated : Boolean(adminUser?.role === 'admin'),
+        isAuthenticated: isCurrentTabAdmin() ? isAdminAuthenticated : isUserAuthenticated,
+        isAdmin: isAdminAuthenticated,
       }}
     >
       {children}

@@ -69,14 +69,9 @@ const isAdminTarget = (config) => {
 
 api.interceptors.request.use(
   (config) => {
-    // Determine appropriate token based on target endpoint and active tab
+    // Strictly isolate admin token and user token without cross-fallback
     const isAdmin = isAdminTarget(config);
-    const adminToken = getAdminToken();
-    const userToken = getUserToken();
-
-    const token = isAdmin
-      ? (adminToken || userToken)
-      : (userToken || adminToken);
+    const token = isAdmin ? getAdminToken() : getUserToken();
 
     if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;

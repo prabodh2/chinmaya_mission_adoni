@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Lock, Mail, KeyRound, Eye, EyeOff } from 'lucide-react';
+import { Shield, Lock, Mail, KeyRound, Eye, EyeOff, AlertTriangle } from 'lucide-react';
 
 export const AdminLoginPage = () => {
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -11,14 +12,24 @@ export const AdminLoginPage = () => {
   const { loginAdmin, loading } = useAuth();
   const navigate = useNavigate();
 
+  const redirectUrl = searchParams.get('redirect') || '/admin/dashboard';
+  const hasAccessDenied = searchParams.get('error') === 'access_denied';
+
+  useEffect(() => {
+    if (hasAccessDenied) {
+      setError('Access denied: Administrator permissions are required to view the Admin Control Panel.');
+    }
+  }, [hasAccessDenied]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     const res = await loginAdmin(email, password);
     if (res.success) {
-      navigate('/admin/dashboard');
+      const safeRedirect = redirectUrl.startsWith('/admin') ? redirectUrl : '/admin/dashboard';
+      navigate(safeRedirect, { replace: true });
     } else {
-      setError(res.message);
+      setError(res.message || 'Access denied: Invalid administrator credentials.');
     }
   };
 
@@ -42,20 +53,21 @@ export const AdminLoginPage = () => {
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-500 text-xs font-bold text-center">
-            {error}
+          <div className="p-4 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-500 text-xs font-bold text-center flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-              Admin Email / Username
+              Admin Email / Identifier
             </label>
             <div className="relative">
               <Mail className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -100,12 +112,15 @@ export const AdminLoginPage = () => {
           </button>
         </form>
 
-        <div className="text-center pt-3 text-[11px] text-[var(--text-muted)]">
-          Demo Admin Credentials: <br />
-          <span className="font-mono text-[var(--cyan)] font-bold">admin@anti-drug-marathon.org</span> / <span className="font-mono text-[var(--orange)] font-bold">adminpassword123</span>
+        <div className="text-center pt-2">
+          <Link to="/" className="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--orange)] text-decoration-none transition-colors">
+            ← Return to Public Website
+          </Link>
         </div>
 
       </div>
     </div>
   );
 };
+
+export default AdminLoginPage;

@@ -48,7 +48,7 @@ import {
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
-  const { user, isAdmin, logoutAdmin, logout } = useAuth();
+  const { adminUser, user, isAdmin, logoutAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(
@@ -447,17 +447,33 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           </div>
         </div>
 
-        <button
-          onClick={() => {
-            if (logoutAdmin) logoutAdmin();
-            else logout();
-            navigate('/admin/login');
-          }}
-          className="btn-secondary text-xs py-2.5 px-5 border-red-500/30 text-red-500"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>ADMIN LOGOUT</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-left">
+            <div className="w-8 h-8 rounded-full bg-[var(--cyan)] text-white flex items-center justify-center font-black text-xs shadow-sm">
+              {adminUser?.fullName ? adminUser.fullName.charAt(0).toUpperCase() : 'A'}
+            </div>
+            <div>
+              <p className="text-xs font-extrabold text-[var(--text-primary)] truncate max-w-[160px]">
+                {adminUser?.fullName || 'Chinmaya Admin'}
+              </p>
+              <span className="text-[10px] font-mono font-bold text-[var(--cyan)] block">
+                {adminUser?.email || adminUser?.phone || 'admin@anti-drug-marathon.org'}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              if (logoutAdmin) logoutAdmin();
+              else logout();
+              navigate('/admin/login');
+            }}
+            className="btn-secondary text-xs py-2.5 px-5 border-red-500/30 text-red-500"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>ADMIN LOGOUT</span>
+          </button>
+        </div>
       </div>
 
       {/* Admin Tabs Bar */}

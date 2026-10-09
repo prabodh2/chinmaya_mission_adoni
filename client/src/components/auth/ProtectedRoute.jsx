@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/signup' }) => {
+export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/login' }) => {
   const { isAdminAuthenticated, isUserAuthenticated, loading } = useAuth();
   const location = useLocation();
 
@@ -14,16 +14,16 @@ export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/
     );
   }
 
-  // Admin Routes Guard
+  // Admin Routes Guard: Strictly requires valid authenticated Admin role
   if (requireAdmin) {
     if (!isAdminAuthenticated) {
       const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
-      return <Navigate to={`/admin/login?redirect=${returnUrl}`} replace />;
+      return <Navigate to={`/admin/login?redirect=${returnUrl}&error=access_denied`} replace />;
     }
     return children;
   }
 
-  // Normal User Routes Guard
+  // Normal User Routes Guard: Requires authenticated User
   if (!isUserAuthenticated) {
     const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
     return <Navigate to={`${redirectTo}?redirect=${returnUrl}`} replace />;

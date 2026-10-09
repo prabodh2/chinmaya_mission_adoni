@@ -212,6 +212,23 @@ export const getRegistrationById = async (req, res) => {
         message: `Registration not found with ID: ${id}`,
       });
     }
+
+    // Strict Authorization: Only the owner or an administrator can view the full record
+    const userRole = (req.user?.role || '').toLowerCase();
+    const isAdmin = userRole === 'admin' || userRole === 'super_admin';
+    const isOwner = req.user && (
+      (registration.userId && registration.userId.toString() === req.user._id.toString()) ||
+      (registration.contactNumber && registration.contactNumber === req.user.phone)
+    );
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied: You are not authorized to view this registration record.',
+        errorCode: 'FORBIDDEN',
+      });
+    }
+
     res.json({ success: true, data: registration });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

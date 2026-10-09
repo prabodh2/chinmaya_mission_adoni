@@ -29,7 +29,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: {
+      type: String,
+      enum: ['user', 'admin', 'USER', 'ADMIN', 'super_admin', 'SUPER_ADMIN'],
+      default: 'user',
+      set: (v) => (v ? v.toLowerCase() : 'user'),
+    },
   },
   { timestamps: true }
 );
@@ -46,4 +51,3 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 };
 
 export default mongoose.model('User', userSchema);
-
