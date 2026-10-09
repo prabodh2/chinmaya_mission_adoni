@@ -3,6 +3,7 @@ import {
   signupUser,
   loginUser,
   loginAdmin,
+  verifySession,
   getProfile,
   updateProfile,
   changePassword,
@@ -23,6 +24,7 @@ router.post('/admin/login', loginLimiter, loginAdmin);
 router.post('/admin/change-password', protect, requireAdmin, changeAdminPassword);
 
 // User Profile & Settings (Authenticated)
+router.get('/verify', protect, verifySession);
 router.get('/me', protect, getProfile);
 router.get('/profile', protect, getProfile);
 router.put('/profile', protect, updateProfile);

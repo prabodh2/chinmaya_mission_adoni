@@ -1,29 +1,90 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import axios from 'axios';
-import { authService } from '../services/api';
+import { authService, AUTH_KEYS, getAdminToken, getUserToken } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
+  // Admin Session State
+  const [adminUser, setAdminUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('marathon_user');
+      const saved = localStorage.getItem(AUTH_KEYS.ADMIN_USER);
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
     }
   });
 
-  const [token, setToken] = useState(() => localStorage.getItem('marathon_token') || '');
+  const [adminToken, setAdminToken] = useState(() => getAdminToken());
+
+  // User Session State
+  const [normalUser, setNormalUser] = useState(() => {
+    try {
+      const saved =
+        localStorage.getItem(AUTH_KEYS.USER_USER) ||
+        localStorage.getItem(AUTH_KEYS.LEGACY_USER);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [normalToken, setNormalToken] = useState(() => getUserToken());
+
   const [loading, setLoading] = useState(false);
 
+  // Synchronize state across separate browser tabs via storage events
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
+    const handleStorageChange = (e) => {
+      if (!e.key || e.key === AUTH_KEYS.ADMIN_TOKEN || e.key === AUTH_KEYS.ADMIN_USER) {
+        try {
+          const savedAdmin = localStorage.getItem(AUTH_KEYS.ADMIN_USER);
+          setAdminUser(savedAdmin ? JSON.parse(savedAdmin) : null);
+          setAdminToken(getAdminToken());
+        } catch {}
+      }
+
+      if (
+        !e.key ||
+        e.key === AUTH_KEYS.USER_TOKEN ||
+        e.key === AUTH_KEYS.USER_USER ||
+        e.key === AUTH_KEYS.LEGACY_TOKEN ||
+        e.key === AUTH_KEYS.LEGACY_USER
+      ) {
+        try {
+          const savedUser =
+            localStorage.getItem(AUTH_KEYS.USER_USER) ||
+            localStorage.getItem(AUTH_KEYS.LEGACY_USER);
+          setNormalUser(savedUser ? JSON.parse(savedUser) : null);
+          setNormalToken(getUserToken());
+        } catch {}
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Check if current active page is within the Admin panel
+  const isCurrentTabAdmin = () => {
+    if (typeof window === 'undefined') return false;
+    return window.location.pathname.startsWith('/admin');
+  };
+
+  // Dynamic context user: returns adminUser if on /admin, otherwise normalUser (with smart fallbacks)
+  const activeUser = useMemo(() => {
+    if (isCurrentTabAdmin()) {
+      return adminUser || normalUser || null;
     }
-  }, [token]);
+    return normalUser || adminUser || null;
+  }, [adminUser, normalUser]);
+
+  const activeToken = useMemo(() => {
+    if (isCurrentTabAdmin()) {
+      return adminToken || normalToken || '';
+    }
+    return normalToken || adminToken || '';
+  }, [adminToken, normalToken]);
 
   // Public User Signup Handler
   const signup = async (formData) => {
@@ -32,10 +93,12 @@ export const AuthProvider = ({ children }) => {
       const res = await authService.signup(formData);
       if (res.data?.success && res.data?.data) {
         const { token: jwtToken, ...userData } = res.data.data;
-        setUser(userData);
-        setToken(jwtToken);
-        localStorage.setItem('marathon_user', JSON.stringify(userData));
-        localStorage.setItem('marathon_token', jwtToken);
+        setNormalUser(userData);
+        setNormalToken(jwtToken);
+        localStorage.setItem(AUTH_KEYS.USER_USER, JSON.stringify(userData));
+        localStorage.setItem(AUTH_KEYS.USER_TOKEN, jwtToken);
+        localStorage.setItem(AUTH_KEYS.LEGACY_USER, JSON.stringify(userData));
+        localStorage.setItem(AUTH_KEYS.LEGACY_TOKEN, jwtToken);
         return { success: true, user: userData, message: res.data.message };
       }
       return { success: false, message: res.data?.message || 'Signup failed' };
@@ -49,17 +112,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Centralized User Login Handler (Phone + Password)
+  // User Login Handler (Phone + Password)
   const login = async ({ phone, email, password }) => {
     setLoading(true);
     try {
       const res = await authService.login({ phone, email, password });
       if (res.data?.success && res.data?.data) {
         const { token: jwtToken, ...userData } = res.data.data;
-        setUser(userData);
-        setToken(jwtToken);
-        localStorage.setItem('marathon_user', JSON.stringify(userData));
-        localStorage.setItem('marathon_token', jwtToken);
+        setNormalUser(userData);
+        setNormalToken(jwtToken);
+        localStorage.setItem(AUTH_KEYS.USER_USER, JSON.stringify(userData));
+        localStorage.setItem(AUTH_KEYS.USER_TOKEN, jwtToken);
+        localStorage.setItem(AUTH_KEYS.LEGACY_USER, JSON.stringify(userData));
+        localStorage.setItem(AUTH_KEYS.LEGACY_TOKEN, jwtToken);
         return { success: true, user: userData, message: res.data.message };
       }
       return { success: false, message: res.data?.message || 'Login failed' };
@@ -73,17 +138,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Dedicated Admin Login Handler
+  // Dedicated Admin Login Handler (Does NOT overwrite user session)
   const loginAdmin = async (email, password) => {
     setLoading(true);
     try {
       const res = await authService.loginAdmin({ email, password });
       if (res.data?.success && res.data?.data) {
         const { token: jwtToken, ...adminData } = res.data.data;
-        setUser(adminData);
-        setToken(jwtToken);
-        localStorage.setItem('marathon_user', JSON.stringify(adminData));
-        localStorage.setItem('marathon_token', jwtToken);
+        setAdminUser(adminData);
+        setAdminToken(jwtToken);
+        localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(adminData));
+        localStorage.setItem(AUTH_KEYS.ADMIN_TOKEN, jwtToken);
         return { success: true, user: adminData };
       }
       return { success: false, message: res.data?.message || 'Admin authentication failed' };
@@ -97,15 +162,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Update Profile details
+  // Update Profile details for User
   const updateProfile = async (profileData) => {
     setLoading(true);
     try {
       const res = await authService.updateProfile(profileData);
       if (res.data?.success && res.data?.data) {
         const updated = res.data.data;
-        setUser((prev) => ({ ...prev, ...updated }));
-        localStorage.setItem('marathon_user', JSON.stringify({ ...user, ...updated }));
+        setNormalUser((prev) => {
+          const next = { ...prev, ...updated };
+          localStorage.setItem(AUTH_KEYS.USER_USER, JSON.stringify(next));
+          localStorage.setItem(AUTH_KEYS.LEGACY_USER, JSON.stringify(next));
+          return next;
+        });
         return { success: true, data: updated, message: res.data.message };
       }
       return { success: false, message: res.data?.message || 'Update failed' };
@@ -137,34 +206,85 @@ export const AuthProvider = ({ children }) => {
 
   // Refresh user data from server
   const refreshUser = async () => {
-    if (!token) return;
-    try {
-      const res = await authService.getMe();
-      if (res.data?.success && res.data?.data) {
-        setUser(res.data.data);
-        localStorage.setItem('marathon_user', JSON.stringify(res.data.data));
+    if (adminToken) {
+      try {
+        const res = await authService.verifySession('admin');
+        if (res.data?.success && res.data?.data) {
+          setAdminUser(res.data.data);
+          localStorage.setItem(AUTH_KEYS.ADMIN_USER, JSON.stringify(res.data.data));
+        }
+      } catch (err) {
+        if (err.response?.status === 401) {
+          logoutAdmin();
+        }
       }
-    } catch (err) {
-      // If token expired, clear session
-      if (err.response?.status === 401) {
-        logout();
+    }
+
+    if (normalToken) {
+      try {
+        const res = await authService.verifySession('user');
+        if (res.data?.success && res.data?.data) {
+          setNormalUser(res.data.data);
+          localStorage.setItem(AUTH_KEYS.USER_USER, JSON.stringify(res.data.data));
+          localStorage.setItem(AUTH_KEYS.LEGACY_USER, JSON.stringify(res.data.data));
+        }
+      } catch (err) {
+        if (err.response?.status === 401) {
+          logoutUser();
+        }
       }
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken('');
-    localStorage.removeItem('marathon_user');
-    localStorage.removeItem('marathon_token');
-    delete axios.defaults.headers.common['Authorization'];
-  };
+  // Admin-Specific Logout (Leaves user session untouched)
+  const logoutAdmin = useCallback(() => {
+    setAdminUser(null);
+    setAdminToken('');
+    try {
+      localStorage.removeItem(AUTH_KEYS.ADMIN_USER);
+      localStorage.removeItem(AUTH_KEYS.ADMIN_TOKEN);
+    } catch {}
+  }, []);
+
+  // User-Specific Logout (Leaves admin session untouched)
+  const logoutUser = useCallback(() => {
+    setNormalUser(null);
+    setNormalToken('');
+    try {
+      localStorage.removeItem(AUTH_KEYS.USER_USER);
+      localStorage.removeItem(AUTH_KEYS.USER_TOKEN);
+      localStorage.removeItem(AUTH_KEYS.LEGACY_USER);
+      localStorage.removeItem(AUTH_KEYS.LEGACY_TOKEN);
+    } catch {}
+  }, []);
+
+  // Context-aware generic logout
+  const logout = useCallback(() => {
+    if (isCurrentTabAdmin()) {
+      logoutAdmin();
+    } else {
+      logoutUser();
+    }
+  }, [logoutAdmin, logoutUser]);
+
+  // Global Full Logout
+  const logoutAll = useCallback(() => {
+    logoutAdmin();
+    logoutUser();
+  }, [logoutAdmin, logoutUser]);
+
+  const isAdminAuthenticated = Boolean(adminUser && adminToken && adminUser.role === 'admin');
+  const isUserAuthenticated = Boolean(normalUser && normalToken);
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        token,
+        user: activeUser,
+        token: activeToken,
+        adminUser,
+        adminToken,
+        normalUser,
+        normalToken,
         loading,
         signup,
         login,
@@ -173,8 +293,13 @@ export const AuthProvider = ({ children }) => {
         changePassword,
         refreshUser,
         logout,
-        isAuthenticated: Boolean(user && token),
-        isAdmin: user?.role === 'admin',
+        logoutAdmin,
+        logoutUser,
+        logoutAll,
+        isAdminAuthenticated,
+        isUserAuthenticated,
+        isAuthenticated: isCurrentTabAdmin() ? isAdminAuthenticated : (isUserAuthenticated || isAdminAuthenticated),
+        isAdmin: isCurrentTabAdmin() ? isAdminAuthenticated : Boolean(adminUser?.role === 'admin'),
       }}
     >
       {children}

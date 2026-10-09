@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/signup' }) => {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+  const { isAdminAuthenticated, isUserAuthenticated, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -14,13 +14,19 @@ export const ProtectedRoute = ({ children, requireAdmin = false, redirectTo = '/
     );
   }
 
-  if (!isAuthenticated) {
-    const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
-    return <Navigate to={`${redirectTo}?redirect=${returnUrl}`} replace />;
+  // Admin Routes Guard
+  if (requireAdmin) {
+    if (!isAdminAuthenticated) {
+      const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
+      return <Navigate to={`/admin/login?redirect=${returnUrl}`} replace />;
+    }
+    return children;
   }
 
-  if (requireAdmin && !isAdmin) {
-    return <Navigate to="/admin/login" replace />;
+  // Normal User Routes Guard
+  if (!isUserAuthenticated) {
+    const returnUrl = encodeURIComponent(location.pathname + location.search + location.hash);
+    return <Navigate to={`${redirectTo}?redirect=${returnUrl}`} replace />;
   }
 
   return children;

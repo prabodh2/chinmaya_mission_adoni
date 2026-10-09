@@ -9,15 +9,83 @@ const api = axios.create({
   },
 });
 
+// Session Key Constants
+export const AUTH_KEYS = {
+  ADMIN_TOKEN: 'marathon_admin_token',
+  ADMIN_USER: 'marathon_admin_user',
+  USER_TOKEN: 'marathon_user_token',
+  USER_USER: 'marathon_user_user',
+  LEGACY_TOKEN: 'marathon_token',
+  LEGACY_USER: 'marathon_user',
+};
+
+// Helper to determine if a URL or context is for Admin
+export const getAdminToken = () => {
+  try {
+    return localStorage.getItem(AUTH_KEYS.ADMIN_TOKEN) || '';
+  } catch {
+    return '';
+  }
+};
+
+export const getUserToken = () => {
+  try {
+    return (
+      localStorage.getItem(AUTH_KEYS.USER_TOKEN) ||
+      localStorage.getItem(AUTH_KEYS.LEGACY_TOKEN) ||
+      ''
+    );
+  } catch {
+    return '';
+  }
+};
+
+const isAdminTarget = (config) => {
+  if (config.headers?.['X-Auth-Scope'] === 'admin') return true;
+  if (config.headers?.['X-Auth-Scope'] === 'user') return false;
+  
+  const url = (config.url || '').toLowerCase();
+  if (
+    url.startsWith('/admin') ||
+    url.includes('/admin/') ||
+    url.includes('/media/upload') ||
+    url.includes('/media/replace') ||
+    url.includes('/homepage/admin') ||
+    url.includes('/footer/admin') ||
+    url.includes('/activities/admin') ||
+    url.includes('/contact/admin') ||
+    url.includes('/faqs/admin')
+  ) {
+    return true;
+  }
+
+  // Fallback to active browser tab location if in browser
+  if (typeof window !== 'undefined') {
+    return window.location.pathname.startsWith('/admin');
+  }
+
+  return false;
+};
+
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('marathon_token');
-    if (token) {
+    // Determine appropriate token based on target endpoint and active tab
+    const isAdmin = isAdminTarget(config);
+    const adminToken = getAdminToken();
+    const userToken = getUserToken();
+
+    const token = isAdmin
+      ? (adminToken || userToken)
+      : (userToken || adminToken);
+
+    if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     if (config.data instanceof FormData) {
       delete config.headers['Content-Type'];
     }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -36,20 +104,32 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Don't auto redirect on public endpoint checks
-      const isAuthRoute =
-        window.location.pathname.startsWith('/profile') ||
-        window.location.pathname.startsWith('/my-activity') ||
-        window.location.pathname.startsWith('/admin/dashboard');
+      const config = error.config || {};
+      const isAdmin = isAdminTarget(config);
 
-      if (isAuthRoute) {
-        localStorage.removeItem('marathon_token');
-        localStorage.removeItem('marathon_user');
-        const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
-        if (window.location.pathname.startsWith('/admin')) {
-          window.location.href = `/admin/login?redirect=${returnUrl}`;
+      if (typeof window !== 'undefined') {
+        const path = window.location.pathname;
+        const returnUrl = encodeURIComponent(path + window.location.search);
+
+        if (isAdmin || path.startsWith('/admin')) {
+          // Clear only admin session
+          localStorage.removeItem(AUTH_KEYS.ADMIN_TOKEN);
+          localStorage.removeItem(AUTH_KEYS.ADMIN_USER);
+          
+          if (path.startsWith('/admin') && !path.startsWith('/admin/login')) {
+            window.location.href = `/admin/login?redirect=${returnUrl}`;
+          }
         } else {
-          window.location.href = `/login?redirect=${returnUrl}`;
+          // Clear only user session
+          localStorage.removeItem(AUTH_KEYS.USER_TOKEN);
+          localStorage.removeItem(AUTH_KEYS.USER_USER);
+          localStorage.removeItem(AUTH_KEYS.LEGACY_TOKEN);
+          localStorage.removeItem(AUTH_KEYS.LEGACY_USER);
+
+          const isUserAuthRoute = path.startsWith('/profile') || path.startsWith('/my-activity') || path.startsWith('/my-registrations');
+          if (isUserAuthRoute) {
+            window.location.href = `/login?redirect=${returnUrl}`;
+          }
         }
       }
     }
@@ -58,12 +138,16 @@ api.interceptors.response.use(
 );
 
 export const authService = {
-  signup: (data) => api.post('/auth/signup', data),
-  login: (data) => api.post('/auth/login', data),
-  loginAdmin: (data) => api.post('/auth/admin/login', data),
+  signup: (data) => api.post('/auth/signup', data, { headers: { 'X-Auth-Scope': 'user' } }),
+  login: (data) => api.post('/auth/login', data, { headers: { 'X-Auth-Scope': 'user' } }),
+  loginAdmin: (data) => api.post('/auth/admin/login', data, { headers: { 'X-Auth-Scope': 'admin' } }),
+  verifySession: (scope = 'auto') =>
+    api.get('/auth/verify', {
+      headers: { 'X-Auth-Scope': scope },
+    }),
   getMe: () => api.get('/auth/me'),
-  getProfile: () => api.get('/auth/profile'),
-  updateProfile: (data) => api.put('/auth/profile', data),
+  getProfile: () => api.get('/auth/profile', { headers: { 'X-Auth-Scope': 'user' } }),
+  updateProfile: (data) => api.put('/auth/profile', data, { headers: { 'X-Auth-Scope': 'user' } }),
   changePassword: (data) => api.put('/auth/change-password', data),
 };
 

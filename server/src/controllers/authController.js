@@ -3,8 +3,8 @@ import User from '../models/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'chyk_adoni_anti_drug_marathon_2026_jwt_secret_key_987654321';
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, JWT_SECRET, {
+const generateToken = (id, role = 'user') => {
+  return jwt.sign({ id, role }, JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '365d',
   });
 };
@@ -104,7 +104,7 @@ export const signupUser = async (req, res) => {
     await newUser.save();
 
     // 4. Generate JWT Token
-    const token = generateToken(newUser._id);
+    const token = generateToken(newUser._id, newUser.role);
 
     return res.status(201).json({
       success: true,
@@ -179,7 +179,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     return res.json({
       success: true,
@@ -246,7 +246,7 @@ export const loginAdmin = async (req, res) => {
       });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     res.json({
       success: true,
@@ -266,6 +266,28 @@ export const loginAdmin = async (req, res) => {
       message: err.message || 'Admin login server error',
       errorCode: 'SERVER_ERROR',
     });
+  }
+};
+
+/**
+ * Verify Session & Get Active User
+ * GET /api/auth/verify
+ */
+export const verifySession = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User profile not found',
+      });
+    }
+    res.json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 

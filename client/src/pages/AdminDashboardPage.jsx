@@ -48,7 +48,7 @@ import {
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin, logoutAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(
@@ -449,7 +449,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
         <button
           onClick={() => {
-            logout();
+            if (logoutAdmin) logoutAdmin();
+            else logout();
             navigate('/admin/login');
           }}
           className="btn-secondary text-xs py-2.5 px-5 border-red-500/30 text-red-500"

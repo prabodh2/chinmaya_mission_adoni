@@ -18,7 +18,17 @@ import {
 } from 'lucide-react';
 
 export const Navbar = () => {
-  const { user, logout, isAdmin, isAuthenticated } = useAuth();
+  const {
+    user,
+    normalUser,
+    adminUser,
+    logout,
+    logoutUser,
+    isAdmin,
+    isAuthenticated,
+    isUserAuthenticated,
+    isAdminAuthenticated,
+  } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [isHomeEnabled, setIsHomeEnabled] = useState(true);
@@ -88,13 +98,16 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Registration / Admin CTA */}
-              {isAuthenticated && isAdmin ? (
-                <Link to="/admin/dashboard" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
+              {/* Admin Dashboard Quick Access if Admin Logged In */}
+              {isAdminAuthenticated && (
+                <Link to="/admin/dashboard" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white">
                   <Shield className="w-3.5 h-3.5" />
                   <span>ADMIN DASHBOARD</span>
                 </Link>
-              ) : (
+              )}
+
+              {/* Registration CTA for Non-Admins */}
+              {!isAdminAuthenticated && (
                 <Link to="/register" className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold">
                   <Award className="w-3.5 h-3.5" />
                   <span>REGISTER NOW</span>
@@ -102,16 +115,16 @@ export const Navbar = () => {
               )}
 
               {/* Logged in User Dropdown */}
-              {isAuthenticated && user ? (
+              {isUserAuthenticated && normalUser ? (
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center gap-2 py-1.5 px-3 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--orange)] text-[var(--text-primary)] transition-all font-bold text-xs shadow-sm"
                   >
                     <div className="w-6 h-6 rounded-full bg-[var(--orange)] text-white flex items-center justify-center font-black text-[11px]">
-                      {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
+                      {normalUser.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
                     </div>
-                    <span className="max-w-[100px] truncate">{user.fullName || 'Account'}</span>
+                    <span className="max-w-[100px] truncate">{normalUser.fullName || 'Account'}</span>
                     <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
                   </button>
 
@@ -119,13 +132,8 @@ export const Navbar = () => {
                     <div className="absolute right-0 mt-2 w-60 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl z-50 animate-in fade-in">
                       {/* User Card */}
                       <div className="px-4 py-2.5 border-b border-[var(--border-color)]">
-                        <p className="text-xs font-black text-[var(--text-primary)] truncate">{user.fullName}</p>
-                        <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {user.phone}</p>
-                        {isAdmin && (
-                          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-[var(--cyan)]/20 text-[var(--cyan)] text-[9px] font-black uppercase">
-                            Admin Access
-                          </span>
-                        )}
+                        <p className="text-xs font-black text-[var(--text-primary)] truncate">{normalUser.fullName}</p>
+                        <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {normalUser.phone}</p>
                       </div>
 
                       {/* Dropdown Links */}
@@ -147,25 +155,15 @@ export const Navbar = () => {
                           <Activity className="w-3.5 h-3.5 text-emerald-500" />
                           <span>My Activity & Passes</span>
                         </Link>
-
-                        {isAdmin && (
-                          <Link
-                            to="/admin/dashboard"
-                            onClick={() => setUserDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--cyan)] hover:bg-[var(--bg-tertiary)] text-decoration-none transition-colors border-t border-[var(--border-color)] mt-1"
-                          >
-                            <Shield className="w-3.5 h-3.5" />
-                            <span>Admin Dashboard</span>
-                          </Link>
-                        )}
                       </div>
 
-                      {/* Logout */}
+                      {/* Logout (Only logs out user, preserves admin tab!) */}
                       <div className="pt-1 border-t border-[var(--border-color)]">
                         <button
                           onClick={() => {
                             setUserDropdownOpen(false);
-                            logout();
+                            if (logoutUser) logoutUser();
+                            else logout();
                             navigate('/');
                           }}
                           className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-500/10 text-left transition-colors"
@@ -207,15 +205,15 @@ export const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-color)] px-4 pt-2 pb-6 space-y-4 max-h-[85vh] overflow-y-auto">
           {/* User Status in Mobile */}
-          {isAuthenticated && user ? (
+          {isUserAuthenticated && normalUser ? (
             <div className="p-3.5 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 truncate">
                 <div className="w-9 h-9 rounded-full bg-[var(--orange)] text-white flex items-center justify-center font-black text-sm">
-                  {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
+                  {normalUser.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
                 </div>
                 <div className="truncate">
-                  <p className="text-xs font-black text-[var(--text-primary)] truncate">{user.fullName}</p>
-                  <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {user.phone}</p>
+                  <p className="text-xs font-black text-[var(--text-primary)] truncate">{normalUser.fullName}</p>
+                  <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {normalUser.phone}</p>
                 </div>
               </div>
               <Link
@@ -264,7 +262,7 @@ export const Navbar = () => {
               </Link>
             ))}
 
-            {isAuthenticated && (
+            {isUserAuthenticated && (
               <>
                 <Link
                   to="/my-activity"
@@ -284,11 +282,11 @@ export const Navbar = () => {
 
           {/* Mobile Bottom CTAs */}
           <div className="pt-3 border-t border-[var(--border-color)] flex flex-col gap-2.5">
-            {isAuthenticated && isAdmin ? (
+            {isAdminAuthenticated ? (
               <Link
                 to="/admin/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs"
+                className="btn-primary w-full justify-center text-decoration-none py-3 font-bold text-xs bg-gradient-to-r from-[var(--cyan)] to-blue-600 text-white"
               >
                 <Shield className="w-4 h-4" />
                 <span>ADMIN DASHBOARD</span>
@@ -304,11 +302,12 @@ export const Navbar = () => {
               </Link>
             )}
 
-            {isAuthenticated && (
+            {isUserAuthenticated && (
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  logout();
+                  if (logoutUser) logoutUser();
+                  else logout();
                   navigate('/');
                 }}
                 className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-red-500/10 text-red-500 text-xs font-bold"
