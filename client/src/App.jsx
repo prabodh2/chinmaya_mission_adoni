@@ -90,6 +90,8 @@ export function App() {
               {/* Home page is not required for now; redirect root to About */}
               <Route path="/" element={<Navigate to="/about" replace />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/about-us" element={<AboutPage />} />
+              <Route path="/aboutus" element={<AboutPage />} />
               <Route path="/about-me" element={<AboutPage />} />
               <Route path="/activities" element={<ActivitiesPage />} />
               <Route path="/lets-connect" element={<LetsConnectPage />} />

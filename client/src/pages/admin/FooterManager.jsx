@@ -39,11 +39,10 @@ const DEFAULT_FORM_DATA = {
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
     links: [
-      { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
-      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 2 },
-      { label: 'Activities Gallery', url: '/activities', openInNewTab: false, enabled: true, displayOrder: 3 },
-      { label: "Let's Connect", url: '/lets-connect', openInNewTab: false, enabled: true, displayOrder: 4 },
-      { label: 'Marathon Registration', url: '/register', openInNewTab: false, enabled: true, displayOrder: 5 },
+      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 1 },
+      { label: 'Activities Gallery', url: '/activities', openInNewTab: false, enabled: true, displayOrder: 2 },
+      { label: "Let's Connect", url: '/lets-connect', openInNewTab: false, enabled: true, displayOrder: 3 },
+      { label: 'Marathon Registration', url: '/register', openInNewTab: false, enabled: true, displayOrder: 4 },
     ],
   },
   contact: {

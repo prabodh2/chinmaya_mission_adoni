@@ -78,35 +78,11 @@ export const LetsConnectPage = () => {
           CONNECT & VOLUNTEER
         </span>
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)]">
-          LET'S CONNECT <span className="text-[var(--orange)]">WITH ADONI</span>
+          LET'S CONNECT WITH <span className="text-[var(--orange)]">CHINMAYA MISSION ADONI</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">
           Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission Adoni team.
         </p>
-
-        {/* Account notice */}
-        {isAuthenticated ? (
-          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs max-w-xl mx-auto">
-            <span className="font-semibold text-emerald-500">
-              Connected as <strong>{user?.fullName}</strong> — Your inquiries are tracked under My Activity.
-            </span>
-            <Link to="/my-activity" className="text-emerald-500 font-bold underline whitespace-nowrap">
-              My Activity →
-            </Link>
-          </div>
-        ) : (
-          <div className="p-3.5 rounded-2xl bg-[var(--orange)]/10 border border-[var(--orange)]/25 flex items-center justify-between gap-3 text-xs max-w-xl mx-auto">
-            <span className="font-semibold text-[var(--text-primary)]">
-              Have an account? Sign in so you can track your request status anytime.
-            </span>
-            <Link
-              to="/login?redirect=/lets-connect"
-              className="px-3 py-1 rounded-xl bg-[var(--orange)] text-white font-bold text-[11px] text-decoration-none whitespace-nowrap"
-            >
-              Sign In
-            </Link>
-          </div>
-        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -247,7 +223,6 @@ export const LetsConnectPage = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-[var(--text-primary)]">Ashram Headquarters</h4>
                   <p>Chinmaya Mission Ashrama, Arts College Road, Adoni - 518301, Andhra Pradesh, India</p>
                 </div>
               </div>
@@ -257,7 +232,6 @@ export const LetsConnectPage = () => {
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-[var(--text-primary)]">Helpline & Registration Desk</h4>
                   <p>+91 94402 85934 / +91 98490 12345</p>
                 </div>
               </div>
@@ -267,7 +241,6 @@ export const LetsConnectPage = () => {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-[var(--text-primary)]">Official Email</h4>
                   <p>chinmayamissionadoni@gmail.com</p>
                 </div>
               </div>

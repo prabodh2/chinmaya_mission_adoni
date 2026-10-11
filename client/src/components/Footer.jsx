@@ -83,17 +83,26 @@ function sanitizeMainSiteFooter(rawData) {
     };
   }
 
-  // 2. Sanitize Quick Navigation Links (Remove "What We Do" and "Marathon Registration")
+  // 2. Sanitize Quick Navigation Links (Remove "Home", "What We Do" and "Marathon Registration")
   const rawLinks = data.quickNavigation?.links || MAIN_SITE_FALLBACK_FOOTER.quickNavigation.links;
-  const filteredLinks = rawLinks.filter((link) => {
-    if (!link || !link.label) return false;
-    const lower = link.label.toLowerCase().trim();
-    const url = (link.url || '').toLowerCase().trim();
-    // Exclude unwanted links
-    if (lower.includes('what we do') || url === '/what-we-do') return false;
-    if (lower.includes('marathon registration') || url === '/register') return false;
-    return true;
-  });
+  const filteredLinks = rawLinks
+    .filter((link) => {
+      if (!link || !link.label) return false;
+      const lower = link.label.toLowerCase().trim();
+      const url = (link.url || '').toLowerCase().trim();
+      // Exclude unwanted links
+      if (lower === 'home' || lower.includes('home') || url === '/') return false;
+      if (lower.includes('what we do') || url === '/what-we-do') return false;
+      if (lower.includes('marathon registration') || url === '/register') return false;
+      return true;
+    })
+    .map((link) => {
+      const lower = link.label.toLowerCase().trim();
+      if (lower.includes('about')) {
+        return { ...link, url: '/about' };
+      }
+      return link;
+    });
 
   // Ensure Marathon 2026 Portal link exists
   const hasMarathonPortalLink = filteredLinks.some((l) =>
@@ -312,6 +321,9 @@ export const Footer = ({ overrideData = null }) => {
                     ) : (
                       <Link
                         to={link.url}
+                        onClick={() => {
+                          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                        }}
                         className="transition-colors text-decoration-none hover:text-white hover:underline"
                       >
                         {link.label}
