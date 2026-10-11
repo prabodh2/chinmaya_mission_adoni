@@ -14,6 +14,7 @@ import { SignupPage } from './pages/SignupPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { MyActivityPage } from './pages/MyActivityPage';
 import { VerifyPassPage } from './pages/VerifyPassPage';
+import { FaqPage } from './pages/FaqPage';
 
 // Marathon Layout containing Marathon Navbar and Footer
 function MarathonLayout() {
@@ -53,6 +54,10 @@ export function App() {
             <Route element={<MarathonLayout />}>
               {/* Marathon Landing Page */}
               <Route path="/" element={<HomePage />} />
+
+              {/* Dedicated FAQs Page with Ask Your FAQ doubt submission */}
+              <Route path="/faqs" element={<FaqPage />} />
+              <Route path="/faq" element={<FaqPage />} />
 
               {/* Marathon Registration Page (Protected - requires authentication) */}
               <Route

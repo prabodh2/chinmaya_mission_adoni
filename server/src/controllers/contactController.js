@@ -2,25 +2,35 @@ import ContactMessage from '../models/ContactMessage.js';
 
 export const submitContactMessage = async (req, res) => {
   try {
-    const { fullName, email, phone, category, message } = req.body;
-    if (!fullName || !email || !phone || !message) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
+    const { fullName, name, email, phone, category, message, question, doubt } = req.body;
+    const finalName = (fullName || name || '').trim();
+    const finalMessage = (message || question || doubt || '').trim();
+
+    if (!finalName || !finalMessage) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both your Name and your Doubt/Question are required.',
+      });
     }
+
+    const finalEmail = (email || '').trim() || (req.user ? req.user.email : '') || 'faq@chinmayamissionadoni.org';
+    const finalPhone = (phone || '').trim() || (req.user ? req.user.phone : '') || 'Not Provided';
+    const finalCategory = (category || 'Marathon FAQ Question').trim();
 
     const contact = new ContactMessage({
       userId: req.user ? req.user._id : null,
-      fullName: fullName.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      category: category ? category.trim() : 'General Inquiry',
-      message: message.trim(),
+      fullName: finalName,
+      email: finalEmail,
+      phone: finalPhone,
+      category: finalCategory,
+      message: finalMessage,
       status: 'NEW',
     });
     await contact.save();
 
     res.status(201).json({
       success: true,
-      message: 'Thank you for connecting! Your message has been received.',
+      message: 'Your doubt/question has been submitted to the admin panel successfully!',
       data: contact,
     });
   } catch (err) {

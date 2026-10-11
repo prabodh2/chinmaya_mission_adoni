@@ -16,10 +16,21 @@ import {
   HelpCircle,
   ChevronDown,
   Sparkles,
+  MessageCircleQuestion,
+  Send,
+  X,
+  CheckCircle2,
+  ExternalLink,
 } from 'lucide-react';
+import { contactService } from '../../services/api';
 
 export const SectionRenderer = ({ section, eventConfig, banners, activities, faqs }) => {
   const [openFaq, setOpenFaq] = useState(null);
+  const [showAskForm, setShowAskForm] = useState(false);
+  const [formData, setFormData] = useState({ name: '', phone: '', question: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!section || !section.isEnabled) return null;
 
@@ -141,33 +152,199 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'faq':
       return (
-        <section className="py-16 px-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
+        <section id="faq" className="py-16 px-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="text-center space-y-2">
-              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest">
+            <div className="text-center space-y-3">
+              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest block">
                 {section.subtitle || 'QUESTIONS & ANSWERS'}
               </span>
-              <h2 className="text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
                 {section.title || 'FREQUENTLY ASKED QUESTIONS'}
               </h2>
+              <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-xl mx-auto">
+                Got a question regarding the marathon? Find answers below or ask our organizers directly.
+              </p>
+
+              {/* Action Button: Ask Your FAQ */}
+              <div className="pt-2">
+                <button
+                  onClick={() => {
+                    setShowAskForm(!showAskForm);
+                    setSubmitSuccess(false);
+                    setErrorMessage('');
+                  }}
+                  className="btn-primary py-3 px-6 rounded-2xl text-xs font-black shadow-md hover:shadow-lg inline-flex items-center gap-2"
+                >
+                  <MessageCircleQuestion className="w-4 h-4" />
+                  <span>{showAskForm ? 'CLOSE QUESTION FORM' : 'ASK YOUR FAQ'}</span>
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-4">
+            {/* INLINE FORM: Ask Your FAQ */}
+            {showAskForm && (
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[var(--orange)]/30 shadow-xl space-y-5 animate-in fade-in slide-in-from-top-4 duration-300">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <span className="text-[10px] font-extrabold tracking-widest text-[var(--orange)] uppercase block">
+                      SUBMIT YOUR QUESTION / DOUBT
+                    </span>
+                    <h3 className="text-lg font-black text-[var(--text-primary)] font-heading">
+                      Ask Event Organizers
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setShowAskForm(false)}
+                    className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {submitSuccess ? (
+                  <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+                    <div>
+                      <h4 className="text-sm sm:text-base font-black text-emerald-900">
+                        Question Submitted Successfully!
+                      </h4>
+                      <p className="text-xs text-emerald-700 font-medium mt-0.5">
+                        Your doubt has been forwarded to the Chinmaya Mission Admin Team.
+                      </p>
+                    </div>
+                    <a
+                      href="https://chinmaya-mission-adoni-admin.vercel.app"
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black shadow hover:bg-emerald-700 transition-colors text-decoration-none mt-2"
+                    >
+                      <span>REDIRECTING TO ADMIN PANEL...</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setErrorMessage('');
+                      if (!formData.name.trim() || !formData.question.trim()) {
+                        setErrorMessage('Please fill in both your Name and your Doubt/Question.');
+                        return;
+                      }
+                      setSubmitting(true);
+                      try {
+                        await contactService.submitMessage({
+                          fullName: formData.name.trim(),
+                          message: formData.question.trim(),
+                          phone: formData.phone.trim() || undefined,
+                          category: 'Marathon FAQ Question',
+                        });
+                        setSubmitSuccess(true);
+                        setTimeout(() => {
+                          window.location.href = 'https://chinmaya-mission-adoni-admin.vercel.app';
+                        }, 2000);
+                      } catch (err) {
+                        setErrorMessage(err.response?.data?.message || 'Failed to submit question. Please try again.');
+                      } finally {
+                        setSubmitting(false);
+                      }
+                    }}
+                    className="space-y-4"
+                  >
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-bold">
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-black text-slate-700 uppercase tracking-wider block">
+                        Your Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="e.g. Ramesh Kumar"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20 text-sm font-semibold text-slate-800 transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-black text-slate-700 uppercase tracking-wider block">
+                        Contact Phone <span className="text-slate-400 font-normal lowercase">(optional)</span>
+                      </label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="e.g. 9876543210"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20 text-sm font-semibold text-slate-800 transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-black text-slate-700 uppercase tracking-wider block">
+                        What is your doubt / question? <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={formData.question}
+                        onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                        placeholder="Write your question or doubt here regarding the marathon event..."
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20 text-sm font-semibold text-slate-800 transition-all resize-none"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowAskForm(false)}
+                        className="btn-secondary py-2 px-4 text-xs font-bold"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="btn-primary py-2.5 px-6 text-xs font-black flex items-center gap-2 shadow-md hover:shadow-lg disabled:opacity-50"
+                      >
+                        {submitting ? (
+                          <>
+                            <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>SUBMITTING...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            <span>SUBMIT QUESTION</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
+
+            <div className="space-y-3.5">
               {(faqs || []).map((faq, idx) => (
                 <div key={faq._id || idx} className="rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_4px_12px_rgba(11,35,64,0.04)] overflow-hidden hover:shadow-[0_4px_12px_rgba(11,35,64,0.06),0_8px_24px_rgba(11,35,64,0.08)] transition-all duration-300">
                   <button
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full flex items-center justify-between p-5 text-left font-bold text-sm text-[var(--text-primary)] hover:text-[var(--orange)] transition-colors"
+                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left font-bold text-sm text-[var(--text-primary)] hover:text-[var(--orange)] transition-colors gap-3"
                   >
                     <span className="flex items-center gap-3">
-                      <HelpCircle className="w-5 h-5 text-[var(--orange)] flex-shrink-0" />
-                      {faq.question}
+                      <span className="w-7 h-7 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 border border-[var(--orange)]/30">
+                        <HelpCircle className="w-4 h-4 text-[var(--orange)]" />
+                      </span>
+                      <span className="font-extrabold">{faq.question}</span>
                     </span>
-                    <ChevronDown className={`w-5 h-5 text-[var(--text-muted)] transition-transform ${openFaq === idx ? 'rotate-180 text-[var(--orange)]' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-[var(--text-muted)] shrink-0 transition-transform ${openFaq === idx ? 'rotate-180 text-[var(--orange)]' : ''}`} />
                   </button>
                   {openFaq === idx && (
                     <div className="px-5 pb-5 text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed border-t border-[var(--border-color)]/50 pt-3">
-                      {faq.answer}
+                      <p className="pl-10 font-medium">{faq.answer}</p>
                     </div>
                   )}
                 </div>
