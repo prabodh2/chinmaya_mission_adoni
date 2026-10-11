@@ -43,17 +43,6 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     order: 2,
   },
   {
-    sectionId: 'activities-1',
-    type: 'activities',
-    title: 'MOVEMENT ACTIVITIES & HIGHLIGHTS',
-    subtitle: 'GALLERY & HIGHLIGHTS',
-    description: 'Explore community drives, bootcamps, wellness seminars, and youth initiatives.',
-    primaryButtonText: 'VIEW ALL ACTIVITIES',
-    primaryButtonLink: '/activities',
-    isEnabled: true,
-    order: 4,
-  },
-  {
     sectionId: 'faq-1',
     type: 'faq',
     title: 'FREQUENTLY ASKED QUESTIONS',
@@ -295,10 +284,13 @@ export const HomePage = () => {
     );
   }
 
-  // HOMEPAGE IS ON: RENDER SECTIONS
-  const sections = (homepageData?.sections && homepageData.sections.length > 0)
+  // HOMEPAGE IS ON: RENDER SECTIONS (Excluding activities section)
+  const rawSections = (homepageData?.sections && homepageData.sections.length > 0)
     ? homepageData.sections
     : DEFAULT_HOMEPAGE_SECTIONS;
+  const sections = rawSections.filter(
+    (s) => s.type !== 'activities' && s.sectionId !== 'activities-1'
+  );
 
   return (
     <div className="min-h-screen space-y-4">
