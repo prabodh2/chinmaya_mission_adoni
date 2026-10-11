@@ -8,7 +8,9 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
-const MARATHON_PORTAL_URL = import.meta.env.VITE_MARATHON_URL || 'http://localhost:5175';
+const MARATHON_PORTAL_URL =
+  import.meta.env.VITE_MARATHON_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

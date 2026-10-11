@@ -25,7 +25,9 @@ import { MyActivityPage } from './pages/MyActivityPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
-const MARATHON_PORTAL_URL = import.meta.env.VITE_MARATHON_URL || 'http://localhost:5175';
+const MARATHON_PORTAL_URL =
+  import.meta.env.VITE_MARATHON_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
 
 function MarathonPortalRedirect({ path = '' }) {
   useEffect(() => {
