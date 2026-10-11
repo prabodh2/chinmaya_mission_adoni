@@ -23,9 +23,9 @@ const app = express();
 // Security Headers & CORS
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
-// Merge env origins with hardcoded ones
+// Merge env origins with hardcoded ones (sanitizing trailing slashes)
 const envOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean)
   : [];
 
 const allowedOriginsSet = new Set([
@@ -34,6 +34,7 @@ const allowedOriginsSet = new Set([
   'https://marathon.chinmayamissionadoni.org',
   'https://chinmaya-mission-adoni.vercel.app',
   'https://chinmaya-mission-adoni-admin.vercel.app',
+  'https://marathon-chinmaya-mission-adoni.netlify.app',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
@@ -43,33 +44,39 @@ const allowedOriginsSet = new Set([
   ...envOrigins,
 ]);
 
-// Regex: allow ALL Vercel preview/production URLs for this project (website, admin, and marathon subdomain)
+// Regex: allow ALL Vercel & Netlify preview/production URLs for this project
 const vercelPreviewPattern = /^https:\/\/chinmaya-mission-adoni(-[a-z0-9]+)*\.vercel\.app$/;
 const vercelAdminPattern = /^https:\/\/chinmaya-mission-adoni-admin(-[a-z0-9]+)*\.vercel\.app$/;
 const vercelMarathonPattern = /^https:\/\/(chinmaya-)?marathon(-[a-z0-9]+)*\.vercel\.app$/;
+const netlifyPattern = /^https:\/\/.*(chinmaya|marathon).*\.netlify\.app$/;
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (curl, mobile apps, Render health checks)
-      if (!origin) return callback(null, true);
-      // Allow exact matches
-      if (allowedOriginsSet.has(origin)) return callback(null, true);
-      // Allow all Vercel preview deployments for this project (website, admin & marathon)
-      if (
-        vercelPreviewPattern.test(origin) ||
-        vercelAdminPattern.test(origin) ||
-        vercelMarathonPattern.test(origin)
-      ) {
-        return callback(null, true);
-      }
-      // In development, allow everything
-      if (process.env.NODE_ENV !== 'production') return callback(null, true);
-      callback(new Error(`CORS: Origin ${origin} not allowed`));
-    },
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, mobile apps, Render health checks)
+    if (!origin) return callback(null, true);
+    const sanitized = origin.replace(/\/+$/, '');
+    // Allow exact matches
+    if (allowedOriginsSet.has(sanitized)) return callback(null, true);
+    // Allow all Vercel & Netlify deployments for this project
+    if (
+      vercelPreviewPattern.test(sanitized) ||
+      vercelAdminPattern.test(sanitized) ||
+      vercelMarathonPattern.test(sanitized) ||
+      netlifyPattern.test(sanitized)
+    ) {
+      return callback(null, true);
+    }
+    // In development, allow everything
+    if (process.env.NODE_ENV !== 'production') return callback(null, true);
+    callback(new Error(`CORS: Origin ${origin} not allowed`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
