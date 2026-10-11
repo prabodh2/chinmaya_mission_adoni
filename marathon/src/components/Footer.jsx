@@ -21,10 +21,9 @@ const FALLBACK_FOOTER = {
     heading: 'QUICK NAVIGATION',
     links: [
       { label: 'Marathon Home', url: '/', enabled: true, displayOrder: 1 },
-      { label: 'Event Route Map', url: '/#marathon-map', enabled: true, displayOrder: 2 },
-      { label: 'FAQs', url: '/#faq', enabled: true, displayOrder: 3 },
-      { label: 'Register for Marathon', url: '/register', enabled: true, displayOrder: 4 },
-      { label: 'Chinmaya Mission Main Website', url: MAIN_SITE_URL, enabled: true, displayOrder: 5 },
+      { label: 'FAQs', url: '/faqs', enabled: true, displayOrder: 2 },
+      { label: 'Register for Marathon', url: '/register', enabled: true, displayOrder: 3 },
+      { label: 'Chinmaya Mission Main Website', url: MAIN_SITE_URL, enabled: true, displayOrder: 4 },
     ],
   },
   contact: {

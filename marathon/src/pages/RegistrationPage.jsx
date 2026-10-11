@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { registrationService, eventService } from '../services/api';
 import { SearchableSelect } from '../components/SearchableSelect';
 import { EntryPassModal } from '../components/EntryPassModal';
-import { MarathonRouteMap } from '../components/MarathonRouteMap';
 import { adoniInstitutionsList } from '../utils/constants';
 import { formatPhoneInput, getCleanPhoneNumber } from '../utils/phoneUtils';
 import {
@@ -1204,11 +1203,6 @@ export const RegistrationPage = () => {
           </form>
         </div>
       )}
-
-      {/* Marathon Route Map Section */}
-      <div id="marathon-map" className="pt-6">
-        <MarathonRouteMap />
-      </div>
 
       {/* Entry Pass Modal upon Successful Registration */}
       {receiptData && (

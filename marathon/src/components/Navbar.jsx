@@ -37,7 +37,6 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Route Map', path: '/#marathon-map' },
     { name: 'FAQs', path: '/faqs' },
   ];
 
