@@ -108,22 +108,22 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
           </span>
 
           <h2 className="text-xl sm:text-2xl font-black font-heading text-[var(--text-primary)]">
-            {isGroup ? '2 Participants Confirmed' : 'Registration Confirmed'}
+            {isGroup ? `${participantsList.length} Participants Confirmed` : 'Registration Confirmed'}
           </h2>
 
-          {/* Group Tab Switcher if Friend was Registered */}
+          {/* Group Tab Switcher if Friend(s) were Registered */}
           {isGroup && participantsList.length > 1 && (
             <div className="pt-2">
               <p className="text-xs font-bold text-[var(--text-muted)] mb-2">
                 Select a participant pass to view or save:
               </p>
-              <div className="grid grid-cols-2 gap-2 bg-[var(--bg-tertiary)] p-1.5 rounded-2xl border border-[var(--border-color)]">
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto bg-[var(--bg-tertiary)] p-1.5 rounded-2xl border border-[var(--border-color)]">
                 {participantsList.map((p, idx) => (
                   <button
                     key={p.registrationId || idx}
                     type="button"
                     onClick={() => setActiveParticipantIndex(idx)}
-                    className={`py-2 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 min-w-[130px] py-2 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 ${
                       activeParticipantIndex === idx
                         ? 'bg-[var(--orange)] text-white shadow-md'
                         : 'text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
@@ -131,7 +131,9 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
                   >
                     {idx === 0 ? <User className="w-3.5 h-3.5" /> : <Users className="w-3.5 h-3.5" />}
                     <span className="truncate">
-                      {idx === 0 ? `Participant 1 (${p.fullName?.split(' ')[0] || 'You'})` : `Participant 2 (${p.fullName?.split(' ')[0] || 'Friend'})`}
+                      {idx === 0
+                        ? `You (${p.fullName?.split(' ')[0] || 'Primary'})`
+                        : `Friend ${idx} (${p.fullName?.split(' ')[0] || 'Friend'})`}
                     </span>
                   </button>
                 ))}
@@ -141,7 +143,7 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
 
           <div className="flex items-center justify-center gap-2 pt-1">
             <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
-              {isGroup ? `${activeParticipantIndex === 0 ? 'Your' : "Friend's"} Pass ID:` : 'Registration ID:'}
+              {isGroup ? `${activeParticipantIndex === 0 ? 'Your' : `Friend ${activeParticipantIndex}'s`} Pass ID:` : 'Registration ID:'}
             </span>
             <span className="text-base sm:text-lg font-black font-mono text-[var(--orange)] bg-[var(--orange)]/10 px-3 py-0.5 rounded-lg border border-[var(--orange)]/30">
               {activeRecord?.registrationId}
@@ -150,7 +152,7 @@ export const EntryPassModal = ({ data, eventConfig, onClose }) => {
 
           <p className="text-xs text-[var(--text-muted)] font-medium max-w-sm mx-auto">
             {isGroup
-              ? 'Each participant has a separate unique entry pass and registration ID. Please save both passes.'
+              ? 'Each participant has a separate unique entry pass and registration ID. Please save each participant pass.'
               : 'Your registration is confirmed. Please save or download your official Entry Pass below.'}
           </p>
         </div>

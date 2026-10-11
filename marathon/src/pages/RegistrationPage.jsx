@@ -54,9 +54,8 @@ export const RegistrationPage = () => {
   });
   const [indErrors, setIndErrors] = useState({});
 
-  // Add a Friend Feature State
-  const [hasFriend, setHasFriend] = useState(false);
-  const [friendForm, setFriendForm] = useState({
+  // Add Friends Feature State (Supports 1 to 10 friends)
+  const createBlankFriend = () => ({
     fullName: '',
     age: '',
     standard: '',
@@ -68,7 +67,11 @@ export const RegistrationPage = () => {
     tShirtSize: 'M',
     agreeTerms: false,
   });
-  const [friendErrors, setFriendErrors] = useState({});
+
+  const [hasFriends, setHasFriends] = useState(false);
+  const [friendsCount, setFriendsCount] = useState(1);
+  const [friendsList, setFriendsList] = useState([createBlankFriend()]);
+  const [friendsErrors, setFriendsErrors] = useState([{}]);
 
   const [indSubmitting, setIndSubmitting] = useState(false);
 
@@ -160,60 +163,132 @@ export const RegistrationPage = () => {
     return Object.keys(errs).length === 0;
   };
 
-  // Validate Participant 2 (Friend) Form
-  const validateParticipant2 = () => {
-    const errs = {};
-    if (!friendForm.fullName.trim()) errs.fullName = "Friend's Full Name is required for certificate";
+  // Handle friend count change via dropdown (1 to 10)
+  const handleFriendsCountChange = (newCount) => {
+    const count = parseInt(newCount, 10);
+    if (isNaN(count) || count < 1 || count > 10) return;
 
-    const cleanPhone = getCleanPhoneNumber(friendForm.contactNumber);
-    if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
-      errs.contactNumber = 'Valid 10-digit Indian mobile number required (starting with 6-9)';
-    }
-
-    if (friendForm.isStudent) {
-      if (!friendForm.institutionName) {
-        errs.institutionName = 'Please select your friend\'s School/College';
-      } else if (friendForm.institutionName === 'OTHER' && !friendForm.otherInstitution.trim()) {
-        errs.otherInstitution = 'Please enter your friend\'s institution name';
+    if (count < friendsList.length) {
+      const removedFriendsHaveData = friendsList.slice(count).some((f) =>
+        f.fullName.trim() || f.contactNumber.trim() || f.profession.trim() || f.age.trim()
+      );
+      if (removedFriendsHaveData) {
+        const confirmDecrease = window.confirm(
+          `Reducing to ${count} ${count === 1 ? 'friend' : 'friends'} will clear details entered for additional members. Do you want to proceed?`
+        );
+        if (!confirmDecrease) return;
       }
     }
 
-    if (!friendForm.tShirtSize) errs.tShirtSize = 'Please select a T-shirt size for friend';
-    if (!friendForm.agreeTerms) errs.agreeTerms = 'Friend must accept the physical fitness declaration and event rules';
-
-    setFriendErrors(errs);
-    return Object.keys(errs).length === 0;
+    setFriendsCount(count);
+    setFriendsList((prev) => {
+      if (count > prev.length) {
+        const added = Array.from({ length: count - prev.length }, () => createBlankFriend());
+        return [...prev, ...added];
+      } else {
+        return prev.slice(0, count);
+      }
+    });
+    setFriendsErrors((prev) => {
+      if (count > prev.length) {
+        const addedErrors = Array.from({ length: count - prev.length }, () => ({}));
+        return [...prev, ...addedErrors];
+      } else {
+        return prev.slice(0, count);
+      }
+    });
   };
 
-  // Handle Remove Friend button with confirmation if data was entered
-  const handleRemoveFriend = () => {
-    const hasData =
-      friendForm.fullName.trim() ||
-      friendForm.contactNumber.trim() ||
-      friendForm.profession.trim() ||
-      friendForm.age.trim();
+  // Update specific friend's field
+  const updateFriendField = (index, field, value) => {
+    setFriendsList((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+    if (friendsErrors[index]?.[field]) {
+      setFriendsErrors((prev) => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], [field]: undefined };
+        return updated;
+      });
+    }
+  };
+
+  // Remove all friends with confirmation
+  const handleRemoveAllFriends = () => {
+    const hasData = friendsList.some((f) =>
+      f.fullName.trim() || f.contactNumber.trim() || f.profession.trim() || f.age.trim()
+    );
 
     if (hasData) {
       const confirmRemove = window.confirm(
-        'Are you sure you want to remove your friend? Any entered friend details will be cleared.'
+        'Are you sure you want to remove all friends? Any entered friend details will be cleared.'
       );
       if (!confirmRemove) return;
     }
 
-    setHasFriend(false);
-    setFriendForm({
-      fullName: '',
-      age: '',
-      standard: '',
-      profession: '',
-      isStudent: false,
-      institutionName: '',
-      otherInstitution: '',
-      contactNumber: '',
-      tShirtSize: 'M',
-      agreeTerms: false,
+    setHasFriends(false);
+    setFriendsCount(1);
+    setFriendsList([createBlankFriend()]);
+    setFriendsErrors([{}]);
+  };
+
+  // Remove a single friend at specific index
+  const handleRemoveFriendAtIndex = (idx) => {
+    if (friendsList.length <= 1) {
+      handleRemoveAllFriends();
+      return;
+    }
+
+    const f = friendsList[idx];
+    if (f.fullName.trim() || f.contactNumber.trim() || f.age.trim() || f.profession.trim()) {
+      const confirmRemove = window.confirm(
+        `Are you sure you want to remove Friend ${idx + 1} (${f.fullName.trim() || 'Participant'})?`
+      );
+      if (!confirmRemove) return;
+    }
+
+    const updated = friendsList.filter((_, i) => i !== idx);
+    setFriendsList(updated);
+    setFriendsCount(updated.length);
+    setFriendsErrors((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  // Validate All Friends Form
+  const validateFriends = () => {
+    let isValid = true;
+    const newErrors = [];
+
+    friendsList.forEach((f, idx) => {
+      const errs = {};
+      const friendLabel = `Friend ${idx + 1}`;
+      if (!f.fullName.trim()) errs.fullName = `${friendLabel}'s Full Name is required for certificate`;
+
+      const cleanPhone = getCleanPhoneNumber(f.contactNumber);
+      if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
+        errs.contactNumber = 'Valid 10-digit Indian mobile number required (starting with 6-9)';
+      }
+
+      if (f.isStudent) {
+        if (!f.institutionName) {
+          errs.institutionName = `Please select ${friendLabel}'s School/College`;
+        } else if (f.institutionName === 'OTHER' && !f.otherInstitution.trim()) {
+          errs.otherInstitution = `Please enter ${friendLabel}'s institution name`;
+        }
+      }
+
+      if (!f.tShirtSize) errs.tShirtSize = `Please select a T-shirt size for ${friendLabel}`;
+      if (!f.agreeTerms) errs.agreeTerms = `Declaration must be accepted on behalf of ${friendLabel}`;
+
+      if (Object.keys(errs).length > 0) {
+        isValid = false;
+      }
+      newErrors.push(errs);
     });
-    setFriendErrors({});
+
+    setFriendsErrors(newErrors);
+    return isValid;
   };
 
   // Submit Registration (Individual or Group)
@@ -221,13 +296,13 @@ export const RegistrationPage = () => {
     e.preventDefault();
 
     const p1Valid = validateParticipant1();
-    let p2Valid = true;
+    let pFriendsValid = true;
 
-    if (hasFriend) {
-      p2Valid = validateParticipant2();
+    if (hasFriends) {
+      pFriendsValid = validateFriends();
     }
 
-    if (!p1Valid || !p2Valid) {
+    if (!p1Valid || !pFriendsValid) {
       return;
     }
 
@@ -240,14 +315,22 @@ export const RegistrationPage = () => {
             : indForm.institutionName
           : 'N/A';
 
-      if (hasFriend) {
-        // Group registration submission
-        const finalFriendInstitution =
-          friendForm.isStudent
-            ? friendForm.institutionName === 'OTHER'
-              ? friendForm.otherInstitution
-              : friendForm.institutionName
-            : 'N/A';
+      if (hasFriends && friendsList.length > 0) {
+        // Group registration submission (Primary + 1 to 10 friends)
+        const formattedFriends = friendsList.map((f) => ({
+          fullName: f.fullName.trim(),
+          age: f.age ? parseInt(f.age, 10) : undefined,
+          standard: f.standard || undefined,
+          profession: f.profession ? f.profession.trim() : undefined,
+          isStudent: f.isStudent,
+          institutionName: f.isStudent
+            ? f.institutionName === 'OTHER'
+              ? f.otherInstitution
+              : f.institutionName
+            : 'N/A',
+          contactNumber: f.contactNumber,
+          tShirtSize: f.tShirtSize,
+        }));
 
         const payload = {
           primary: {
@@ -260,44 +343,27 @@ export const RegistrationPage = () => {
             contactNumber: indForm.contactNumber,
             tShirtSize: indForm.tShirtSize,
           },
-          friend: {
-            fullName: friendForm.fullName.trim(),
-            age: friendForm.age ? parseInt(friendForm.age, 10) : undefined,
-            standard: friendForm.standard || undefined,
-            profession: friendForm.profession ? friendForm.profession.trim() : undefined,
-            isStudent: friendForm.isStudent,
-            institutionName: finalFriendInstitution,
-            contactNumber: friendForm.contactNumber,
-            tShirtSize: friendForm.tShirtSize,
-          },
+          friends: formattedFriends,
+          // Single friend fallback for backward compatibility
+          friend: formattedFriends[0],
         };
 
         const res = await registrationService.submitIndividual(payload);
         if (res.data?.success) {
           confetti({
-            particleCount: 140,
-            spread: 80,
+            particleCount: 160,
+            spread: 90,
             origin: { y: 0.6 },
           });
 
           setReceiptData(res.data.data);
 
-          // Reset friend form
-          setHasFriend(false);
-          setFriendForm({
-            fullName: '',
-            age: '',
-            standard: '',
-            profession: '',
-            isStudent: false,
-            institutionName: '',
-            otherInstitution: '',
-            contactNumber: '',
-            tShirtSize: 'M',
-            agreeTerms: false,
-          });
+          // Reset friends form
+          setHasFriends(false);
+          setFriendsCount(1);
+          setFriendsList([createBlankFriend()]);
           setIndErrors({});
-          setFriendErrors({});
+          setFriendsErrors([{}]);
         }
       } else {
         // Single participant submission
@@ -550,10 +616,10 @@ export const RegistrationPage = () => {
                     1
                   </span>
                   <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)]">
-                    {hasFriend ? 'Participant 1 — Your Registration' : 'Participant Details'}
+                    {hasFriends ? 'Participant 1 — Your Registration' : 'Participant Details'}
                   </h3>
                 </div>
-                {hasFriend && (
+                {hasFriends && (
                   <span className="px-2.5 py-0.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-[10px] uppercase tracking-wider">
                     Primary Registrant
                   </span>
@@ -777,256 +843,354 @@ export const RegistrationPage = () => {
             {/* ======================================================== */}
             {/* ADD A FRIEND BUTTON OR PARTICIPANT 2 FORM */}
             {/* ======================================================== */}
-            {!hasFriend ? (
+            {/* ======================================================== */}
+            {/* ADD FRIENDS BUTTON OR MULTI-FRIEND FORMS */}
+            {/* ======================================================== */}
+            {!hasFriends ? (
               <div className="pt-2 pb-2">
                 <button
                   type="button"
                   disabled={!isRegistrationOpen}
-                  onClick={() => setHasFriend(true)}
+                  onClick={() => {
+                    setHasFriends(true);
+                    if (friendsList.length === 0) {
+                      setFriendsList([createBlankFriend()]);
+                      setFriendsCount(1);
+                      setFriendsErrors([{}]);
+                    }
+                  }}
                   className="w-full py-4 px-5 rounded-2xl border-2 border-dashed border-[var(--orange)] bg-[var(--orange)]/10 hover:bg-[var(--orange)]/20 text-[var(--orange)] transition-all font-black text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-sm"
                 >
                   <UserPlus className="w-5 h-5" />
-                  <span>+ ADD A FRIEND TO THIS REGISTRATION</span>
+                  <span>+ ADD FRIENDS TO THIS REGISTRATION</span>
                 </button>
                 <p className="text-[11px] text-[var(--text-muted)] text-center mt-2 font-medium">
-                  Register a friend along with you in a single step. Both of you will receive separate unique entry passes!
+                  Add 1 to 10 friends along with you in a single step! You can select the number of friends and everyone will receive a unique entry pass.
                 </p>
               </div>
             ) : (
-              <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-tertiary)]/60 border-2 border-[var(--orange)]/40 shadow-inner space-y-6 animate-in slide-in-from-top-3">
-                <div className="flex items-center justify-between pb-3 border-b border-[var(--border-color)]">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-[var(--cyan)] text-white flex items-center justify-center font-black text-xs">
-                      2
-                    </span>
-                    <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)]">
-                      Participant 2 — Friend's Registration
-                    </h3>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleRemoveFriend}
-                    className="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-red-500/10 transition-colors"
-                    title="Remove Friend"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span>Remove Friend</span>
-                  </button>
-                </div>
-
-                {/* Friend Full Name */}
-                <div>
-                  <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                    Friend's Full Name (For Certificate) *
-                  </label>
-                  <div className="relative">
-                    <User className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
-                    <input
-                      type="text"
-                      required
-                      disabled={!isRegistrationOpen}
-                      value={friendForm.fullName}
-                      onChange={(e) => setFriendForm({ ...friendForm, fullName: e.target.value })}
-                      placeholder="Enter your friend's full name as it should appear on certificate"
-                      className={`w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
-                        friendErrors.fullName ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--cyan)]'
-                      }`}
-                    />
-                  </div>
-                  {friendErrors.fullName && <p className="text-xs text-red-500 font-bold mt-1">{friendErrors.fullName}</p>}
-                </div>
-
-                {/* Friend Age & Profession */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                      Friend's Age (Years)
-                    </label>
-                    <input
-                      type="number"
-                      min="5"
-                      max="100"
-                      disabled={!isRegistrationOpen}
-                      value={friendForm.age}
-                      onChange={(e) => setFriendForm({ ...friendForm, age: e.target.value })}
-                      placeholder="e.g. 19"
-                      className="w-full px-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                      Friend's Profession / Occupation
-                    </label>
-                    <div className="relative">
-                      <Briefcase className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
-                      <input
-                        type="text"
-                        disabled={!isRegistrationOpen}
-                        value={friendForm.profession}
-                        onChange={(e) => setFriendForm({ ...friendForm, profession: e.target.value })}
-                        placeholder="Student, Teacher, Engineer, etc."
-                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
-                      />
+              <div className="space-y-6 animate-in slide-in-from-top-3">
+                {/* Control Bar: Select number of friends & Remove All */}
+                <div className="p-5 sm:p-6 rounded-3xl bg-[var(--bg-tertiary)] border-2 border-[var(--orange)]/40 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[var(--orange)]/20 flex items-center justify-center text-[var(--orange)]">
+                      <Users className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm sm:text-base font-black font-heading text-[var(--text-primary)]">
+                        Add Friends to Registration
+                      </h4>
+                      <p className="text-xs text-[var(--text-muted)] font-medium">
+                        Choose how many friends to register (1 to 10 members)
+                      </p>
                     </div>
                   </div>
-                </div>
 
-                {/* Friend Student Toggle (Independent) */}
-                <div>
-                  <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                    Is your Friend a Student? *
-                  </label>
-                  <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="friends-count-select" className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider whitespace-nowrap">
+                        Number of Friends:
+                      </label>
+                      <select
+                        id="friends-count-select"
+                        value={friendsCount}
+                        disabled={!isRegistrationOpen}
+                        onChange={(e) => handleFriendsCountChange(e.target.value)}
+                        className="py-2.5 px-4 rounded-xl bg-[var(--bg-primary)] border-2 border-[var(--orange)] text-sm font-extrabold text-[var(--orange)] focus:outline-none shadow-sm cursor-pointer"
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                          <option key={num} value={num} className="bg-[var(--bg-primary)] text-[var(--text-primary)] font-bold">
+                            {num} {num === 1 ? 'Friend' : 'Friends'}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                     <button
                       type="button"
-                      disabled={!isRegistrationOpen}
-                      onClick={() => setFriendForm({ ...friendForm, isStudent: true })}
-                      className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
-                        friendForm.isStudent
-                          ? 'bg-[var(--orange)]/15 border-[var(--orange)] text-[var(--orange)] shadow-sm'
-                          : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
-                      }`}
+                      onClick={handleRemoveAllFriends}
+                      className="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-red-500/10 transition-colors whitespace-nowrap"
+                      title="Remove All Friends"
                     >
-                      YES, FRIEND IS A STUDENT
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={!isRegistrationOpen}
-                      onClick={() => setFriendForm({ ...friendForm, isStudent: false, standard: '', institutionName: '', otherInstitution: '' })}
-                      className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
-                        !friendForm.isStudent
-                          ? 'bg-[var(--cyan)]/15 border-[var(--cyan)] text-[var(--cyan)] shadow-sm'
-                          : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
-                      }`}
-                    >
-                      NO, INDIVIDUAL
+                      <Trash2 className="w-4 h-4" />
+                      <span className="hidden sm:inline">Remove All</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Friend Student Specific Fields */}
-                {friendForm.isStudent && (
-                  <div className="space-y-4 p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] animate-in fade-in">
+                {/* Dynamic list of friend cards */}
+                {friendsList.map((friendItem, idx) => (
+                  <div
+                    key={idx}
+                    className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-tertiary)]/60 border-2 border-[var(--cyan)]/40 shadow-inner space-y-6"
+                  >
+                    <div className="flex items-center justify-between pb-3 border-b border-[var(--border-color)]">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-7 h-7 rounded-full bg-[var(--cyan)] text-white flex items-center justify-center font-black text-xs">
+                          {idx + 2}
+                        </span>
+                        <div>
+                          <h3 className="text-base sm:text-lg font-black font-heading text-[var(--text-primary)]">
+                            Participant {idx + 2} — Friend {idx + 1}'s Registration
+                          </h3>
+                        </div>
+                      </div>
+
+                      {friendsList.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFriendAtIndex(idx)}
+                          className="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-red-500/10 transition-colors"
+                          title={`Remove Friend ${idx + 1}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span>Remove</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Friend Full Name */}
                     <div>
                       <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                        Standard / Class
+                        Friend {idx + 1}'s Full Name (For Certificate) *
                       </label>
                       <div className="relative">
-                        <GraduationCap className="w-5 h-5 text-[var(--orange)] absolute left-3.5 top-3.5" />
+                        <User className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
                         <input
                           type="text"
+                          required
                           disabled={!isRegistrationOpen}
-                          value={friendForm.standard}
-                          onChange={(e) => setFriendForm({ ...friendForm, standard: e.target.value })}
-                          placeholder="e.g. 8th, 9th, 10th, Inter, Degree..."
-                          className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                          value={friendItem.fullName}
+                          onChange={(e) => updateFriendField(idx, 'fullName', e.target.value)}
+                          placeholder={`Enter friend ${idx + 1}'s full name as it should appear on certificate`}
+                          className={`w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
+                            friendsErrors[idx]?.fullName
+                              ? 'border-red-500'
+                              : 'border-[var(--border-color)] focus:border-[var(--cyan)]'
+                          }`}
                         />
                       </div>
+                      {friendsErrors[idx]?.fullName && (
+                        <p className="text-xs text-red-500 font-bold mt-1">{friendsErrors[idx].fullName}</p>
+                      )}
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                        School / College Name in Adoni *
-                      </label>
-                      <SearchableSelect
-                        options={[...institutions, 'OTHER']}
-                        value={friendForm.institutionName}
-                        onChange={(val) => setFriendForm({ ...friendForm, institutionName: val })}
-                        error={friendErrors.institutionName}
-                      />
-                    </div>
-
-                    {friendForm.institutionName === 'OTHER' && (
+                    {/* Friend Age & Profession */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                          Specify School / College Name *
+                          Friend {idx + 1}'s Age (Years)
                         </label>
                         <input
-                          type="text"
-                          value={friendForm.otherInstitution}
-                          onChange={(e) => setFriendForm({ ...friendForm, otherInstitution: e.target.value })}
-                          placeholder="Type your friend's institution name..."
-                          className="w-full py-3.5 px-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                          type="number"
+                          min="5"
+                          max="100"
+                          disabled={!isRegistrationOpen}
+                          value={friendItem.age}
+                          onChange={(e) => updateFriendField(idx, 'age', e.target.value)}
+                          placeholder="e.g. 19"
+                          className="w-full px-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
                         />
-                        {friendErrors.otherInstitution && (
-                          <p className="text-xs text-red-500 font-bold mt-1">{friendErrors.otherInstitution}</p>
-                        )}
                       </div>
-                    )}
-                  </div>
-                )}
 
-                {/* Friend Contact Number & T-Shirt Size */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                      Friend's Contact Mobile Number *
-                    </label>
-                    <div className="relative flex items-center">
-                      <div className="absolute left-3.5 flex items-center gap-1.5 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2.5">
-                        <Phone className="w-4 h-4 text-[var(--cyan)]" />
-                        <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                      <div>
+                        <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                          Friend {idx + 1}'s Profession / Occupation
+                        </label>
+                        <div className="relative">
+                          <Briefcase className="w-5 h-5 text-[var(--cyan)] absolute left-3.5 top-3.5" />
+                          <input
+                            type="text"
+                            disabled={!isRegistrationOpen}
+                            value={friendItem.profession}
+                            onChange={(e) => updateFriendField(idx, 'profession', e.target.value)}
+                            placeholder="Student, Teacher, Engineer, etc."
+                            className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--cyan)]"
+                          />
+                        </div>
                       </div>
-                      <input
-                        type="tel"
-                        required
-                        disabled={!isRegistrationOpen}
-                        value={friendForm.contactNumber}
-                        onChange={(e) => setFriendForm({ ...friendForm, contactNumber: formatPhoneInput(e.target.value) })}
-                        placeholder="98765 43210"
-                        maxLength={12}
-                        className={`w-full pl-20 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
-                          friendErrors.contactNumber ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--cyan)]'
-                        }`}
-                      />
                     </div>
-                    {friendErrors.contactNumber && <p className="text-xs text-red-500 font-bold mt-1">{friendErrors.contactNumber}</p>}
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                      Friend's T-Shirt Size *
-                    </label>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {['S', 'M', 'L', 'XL'].map((size) => (
+                    {/* Friend Student Toggle */}
+                    <div>
+                      <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                        Is Friend {idx + 1} a Student? *
+                      </label>
+                      <div className="grid grid-cols-2 gap-3 pt-1">
                         <button
-                          key={size}
                           type="button"
                           disabled={!isRegistrationOpen}
-                          onClick={() => setFriendForm({ ...friendForm, tShirtSize: size })}
-                          className={`px-3.5 py-2.5 rounded-xl text-xs font-extrabold border transition-all ${
-                            friendForm.tShirtSize === size
-                              ? 'bg-[var(--cyan)] text-white border-[var(--cyan)] shadow-md'
+                          onClick={() => updateFriendField(idx, 'isStudent', true)}
+                          className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
+                            friendItem.isStudent
+                              ? 'bg-[var(--orange)]/15 border-[var(--orange)] text-[var(--orange)] shadow-sm'
                               : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
                           }`}
                         >
-                          {size}
+                          YES, FRIEND IS A STUDENT
                         </button>
-                      ))}
-                    </div>
-                    {friendErrors.tShirtSize && <p className="text-xs text-red-500 font-bold mt-1">{friendErrors.tShirtSize}</p>}
-                  </div>
-                </div>
 
-                {/* Friend Terms Checkbox */}
-                <div className="pt-2">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      disabled={!isRegistrationOpen}
-                      checked={friendForm.agreeTerms}
-                      onChange={(e) => setFriendForm({ ...friendForm, agreeTerms: e.target.checked })}
-                      className="w-5 h-5 mt-0.5 text-[var(--cyan)] rounded accent-[var(--cyan)]"
-                    />
-                    <span className="text-xs text-[var(--text-muted)] font-semibold leading-relaxed">
-                      I declare on behalf of Participant 2 (Friend) that they are physically fit to participate in the Anti-Drug Movement Marathon Run 2026 and agree to the event rules, terms and conditions.
-                    </span>
-                  </label>
-                  {friendErrors.agreeTerms && <p className="text-xs text-red-500 font-bold mt-1">{friendErrors.agreeTerms}</p>}
-                </div>
+                        <button
+                          type="button"
+                          disabled={!isRegistrationOpen}
+                          onClick={() => {
+                            setFriendsList((prev) => {
+                              const updated = [...prev];
+                              updated[idx] = {
+                                ...updated[idx],
+                                isStudent: false,
+                                standard: '',
+                                institutionName: '',
+                                otherInstitution: '',
+                              };
+                              return updated;
+                            });
+                          }}
+                          className={`py-3 px-4 rounded-2xl text-xs font-extrabold border transition-all ${
+                            !friendItem.isStudent
+                              ? 'bg-[var(--cyan)]/15 border-[var(--cyan)] text-[var(--cyan)] shadow-sm'
+                              : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
+                          }`}
+                        >
+                          NO, INDIVIDUAL
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Friend Student Specific Fields */}
+                    {friendItem.isStudent && (
+                      <div className="space-y-4 p-4 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] animate-in fade-in">
+                        <div>
+                          <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                            Standard / Class
+                          </label>
+                          <div className="relative">
+                            <GraduationCap className="w-5 h-5 text-[var(--orange)] absolute left-3.5 top-3.5" />
+                            <input
+                              type="text"
+                              disabled={!isRegistrationOpen}
+                              value={friendItem.standard}
+                              onChange={(e) => updateFriendField(idx, 'standard', e.target.value)}
+                              placeholder="e.g. 8th, 9th, 10th, Inter, Degree..."
+                              className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                            School / College Name in Adoni *
+                          </label>
+                          <SearchableSelect
+                            options={[...institutions, 'OTHER']}
+                            value={friendItem.institutionName}
+                            onChange={(val) => updateFriendField(idx, 'institutionName', val)}
+                            error={friendsErrors[idx]?.institutionName}
+                          />
+                        </div>
+
+                        {friendItem.institutionName === 'OTHER' && (
+                          <div>
+                            <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                              Specify School / College Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={friendItem.otherInstitution}
+                              onChange={(e) => updateFriendField(idx, 'otherInstitution', e.target.value)}
+                              placeholder="Type your friend's institution name..."
+                              className="w-full py-3.5 px-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--orange)]"
+                            />
+                            {friendsErrors[idx]?.otherInstitution && (
+                              <p className="text-xs text-red-500 font-bold mt-1">
+                                {friendsErrors[idx].otherInstitution}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Friend Contact Number & T-Shirt Size */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                          Friend {idx + 1}'s Contact Mobile Number *
+                        </label>
+                        <div className="relative flex items-center">
+                          <div className="absolute left-3.5 flex items-center gap-1.5 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2.5">
+                            <Phone className="w-4 h-4 text-[var(--cyan)]" />
+                            <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                          </div>
+                          <input
+                            type="tel"
+                            required
+                            disabled={!isRegistrationOpen}
+                            value={friendItem.contactNumber}
+                            onChange={(e) =>
+                              updateFriendField(idx, 'contactNumber', formatPhoneInput(e.target.value))
+                            }
+                            placeholder="98765 43210"
+                            maxLength={12}
+                            className={`w-full pl-20 pr-4 py-3.5 rounded-2xl bg-[var(--bg-primary)] border text-sm text-[var(--text-primary)] focus:outline-none ${
+                              friendsErrors[idx]?.contactNumber
+                                ? 'border-red-500'
+                                : 'border-[var(--border-color)] focus:border-[var(--cyan)]'
+                            }`}
+                          />
+                        </div>
+                        {friendsErrors[idx]?.contactNumber && (
+                          <p className="text-xs text-red-500 font-bold mt-1">{friendsErrors[idx].contactNumber}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
+                          Friend {idx + 1}'s T-Shirt Size *
+                        </label>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {['S', 'M', 'L', 'XL'].map((size) => (
+                            <button
+                              key={size}
+                              type="button"
+                              disabled={!isRegistrationOpen}
+                              onClick={() => updateFriendField(idx, 'tShirtSize', size)}
+                              className={`px-3.5 py-2.5 rounded-xl text-xs font-extrabold border transition-all ${
+                                friendItem.tShirtSize === size
+                                  ? 'bg-[var(--cyan)] text-white border-[var(--cyan)] shadow-md'
+                                  : 'bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)]'
+                              }`}
+                            >
+                              {size}
+                            </button>
+                          ))}
+                        </div>
+                        {friendsErrors[idx]?.tShirtSize && (
+                          <p className="text-xs text-red-500 font-bold mt-1">{friendsErrors[idx].tShirtSize}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Friend Terms Checkbox */}
+                    <div className="pt-2">
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          disabled={!isRegistrationOpen}
+                          checked={friendItem.agreeTerms}
+                          onChange={(e) => updateFriendField(idx, 'agreeTerms', e.target.checked)}
+                          className="w-5 h-5 mt-0.5 text-[var(--cyan)] rounded accent-[var(--cyan)]"
+                        />
+                        <span className="text-xs text-[var(--text-muted)] font-semibold leading-relaxed">
+                          I declare on behalf of Participant {idx + 2} ({friendItem.fullName.trim() || `Friend ${idx + 1}`}) that they are physically fit to participate in the Anti-Drug Movement Marathon Run 2026 and agree to the event rules, terms and conditions.
+                        </span>
+                      </label>
+                      {friendsErrors[idx]?.agreeTerms && (
+                        <p className="text-xs text-red-500 font-bold mt-1">{friendsErrors[idx].agreeTerms}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
 
@@ -1034,15 +1198,22 @@ export const RegistrationPage = () => {
             <div className="pt-2">
               <button
                 type="submit"
-                disabled={!isRegistrationOpen || !indForm.agreeTerms || (hasFriend && !friendForm.agreeTerms) || indSubmitting}
+                disabled={
+                  !isRegistrationOpen ||
+                  !indForm.agreeTerms ||
+                  (hasFriends && friendsList.some((f) => !f.agreeTerms)) ||
+                  indSubmitting
+                }
                 className="btn-primary w-full justify-center py-4 text-base shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-black"
               >
                 <Award className="w-5 h-5" />
                 <span>
                   {indSubmitting
                     ? 'SUBMITTING REGISTRATION...'
-                    : hasFriend
-                    ? 'SUBMIT REGISTRATION (YOU + FRIEND)'
+                    : hasFriends
+                    ? `SUBMIT REGISTRATION (YOU + ${friendsList.length} ${
+                        friendsList.length === 1 ? 'FRIEND' : 'FRIENDS'
+                      })`
                     : 'SUBMIT MARATHON REGISTRATION'}
                 </span>
               </button>

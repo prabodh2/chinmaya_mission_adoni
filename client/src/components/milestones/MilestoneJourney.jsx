@@ -215,7 +215,7 @@ export const MilestoneJourney = () => {
           >
             <JourneyBus
               isMoving={isScrolling}
-              currentYear={currentMilestone.year}
+              currentYear={currentMilestone.shortYear || currentMilestone.year}
             />
           </div>
 
@@ -248,7 +248,7 @@ export const MilestoneJourney = () => {
                         {/* Road Sign Beside Road */}
                         <div className="flex md:justify-end justify-start mb-1">
                           <RoadSign
-                            year={milestone.year}
+                            year={milestone.signYear || milestone.year}
                             isActive={isActive}
                             isPassed={isPassed}
                             side="left"
@@ -276,7 +276,7 @@ export const MilestoneJourney = () => {
                         {/* Road Sign Beside Road */}
                         <div className="flex justify-start mb-1">
                           <RoadSign
-                            year={milestone.year}
+                            year={milestone.signYear || milestone.year}
                             isActive={isActive}
                             isPassed={isPassed}
                             side="right"

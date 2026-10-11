@@ -32,6 +32,12 @@ const EraBadge = ({ era }) => {
       return <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">🔥 Sacred Ceremony</span>;
     case 'education':
       return <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">☀️ Value Education</span>;
+    case 'culture':
+      return <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">📖 Gita Chanting</span>;
+    case 'community':
+      return <span className="text-[10px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200">🌉 Devotee Access</span>;
+    case 'modern':
+      return <span className="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-md border border-cyan-200">🎙️ Spiritual Outreach</span>;
     case 'celebration':
       return <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">🏆 District Milestone</span>;
     default:

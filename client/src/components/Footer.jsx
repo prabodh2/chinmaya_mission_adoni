@@ -13,7 +13,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   brand: {
     title: 'CHINMAYA MISSION ADONI',
     description:
-      'A spiritual and cultural organisation established in 2001, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
+      'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
   },
   organizedBy: {
     heading: 'FOUNDED UNDER PUJYA GURUDEV:',
@@ -79,7 +79,7 @@ function sanitizeMainSiteFooter(rawData) {
       ...data.brand,
       title: 'CHINMAYA MISSION ADONI',
       description:
-        'A spiritual and cultural organisation established in 2001, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
+        'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
     };
   }
 
@@ -283,7 +283,7 @@ export const Footer = ({ overrideData = null }) => {
 
             <p className="text-xs leading-relaxed font-medium opacity-90">
               {brand.description ||
-                'A spiritual and cultural organisation established in 2001, dedicated to sharing timeless Vedic wisdom, human values, and inspiring purposeful lives.'}
+                'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring purposeful lives.'}
             </p>
 
             <div className="text-xs font-bold pt-1">

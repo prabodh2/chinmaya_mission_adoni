@@ -35,28 +35,28 @@ export const AboutPage = () => {
     },
     whoWeAre: {
       heading: 'WHO ARE WE?',
-      p1: 'Chinmaya Mission Adoni is a spiritual and cultural organisation established in 2001 and inaugurated by Pujya Swami Tejomayananda. As part of the global Chinmaya Mission movement founded by Pujya Gurudev Swami Chinmayananda, we are dedicated to sharing the timeless wisdom of Vedanta and the Bhagavad Gita, inspiring individuals to lead lives rooted in knowledge, values and selfless service.',
+      p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
       highlights: [
-        { label: 'ESTABLISHED', value: '2001' },
-        { label: 'INAUGURATED BY', value: 'Pujya Swami Tejomayananda' },
+        { label: 'ESTABLISHED', value: '1992' },
+        { label: 'ESTABLISHED BY', value: 'Swami Shyamananda' },
         { label: 'ROOTED IN', value: 'Vedanta & Bhagavad Gita' },
       ],
     },
     ourStory: {
       heading: 'OUR STORY',
-      p1: 'Established in 2001 and inaugurated by Pujya Swami Tejomayananda, Chinmaya Mission Adoni is part of the global Chinmaya Mission movement founded by Pujya Gurudev Swami Chinmayananda. Rooted in the timeless wisdom of Vedanta and the teachings of the Bhagavad Gita, the Mission is dedicated to nurturing spiritual growth, strengthening human values and inspiring individuals to lead purposeful lives.',
-      p2: 'Since its inception, Chinmaya Mission Adoni has sought to bring the light of spiritual knowledge and Indian cultural heritage to the local community. Through spiritual learning, cultural activities, youth engagement and community service, the Mission strives to make ancient wisdom meaningful and relevant to contemporary life.',
+      p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
+      p2: 'Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       timeline: [
         {
-          year: '2001',
+          year: '1992',
           title: 'Establishment of Chinmaya Mission Adoni',
-          desc: 'Inaugurated by Pujya Swami Tejomayananda to share timeless wisdom in Adoni.',
+          desc: 'Established by Swami Shyamananda (Dr. Shyamala) under the guidance of Swami Sharadapriyananda.',
         },
         {
-          year: '2005',
-          title: 'Spiritual & Cultural Growth',
-          desc: 'Expanding study groups, spiritual discourses, and cultural programs.',
+          year: '2001',
+          title: 'Chinmaya Cultural Complex',
+          desc: 'Inauguration of the Chinmaya Cultural Complex by Pujya Swami Tejomayanandaji.',
         },
         {
           year: '2012',
@@ -138,15 +138,17 @@ export const AboutPage = () => {
     continuingLegacy: {
       heading: 'CONTINUING THE LEGACY',
       content:
-        'Since its inauguration in 2001 by Pujya Swami Tejomayananda, Chinmaya Mission Adoni has been part of the continuing effort to share the vision and teachings of Pujya Gurudev Swami Chinmayananda. Guided by the principles of knowledge, devotion and selfless service, the Mission aspires to inspire individuals, empower youth and contribute to the spiritual and cultural enrichment of Adoni.',
-      highlights: ['2001', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
+        'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
+      highlights: ['1992', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
     },
     conclusion: {
       heading: 'Conclusion',
       paragraph1:
-        "Chinmaya Mission, Adoni, has grown from its humble beginnings in 1992 into an important centre for spiritual development, cultural preservation, children's education and youth development. Its sustained Geeta chanting competitions, Balavihar and youth camps, temple-related activities and cultural programmes demonstrate its long-term contribution to the community.",
+        'From its humble beginning in 1992, Chinmaya Mission, Adoni, has grown into a vibrant centre dedicated to spiritual growth, cultural preservation, value-based education and community service.',
       paragraph2:
-        "The Mission's journey reflects a commitment to preserving Indian values and making them relevant to successive generations.",
+        'Through its sustained Geeta Chanting Competitions, Balavihar, Youth Camps, temple development initiatives and numerous cultural programmes, the Mission has positively influenced thousands of children, youth and families over the past three decades.',
+      paragraph3:
+        "The journey of Chinmaya Mission, Adoni, reflects its unwavering commitment to preserving India's spiritual heritage while making eternal values meaningful and relevant for present and future generations. Guided by the ideals of Pujya Gurudev Swami Chinmayananda, the Mission continues to inspire individuals to lead lives of knowledge, devotion, discipline and selfless service, thereby contributing to the moral and cultural enrichment of society.",
     },
     ourVision: {
       heading: 'OUR VISION',
@@ -209,6 +211,18 @@ export const AboutPage = () => {
       const cached = localStorage.getItem('cms_about_content');
       if (cached) {
         const parsed = JSON.parse(cached);
+        if (!parsed?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
+          parsed.whoWeAre = { ...defaultContent.whoWeAre };
+        }
+        if (!parsed?.ourStory?.p1?.includes('Swami Shyamananda')) {
+          parsed.ourStory = { ...defaultContent.ourStory };
+        }
+        if (!parsed?.conclusion?.paragraph3 || parsed?.conclusion?.paragraph1?.includes('an important centre for spiritual development')) {
+          parsed.conclusion = { ...defaultContent.conclusion };
+        }
+        if (!parsed?.continuingLegacy?.highlights?.includes('1992')) {
+          parsed.continuingLegacy = { ...defaultContent.continuingLegacy };
+        }
         if (parsed?.ourActivities?.cards) {
           parsed.ourActivities.cards.forEach((c, idx) => {
             const def = defaultContent.ourActivities.cards[idx];
@@ -241,6 +255,18 @@ export const AboutPage = () => {
         if (res.data?.success && res.data?.data) {
           const apiData = res.data.data;
           const merged = { ...defaultContent, ...apiData };
+          if (!merged?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
+            merged.whoWeAre = { ...defaultContent.whoWeAre };
+          }
+          if (!merged?.ourStory?.p1?.includes('Swami Shyamananda')) {
+            merged.ourStory = { ...defaultContent.ourStory };
+          }
+          if (!merged?.conclusion?.paragraph3 || merged?.conclusion?.paragraph1?.includes('an important centre for spiritual development')) {
+            merged.conclusion = { ...defaultContent.conclusion };
+          }
+          if (!merged?.continuingLegacy?.highlights?.includes('1992')) {
+            merged.continuingLegacy = { ...defaultContent.continuingLegacy };
+          }
           if (merged.ourActivities?.cards) {
             merged.ourActivities.cards = merged.ourActivities.cards.map((c, idx) => {
               let cleanImg = c.imageUrl;
@@ -414,9 +440,11 @@ export const AboutPage = () => {
               <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
                 {data.whoWeAre.p1}
               </p>
-              <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
-                {data.whoWeAre.p2}
-              </p>
+              {data.whoWeAre.p2 && data.whoWeAre.p2.trim() !== '' && data.whoWeAre.p2 !== data.whoWeAre.p1 && (
+                <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
+                  {data.whoWeAre.p2}
+                </p>
+              )}
             </div>
 
             {/* Highlights Statistics Grid */}
@@ -701,15 +729,20 @@ export const AboutPage = () => {
             </h2>
             <div className="space-y-4 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
               <p>
-                {data.conclusion?.paragraph1 ||
-                  "Chinmaya Mission, Adoni, has grown from its humble beginnings in 1992 into an important centre for spiritual development, cultural preservation, children's education and youth development. Its sustained Geeta chanting competitions, Balavihar and youth camps, temple-related activities and cultural programmes demonstrate its long-term contribution to the community."}
+                {data.conclusion?.paragraph1}
               </p>
-              <div className="p-4 rounded-2xl bg-[var(--bg-secondary)] border-l-4 border-[var(--orange)]">
-                <p className="font-semibold text-[var(--text-primary)] italic">
-                  {data.conclusion?.paragraph2 ||
-                    "The Mission's journey reflects a commitment to preserving Indian values and making them relevant to successive generations."}
+              {data.conclusion?.paragraph2 && (
+                <p>
+                  {data.conclusion.paragraph2}
                 </p>
-              </div>
+              )}
+              {data.conclusion?.paragraph3 && (
+                <div className="p-5 rounded-2xl bg-[var(--bg-secondary)] border-l-4 border-[var(--orange)] shadow-sm">
+                  <p className="font-semibold text-[var(--text-primary)] italic leading-relaxed">
+                    {data.conclusion.paragraph3}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
