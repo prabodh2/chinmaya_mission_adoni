@@ -93,6 +93,23 @@ export const RegistrationDetailsModal = ({ registration, onClose, onEdit }) => {
           </div>
 
           <div className="p-3.5 rounded-2xl bg-[#0B132B] border border-white/10 sm:col-span-2">
+            <span className="text-[10px] font-bold text-[#64748B] uppercase block">Entry Pass Identifier</span>
+            <span className="text-sm font-black text-[#00B4D8] font-mono mt-0.5 block">
+              {registration.entryPassId || 'PASS-UNASSIGNED'}
+            </span>
+          </div>
+
+          {registration.groupRole && (
+            <div className="p-3.5 rounded-2xl bg-[#0B132B] border border-white/10 sm:col-span-2">
+              <span className="text-[10px] font-bold text-[#64748B] uppercase block">Group Booking Status</span>
+              <span className="text-sm font-bold text-[#F59E0B] mt-0.5 block capitalize">
+                {registration.groupRole === 'primary' ? 'Primary Registrant (Self)' : "Friend's Registration (Linked)"}
+                {registration.groupId && ` • Group ID: ${registration.groupId}`}
+              </span>
+            </div>
+          )}
+
+          <div className="p-3.5 rounded-2xl bg-[#0B132B] border border-white/10 sm:col-span-2">
             <span className="text-[10px] font-bold text-[#64748B] uppercase block">Registered On</span>
             <span className="text-sm font-bold text-white mt-0.5 block">
               {new Date(registration.createdAt).toLocaleString('en-IN', {

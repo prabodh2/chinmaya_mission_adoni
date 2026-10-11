@@ -25,6 +25,29 @@ import { MyActivityPage } from './pages/MyActivityPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
+const MARATHON_PORTAL_URL = import.meta.env.VITE_MARATHON_URL || 'http://localhost:5175';
+
+function MarathonPortalRedirect({ path = '' }) {
+  useEffect(() => {
+    window.location.href = `${MARATHON_PORTAL_URL}${path}`;
+  }, [path]);
+
+  return (
+    <div className="min-h-[50vh] flex flex-col items-center justify-center p-6 text-center">
+      <div className="w-10 h-10 border-4 border-[var(--orange)] border-t-transparent rounded-full animate-spin mb-4" />
+      <p className="text-sm font-bold text-[var(--text-primary)]">
+        Redirecting to Anti-Drug Marathon Run 2026 Portal...
+      </p>
+      <a
+        href={`${MARATHON_PORTAL_URL}${path}`}
+        className="mt-3 text-xs font-bold text-[var(--orange)] underline"
+      >
+        Click here if not redirected automatically
+      </a>
+    </div>
+  );
+}
+
 // Public Layout containing Public Navbar and Footer
 function PublicLayout() {
   return (
@@ -60,53 +83,22 @@ export function App() {
         <Router>
           <ScrollToTop />
           <Routes>
-            {/* 1. Public Website & User Account Routes (Wrapped with Public Navbar & Footer) */}
+            {/* 1. Main Chinmaya Mission Website Pages */}
             <Route element={<PublicLayout />}>
-              <Route path="/" element={<HomePage />} />
+              {/* Home page is not required for now; redirect root to About */}
+              <Route path="/" element={<Navigate to="/about" replace />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about-me" element={<AboutPage />} />
               <Route path="/activities" element={<ActivitiesPage />} />
               <Route path="/lets-connect" element={<LetsConnectPage />} />
               
-              {/* Marathon Registration Route */}
-              <Route
-                path="/register"
-                element={
-                  <ProtectedRoute redirectTo="/signup">
-                    <RegistrationPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* User Authentication Routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-
-              {/* User Account Portal */}
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/my-activity"
-                element={
-                  <ProtectedRoute>
-                    <MyActivityPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/my-registrations"
-                element={
-                  <ProtectedRoute>
-                    <MyActivityPage />
-                  </ProtectedRoute>
-                }
-              />
+              {/* Marathon portal redirects (marathon is hosted separately) */}
+              <Route path="/register" element={<MarathonPortalRedirect path="/register" />} />
+              <Route path="/login" element={<MarathonPortalRedirect path="/login" />} />
+              <Route path="/signup" element={<MarathonPortalRedirect path="/signup" />} />
+              <Route path="/profile" element={<MarathonPortalRedirect path="/profile" />} />
+              <Route path="/my-activity" element={<MarathonPortalRedirect path="/my-activity" />} />
+              <Route path="/my-registrations" element={<MarathonPortalRedirect path="/my-activity" />} />
             </Route>
 
             {/* 2. Standalone Admin Login (NO Public Navbar, NO Public Footer, NO Normal User Pill) */}
@@ -226,8 +218,8 @@ export function App() {
               }
             />
 
-            {/* Catch-all Redirect */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Catch-all Redirect to About */}
+            <Route path="*" element={<Navigate to="/about" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   submitIndividualRegistration,
+  submitGroupRegistration,
   submitSchoolCollegeRegistration,
   submitBulkRegistration,
   parseSpreadsheetFile,
@@ -12,6 +13,7 @@ import {
   deleteRegistration,
   getRegistrationSummary,
   getRegistrationCounts,
+  verifyPass,
 } from '../controllers/registrationController.js';
 import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
@@ -22,11 +24,15 @@ const router = express.Router();
 
 // Protected Form Submissions (Requires user authentication/signup)
 router.post('/individual', registrationLimiter, protect, submitIndividualRegistration);
+router.post('/group', registrationLimiter, protect, submitGroupRegistration);
 router.post('/form', registrationLimiter, protect, submitIndividualRegistration); // alias
 router.post('/school-college', registrationLimiter, protect, uploadSpreadsheet, submitSchoolCollegeRegistration);
 router.post('/bulk', registrationLimiter, protect, uploadSpreadsheet, submitBulkRegistration); // alias
 router.post('/parse-file', protect, uploadSpreadsheet, parseSpreadsheetFile);
 
+// Public Entry Pass Verification (Opaque / QR scan verification)
+router.get('/verify-pass/:passId', verifyPass);
+router.get('/pass/:passId/verify', verifyPass);
 
 // Metadata & Calculations
 router.get('/institutions', getInstitutions);

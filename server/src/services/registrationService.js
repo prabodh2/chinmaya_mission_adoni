@@ -1,7 +1,17 @@
+import crypto from 'crypto';
 import Registration from '../models/Registration.js';
 import BulkBatch from '../models/BulkBatch.js';
 import { generateRegistrationId } from '../utils/registrationIdGenerator.js';
 import { syncRegistrationToGoogleSheets } from '../config/googleSheets.js';
+
+/**
+ * Generate unique, unguessable entry pass identifier
+ * Example: PASS-CMA2026IN01-A7E4D9
+ */
+export const generateEntryPassId = (registrationId) => {
+  const randomSuffix = crypto.randomBytes(3).toString('hex').toUpperCase();
+  return `PASS-${registrationId}-${randomSuffix}`;
+};
 
 /**
  * Clean and normalize a 10-digit Indian phone number
@@ -42,10 +52,15 @@ const normalizeTypeQuery = (type) => {
 
 export const registrationService = {
   /**
-   * Create an Individual Registration
+   * Create an Individual Registration (or delegates to Group Registration if a friend is included)
    * Format: CMA + YEAR + IN + INDEX (e.g. CMA2026IN01)
    */
   async createIndividualRegistration(data, userId = null) {
+    // If friend data is provided, route through group registration
+    if (data.friend && typeof data.friend === 'object' && Object.keys(data.friend).length > 0) {
+      return this.createGroupRegistration(data.primary || data, data.friend, userId);
+    }
+
     const {
       fullName,
       studentName,
@@ -67,7 +82,7 @@ export const registrationService = {
 
     const finalName = (fullName || studentName || name || '').trim();
     if (!finalName) {
-      throw new Error('Student name is required.');
+      throw new Error('Full Name is required.');
     }
 
     const rawPhone = contactNumber || parentPhone || phone || '';
@@ -104,12 +119,15 @@ export const registrationService = {
 
     // Atomically generate sequential ID (e.g. CMA2026IN01)
     const { registrationId, year, index } = await generateRegistrationId('individual');
+    const entryPassId = generateEntryPassId(registrationId);
 
     const registration = new Registration({
       registrationId,
       registrationYear: year,
       registrationIndex: index,
       userId,
+      registeredBy: userId,
+      entryPassId,
       fullName: finalName,
       age: isNaN(parsedAge) ? null : parsedAge,
       standard: finalStandard,
@@ -137,6 +155,149 @@ export const registrationService = {
       .catch(() => {});
 
     return registration;
+  },
+
+  /**
+   * Create a Group Registration (Primary User + Friend)
+   * Atomically registers two distinct participants linked by a unique groupId.
+   * Both participants receive distinct sequential registration IDs and unique entry pass IDs.
+   */
+  async createGroupRegistration(primaryData, friendData, userId = null) {
+    // 1. Validate Primary Participant
+    const primaryName = (primaryData.fullName || primaryData.name || '').trim();
+    if (!primaryName) {
+      throw new Error('Participant 1 (Your) Full Name is required.');
+    }
+    const primaryPhone = sanitizePhone(primaryData.contactNumber || primaryData.phone || '');
+    if (primaryPhone.length !== 10 || !/^[6-9]/.test(primaryPhone)) {
+      throw new Error('Participant 1 (Your) valid 10-digit mobile number starting with 6-9 is required.');
+    }
+    const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+    const rawPrimarySize = (primaryData.tShirtSize || primaryData.size || 'M').toUpperCase();
+    const primarySize = validSizes.includes(rawPrimarySize) ? rawPrimarySize : 'M';
+    const parsedPrimaryAge = primaryData.age ? parseInt(primaryData.age, 10) : null;
+    const primaryStandard = primaryData.standard ? String(primaryData.standard).trim() : null;
+    const primaryProfession = primaryData.profession ? String(primaryData.profession).trim() : null;
+    const primaryInstitution = (primaryData.institutionName || primaryData.schoolName || 'N/A').trim();
+
+    // 2. Validate Friend Participant
+    const friendName = (friendData.fullName || friendData.name || '').trim();
+    if (!friendName) {
+      throw new Error("Participant 2 (Friend's) Full Name is required.");
+    }
+    const friendPhone = sanitizePhone(friendData.contactNumber || friendData.phone || '');
+    if (friendPhone.length !== 10 || !/^[6-9]/.test(friendPhone)) {
+      throw new Error("Participant 2 (Friend's) valid 10-digit mobile number starting with 6-9 is required.");
+    }
+    const rawFriendSize = (friendData.tShirtSize || friendData.size || 'M').toUpperCase();
+    const friendSize = validSizes.includes(rawFriendSize) ? rawFriendSize : 'M';
+    const parsedFriendAge = friendData.age ? parseInt(friendData.age, 10) : null;
+    const friendStandard = friendData.standard ? String(friendData.standard).trim() : null;
+    const friendProfession = friendData.profession ? String(friendData.profession).trim() : null;
+    const friendInstitution = (friendData.institutionName || friendData.schoolName || 'N/A').trim();
+
+    // 3. Duplicate check for either participant in recent 15 seconds
+    const fifteenSecondsAgo = new Date(Date.now() - 15 * 1000);
+    const existingRecentPrimary = await Registration.findOne({
+      fullName: primaryName,
+      contactNumber: primaryPhone,
+      createdAt: { $gte: fifteenSecondsAgo },
+    });
+    if (existingRecentPrimary && existingRecentPrimary.groupId) {
+      const existingFriend = await Registration.findOne({
+        groupId: existingRecentPrimary.groupId,
+        groupRole: 'friend',
+      });
+      if (existingFriend) {
+        return {
+          isGroup: true,
+          groupId: existingRecentPrimary.groupId,
+          primary: existingRecentPrimary,
+          friend: existingFriend,
+          participants: [existingRecentPrimary, existingFriend],
+        };
+      }
+    }
+
+    // 4. Generate unique group booking ID
+    const groupYear = new Date().getFullYear();
+    const groupRandom = crypto.randomBytes(3).toString('hex').toUpperCase();
+    const groupId = `GRP-${groupYear}-${Date.now().toString(36).toUpperCase()}-${groupRandom}`;
+
+    // 5. Atomically allocate 2 sequential registration IDs
+    const idGen1 = await generateRegistrationId('individual');
+    const idGen2 = await generateRegistrationId('individual');
+
+    const entryPassId1 = generateEntryPassId(idGen1.registrationId);
+    const entryPassId2 = generateEntryPassId(idGen2.registrationId);
+
+    // 6. Build Participant 1 (Primary)
+    const reg1 = new Registration({
+      registrationId: idGen1.registrationId,
+      registrationYear: idGen1.year,
+      registrationIndex: idGen1.index,
+      userId,
+      registeredBy: userId,
+      groupId,
+      groupRole: 'primary',
+      entryPassId: entryPassId1,
+      fullName: primaryName,
+      age: isNaN(parsedPrimaryAge) ? null : parsedPrimaryAge,
+      standard: primaryStandard,
+      profession: primaryProfession,
+      isStudent: Boolean(primaryData.isStudent),
+      institutionName: primaryInstitution,
+      contactNumber: primaryPhone,
+      tShirtSize: primarySize,
+      registrationType: 'individual',
+      institutionType: 'OTHER',
+      status: 'CONFIRMED',
+    });
+
+    // 7. Build Participant 2 (Friend - distinct participant, no automatic login account)
+    const reg2 = new Registration({
+      registrationId: idGen2.registrationId,
+      registrationYear: idGen2.year,
+      registrationIndex: idGen2.index,
+      userId: null,
+      registeredBy: userId,
+      groupId,
+      groupRole: 'friend',
+      entryPassId: entryPassId2,
+      fullName: friendName,
+      age: isNaN(parsedFriendAge) ? null : parsedFriendAge,
+      standard: friendStandard,
+      profession: friendProfession,
+      isStudent: Boolean(friendData.isStudent),
+      institutionName: friendInstitution,
+      contactNumber: friendPhone,
+      tShirtSize: friendSize,
+      registrationType: 'individual',
+      institutionType: 'OTHER',
+      status: 'CONFIRMED',
+    });
+
+    // 8. Atomic save: save reg1 first, then reg2. If reg2 fails, rollback reg1.
+    await reg1.save();
+    try {
+      await reg2.save();
+    } catch (saveErr) {
+      console.error('[Group Registration Rollback] Removing reg1 due to reg2 failure:', saveErr.message);
+      await Registration.findByIdAndDelete(reg1._id).catch(() => {});
+      throw new Error(`Failed to save friend registration: ${saveErr.message}`);
+    }
+
+    // 9. Sync both to Google Sheets in background
+    syncRegistrationToGoogleSheets(reg1).catch(() => {});
+    syncRegistrationToGoogleSheets(reg2).catch(() => {});
+
+    return {
+      isGroup: true,
+      groupId,
+      primary: reg1,
+      friend: reg2,
+      participants: [reg1, reg2],
+    };
   },
 
   /**
@@ -195,12 +356,15 @@ export const registrationService = {
 
     // Atomically generate sequential ID (e.g. CMA2026SC01)
     const { registrationId, year, index } = await generateRegistrationId('school_college');
+    const entryPassId = generateEntryPassId(registrationId);
 
     const registration = new Registration({
       registrationId,
       registrationYear: year,
       registrationIndex: index,
       userId,
+      registeredBy: userId,
+      entryPassId,
       fullName: finalName,
       age: isNaN(parsedAge) ? null : parsedAge,
       standard: finalStandard,
@@ -300,12 +464,15 @@ export const registrationService = {
 
       // Atomically generate sequential CMA...SC... ID
       const { registrationId, year: regYear, index: regIndex } = await generateRegistrationId('school_college');
+      const entryPassId = generateEntryPassId(registrationId);
 
       const reg = new Registration({
         registrationId,
         registrationYear: regYear,
         registrationIndex: regIndex,
         userId,
+        registeredBy: userId,
+        entryPassId,
         fullName: studentName,
         age: isNaN(studentAge) ? null : studentAge,
         standard: studentStandard,
@@ -441,16 +608,59 @@ export const registrationService = {
   },
 
   /**
-   * Get single registration by registrationId or _id
+   * Get single registration by registrationId, entryPassId, or _id
    */
   async getRegistrationById(id) {
     if (!id) return null;
     const cleaned = String(id).trim();
-    let reg = await Registration.findOne({ registrationId: cleaned.toUpperCase() });
+    let reg = await Registration.findOne({
+      $or: [
+        { registrationId: cleaned.toUpperCase() },
+        { entryPassId: cleaned.toUpperCase() },
+      ],
+    });
     if (!reg && cleaned.match(/^[0-9a-fA-F]{24}$/)) {
       reg = await Registration.findById(cleaned);
     }
     return reg;
+  },
+
+  /**
+   * Verify an Entry Pass by registration ID or entry pass ID.
+   * Returns safe participant and event details for display / QR scanning.
+   */
+  async verifyEntryPass(passIdentifier) {
+    if (!passIdentifier) {
+      throw new Error('Entry pass identifier is required.');
+    }
+    const reg = await this.getRegistrationById(passIdentifier);
+    if (!reg) {
+      return {
+        isValid: false,
+        message: 'Invalid entry pass. No registration found.',
+      };
+    }
+
+    const isConfirmed = reg.status === 'CONFIRMED';
+    return {
+      isValid: isConfirmed,
+      status: reg.status,
+      registrationId: reg.registrationId,
+      entryPassId: reg.entryPassId || `PASS-${reg.registrationId}`,
+      fullName: reg.fullName,
+      tShirtSize: reg.tShirtSize,
+      isStudent: reg.isStudent,
+      institutionName: reg.institutionName,
+      standard: reg.standard,
+      profession: reg.profession,
+      contactNumber: reg.contactNumber ? `+91 ${reg.contactNumber.replace(/^\+?91/, '').slice(-4).padStart(10, '•')}` : '—',
+      groupId: reg.groupId || null,
+      groupRole: reg.groupRole || null,
+      event: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
+      date: 'Sunday, 20 December 2026',
+      venue: 'Chinmaya Mission Adoni, Andhra Pradesh',
+      message: isConfirmed ? 'Entry pass verified and active.' : `Entry pass is ${reg.status}.`,
+    };
   },
 
   /**

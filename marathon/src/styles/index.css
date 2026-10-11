@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Design Tokens derived from Poster */
+  --navy: #0B2340;
+  --dark: #111111;
+  --cream: #FFF0C5;
+  --cream-card: #FFFFFF;
+  --orange: #F4511E;
+  --orange-light: #FF7043;
+  --yellow: #FFC107;
+  --red: #E83B1E;
+  --green: #4CAF50;
+  --cyan: #00A6E0;
+  --purple: #7B3FB6;
+  --pink: #E91E63;
+  
+  /* Layout Tokens */
+  --container-max: 1280px;
+  --section-py-desktop: 80px;
+  --section-py-tablet: 60px;
+  --section-py-mobile: 40px;
+
+  /* Theme Variables (Light Mode Default) */
+  --bg-primary: #FFF0C5;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #FFFFFF;
+  --bg-dark-section: #0B2340;
+  --text-primary: #0B2340;
+  --text-secondary: #24415C;
+  --text-muted: #3D607E;
+  --border-color: #EBD6A2;
+  --card-shadow: 0 10px 30px -5px rgba(11, 35, 64, 0.08);
+  --glass-bg: #FFFFFF;
+  --glass-border: rgba(11, 35, 64, 0.12);
+  --hero-glow: radial-gradient(circle, rgba(255, 240, 197, 0.5) 0%, rgba(255, 193, 7, 0.08) 50%, transparent 70%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+  line-height: 1.6;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Prevent long unbroken text from forcing layout overflow without breaking normal words */
+p, h1, h2, h3, h4, h5, h6, a, span, button {
+  overflow-wrap: break-word;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Global Container System */
+.container-custom {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .container-custom {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Section Padding Utility */
+.section-padding {
+  padding-top: var(--section-py-desktop);
+  padding-bottom: var(--section-py-desktop);
+}
+
+@media (max-width: 1024px) {
+  .section-padding {
+    padding-top: var(--section-py-tablet);
+    padding-bottom: var(--section-py-tablet);
+  }
+}
+
+@media (max-width: 640px) {
+  .section-padding {
+    padding-top: var(--section-py-mobile);
+    padding-bottom: var(--section-py-mobile);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--orange);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-light);
+}
+
+/* Continuous Carousel Keyframes */
+@keyframes scrollRightToLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scrollRightToLeft 25s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Transformation Gradient Utilities */
+.gradient-negative {
+  background: linear-gradient(135deg, #1A1A1A 0%, #0B2340 100%);
+  color: #FFFFFF;
+}
+
+.gradient-positive {
+  background: linear-gradient(135deg, #F4511E 0%, #FFC107 100%);
+  color: #111111;
+}
+
+.badge-orange {
+  background-color: rgba(244, 81, 30, 0.12);
+  color: var(--orange);
+  border: 1px solid rgba(244, 81, 30, 0.3);
+}
+
+.badge-cyan {
+  background-color: rgba(0, 166, 224, 0.12);
+  color: var(--cyan);
+  border: 1px solid rgba(0, 166, 224, 0.3);
+}
+
+.badge-green {
+  background-color: rgba(76, 175, 80, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.badge-purple {
+  background-color: rgba(123, 63, 182, 0.12);
+  color: var(--purple);
+  border: 1px solid rgba(123, 63, 182, 0.3);
+}
+
+/* Glowing Accent Button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange) 0%, #E64A19 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 0.85rem 1.8rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(244, 81, 30, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(244, 81, 30, 0.5);
+  background: linear-gradient(135deg, #FF7043 0%, var(--orange) 100%);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 0.8rem 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.btn-secondary:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Classic, Clean, Professional Card Design System
+   ========================================================================== */
+
+/* Standard Card: White background, subtle border, gentle shadow, flexible flex-col layout */
+.card-standard,
+.glass-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1rem; /* 16px moderate classic radius */
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-standard:hover,
+.glass-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(234, 88, 12, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Card Image Containers: 100% full-width, top-aligned, no blank gaps */
+.card-image-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #F1F5F9;
+  display: block;
+}
+
+.card-image-wrap img,
+.card-media-cover {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease-out;
+}
+
+.card-standard:hover .card-image-wrap img,
+.card-standard:hover .card-media-cover {
+  transform: scale(1.03);
+}
+
+/* Card Content Body: balanced padding, flex growth, clear hierarchy */
+.card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+.card-title {
+  color: #0B2340;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+  overflow-wrap: break-word;
+}
+
+.card-desc {
+  color: #475569;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-weight: 400;
+  flex: 1 1 auto;
+  margin-bottom: 1rem;
+}
+
+/* Card Action / Footer Area: anchored to bottom */
+.card-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Accent Card Borders */
+.card-accent-orange {
+  border-left: 3px solid #EA580C !important;
+}
+
+.card-accent-navy {
+  border-left: 3px solid #0B2340 !important;
+}
+
+.card-accent-blue {
+  border-left: 3px solid #0284C7 !important;
+}

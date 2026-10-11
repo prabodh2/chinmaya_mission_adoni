@@ -1,0 +1,93 @@
+/* Global sizing & responsive layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-x: clip;
+  background-color: #FFF0C5;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-x: clip;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-primary, #FFF0C5);
+  color: var(--text-primary, #0B2340);
+  line-height: 1.6;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+}
+
+/* Flexible content containment */
+#root > *,
+main,
+main > *,
+section,
+.container-custom,
+.container-custom > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Media responsiveness */
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent long text from breaking layout while preserving readability */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+span,
+button {
+  overflow-wrap: break-word;
+}
+
+/* Keep the global container responsive */
+.container-custom {
+  width: 100%;
+  max-width: var(--container-max, 1280px);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .container-custom {
+    padding-inline: 1rem;
+  }
+}

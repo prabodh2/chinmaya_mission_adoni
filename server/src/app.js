@@ -29,18 +29,24 @@ const envOrigins = process.env.ALLOWED_ORIGINS
   : [];
 
 const allowedOriginsSet = new Set([
+  'https://chinmayamissionadoni.org',
+  'https://www.chinmayamissionadoni.org',
+  'https://marathon.chinmayamissionadoni.org',
   'https://chinmaya-mission-adoni.vercel.app',
   'https://chinmaya-mission-adoni-admin.vercel.app',
   'http://localhost:5173',
   'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
   'http://localhost:3000',
   'http://localhost:3001',
   ...envOrigins,
 ]);
 
-// Regex: allow ALL Vercel preview/production URLs for this project (both website and admin)
+// Regex: allow ALL Vercel preview/production URLs for this project (website, admin, and marathon subdomain)
 const vercelPreviewPattern = /^https:\/\/chinmaya-mission-adoni(-[a-z0-9]+)*\.vercel\.app$/;
 const vercelAdminPattern = /^https:\/\/chinmaya-mission-adoni-admin(-[a-z0-9]+)*\.vercel\.app$/;
+const vercelMarathonPattern = /^https:\/\/(chinmaya-)?marathon(-[a-z0-9]+)*\.vercel\.app$/;
 
 app.use(
   cors({
@@ -49,8 +55,14 @@ app.use(
       if (!origin) return callback(null, true);
       // Allow exact matches
       if (allowedOriginsSet.has(origin)) return callback(null, true);
-      // Allow all Vercel preview deployments for this project (website & admin)
-      if (vercelPreviewPattern.test(origin) || vercelAdminPattern.test(origin)) return callback(null, true);
+      // Allow all Vercel preview deployments for this project (website, admin & marathon)
+      if (
+        vercelPreviewPattern.test(origin) ||
+        vercelAdminPattern.test(origin) ||
+        vercelMarathonPattern.test(origin)
+      ) {
+        return callback(null, true);
+      }
       // In development, allow everything
       if (process.env.NODE_ENV !== 'production') return callback(null, true);
       callback(new Error(`CORS: Origin ${origin} not allowed`));

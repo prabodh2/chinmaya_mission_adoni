@@ -39,6 +39,20 @@ const registrationSchema = new mongoose.Schema(
     },
     batchId: { type: String, default: null, index: true },
     contactPersonName: { type: String, default: null },
+    groupId: { type: String, default: null, index: true },
+    groupRole: {
+      type: String,
+      enum: ['primary', 'friend', null],
+      default: null,
+    },
+    registeredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null, index: true },
+    entryPassId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+      trim: true,
+    },
     status: {
       type: String,
       enum: ['CONFIRMED', 'CANCELLED'],

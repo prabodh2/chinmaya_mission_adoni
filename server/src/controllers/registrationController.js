@@ -46,11 +46,37 @@ export const submitIndividualRegistration = async (req, res) => {
       req.user ? req.user._id : null
     );
 
+    if (registration.isGroup) {
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful for you and your friend!',
+        data: {
+          isGroup: true,
+          groupId: registration.groupId,
+          participants: registration.participants.map((r) => ({
+            registrationId: r.registrationId,
+            entryPassId: r.entryPassId,
+            groupRole: r.groupRole,
+            fullName: r.fullName,
+            age: r.age,
+            standard: r.standard,
+            profession: r.profession,
+            isStudent: r.isStudent,
+            institutionName: r.institutionName,
+            contactNumber: r.contactNumber,
+            tShirtSize: r.tShirtSize,
+            createdAt: r.createdAt,
+          })),
+        },
+      });
+    }
+
     res.status(201).json({
       success: true,
       message: 'Registration successful',
       data: {
         registrationId: registration.registrationId,
+        entryPassId: registration.entryPassId,
         registrationYear: registration.registrationYear,
         registrationType: registration.registrationType,
         fullName: registration.fullName,
@@ -73,6 +99,11 @@ export const submitIndividualRegistration = async (req, res) => {
     });
   }
 };
+
+/**
+ * Backward compatibility alias for group registrations
+ */
+export const submitGroupRegistration = submitIndividualRegistration;
 
 /**
  * Submit School / College Registration (supports both single student and bulk uploads)
@@ -213,11 +244,12 @@ export const getRegistrationById = async (req, res) => {
       });
     }
 
-    // Strict Authorization: Only the owner or an administrator can view the full record
+    // Strict Authorization: Only the owner, booking registrant, or an administrator can view the full record
     const userRole = (req.user?.role || '').toLowerCase();
     const isAdmin = userRole === 'admin';
     const isOwner = req.user && (
       (registration.userId && registration.userId.toString() === req.user._id.toString()) ||
+      (registration.registeredBy && registration.registeredBy.toString() === req.user._id.toString()) ||
       (registration.contactNumber && registration.contactNumber === req.user.phone)
     );
 
@@ -413,11 +445,42 @@ export const getUserRegistrations = async (req, res) => {
   try {
     const userPhone = req.user.phone;
     const registrations = await Registration.find({
-      $or: [{ userId: req.user._id }, { contactNumber: userPhone }],
+      $or: [
+        { userId: req.user._id },
+        { registeredBy: req.user._id },
+        { contactNumber: userPhone },
+      ],
     }).sort({ createdAt: -1 });
 
     res.json({ success: true, data: registrations });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+/**
+ * Public Entry Pass Verification
+ * Endpoint: GET /api/registrations/verify-pass/:passId (or /api/registrations/pass/:passId/verify)
+ */
+export const verifyPass = async (req, res) => {
+  try {
+    const passId = req.params.passId || req.params.id;
+    const result = await registrationService.verifyEntryPass(passId);
+    if (!result.isValid) {
+      return res.status(404).json({
+        success: false,
+        message: result.message || 'Invalid or unconfirmed entry pass.',
+        data: result,
+      });
+    }
+    res.json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Pass verification failed.',
+    });
   }
 };
