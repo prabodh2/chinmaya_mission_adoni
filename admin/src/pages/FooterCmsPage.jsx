@@ -40,8 +40,8 @@ const DEFAULT_FORM_DATA = {
   contact: {
     heading: 'EVENT LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Ashrama',
-      line2: 'Arts College Road',
+      line1: 'Chinmaya Mission Adoni',
+      line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',
       state: 'Andhra Pradesh',

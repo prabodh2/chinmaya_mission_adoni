@@ -31,8 +31,8 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   contact: {
     heading: 'ASHRAM LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Ashrama',
-      line2: 'Arts College Road',
+      line1: 'Chinmaya Mission Adoni',
+      line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',
       state: 'Andhra Pradesh',
@@ -123,11 +123,17 @@ function sanitizeMainSiteFooter(rawData) {
     links: filteredLinks,
   };
 
-  // 3. Sanitize Contact Heading (Ashram Location)
+  // 3. Sanitize Contact Heading & Address
   if (data.contact) {
+    const addr = data.contact.address || {};
     data.contact = {
       ...data.contact,
       heading: 'ASHRAM LOCATION & CONTACT',
+      address: {
+        ...addr,
+        line1: addr.line1?.includes('Ashrama') ? 'Chinmaya Mission Adoni' : (addr.line1 || 'Chinmaya Mission Adoni'),
+        line2: (addr.line2 === 'Arts College Road' || !addr.line2) ? 'Near Arts College Road' : addr.line2,
+      },
     };
   }
 

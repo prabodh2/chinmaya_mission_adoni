@@ -223,7 +223,7 @@ export const LetsConnectPage = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <p>Chinmaya Mission Ashrama, Arts College Road, Adoni - 518301, Andhra Pradesh, India</p>
+                  <p>Chinmaya Mission Adoni, Near Arts College Road, Adoni - 518301, Andhra Pradesh, India</p>
                 </div>
               </div>
 

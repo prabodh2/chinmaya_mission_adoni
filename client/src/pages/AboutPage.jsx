@@ -386,10 +386,10 @@ export const AboutPage = () => {
                   SPIRITUAL & CULTURAL CENTRE
                 </span>
                 <h3 className="text-xl font-extrabold font-heading text-white">
-                  Chinmaya Mission Ashram
+                  Chinmaya Mission Adoni
                 </h3>
                 <p className="text-xs text-slate-300 font-medium">
-                  Arts College Road, Adoni, Andhra Pradesh
+                  Near Arts College Road, Adoni, Andhra Pradesh
                 </p>
               </div>
             </div>
