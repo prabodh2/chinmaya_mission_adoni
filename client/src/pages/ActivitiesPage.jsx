@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Maximize2,
   Calendar,
+  MapPin,
 } from 'lucide-react';
 
 // Reusable Activity Card Component (Classic, Clean, Standardized Design)
@@ -73,10 +74,18 @@ const ActivityCard = ({ activity, onSelect }) => {
 
         {/* Card Footer Meta */}
         <div className="mt-auto pt-3.5 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
-          <span className="truncate max-w-[60%]">
+          <span className="truncate max-w-[55%] text-slate-500 font-medium">
             {activity.imageSource ? `Source: ${activity.imageSource}` : 'Adoni Wing'}
           </span>
-          <span className="text-[var(--orange)] font-bold uppercase tracking-wider text-[10px]">Chinmaya Mission</span>
+          <button
+            type="button"
+            onClick={() => onSelect(activity)}
+            className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+            title={`Know more about ${activity.title}`}
+          >
+            <span>Know More</span>
+            <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+          </button>
         </div>
       </div>
     </article>
@@ -165,6 +174,29 @@ export const ActivitiesPage = () => {
       imageSource: 'Chinmaya Mission Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
       icon: <Landmark className="w-5 h-5 text-[var(--orange)]" />,
+      detailedInfo: {
+        deity: 'Sri Chinnaya Sanjeevarya Swamy Devasthanam',
+        location: 'Adoni',
+        sections: [
+          {
+            heading: 'History and Spiritual Significance',
+            paragraphs: [
+              'The Sri Chinnaya Sanjeevarya Swamy Devasthanam in Adoni was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission, Adoni.',
+              'The consecration ceremony was performed in accordance with the traditional Agama Shastras, under the guidance of Pujya Swami Pranavananda, with the support and cooperation of Sri Vitta Bhadrayya, Sri B. V. R. Reddy, Sri Achyutha Mohan Reddy, and the devoted community.',
+              'In 2012, a sacred Kumbhabhishekam ceremony was performed to renew the spiritual sanctity of the temple, under the guidance of Pujya Swami Paratparananda and Pujya Swami Pranavananda.',
+              'With the wholehearted participation of devotees, a sacred Havan was conducted. Silver armour was offered to the presiding deity, and two ornamental pieces were provided for the festival deities (Utsava Murtis), reflecting the devotion and reverence of the community.',
+            ],
+          },
+          {
+            heading: 'Daily Worship and Annual Celebrations',
+            paragraphs: [
+              'Daily poojas are performed with devotion and reverence to the presiding deity. Special rituals and religious observances are conducted on auspicious days and during important festivals throughout the year.',
+              'The temple celebrates Shravana Masa, Hanuman Jayanti, and Karthika Deepotsavam with great devotion and spiritual fervour. These sacred observances bring devotees together in prayer, worship, and the celebration of their spiritual traditions.',
+              'The Devasthanam continues to serve as a place of worship and devotion, preserving religious traditions and nurturing the spiritual aspirations of its devotees.',
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'shanta-malleshwara-temple',
@@ -178,6 +210,20 @@ export const ActivitiesPage = () => {
       imageSource: 'Shri Shantamalleshwara Swami Temple Adoni',
       imageCredit: 'Official Festival & Devotional Observances',
       icon: <Flame className="w-5 h-5 text-[var(--orange)]" />,
+      detailedInfo: {
+        deity: 'Shanta Malleshwara Temple',
+        location: 'Adoni',
+        sections: [
+          {
+            heading: 'History and Spiritual Legacy',
+            paragraphs: [
+              'Shanta Malleshwara Temple is a sacred centre of worship and devotion associated with Chinmaya Mission, Adoni. The development of the temple commenced in 1996 under the spiritual inspiration and vision of the Mission.',
+              'In 2003 and 2004, major infrastructural access developments, including the temple bridge and foot bridge, were constructed to facilitate ease of access for pilgrims and devotees.',
+              'The temple continues to serve as a vital spiritual sanctum hosting sacred rituals, festivals, and community celebrations throughout the year.',
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'devi-group',
@@ -191,6 +237,19 @@ export const ActivitiesPage = () => {
       imageSource: 'Devi Group Cultural Learning Wing',
       imageCredit: 'Spiritual Learning & Cultural Preservation',
       icon: <Heart className="w-5 h-5 text-[var(--orange)]" />,
+      detailedInfo: {
+        deity: 'Devi Group • Women’s Cultural Wing',
+        location: 'Adoni',
+        sections: [
+          {
+            heading: 'Spiritual Devotion & Cultural Values',
+            paragraphs: [
+              "The Devi Group is dedicated to nurturing devotion, spiritual understanding, and the preservation of cultural values across families in Adoni.",
+              "Through scriptural study, devotional singing, collective poojas, and participation in Chinmaya Mission festivals, members deepen their spiritual connection and foster dharmic values within the household and community.",
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'chinmaya-yuva-kendra',
@@ -207,6 +266,20 @@ export const ActivitiesPage = () => {
       imageCredit: 'Youth Empowerment & Community Leadership',
       icon: <Zap className="w-5 h-5 text-[var(--orange)]" />,
       featured: true,
+      detailedInfo: {
+        deity: 'Chinmaya Yuva Kendra (CHYK)',
+        location: 'Adoni',
+        sections: [
+          {
+            heading: 'Youth Empowerment & Philosophy in Action',
+            paragraphs: [
+              'Chinmaya Yuva Kendra (CHYK) is the global youth wing of Chinmaya Mission, empowering youth aged 16 to 30 through spiritual insight, leadership development, and dynamic service.',
+              'In Adoni, CHYK organizes youth camps, marathon training, personality development workshops, study groups, and community awareness rallies such as the Anti-Drug Movement 2026.',
+              'CHYK inspires youth to channel their boundless energy constructively, uniting physical dynamism with spiritual wisdom and moral excellence.',
+            ],
+          },
+        ],
+      },
     },
   ];
 
@@ -284,6 +357,7 @@ export const ActivitiesPage = () => {
               ...act,
               imageUrl: img,
               icon: act.icon || initialMatch?.icon,
+              detailedInfo: act.detailedInfo || initialMatch?.detailedInfo,
             };
           });
         }
@@ -291,6 +365,16 @@ export const ActivitiesPage = () => {
       }
     } catch (_) {}
     return fallback;
+  };
+
+  const handleSelectActivity = (act) => {
+    const initialMatch = initialActivities.find(
+      (init) => init.id === act.id || init.title?.toLowerCase() === act.title?.toLowerCase()
+    );
+    setSelectedActivity({
+      ...act,
+      detailedInfo: act.detailedInfo || initialMatch?.detailedInfo,
+    });
   };
 
   const [missionActivities, setMissionActivities] = useState(() => {
@@ -459,7 +543,7 @@ export const ActivitiesPage = () => {
             <ActivityCard
               key={act.id}
               activity={act}
-              onSelect={setSelectedActivity}
+              onSelect={handleSelectActivity}
             />
           ))}
         </div>
@@ -481,7 +565,7 @@ export const ActivitiesPage = () => {
             <ActivityCard
               key={act.id}
               activity={act}
-              onSelect={setSelectedActivity}
+              onSelect={handleSelectActivity}
             />
           ))}
         </div>
@@ -501,7 +585,7 @@ export const ActivitiesPage = () => {
         {chykActivity && (
           <ChykFeatureSection
             activity={chykActivity}
-            onSelect={setSelectedActivity}
+            onSelect={handleSelectActivity}
           />
         )}
       </section>
@@ -523,7 +607,7 @@ export const ActivitiesPage = () => {
               <ActivityCard
                 key={act.id || act._id || act.title}
                 activity={act}
-                onSelect={setSelectedActivity}
+                onSelect={handleSelectActivity}
               />
             ))}
           </div>
@@ -547,41 +631,114 @@ export const ActivitiesPage = () => {
         </div>
       </footer>
 
-      {/* Lightbox Modal for Enlarged Activity Images */}
+      {/* Detail & History Modal for Activity */}
       {selectedActivity && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-3xl w-full overflow-hidden shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative">
-            <button
-              onClick={() => setSelectedActivity(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-black/70 text-white hover:bg-black transition-colors z-10"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="max-h-[60vh] bg-black flex items-center justify-center">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in overflow-y-auto"
+          onClick={() => setSelectedActivity(null)}
+        >
+          <div 
+            className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative my-auto flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Image Banner */}
+            <div className="relative h-56 sm:h-64 w-full bg-slate-900 shrink-0 overflow-hidden">
               <img
                 src={selectedActivity.imageUrl}
                 alt={selectedActivity.imageAlt || selectedActivity.title}
-                className="max-h-[60vh] w-full object-contain"
+                onError={(e) => {
+                  if (selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) {
+                    e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+                  } else if (selectedActivity.id === 'shanta-malleshwara-temple' || selectedActivity.title?.toLowerCase().includes('malleshwara')) {
+                    e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+                  } else if (selectedActivity.id === 'devi-group' || selectedActivity.title?.toLowerCase().includes('devi')) {
+                    e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                  } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.title?.toLowerCase().includes('chyk')) {
+                    e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+                  }
+                }}
+                className="w-full h-full object-cover object-center"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedActivity(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black text-white transition-colors z-10 backdrop-blur-sm cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Header Badges Floating on Image */}
+              <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center justify-between gap-2">
+                <span className="px-3 py-1 rounded-full bg-[var(--orange)] text-white text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
+                  {selectedActivity.category}
+                </span>
+                {selectedActivity.detailedInfo?.location && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 text-[11px] font-bold shadow-sm">
+                    <MapPin className="w-3.5 h-3.5 text-[var(--orange)]" />
+                    <span>{selectedActivity.detailedInfo.location}</span>
+                  </span>
+                )}
+              </div>
             </div>
 
-            <div className="p-6 sm:p-8 space-y-3 text-left">
-              <span className="px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] text-xs font-extrabold uppercase">
-                {selectedActivity.category}
-              </span>
-              <h3 className="text-2xl font-extrabold text-[var(--text-primary)] font-heading">
-                {selectedActivity.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
-                {selectedActivity.description}
-              </p>
-              {selectedActivity.additionalDescription && (
-                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed pt-2 border-t border-[var(--border-color)]/50">
-                  {selectedActivity.additionalDescription}
-                </p>
+            {/* Scrollable Modal Content */}
+            <div className="p-6 sm:p-8 space-y-6 text-left overflow-y-auto max-h-[calc(90vh-14rem)]">
+              {/* Title & Subtitle */}
+              <div className="border-b border-slate-100 pb-4">
+                <h2 className="text-xl sm:text-2xl font-black font-heading text-[var(--text-primary)] leading-snug">
+                  {selectedActivity.detailedInfo?.deity || selectedActivity.title}
+                </h2>
+                {selectedActivity.detailedInfo?.location && (
+                  <p className="text-xs font-bold text-[var(--orange)] tracking-widest uppercase mt-1">
+                    {selectedActivity.detailedInfo.location}
+                  </p>
+                )}
+              </div>
+
+              {/* Detailed Sections if available */}
+              {selectedActivity.detailedInfo?.sections ? (
+                <div className="space-y-6">
+                  {selectedActivity.detailedInfo.sections.map((section, sIdx) => (
+                    <div key={sIdx} className="space-y-3">
+                      <div className="flex items-center gap-2.5 pb-1.5 border-b border-slate-100">
+                        <div className="w-2 h-2 rounded-full bg-[var(--orange)]" />
+                        <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900 tracking-tight">
+                          {section.heading}
+                        </h3>
+                      </div>
+                      <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        {section.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx}>{p}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                  <p>{selectedActivity.description}</p>
+                  {selectedActivity.additionalDescription && (
+                    <p className="pt-2 border-t border-slate-100">{selectedActivity.additionalDescription}</p>
+                  )}
+                </div>
               )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 sm:px-8 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500 shrink-0">
+              <span className="truncate max-w-[65%]">
+                {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission Adoni'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedActivity(null)}
+                className="btn-primary text-xs py-1.5 px-4 rounded-xl font-bold cursor-pointer"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
