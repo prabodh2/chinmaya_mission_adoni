@@ -13,8 +13,9 @@
 }
 
 .site-shell {
-  max-width: 1600px;
-  margin: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
   background: #FFFFFF;
 }
@@ -202,9 +203,9 @@
 
 .hero-portrait {
   position: absolute;
-  right: 7%;
+  right: clamp(4%, 7vw, 10%);
   bottom: 0;
-  width: 38%;
+  width: min(38%, 560px);
   height: 92%;
   z-index: 2;
   pointer-events: none;

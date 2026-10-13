@@ -53,7 +53,7 @@ function MarathonPortalRedirect({ path = '' }) {
 // Public Layout containing Public Navbar and Footer
 function PublicLayout() {
   return (
-    <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white w-full max-w-full overflow-x-hidden bg-white">
       <Navbar />
       <main className="flex-grow pt-16 sm:pt-20 md:pt-24 w-full max-w-full overflow-x-hidden">
         <Outlet />
