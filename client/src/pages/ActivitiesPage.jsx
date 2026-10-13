@@ -20,8 +20,16 @@ import {
 const ActivityCard = ({ activity, onSelect }) => {
   return (
     <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden group">
-      {/* Full-width Image Area (No blank space beside image) */}
-      <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-100 block">
+      {/* Full-width Image Area (Total image fully visible without cropping) */}
+      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950 flex items-center justify-center block">
+        {/* Ambient blurred backdrop so full aspect ratio is preserved without harsh borders */}
+        <img
+          src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+        />
+        {/* Full uncropped image visible completely */}
         <img
           src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
           alt={activity.imageAlt || activity.title}
@@ -36,20 +44,20 @@ const ActivityCard = ({ activity, onSelect }) => {
               e.currentTarget.src = '/assets/images/activity-chyk.jpg';
             }
           }}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+          className="relative z-10 w-full h-full object-contain p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
         
         {activity.category && (
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
             {activity.category}
           </span>
         )}
 
         <button
           onClick={() => onSelect(activity)}
-          className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm"
+          className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm z-20 cursor-pointer"
           title="Enlarge Image"
           aria-label={`Enlarge image for ${activity.title}`}
         >
@@ -99,22 +107,30 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left Column: Visual Image */}
         <div className="lg:col-span-5 order-1">
-          <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-100">
+          <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-950 flex items-center justify-center">
+            {/* Ambient blurred backdrop */}
+            <img
+              src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+            />
+            {/* Full uncropped image */}
             <img
               src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
               alt={activity.imageAlt || activity.title}
               onError={(e) => {
                 e.currentTarget.src = '/assets/images/activity-chyk.jpg';
               }}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 block"
+              className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500 block"
               loading="lazy"
             />
-            <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--orange)] text-white font-bold text-[11px] tracking-wider uppercase shadow-sm">
+            <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--orange)] text-white font-bold text-[11px] tracking-wider uppercase shadow-sm z-20">
               {activity.category}
             </span>
             <button
               onClick={() => onSelect(activity)}
-              className="absolute bottom-3 right-3 p-2.5 rounded-full bg-black/75 backdrop-blur-sm text-white hover:bg-black transition-colors border border-white/20"
+              className="absolute bottom-3 right-3 p-2.5 rounded-full bg-black/75 backdrop-blur-sm text-white hover:bg-black transition-colors border border-white/20 z-20 cursor-pointer"
               aria-label="Enlarge CHYK Activity Image"
             >
               <Maximize2 className="w-4 h-4 text-[var(--yellow)]" />
@@ -638,11 +654,19 @@ export const ActivitiesPage = () => {
           onClick={() => setSelectedActivity(null)}
         >
           <div 
-            className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative my-auto flex flex-col"
+            className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative my-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Image Banner */}
-            <div className="relative h-56 sm:h-64 w-full bg-slate-900 shrink-0 overflow-hidden">
+            {/* Modal Image Area (Total image fully visible without cropping) */}
+            <div className="relative w-full h-72 sm:h-96 md:h-[440px] bg-slate-950 shrink-0 overflow-hidden flex items-center justify-center">
+              {/* Ambient blurred backdrop so there are no empty borders */}
+              <img
+                src={selectedActivity.imageUrl}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+              />
+              {/* Full uncropped image */}
               <img
                 src={selectedActivity.imageUrl}
                 alt={selectedActivity.imageAlt || selectedActivity.title}
@@ -657,26 +681,26 @@ export const ActivitiesPage = () => {
                     e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                   }
                 }}
-                className="w-full h-full object-cover object-center"
+                className="relative z-10 w-full h-full object-contain p-2 block"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none z-10" />
 
               {/* Close Button */}
               <button
                 onClick={() => setSelectedActivity(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black text-white transition-colors z-10 backdrop-blur-sm cursor-pointer"
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/65 hover:bg-black text-white transition-colors z-20 backdrop-blur-sm cursor-pointer shadow-lg"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Header Badges Floating on Image */}
-              <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center justify-between gap-2">
-                <span className="px-3 py-1 rounded-full bg-[var(--orange)] text-white text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
+              <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-none">
+                <span className="px-3.5 py-1.5 rounded-full bg-[var(--orange)] text-white text-xs font-extrabold uppercase tracking-wider shadow-md">
                   {selectedActivity.category}
                 </span>
                 {selectedActivity.detailedInfo?.location && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 text-[11px] font-bold shadow-sm">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-slate-800 text-xs font-bold shadow-md">
                     <MapPin className="w-3.5 h-3.5 text-[var(--orange)]" />
                     <span>{selectedActivity.detailedInfo.location}</span>
                   </span>
@@ -685,7 +709,7 @@ export const ActivitiesPage = () => {
             </div>
 
             {/* Scrollable Modal Content */}
-            <div className="p-6 sm:p-8 space-y-6 text-left overflow-y-auto max-h-[calc(90vh-14rem)]">
+            <div className="p-6 sm:p-8 space-y-6 text-left">
               {/* Title & Subtitle */}
               <div className="border-b border-slate-100 pb-4">
                 <h2 className="text-xl sm:text-2xl font-black font-heading text-[var(--text-primary)] leading-snug">

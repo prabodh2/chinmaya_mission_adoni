@@ -77,8 +77,9 @@ export const LetsConnectPage = () => {
           <Flame className="w-4 h-4" />
           CONNECT & VOLUNTEER
         </span>
-        <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)]">
-          LET'S CONNECT WITH <span className="text-[var(--orange)]">CHINMAYA MISSION ADONI</span>
+        <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
+          <span>LET'S CONNECT WITH</span>
+          <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION ADONI</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">
           Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission Adoni team.

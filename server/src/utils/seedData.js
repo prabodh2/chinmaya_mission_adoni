@@ -219,12 +219,7 @@ export const seedInitialData = async () => {
           whoWeAre: {
             heading: 'WHO ARE WE?',
             p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
-            p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
-            highlights: [
-              { label: 'ESTABLISHED', value: '1992' },
-              { label: 'ESTABLISHED BY', value: 'Swami Shyamananda' },
-              { label: 'ROOTED IN', value: 'Vedanta & Bhagavad Gita' }
-            ]
+            p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.'
           },
           ourStory: {
             heading: 'OUR STORY',

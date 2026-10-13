@@ -29,7 +29,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
     ],
   },
   contact: {
-    heading: 'ASHRAM LOCATION & CONTACT',
+    heading: 'LOCATION & CONTACT',
     address: {
       line1: 'Chinmaya Mission Adoni',
       line2: 'Near Arts College Road',
@@ -128,7 +128,7 @@ function sanitizeMainSiteFooter(rawData) {
     const addr = data.contact.address || {};
     data.contact = {
       ...data.contact,
-      heading: 'ASHRAM LOCATION & CONTACT',
+      heading: 'LOCATION & CONTACT',
       address: {
         ...addr,
         line1: addr.line1?.includes('Ashrama') ? 'Chinmaya Mission Adoni' : (addr.line1 || 'Chinmaya Mission Adoni'),
@@ -341,13 +341,13 @@ export const Footer = ({ overrideData = null }) => {
             </ul>
           </div>
 
-          {/* Column 3: Ashram Location & Contact */}
+          {/* Column 3: Location & Contact */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
-              {contact.heading || 'ASHRAM LOCATION & CONTACT'}
+              {contact.heading || 'LOCATION & CONTACT'}
             </h4>
             <div className="space-y-2.5 text-xs opacity-90">
               {fullAddress && (

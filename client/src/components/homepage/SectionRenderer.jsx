@@ -166,18 +166,26 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
                   key={act._id || act.title}
                   className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 flex flex-col h-full overflow-hidden group"
                 >
-                  {/* Full-width Image Area */}
-                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 block">
+                  {/* Full-width Image Area (Total image fully visible without cropping) */}
+                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950 flex items-center justify-center block">
+                    {/* Ambient blurred backdrop so there are no empty borders */}
+                    <img
+                      src={act.imageUrl}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+                    />
+                    {/* Full uncropped image visible completely */}
                     <img
                       src={act.imageUrl}
                       alt={act.title}
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+                      className="relative z-10 w-full h-full object-contain p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
                     
                     {act.category && (
-                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
                         {act.category}
                       </span>
                     )}

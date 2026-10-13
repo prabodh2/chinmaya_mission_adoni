@@ -11,8 +11,6 @@ import {
   Compass,
   Quote,
   ArrowRight,
-  Calendar,
-  Award,
   Users,
   Sun,
   Shield,
@@ -37,11 +35,6 @@ export const AboutPage = () => {
       heading: 'WHO ARE WE?',
       p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
-      highlights: [
-        { label: 'ESTABLISHED', value: '1992' },
-        { label: 'ESTABLISHED BY', value: 'Swami Shyamananda' },
-        { label: 'ROOTED IN', value: 'Vedanta & Bhagavad Gita' },
-      ],
     },
     ourStory: {
       heading: 'OUR STORY',
@@ -434,46 +427,15 @@ export const AboutPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Paragraphs */}
-            <div className="lg:col-span-7 space-y-5 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-normal">
-              <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
-                {data.whoWeAre.p1}
+          <div className="space-y-5 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-normal">
+            <p className="p-5 sm:p-6 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
+              {data.whoWeAre.p1}
+            </p>
+            {data.whoWeAre.p2 && data.whoWeAre.p2.trim() !== '' && data.whoWeAre.p2 !== data.whoWeAre.p1 && (
+              <p className="p-5 sm:p-6 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
+                {data.whoWeAre.p2}
               </p>
-              {data.whoWeAre.p2 && data.whoWeAre.p2.trim() !== '' && data.whoWeAre.p2 !== data.whoWeAre.p1 && (
-                <p className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
-                  {data.whoWeAre.p2}
-                </p>
-              )}
-            </div>
-
-            {/* Highlights Statistics Grid */}
-            <div className="lg:col-span-5 grid grid-cols-1 gap-4">
-              {data.whoWeAre.highlights.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] hover:border-[var(--orange)]/50 transition-all shadow-sm flex items-center gap-4"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0">
-                    {idx === 0 ? (
-                      <Calendar className="w-6 h-6" />
-                    ) : idx === 1 ? (
-                      <Award className="w-6 h-6" />
-                    ) : (
-                      <BookOpen className="w-6 h-6" />
-                    )}
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider block">
-                      {item.label}
-                    </span>
-                    <span className="text-base sm:text-lg font-extrabold font-heading text-[var(--text-primary)]">
-                      {item.value}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -632,8 +594,16 @@ export const AboutPage = () => {
                   : 'border-slate-200/90 hover:border-[var(--orange)]/50'
               }`}
             >
-              {/* Full-width Top Image (Zero blank space beside image) */}
-              <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-100 block">
+              {/* Full-width Top Image (Total image fully visible without cropping) */}
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950 flex items-center justify-center block">
+                {/* Ambient blurred backdrop so there are no empty borders */}
+                <img
+                  src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+                />
+                {/* Full uncropped image visible completely */}
                 <img
                   src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
                   alt={card.title}
@@ -648,13 +618,13 @@ export const AboutPage = () => {
                       e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                     }
                   }}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out block"
+                  className="relative z-10 w-full h-full object-contain p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-40 group-hover:opacity-30 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
                 
                 {card.badge && (
-                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm">
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
                     {card.badge}
                   </span>
                 )}

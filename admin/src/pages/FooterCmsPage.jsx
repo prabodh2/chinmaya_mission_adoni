@@ -176,7 +176,7 @@ export const FooterCmsPage = () => {
         {/* Contact Information Card */}
         <div className="p-6 rounded-3xl bg-[#1C2541] border border-white/10 shadow-xl space-y-4">
           <h3 className="text-sm font-black font-heading text-[#FF7B00] uppercase tracking-wider border-b border-white/10 pb-2">
-            2. Ashram Location & Contact Details
+            2. Location & Contact Details
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
