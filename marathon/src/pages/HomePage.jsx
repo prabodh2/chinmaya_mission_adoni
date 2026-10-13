@@ -315,7 +315,9 @@ export const HomePage = () => {
 
             {/* Inject Transformation Story after Marathon Section */}
             {section.type === 'marathon' && (
-              <TransformationSection />
+              <div className="-mt-4">
+                <TransformationSection />
+              </div>
             )}
           </React.Fragment>
         ))

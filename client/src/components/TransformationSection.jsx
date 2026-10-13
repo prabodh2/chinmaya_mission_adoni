@@ -36,14 +36,10 @@ export const TransformationSection = () => {
   ];
 
   return (
-    <section id="about" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="about" className="pt-2 sm:pt-4 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] text-xs font-extrabold tracking-widest uppercase border border-[var(--orange)]/30">
-          <Sparkles className="w-4 h-4" />
-          THE TRANSFORMATION STORY
-        </span>
         <h2 className="text-3xl sm:text-5xl font-black font-heading text-[var(--text-primary)]">
           YOUR LIFE. <span className="text-[var(--orange)]">YOUR CHOICE.</span>
         </h2>
@@ -60,11 +56,6 @@ export const TransformationSection = () => {
           <div className="absolute top-0 right-0 w-48 h-48 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
           
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 font-bold text-[11px] uppercase tracking-wider mb-5 border border-red-500/30">
-              <AlertTriangle className="w-3.5 h-3.5" />
-              THE DARK SIDE • THE TRAP
-            </div>
-
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 font-heading">
               Peer Pressure & Addiction
             </h3>
@@ -100,11 +91,6 @@ export const TransformationSection = () => {
         {/* Bright / Positive Side Card */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl relative overflow-hidden shadow-sm hover:shadow-md flex flex-col justify-between border border-slate-200/90 border-l-4 border-l-[var(--orange)] group">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] font-bold text-[11px] uppercase tracking-wider mb-5 border border-[var(--orange)]/25">
-              <Sun className="w-3.5 h-3.5" />
-              THE BRIGHT SIDE • THE MOVEMENT
-            </div>
-
             <h3 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] mb-2 font-heading">
               Health, Purpose & Brighter Future
             </h3>

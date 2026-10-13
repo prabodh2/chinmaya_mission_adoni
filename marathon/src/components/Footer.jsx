@@ -201,7 +201,19 @@ export const Footer = ({ overrideData = null }) => {
             <div className="text-xs font-bold pt-1">
               <span style={headingStyle}>{organizedBy.heading || 'ORGANIZED BY:'}</span>
               <p className="text-white font-extrabold mt-0.5 leading-snug">
-                {organizedBy.text || 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni'}
+                {organizedBy.text && organizedBy.text.includes(' & ') ? (
+                  <>
+                    <span className="block">{organizedBy.text.split(' & ')[0]} &</span>
+                    <span className="block">{organizedBy.text.split(' & ')[1]}</span>
+                  </>
+                ) : (
+                  organizedBy.text || (
+                    <>
+                      <span className="block">Chinmaya Mission Adoni &</span>
+                      <span className="block">Chinmaya Yuva Kendra Adoni</span>
+                    </>
+                  )
+                )}
               </p>
             </div>
           </div>

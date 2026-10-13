@@ -43,19 +43,6 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--orange)]/10 pointer-events-none rounded-full blur-3xl" />
           
           <div className="max-w-5xl mx-auto text-center space-y-6 sm:space-y-8 relative z-10 w-full flex flex-col items-center">
-            {section.badgeText && (
-              <div className="flex flex-wrap items-center justify-center gap-3 animate-in fade-in">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
-                  <Flame className="w-4 h-4 text-[var(--orange)]" />
-                  {section.badgeText}
-                </span>
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--cyan)]/15 text-[var(--cyan)] font-extrabold text-xs tracking-widest uppercase border border-[var(--cyan)]/30">
-                  <MapPin className="w-3.5 h-3.5" />
-                  ADONI, ANDHRA PRADESH
-                </span>
-              </div>
-            )}
-
             <div className="space-y-3 sm:space-y-4">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
                 {section.title || 'ANTI-DRUG MOVEMENT MARATHON RUN 2026'}
@@ -81,10 +68,10 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
               <Link
                 to="/register#marathon-map"
                 className="flex items-center gap-2 text-decoration-none text-[var(--text-primary)] hover:text-[var(--cyan)] transition-colors cursor-pointer group"
-                title="Click to view 7KM Marathon Route Map"
+                title="Click to view Marathon Route Map"
               >
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--cyan)] group-hover:scale-110 transition-transform" />
-                <span className="underline decoration-dotted underline-offset-4 font-extrabold">Chinmaya Mission Adoni</span>
+                <span className="underline decoration-dotted underline-offset-4 font-extrabold">Route of Marathon</span>
               </Link>
             </div>
 
@@ -124,13 +111,10 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'marathon':
       return (
-        <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-y border-[var(--border-color)]">
+        <section className="pt-10 sm:pt-14 pb-2 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
           <div className="max-w-7xl mx-auto space-y-6 text-center">
             {section.title && (
               <div className="space-y-2">
-                <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest px-3.5 py-1 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/20">
-                  {section.badgeText || 'EVENT INFORMATION'}
-                </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
                   {section.title}
                 </h2>
@@ -155,9 +139,6 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
         <section id="faq" className="py-16 px-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-3">
-              <span className="text-xs font-extrabold text-[var(--orange)] uppercase tracking-widest block">
-                {section.subtitle || 'QUESTIONS & ANSWERS'}
-              </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
                 {section.title || 'FREQUENTLY ASKED QUESTIONS'}
               </h2>

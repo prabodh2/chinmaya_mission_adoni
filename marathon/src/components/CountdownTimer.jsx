@@ -32,7 +32,7 @@ export const CountdownTimer = ({ targetDate = '2026-12-20T06:00:00.000+05:30' })
   const formatUnit = (num) => String(num).padStart(2, '0');
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-6 px-4">
+    <div className="w-full max-w-4xl mx-auto pt-6 pb-1 px-4">
       <div className="glass-card p-6 sm:p-8 rounded-3xl border-l-4 border-l-[var(--orange)] relative overflow-hidden">
         
         {/* Glow Accent */}

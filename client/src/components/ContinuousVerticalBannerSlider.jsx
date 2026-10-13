@@ -72,8 +72,8 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
           <Sparkles className="w-3.5 h-3.5" />
           <span>MOVEMENT POSTERS & INSPIRATION</span>
         </div>
-        <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-white tracking-tight">
-          YOUTH EMPOWERMENT GALLERY
+        <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-white tracking-tight uppercase">
+          CHINMAYA YUVA KENDRA ADONI
         </h3>
       </div>
 
@@ -96,7 +96,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
             >
               <img
                 src={item.imageUrl}
-                alt={item.title || 'Chinmaya Mission Adoni'}
+                alt={item.title || 'Chinmaya Yuva Kendra Adoni'}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100 block"
                 loading="lazy"
               />
@@ -112,7 +112,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
                   {item.title}
                 </h4>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  Chinmaya Mission Adoni
+                  Chinmaya Yuva Kendra Adoni
                 </p>
               </div>
             </div>

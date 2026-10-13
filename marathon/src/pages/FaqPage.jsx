@@ -132,11 +132,6 @@ export const FaqPage = () => {
         
         {/* Header Section */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--orange)]/15 border border-[var(--orange)]/30 text-[var(--orange)] text-[11px] font-extrabold uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>QUESTIONS & ANSWERS</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl font-black font-heading text-[var(--text-primary)] tracking-tight">
             FREQUENTLY ASKED QUESTIONS
           </h1>

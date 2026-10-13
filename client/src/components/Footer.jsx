@@ -17,7 +17,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   },
   organizedBy: {
     heading: 'FOUNDED UNDER PUJYA GURUDEV:',
-    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra (CHYK)',
+    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
   },
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
@@ -46,7 +46,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
     websiteUrl: '',
   },
   pledge: {
-    heading: 'OUR INSPIRATION',
+    heading: 'Our Motto',
     title: 'TO GIVE MAXIMUM HAPPINESS',
     description:
       '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
@@ -137,16 +137,22 @@ function sanitizeMainSiteFooter(rawData) {
     };
   }
 
-  // 4. Sanitize Pledge Section (Replace "THE MARATHON PLEDGE" with Gurudev's Motto)
+  // 3b. Sanitize Organized By
+  if (data.organizedBy && data.organizedBy.text?.includes('(CHYK)')) {
+    data.organizedBy.text = 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni';
+  }
+
+  // 4. Sanitize Pledge Section (Replace "THE MARATHON PLEDGE" / "OUR INSPIRATION" with Gurudev's Motto)
   const pledgeHeading = data.pledge?.heading || '';
   const pledgeTitle = data.pledge?.title || '';
   if (
     pledgeHeading.includes('MARATHON') ||
     pledgeTitle.includes('DRUG-FREE') ||
-    pledgeTitle.includes('MARATHON')
+    pledgeTitle.includes('MARATHON') ||
+    pledgeHeading.includes('INSPIRATION')
   ) {
     data.pledge = {
-      heading: 'OUR INSPIRATION',
+      heading: 'Our Motto',
       title: 'TO GIVE MAXIMUM HAPPINESS',
       description:
         '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
@@ -289,7 +295,19 @@ export const Footer = ({ overrideData = null }) => {
             <div className="text-xs font-bold pt-1">
               <span style={headingStyle}>{organizedBy.heading || 'FOUNDED UNDER GURUDEV:'}</span>
               <p className="text-white font-extrabold mt-0.5 leading-snug">
-                {organizedBy.text || 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra (CHYK)'}
+                {organizedBy.text && organizedBy.text.includes(' & ') ? (
+                  <>
+                    <span className="block">{organizedBy.text.split(' & ')[0]} &</span>
+                    <span className="block">{organizedBy.text.split(' & ')[1]}</span>
+                  </>
+                ) : (
+                  organizedBy.text || (
+                    <>
+                      <span className="block">Chinmaya Mission Adoni &</span>
+                      <span className="block">Chinmaya Yuva Kendra Adoni</span>
+                    </>
+                  )
+                )}
               </p>
             </div>
           </div>
@@ -407,13 +425,13 @@ export const Footer = ({ overrideData = null }) => {
             </div>
           </div>
 
-          {/* Column 4: Chinmaya Mission Inspiration (NO Marathon Pledge) */}
+          {/* Column 4: Chinmaya Mission Motto (NO Marathon Pledge) */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
-              {pledge.heading || 'OUR INSPIRATION'}
+              {pledge.heading === 'OUR INSPIRATION' ? 'Our Motto' : (pledge.heading || 'Our Motto')}
             </h4>
             <div style={cardStyle} className="p-4 rounded-2xl border text-xs space-y-2">
               <p className="text-white font-extrabold flex items-center gap-1.5">

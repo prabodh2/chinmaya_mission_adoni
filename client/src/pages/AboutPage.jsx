@@ -465,11 +465,7 @@ export const AboutPage = () => {
               "{data.ourVision.quote}"
             </h2>
 
-            <div className="pt-4 flex items-center justify-center gap-3 text-xs font-bold text-slate-300">
-              <span className="w-12 h-px bg-[var(--orange)]" />
-              <span>CHINMAYA MISSION ADONI</span>
-              <span className="w-12 h-px bg-[var(--orange)]" />
-            </div>
+
           </div>
         </div>
       </section>
@@ -690,33 +686,6 @@ export const AboutPage = () => {
         </div>
       </section>
 
-      {/* 9.5 CONCLUSION SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--cyan)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-6">
-          <div className="max-w-4xl mx-auto space-y-5">
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-              {data.conclusion?.heading || 'Conclusion'}
-            </h2>
-            <div className="space-y-4 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-              <p>
-                {data.conclusion?.paragraph1}
-              </p>
-              {data.conclusion?.paragraph2 && (
-                <p>
-                  {data.conclusion.paragraph2}
-                </p>
-              )}
-              {data.conclusion?.paragraph3 && (
-                <div className="p-5 rounded-2xl bg-[var(--bg-secondary)] border-l-4 border-[var(--orange)] shadow-sm">
-                  <p className="font-semibold text-[var(--text-primary)] italic leading-relaxed">
-                    {data.conclusion.paragraph3}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 10. CLOSING STATEMENT / CTA SECTION */}
       <section className="px-4 max-w-5xl mx-auto text-center">

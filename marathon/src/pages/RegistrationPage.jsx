@@ -524,14 +524,9 @@ export const RegistrationPage = () => {
       {/* Page Header */}
       <div className="text-center space-y-3">
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold text-[11px] tracking-widest uppercase bg-[var(--cyan)]/15 text-[var(--cyan)] border border-[var(--cyan)]/30">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
             <Sparkles className="w-3.5 h-3.5" />
-            OFFICIAL REGISTRATION
-          </span>
-
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-wider uppercase border bg-[var(--orange)]/15 text-[var(--orange)] border-[var(--orange)]/30">
-            <Calendar className="w-4 h-4" />
-            LAST DAY TO REGISTER: 30/11/2026
+            CHINMAYA YUVA KENDRA ADONI
           </span>
         </div>
 

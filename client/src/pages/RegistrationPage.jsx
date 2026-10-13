@@ -329,19 +329,10 @@ export const RegistrationPage = () => {
       
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase border ${
-            isRegistrationOpen
-              ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
-              : 'bg-red-500/15 text-red-500 border-red-500/30'
-          }`}>
-            <CheckCircle className="w-4 h-4" />
-            {isRegistrationOpen ? 'REGISTRATION OPEN' : 'REGISTRATION CLOSED'}
-          </span>
-
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-wider uppercase border bg-[var(--orange)]/15 text-[var(--orange)] border-[var(--orange)]/30">
-            <Calendar className="w-4 h-4" />
-            LAST DAY TO REGISTER: 30/11/2026
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
+            <Sparkles className="w-3.5 h-3.5" />
+            CHINMAYA YUVA KENDRA ADONI
           </span>
         </div>
 
