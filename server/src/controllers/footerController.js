@@ -24,9 +24,9 @@ export const defaultFooterConfig = {
     ],
   },
   contact: {
-    heading: 'EVENT LOCATION & CONTACT',
+    heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Adoni',
+      line1: 'Chinmaya Mission Cultural Complex , Adoni',
       line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',
@@ -40,10 +40,10 @@ export const defaultFooterConfig = {
     websiteUrl: '',
   },
   pledge: {
-    heading: 'THE MARATHON PLEDGE',
-    title: 'RUN FOR A DRUG-FREE FUTURE',
+    heading: 'Our Motto',
+    title: 'TO GIVE MAXIMUM HAPPINESS',
     description:
-      '"I pledge to reject bad influences, honor my health, choose good friends, and build a brighter future for myself and Adoni."',
+      '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
   },
   bottomFooter: {
     copyrightText: '© Chinmaya Mission Adoni.',

@@ -243,27 +243,79 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'cta':
       return (
-        <section className="py-16 px-4 bg-gradient-to-r from-[var(--orange)] via-[#E64A19] to-[var(--orange)] text-white text-center">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <h2 className="text-3xl sm:text-5xl font-black font-heading tracking-tight">
-              {section.title || 'BE PART OF THE MOVEMENT IN ADONI!'}
-            </h2>
-            <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-medium">
-              {section.description || 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!'}
-            </p>
-            {section.primaryButtonText && (
-              <div>
-                <Link
-                  to={section.primaryButtonLink || '/register'}
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-extrabold text-base shadow-2xl hover:bg-slate-100 transition-transform hover:scale-105 text-decoration-none"
-                >
-                  <Award className="w-5 h-5 text-[var(--orange)]" />
-                  <span>{section.primaryButtonText}</span>
-                </Link>
+        <div className="space-y-0">
+          <section className="py-16 px-4 bg-gradient-to-r from-[var(--orange)] via-[#E64A19] to-[var(--orange)] text-white text-center">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <h2 className="text-3xl sm:text-5xl font-black font-heading tracking-tight">
+                {section.title || 'BE PART OF THE MOVEMENT IN ADONI!'}
+              </h2>
+              <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-medium">
+                {section.description || 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!'}
+              </p>
+              {section.primaryButtonText && (
+                <div>
+                  <Link
+                    to={section.primaryButtonLink || '/register'}
+                    className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-extrabold text-base shadow-2xl hover:bg-slate-100 transition-transform hover:scale-105 text-decoration-none"
+                  >
+                    <Award className="w-5 h-5 text-[var(--orange)]" />
+                    <span>{section.primaryButtonText}</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* QUOTE BANNER UNDER BE PART OF THE MOVEMENT */}
+          <section className="relative overflow-hidden min-h-[175px] flex flex-col md:flex-row items-center justify-between gap-6 px-6 sm:px-12 lg:px-20 py-10 text-white bg-[#07162D] border-t border-slate-800/80 shadow-2xl">
+            {/* Background Road Image with Dark Blue Tint */}
+            <div
+              className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-40 mix-blend-luminosity"
+              style={{
+                backgroundImage: "url('/assets/sunset-road.jpg')",
+                backgroundPosition: "center 60%",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#07162D]/95 via-[#07162D]/90 to-[#07162D]/85 pointer-events-none" />
+
+            {/* Center Background Watermark Brand */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none opacity-20 px-4 text-center">
+              <span className="text-[11px] sm:text-xs font-semibold tracking-wider text-slate-300 uppercase">
+                An Initiative by
+              </span>
+              <span className="text-xl sm:text-3xl font-black tracking-widest text-[#F0441D] mt-0.5">
+                CHINMAYA YUVA KENDRA ADONI
+              </span>
+              <span className="text-[9px] sm:text-[11px] font-bold tracking-[0.2em] text-slate-300 uppercase mt-0.5">
+                TOGETHER FOR A HEALTHY, BRIGHTER TOMORROW
+              </span>
+            </div>
+
+            {/* Left Quote Content */}
+            <div className="relative z-10 max-w-2xl text-left">
+              <div className="font-serif text-[#FFD12D] text-4xl sm:text-5xl leading-none mb-1 select-none">
+                “
               </div>
-            )}
-          </div>
-        </section>
+              <p className="font-serif text-base sm:text-lg lg:text-xl text-white font-medium leading-relaxed mb-2">
+                The youth are not useless , they are used less. The youth are not careless , they are cared for less.”
+              </p>
+              <small className="block font-sans text-xs sm:text-sm text-[#F6D9BA] font-semibold tracking-wide">
+                - Swami Chinmayananda
+              </small>
+            </div>
+
+            {/* Right Action Button */}
+            <div className="relative z-10 shrink-0">
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-[#FFF5E5] text-[#07162D] hover:bg-white text-xs sm:text-sm font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl text-decoration-none"
+              >
+                <span>Know More</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </section>
+        </div>
       );
 
     case 'about':

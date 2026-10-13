@@ -38,9 +38,9 @@ const DEFAULT_FORM_DATA = {
     ],
   },
   contact: {
-    heading: 'EVENT LOCATION & CONTACT',
+    heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Adoni',
+      line1: 'Chinmaya Mission Cultural Complex , Adoni',
       line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',

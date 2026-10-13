@@ -53,10 +53,10 @@ const footerSchema = new mongoose.Schema(
     contact: {
       heading: {
         type: String,
-        default: 'EVENT LOCATION & CONTACT',
+        default: 'LOCATION & CONTACT',
       },
       address: {
-        line1: { type: String, default: 'Chinmaya Mission Adoni' },
+        line1: { type: String, default: 'Chinmaya Mission Cultural Complex , Adoni' },
         line2: { type: String, default: 'Near Arts College Road' },
         city: { type: String, default: 'Adoni' },
         pincode: { type: String, default: '518301' },
@@ -72,16 +72,16 @@ const footerSchema = new mongoose.Schema(
     pledge: {
       heading: {
         type: String,
-        default: 'THE MARATHON PLEDGE',
+        default: 'Our Motto',
       },
       title: {
         type: String,
-        default: 'RUN FOR A DRUG-FREE FUTURE',
+        default: 'TO GIVE MAXIMUM HAPPINESS',
       },
       description: {
         type: String,
         default:
-          '"I pledge to reject bad influences, honor my health, choose good friends, and build a brighter future for myself and Adoni."',
+          '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
       },
     },
     bottomFooter: {

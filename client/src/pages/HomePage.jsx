@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  BookOpen,
   Heart,
-  Users,
-  Sun,
-  Globe2,
   Leaf,
   CalendarDays,
   ArrowRight,
@@ -19,12 +15,22 @@ const MARATHON_PORTAL_URL =
   import.meta.env.VITE_MARATHON_URL ||
   (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
 
-const values = [
-  { icon: BookOpen, title: 'Education', desc: 'For a brighter future', color: 'lavender' },
-  { icon: Heart, title: 'Cultural Enhancement', desc: 'For a stronger identity', color: 'peach' },
-  { icon: Users, title: 'Service', desc: 'For a kinder world', color: 'green' },
-  { icon: Flower2, title: 'Spiritual Growth', desc: 'For inner peace', color: 'lavender' },
-  { icon: Sun, title: 'Positive Contribution', desc: 'For a better society', color: 'yellow' },
+const corePillars = [
+  {
+    icon: '/assets/images/vision-icon.png',
+    title: 'Our Vision',
+    text: 'The inner transformation of individuals through knowledge of Vedanta, spiritual practices and service to society, resulting in a happy world around them.',
+  },
+  {
+    icon: '/assets/images/mission-icon.png',
+    title: 'Our Mission',
+    text: 'To provide to individuals from any background, the wisdom of Vedanta and the practical means for spiritual growth and happiness enabling them to become positive contributors to society.',
+  },
+  {
+    icon: '/assets/images/motto-icon.png',
+    title: 'Our Motto',
+    text: 'To give maximum happiness to the maximum number for the maximum time.',
+  },
 ];
 
 const events = [
@@ -81,6 +87,21 @@ export function HomePage() {
       <main>
         {/* HERO SECTION */}
         <section className="hero" id="home">
+          {/* Background Video */}
+          <div className="hero-video-wrap" aria-hidden="true">
+            <video
+              className="hero-video-bg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src="/assets/logo.mp4" type="video/mp4" />
+            </video>
+            <div className="hero-video-overlay" />
+          </div>
+
           <div className="hero-glow" />
           <div className="hero-content">
             <p className="eyebrow">
@@ -150,37 +171,14 @@ export function HomePage() {
         <section className="about-section section-wrap" id="about">
           <div className="about-copy">
             <p className="eyebrow">OUR PURPOSE</p>
-            <h2>About Chinmaya Mission</h2>
+            <h2>About Chinmaya Mission Adoni</h2>
             <span className="title-underline" />
             <p>
-              Chinmaya Mission is a global spiritual movement founded by Swami Chinmayananda in 1953, dedicated to the study and practice of Vedanta, and the holistic development of individuals and society.
+              Chinmaya Mission Adoni is a spiritual organization dedicated to spreading timeless wisdom, nurturing cultural values, and inspiring individuals through spiritual learning, education, and community service.
             </p>
             <Link className="text-link" to="/about">
               Learn More <ArrowRight size={15} />
             </Link>
-          </div>
-          <div className="mission-stats">
-            <div className="stat">
-              <span className="stat-icon">
-                <Flower2 />
-              </span>
-              <strong>Founded in</strong>
-              <b>1953</b>
-            </div>
-            <div className="stat">
-              <span className="stat-icon">
-                <Globe2 />
-              </span>
-              <strong>Global</strong>
-              <b>Presence</b>
-            </div>
-            <div className="stat">
-              <span className="stat-icon">
-                <Users />
-              </span>
-              <strong>Millions</strong>
-              <b>of Lives Touched</b>
-            </div>
           </div>
           <Leaf className="decor-leaf" size={75} strokeWidth={1} />
         </section>
@@ -193,14 +191,14 @@ export function HomePage() {
               <h2>Our Core Values</h2>
               <span className="title-underline" />
             </div>
-            <div className="values-grid">
-              {values.map(({ icon: Icon, title, desc, color }) => (
-                <article className="value-item" key={title}>
-                  <div className={'value-icon ' + color}>
-                    <Icon size={30} strokeWidth={1.7} />
+            <div className="pillars-grid">
+              {corePillars.map(({ icon, title, text }) => (
+                <article className="pillar-card" key={title}>
+                  <div className="pillar-icon-wrap">
+                    <img src={icon} alt={title} className="pillar-icon-img" />
                   </div>
                   <h3>{title}</h3>
-                  <p>{desc}</p>
+                  <p>{text}</p>
                 </article>
               ))}
             </div>
@@ -236,16 +234,12 @@ export function HomePage() {
                 <Heart size={14} /> Serve with purpose
               </span>
             </div>
-            <a
+            <Link
               className="btn btn-primary"
-              href="#events"
-              onClick={(e) => {
-                e.preventDefault();
-                goTo('Events');
-              }}
+              to="/lets-connect"
             >
               Join CHYK <ArrowRight size={16} />
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -306,21 +300,6 @@ export function HomePage() {
               </article>
             ))}
           </div>
-        </section>
-
-        {/* QUOTE BANNER */}
-        <section className="quote-banner">
-          <div className="quote-overlay" />
-          <div className="quote-content">
-            <div className="quote-mark">“</div>
-            <p>
-              To give maximum happiness to the maximum number of people for the maximum time is our motto.
-            </p>
-            <small>— Pujya Gurudev Swami Chinmayananda</small>
-          </div>
-          <Link to="/about" className="btn btn-light">
-            Know More <ArrowRight size={14} />
-          </Link>
         </section>
       </main>
     </div>

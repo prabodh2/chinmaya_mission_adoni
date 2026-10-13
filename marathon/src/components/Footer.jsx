@@ -20,16 +20,21 @@ const FALLBACK_FOOTER = {
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
     links: [
-      { label: 'Marathon Home', url: '/', enabled: true, displayOrder: 1 },
-      { label: 'FAQs', url: '/faqs', enabled: true, displayOrder: 2 },
-      { label: 'Register for Marathon', url: '/register', enabled: true, displayOrder: 3 },
-      { label: 'Chinmaya Mission Main Website', url: MAIN_SITE_URL, enabled: true, displayOrder: 4 },
+      { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
+      { label: 'FAQs', url: '/faqs', openInNewTab: false, enabled: true, displayOrder: 2 },
+      {
+        label: 'Main Mission Site',
+        url: 'https://chinmaya-mission-adoni.vercel.app/',
+        openInNewTab: true,
+        enabled: true,
+        displayOrder: 3,
+      },
     ],
   },
   contact: {
-    heading: 'EVENT LOCATION & CONTACT',
+    heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Adoni',
+      line1: 'Chinmaya Mission Cultural Complex , Adoni',
       line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',
@@ -43,10 +48,10 @@ const FALLBACK_FOOTER = {
     websiteUrl: '',
   },
   pledge: {
-    heading: 'THE MARATHON PLEDGE',
-    title: 'RUN FOR A DRUG-FREE FUTURE',
+    heading: 'Our Motto',
+    title: 'TO GIVE MAXIMUM HAPPINESS',
     description:
-      '"I pledge to reject bad influences, honor my health, choose good friends, and build a brighter future for myself and Adoni."',
+      '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
   },
   bottomFooter: {
     copyrightText: '© Chinmaya Mission Adoni.',
@@ -137,20 +142,86 @@ export const Footer = ({ overrideData = null }) => {
     appearance = FALLBACK_FOOTER.appearance,
   } = footerData;
 
-  // Sort and filter active links
-  const navLinks = (quickNavigation.links || [])
-    .filter((link) => link.enabled !== false)
-    .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  // Quick Navigation links for Marathon
+  // Replace old main site links (About Us, Activities Gallery, What We Do, Let's Connect)
+  // with Home, FAQs, and Main Mission Site
+  const unwantedLabels = ['about us', 'activities gallery', 'what we do', "let's connect", 'lets connect'];
+  const unwantedUrls = ['/about', '/activities', '/what-we-do', '/lets-connect'];
+
+  const defaultMarathonLinks = [
+    { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
+    { label: 'FAQs', url: '/faqs', openInNewTab: false, enabled: true, displayOrder: 2 },
+    {
+      label: 'Main Mission Site',
+      url: 'https://chinmaya-mission-adoni.vercel.app/',
+      openInNewTab: true,
+      enabled: true,
+      displayOrder: 3,
+    },
+  ];
+
+  const rawLinks = (quickNavigation.links || []).filter((link) => {
+    if (!link || link.enabled === false) return false;
+    const lower = (link.label || '').toLowerCase().trim();
+    const url = (link.url || '').toLowerCase().trim();
+    if (unwantedLabels.some((u) => lower.includes(u))) return false;
+    if (unwantedUrls.includes(url)) return false;
+    return true;
+  });
+
+  // Ensure Home, FAQs, and Main Mission Site are the quick navigation links
+  const navLinks = rawLinks.length === 0 || rawLinks.every((l) => ['home', 'faqs', 'main mission site'].includes(l.label?.toLowerCase().trim()))
+    ? defaultMarathonLinks
+    : [
+        ...defaultMarathonLinks,
+        ...rawLinks.filter(
+          (l) =>
+            l.url !== '/' &&
+            l.url !== '/faqs' &&
+            !l.url?.includes('chinmaya-mission-adoni.vercel.app') &&
+            l.label?.toLowerCase() !== 'home' &&
+            l.label?.toLowerCase() !== 'faqs' &&
+            !l.label?.toLowerCase().includes('main mission')
+        ),
+      ];
+
+  const contactHeading =
+    !contact.heading || contact.heading === 'EVENT LOCATION & CONTACT'
+      ? 'LOCATION & CONTACT'
+      : contact.heading;
 
   const address = contact.address || {};
+  let line1 = address.line1 || 'Chinmaya Mission Cultural Complex , Adoni';
+  if (line1 === 'Chinmaya Mission Adoni' || !line1.includes('Cultural Complex')) {
+    line1 = 'Chinmaya Mission Cultural Complex , Adoni';
+  }
+  const line2 = address.line2 || 'Near Arts College Road';
+  const cityPin = address.city ? `${address.city} - ${address.pincode || '518301'}` : 'Adoni - 518301';
+  const stateStr = address.state || 'Andhra Pradesh';
+
   const fullAddress = [
-    address.line1,
-    address.line2,
-    address.city ? `${address.city} - ${address.pincode || ''}` : '',
-    address.state,
+    line1,
+    line2,
+    cityPin,
+    stateStr,
   ]
     .filter(Boolean)
     .join(', ');
+
+  const pledgeHeading =
+    pledge.heading === 'THE MARATHON PLEDGE' || !pledge.heading
+      ? 'Our Motto'
+      : pledge.heading;
+
+  const pledgeTitle =
+    pledge.title === 'RUN FOR A DRUG-FREE FUTURE' || !pledge.title
+      ? 'TO GIVE MAXIMUM HAPPINESS'
+      : pledge.title;
+
+  const pledgeDescription =
+    pledge.description?.includes('I pledge to reject') || !pledge.description
+      ? '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda'
+      : pledge.description;
 
   const footerStyle = {
     backgroundColor: appearance?.backgroundColor || '#0B2340',
@@ -266,7 +337,7 @@ export const Footer = ({ overrideData = null }) => {
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
-              {contact.heading || 'EVENT LOCATION & CONTACT'}
+              {contactHeading}
             </h4>
             <div className="space-y-2.5 text-xs opacity-90">
               {fullAddress && (
@@ -318,17 +389,17 @@ export const Footer = ({ overrideData = null }) => {
             </div>
           </div>
 
-          {/* Column 4: The Marathon Pledge */}
+          {/* Column 4: Our Motto */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
-              {pledge.heading || 'THE MARATHON PLEDGE'}
+              {pledgeHeading}
             </h4>
             <div style={cardStyle} className="p-4 rounded-2xl border text-xs space-y-2">
-              <p className="text-white font-extrabold">{pledge.title || 'RUN FOR A DRUG-FREE FUTURE'}</p>
-              <p className="leading-relaxed opacity-90">{pledge.description}</p>
+              <p className="text-white font-extrabold">{pledgeTitle}</p>
+              <p className="leading-relaxed opacity-90">{pledgeDescription}</p>
             </div>
           </div>
 

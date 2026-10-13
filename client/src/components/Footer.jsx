@@ -32,7 +32,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   contact: {
     heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Adoni',
+      line1: 'Chinmaya Mission Cultural Complex , Adoni',
       line2: 'Near Arts College Road',
       city: 'Adoni',
       pincode: '518301',
@@ -131,7 +131,7 @@ function sanitizeMainSiteFooter(rawData) {
       heading: 'LOCATION & CONTACT',
       address: {
         ...addr,
-        line1: addr.line1?.includes('Ashrama') ? 'Chinmaya Mission Adoni' : (addr.line1 || 'Chinmaya Mission Adoni'),
+        line1: addr.line1?.includes('Cultural Complex') ? addr.line1 : 'Chinmaya Mission Cultural Complex , Adoni',
         line2: (addr.line2 === 'Arts College Road' || !addr.line2) ? 'Near Arts College Road' : addr.line2,
       },
     };
