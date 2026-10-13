@@ -8,6 +8,8 @@ import {
   Flower2,
   Sparkles,
   ExternalLink,
+  Users,
+  Sun,
 } from 'lucide-react';
 import '../styles/homepage.css';
 
