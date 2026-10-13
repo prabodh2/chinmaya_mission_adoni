@@ -2,18 +2,19 @@
 @import "tailwindcss";
 
 :root {
-  /* Design Tokens derived from Poster */
-  --navy: #0B2340;
-  --dark: #111111;
-  --cream: #FFF0C5;
+  /* Design Tokens derived from Color Palette */
+  --navy: #07162D;
+  --dark: #07162D;
+  --cream: #FFF5E5;
   --cream-card: #FFFFFF;
-  --orange: #F4511E;
-  --orange-light: #FF7043;
-  --yellow: #FFC107;
-  --red: #E83B1E;
-  --green: #4CAF50;
-  --cyan: #00A6E0;
-  --purple: #7B3FB6;
+  --orange: #F0441D;
+  --orange-light: #FF5A36;
+  --yellow: #FFD12D;
+  --red: #F51E25;
+  --green: #138B52;
+  --sky: #B9DDF7;
+  --cyan: #B9DDF7;
+  --purple: #5E4AB5;
   --pink: #E91E63;
   
   /* Layout Tokens */
@@ -23,18 +24,18 @@
   --section-py-mobile: 40px;
 
   /* Theme Variables (Light Mode Default) */
-  --bg-primary: #FFF0C5;
+  --bg-primary: #FFF5E5;
   --bg-secondary: #FFFFFF;
-  --bg-tertiary: #FFFFFF;
-  --bg-dark-section: #0B2340;
-  --text-primary: #0B2340;
-  --text-secondary: #24415C;
-  --text-muted: #3D607E;
+  --bg-tertiary: #FFFDF9;
+  --bg-dark-section: #07162D;
+  --text-primary: #07162D;
+  --text-secondary: #384354;
+  --text-muted: #59616D;
   --border-color: #EBD6A2;
-  --card-shadow: 0 10px 30px -5px rgba(11, 35, 64, 0.08);
+  --card-shadow: 0 10px 30px -5px rgba(7, 22, 45, 0.08);
   --glass-bg: #FFFFFF;
-  --glass-border: rgba(11, 35, 64, 0.12);
-  --hero-glow: radial-gradient(circle, rgba(255, 240, 197, 0.5) 0%, rgba(255, 193, 7, 0.08) 50%, transparent 70%);
+  --glass-border: rgba(7, 22, 45, 0.1);
+  --hero-glow: radial-gradient(circle, rgba(255, 245, 229, 0.6) 0%, rgba(255, 209, 45, 0.12) 50%, transparent 70%);
 }
 
 *,

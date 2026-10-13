@@ -1,338 +1,330 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ContinuousVerticalBannerSlider } from '../components/ContinuousVerticalBannerSlider';
-import { TransformationSection } from '../components/TransformationSection';
-import { SectionRenderer } from '../components/homepage/SectionRenderer';
-import { bannerService, eventService, faqService, activityService, homepageService } from '../services/api';
-import { applyDynamicTheme } from '../utils/themeHelper';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  Flame,
-  Wrench,
-  Mail,
-  ShieldAlert,
+  BookOpen,
+  Heart,
+  Users,
+  Sun,
+  Globe2,
+  Leaf,
+  CalendarDays,
   ArrowRight,
+  Flower2,
   Sparkles,
+  ExternalLink,
 } from 'lucide-react';
+import '../styles/homepage.css';
 
-const DEFAULT_HOMEPAGE_SECTIONS = [
+const MARATHON_PORTAL_URL =
+  import.meta.env.VITE_MARATHON_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
+
+const values = [
+  { icon: BookOpen, title: 'Education', desc: 'For a brighter future', color: 'lavender' },
+  { icon: Heart, title: 'Cultural Enhancement', desc: 'For a stronger identity', color: 'peach' },
+  { icon: Users, title: 'Service', desc: 'For a kinder world', color: 'green' },
+  { icon: Flower2, title: 'Spiritual Growth', desc: 'For inner peace', color: 'lavender' },
+  { icon: Sun, title: 'Positive Contribution', desc: 'For a better society', color: 'yellow' },
+];
+
+const events = [
   {
-    sectionId: 'hero-1',
-    type: 'hero',
-    title: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-    subtitle: '"YOUR LIFE. YOUR CHOICE."',
-    description: 'Run for a Drug-Free Future • Join Thousands of Youth in Adoni Building Health, Strength & Discipline',
-    badgeText: 'CHINMAYA MISSION ADONI & CHYK ADONI',
-    primaryButtonText: 'REGISTER NOW',
-    primaryButtonLink: '/register',
-    secondaryButtonText: 'EXPLORE THE MOVEMENT',
-    secondaryButtonLink: '#about',
-    imageUrl: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=1600&auto=format&fit=crop',
-    isEnabled: true,
-    order: 1,
+    title: '3K Anti-Drug Marathon',
+    subtitle: 'We Rise · We Run · We Resist',
+    date: 'Sunday, Dec 20, 2026',
+    kind: 'marathon',
+    image: '/assets/chyk-marathon.jpg',
+    url: MARATHON_PORTAL_URL,
+    isExternal: true,
   },
   {
-    sectionId: 'marathon-1',
-    type: 'marathon',
-    title: 'EVENT DETAILS & COUNTDOWN',
-    subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
-    description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
-    badgeText: 'EVENT INFORMATION',
-    primaryButtonText: 'REGISTER FOR MARATHON',
-    primaryButtonLink: '/register',
-    isEnabled: true,
-    order: 2,
+    title: 'Chinmaya Amrit Yatra',
+    subtitle: 'A 75-year legacy journey',
+    date: 'Dec 31, 2025 – Oct 23, 2026',
+    kind: 'journey',
+    icon: '✦',
+    url: '/activities',
   },
   {
-    sectionId: 'activities-1',
-    type: 'activities',
-    title: 'MOVEMENT ACTIVITIES & HIGHLIGHTS',
-    subtitle: 'GALLERY & HIGHLIGHTS',
-    description: 'Explore community drives, bootcamps, wellness seminars, and youth initiatives.',
-    primaryButtonText: 'VIEW ALL ACTIVITIES',
-    primaryButtonLink: '/activities',
-    isEnabled: true,
-    order: 4,
+    title: 'Jnana Yajna',
+    subtitle: 'Spiritual discourses',
+    date: 'Regular sessions',
+    kind: 'wisdom',
+    icon: 'ॐ',
+    url: '/activities',
   },
   {
-    sectionId: 'faq-1',
-    type: 'faq',
-    title: 'FREQUENTLY ASKED QUESTIONS',
-    subtitle: 'QUESTIONS & ANSWERS',
-    description: 'Everything you need to know about participating, registrations, certificates, and event details.',
-    isEnabled: true,
-    order: 5,
-  },
-  {
-    sectionId: 'cta-1',
-    type: 'cta',
-    title: 'BE PART OF THE MOVEMENT IN ADONI!',
-    subtitle: 'CHINMAYA MISSION & CHYK ADONI',
-    description: 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!',
-    primaryButtonText: 'MARATHON REGISTRATION',
-    primaryButtonLink: '/register',
-    isEnabled: true,
-    order: 6,
+    title: 'Bala Vihar',
+    subtitle: 'Values for life',
+    date: 'Ongoing',
+    kind: 'meditation',
+    icon: '☼',
+    url: '/activities',
   },
 ];
 
-const DEFAULT_ACTIVITIES = [
-  {
-    _id: 'act-1',
-    title: 'Youth Marathon Prep Bootcamps',
-    category: 'Marathon Training',
-    description: 'Weekly morning running sessions and endurance training across Adoni schools and colleges.',
-    imageUrl: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=800&auto=format&fit=crop',
-    active: true,
-  },
-  {
-    _id: 'act-3',
-    title: 'Mind & Body Wellness Seminars',
-    category: 'Fitness & Wellness',
-    description: 'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
-    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
-    active: true,
-  },
-  {
-    _id: 'act-4',
-    title: 'Adoni Torch Relay & Street Rallies',
-    category: 'Awareness Campaign',
-    description: 'Torch relay highlighting positive choices, sports culture, and freedom from addiction.',
-    imageUrl: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop',
-    active: true,
-  },
-];
+export function HomePage() {
+  const [active, setActive] = useState('Home');
+  const navigate = useNavigate();
 
-const DEFAULT_FAQS = [
-  {
-    _id: 'faq-1',
-    question: 'When and where is the Anti-Drug Marathon Run 2026?',
-    answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
-  },
-  {
-    _id: 'faq-2',
-    question: 'Who can participate in the marathon?',
-    answer: 'The marathon is open to everyone! Students from schools and colleges, working professionals, families, and senior citizens in Adoni are all encouraged to join.',
-  },
-  {
-    _id: 'faq-3',
-    question: 'What is the last date to register for the marathon?',
-    answer: 'The last day of registration is 30 November 2026 (30/11/2026). Make sure to register online before the deadline.',
-  },
-  {
-    _id: 'faq-4',
-    question: 'Is there an entry fee for registration?',
-    answer: 'Registration is free for all, anyone can participate.',
-  },
-  {
-    _id: 'faq-5',
-    question: 'How can schools and colleges submit registrations?',
-    answer: 'Institutions can visit the Registration page, select "School & College Registration", download the template, upload student details, and submit in one single step.',
-  },
-  {
-    _id: 'faq-6',
-    question: 'Will certificates be provided to participants?',
-    answer: 'Yes! Physical certificates will be given after the completion of the run.',
-  },
-];
-
-const getCached = (key, fallback) => {
-  try {
-    const item = localStorage.getItem(key);
-    if (item) return JSON.parse(item);
-  } catch (_) {}
-  return fallback;
-};
-
-export const HomePage = () => {
-  const [homepageData, setHomepageData] = useState(() => getCached('cms_homepage_config', null));
-  const [loading, setLoading] = useState(() => !getCached('cms_homepage_config', null));
-  const [eventConfig, setEventConfig] = useState(() => getCached('cms_event_config', null));
-  const [banners, setBanners] = useState(() => getCached('cms_banners', { horizontal: null, vertical: [] }));
-  const [faqs, setFaqs] = useState(() => getCached('cms_faqs', DEFAULT_FAQS));
-  const [activities, setActivities] = useState(() => {
-    const cached = getCached('cms_activities', null);
-    if (Array.isArray(cached) && cached.length > 0) {
-      return cached.filter((a) => !/School Anti-Drug Oath/i.test(a.title || ''));
+  const goTo = (label) => {
+    setActive(label);
+    const targetId = label.toLowerCase();
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    return DEFAULT_ACTIVITIES;
-  });
-
-  const loadAllData = () => {
-    // 1. Fetch Public Homepage Configuration from CMS
-    homepageService
-      .getPublicHomepage()
-      .then((res) => {
-        if (res.data?.success && res.data?.data) {
-          setHomepageData(res.data.data);
-          try { localStorage.setItem('cms_homepage_config', JSON.stringify(res.data.data)); } catch (_) {}
-          if (res.data.data.theme) {
-            applyDynamicTheme(res.data.data.theme);
-          }
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-
-    // 2. Fetch Auxiliary Data (Events, Banners, FAQs, Activities)
-    eventService.getConfig().then((res) => {
-      if (res.data?.success) {
-        setEventConfig(res.data.data);
-        try { localStorage.setItem('cms_event_config', JSON.stringify(res.data.data)); } catch (_) {}
-      }
-    }).catch(() => {});
-
-    bannerService.getBanners().then((res) => {
-      if (res.data?.success) {
-        setBanners(res.data.data);
-        try { localStorage.setItem('cms_banners', JSON.stringify(res.data.data)); } catch (_) {}
-      }
-    }).catch(() => {});
-
-    faqService.getFAQs().then((res) => {
-      if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        setFaqs(res.data.data);
-        try { localStorage.setItem('cms_faqs', JSON.stringify(res.data.data)); } catch (_) {}
-      } else {
-        setFaqs(DEFAULT_FAQS);
-      }
-    }).catch(() => {
-      setFaqs(DEFAULT_FAQS);
-    });
-
-    activityService.getActivities().then((res) => {
-      if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        const cleanActs = res.data.data
-          .filter((a) => a.active !== false && !/School Anti-Drug Oath/i.test(a.title || ''))
-          .slice(0, 3);
-        setActivities(cleanActs);
-        try { localStorage.setItem('cms_activities', JSON.stringify(cleanActs)); } catch (_) {}
-      } else {
-        setActivities(DEFAULT_ACTIVITIES);
-      }
-    }).catch(() => {
-      setActivities(DEFAULT_ACTIVITIES);
-    });
   };
 
-  useEffect(() => {
-    loadAllData();
-
-    const handleCmsUpdate = (e) => {
-      if (e.type === 'storage' && e.key && e.key !== 'cms_last_updated') return;
-      loadAllData();
-    };
-
-    window.addEventListener('cms_updated', handleCmsUpdate);
-    window.addEventListener('storage', handleCmsUpdate);
-    window.addEventListener('focus', handleCmsUpdate);
-
-    return () => {
-      window.removeEventListener('cms_updated', handleCmsUpdate);
-      window.removeEventListener('storage', handleCmsUpdate);
-      window.removeEventListener('focus', handleCmsUpdate);
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 rounded-full border-4 border-[var(--orange)] border-t-transparent animate-spin" />
-        <p className="text-xs font-bold text-[var(--text-muted)] tracking-wider uppercase">
-          Loading Anti-Drug Movement 2026...
-        </p>
-      </div>
-    );
-  }
-
-  // GLOBAL HOMEPAGE OFF / DISABLED MAINTENANCE STATE
-  if (homepageData && homepageData.isEnabled === false) {
-    return (
-      <div className="min-h-[85vh] flex items-center justify-center p-4 bg-[var(--bg-primary)]">
-        <div className="bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] rounded-3xl max-w-2xl w-full p-8 sm:p-12 text-center space-y-6 shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] relative overflow-hidden">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center mx-auto shadow-inner">
-            <Wrench className="w-8 h-8 animate-pulse" />
+  return (
+    <div className="site-shell">
+      <main>
+        {/* HERO SECTION */}
+        <section className="hero" id="home">
+          <div className="hero-glow" />
+          <div className="hero-content">
+            <p className="eyebrow">
+              <span className="eyebrow-line" /> CHINMAYA MISSION · ADONI
+            </p>
+            <h1>
+              Inner Transformation<br />
+              <em>for a Better World</em>
+            </h1>
+            <p className="hero-description">
+              Through Vedanta, values and service,<br className="desktop-break" /> we strive to build a generation of conscious,<br className="desktop-break" /> compassionate and capable individuals.
+            </p>
+            <div className="hero-actions">
+              <a
+                className="btn btn-primary"
+                href="#about"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goTo('About');
+                }}
+              >
+                Explore Our Mission <ArrowRight size={16} />
+              </a>
+              <a
+                className="btn btn-outline"
+                href="#chyk"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goTo('CHYK');
+                }}
+              >
+                Know About CHYK
+              </a>
+            </div>
           </div>
 
-          <span className="px-3.5 py-1 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-[10px] tracking-widest uppercase border border-[var(--orange)]/30">
-            NOTICE • HOMEPAGE TEMPORARILY UNAVAILABLE
-          </span>
-
-          <h1 className="text-3xl sm:text-4xl font-black font-heading text-[var(--text-primary)]">
-            {homepageData.disabledTitle || 'Website Updates In Progress'}
-          </h1>
-
-          <p className="text-sm sm:text-base text-[var(--text-muted)] font-semibold leading-relaxed max-w-xl mx-auto">
-            {homepageData.disabledMessage || 'The public homepage is currently undergoing scheduled updates. Please check back soon!'}
-          </p>
-
-          {homepageData.disabledImage && (
-            <div className="rounded-2xl overflow-hidden border border-[var(--border-color)] max-h-[260px] mx-auto shadow-md">
+          <div className="hero-portrait" aria-hidden="true">
+            <div className="portrait-aura" />
+            <div className="portrait-frame">
               <img
-                src={homepageData.disabledImage}
-                alt="Maintenance"
-                className="w-full h-full object-cover"
+                src="/assets/swami-chinmayananda-natural.jpg"
+                alt="Swami Chinmayananda"
+                className="portrait-img"
               />
             </div>
-          )}
-
-          {homepageData.disabledContactButton && (
-            <div className="pt-4">
-              <Link
-                to={homepageData.disabledContactUrl || '/lets-connect'}
-                className="btn-primary text-sm py-3.5 px-8 inline-flex text-decoration-none shadow-xl"
-              >
-                <Mail className="w-4 h-4" />
-                <span>CONTACT ORGANIZERS</span>
-              </Link>
+            <div className="portrait-symbol">
+              <Flower2 size={26} />
+              <span>
+                Arise<br />
+                Awake<br />
+                and<br />
+                Guide Others
+              </span>
+              <i />
             </div>
-          )}
+            <div className="signature">Swami Chinmayananda</div>
+          </div>
 
-          <p className="text-[11px] text-[var(--text-muted)] pt-4 border-t border-[var(--border-color)]">
-            Chinmaya Mission Adoni & Chinmaya Yuva Kendra
-          </p>
-        </div>
-      </div>
-    );
-  }
+          <div className="hero-bottom-note">
+            <span>01</span>
+            <span className="note-line" /> A journey inward. A difference outward.
+          </div>
+          <div className="sun-disc" />
+        </section>
 
-  // HOMEPAGE IS ON: RENDER SECTIONS
-  const sections = (homepageData?.sections && homepageData.sections.length > 0)
-    ? homepageData.sections
-    : DEFAULT_HOMEPAGE_SECTIONS;
+        {/* ABOUT SECTION */}
+        <section className="about-section section-wrap" id="about">
+          <div className="about-copy">
+            <p className="eyebrow">OUR PURPOSE</p>
+            <h2>About Chinmaya Mission</h2>
+            <span className="title-underline" />
+            <p>
+              Chinmaya Mission is a global spiritual movement founded by Swami Chinmayananda in 1953, dedicated to the study and practice of Vedanta, and the holistic development of individuals and society.
+            </p>
+            <Link className="text-link" to="/about">
+              Learn More <ArrowRight size={15} />
+            </Link>
+          </div>
+          <div className="mission-stats">
+            <div className="stat">
+              <span className="stat-icon">
+                <Flower2 />
+              </span>
+              <strong>Founded in</strong>
+              <b>1953</b>
+            </div>
+            <div className="stat">
+              <span className="stat-icon">
+                <Globe2 />
+              </span>
+              <strong>Global</strong>
+              <b>Presence</b>
+            </div>
+            <div className="stat">
+              <span className="stat-icon">
+                <Users />
+              </span>
+              <strong>Millions</strong>
+              <b>of Lives Touched</b>
+            </div>
+          </div>
+          <Leaf className="decor-leaf" size={75} strokeWidth={1} />
+        </section>
 
-  return (
-    <div className="min-h-screen space-y-4">
-      {/* Dynamic Sections Rendered According to Admin Order */}
-      {sections.length > 0 ? (
-        sections.map((section) => (
-          <React.Fragment key={section.sectionId || section._id}>
-            <SectionRenderer
-              section={section}
-              eventConfig={eventConfig}
-              banners={banners}
-              activities={activities}
-              faqs={faqs}
+        {/* CORE VALUES SECTION */}
+        <section className="values-section" id="activities">
+          <div className="section-wrap">
+            <div className="section-heading">
+              <p className="eyebrow">WHAT GUIDES US</p>
+              <h2>Our Core Values</h2>
+              <span className="title-underline" />
+            </div>
+            <div className="values-grid">
+              {values.map(({ icon: Icon, title, desc, color }) => (
+                <article className="value-item" key={title}>
+                  <div className={'value-icon ' + color}>
+                    <Icon size={30} strokeWidth={1.7} />
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CHYK SECTION */}
+        <section className="chyk-section section-wrap" id="chyk">
+          <div className="chyk-image">
+            <img
+              src="/assets/youth-runners.png"
+              alt="Young people taking part in a healthy community activity"
             />
+            <div className="image-label">
+              <span>CHYK</span>
+              <small>Young minds. Big dreams.</small>
+            </div>
+          </div>
+          <div className="chyk-copy">
+            <p className="eyebrow">THE YOUTH WING</p>
+            <h2>
+              CHYK <span>— The Youth Wing</span>
+            </h2>
+            <span className="title-underline" />
+            <p>
+              CHYK (Chinmaya Yuva Kendra) empowers young minds through value-based education, spiritual learning, cultural activities and social service.
+            </p>
+            <div className="chyk-tags">
+              <span>
+                <Sparkles size={14} /> Discover your potential
+              </span>
+              <span>
+                <Heart size={14} /> Serve with purpose
+              </span>
+            </div>
+            <a
+              className="btn btn-primary"
+              href="#events"
+              onClick={(e) => {
+                e.preventDefault();
+                goTo('Events');
+              }}
+            >
+              Join CHYK <ArrowRight size={16} />
+            </a>
+          </div>
+        </section>
 
-            {/* Inject Banner Carousel after Hero Section */}
-            {section.type === 'hero' && banners.vertical && banners.vertical.length > 0 && (
-              <section className="py-4">
-                <ContinuousVerticalBannerSlider banners={banners.vertical} />
-              </section>
-            )}
+        {/* UPCOMING EVENTS SECTION */}
+        <section className="events-section section-wrap" id="events">
+          <div className="events-heading">
+            <div>
+              <p className="eyebrow">COME BE A PART</p>
+              <h2>Upcoming Events</h2>
+              <span className="title-underline" />
+            </div>
+            <Link className="text-link" to="/activities">
+              View All <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="events-grid">
+            {events.map((event, i) => (
+              <article
+                className="event-card cursor-pointer group"
+                key={event.title}
+                onClick={() => {
+                  if (event.url) {
+                    if (event.isExternal) {
+                      window.open(event.url, '_blank', 'noopener,noreferrer');
+                    } else {
+                      navigate(event.url);
+                    }
+                  }
+                }}
+              >
+                <div className={'event-art ' + event.kind}>
+                  {event.image ? (
+                    <img src={event.image} alt={event.title} className="event-art-img" />
+                  ) : event.kind === 'journey' ? (
+                    <div className="road-sun" />
+                  ) : event.kind === 'wisdom' ? (
+                    <div className="wisdom-symbol">ॐ</div>
+                  ) : event.kind === 'youth' ? (
+                    <Users size={50} />
+                  ) : (
+                    <Sun size={56} strokeWidth={1.2} />
+                  )}
+                  <span className="event-number">0{i + 1}</span>
+                </div>
+                <div className="event-info">
+                  <div className="flex items-start justify-between gap-1">
+                    <h3>{event.title}</h3>
+                    {event.isExternal && (
+                      <ExternalLink size={13} className="text-[var(--orange)] shrink-0 mt-0.5 opacity-70 group-hover:opacity-100" />
+                    )}
+                  </div>
+                  <p>{event.subtitle}</p>
+                  <div className="event-date">
+                    <CalendarDays size={14} />
+                    {event.date}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-            {/* Inject Transformation Story after Marathon Section */}
-            {section.type === 'marathon' && (
-              <TransformationSection />
-            )}
-          </React.Fragment>
-        ))
-      ) : (
-        /* Fallback if no sections configured */
-        <div className="py-20 text-center text-sm font-bold text-[var(--text-muted)]">
-          No homepage sections published yet.
-        </div>
-      )}
+        {/* QUOTE BANNER */}
+        <section className="quote-banner">
+          <div className="quote-overlay" />
+          <div className="quote-content">
+            <div className="quote-mark">“</div>
+            <p>
+              To give maximum happiness to the maximum number of people for the maximum time is our motto.
+            </p>
+            <small>— Pujya Gurudev Swami Chinmayananda</small>
+          </div>
+          <Link to="/about" className="btn btn-light">
+            Know More <ArrowRight size={14} />
+          </Link>
+        </section>
+      </main>
     </div>
   );
-};
+}
+
+export default HomePage;

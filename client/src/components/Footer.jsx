@@ -22,10 +22,11 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
     links: [
-      { label: 'About Us', url: '/about', enabled: true, displayOrder: 1 },
-      { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 2 },
-      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 3 },
-      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 4, openInNewTab: true },
+      { label: 'Home', url: '/', enabled: true, displayOrder: 1 },
+      { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
+      { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 3 },
+      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 4 },
+      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 5, openInNewTab: true },
     ],
   },
   contact: {
@@ -91,7 +92,6 @@ function sanitizeMainSiteFooter(rawData) {
       const lower = link.label.toLowerCase().trim();
       const url = (link.url || '').toLowerCase().trim();
       // Exclude unwanted links
-      if (lower === 'home' || lower.includes('home') || url === '/') return false;
       if (lower.includes('what we do') || url === '/what-we-do') return false;
       if (lower.includes('marathon registration') || url === '/register') return false;
       return true;

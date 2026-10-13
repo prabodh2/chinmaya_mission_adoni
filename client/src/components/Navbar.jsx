@@ -22,6 +22,7 @@ export const Navbar = () => {
   }, [location.pathname]);
 
   const navLinks = [
+    { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Activities', path: '/activities' },
     { name: "Let's Connect", path: '/lets-connect' },

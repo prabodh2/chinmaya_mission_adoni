@@ -87,8 +87,8 @@ export function App() {
           <Routes>
             {/* 1. Main Chinmaya Mission Website Pages */}
             <Route element={<PublicLayout />}>
-              {/* Home page is not required for now; redirect root to About */}
-              <Route path="/" element={<Navigate to="/about" replace />} />
+              {/* Main Landing Page */}
+              <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about-us" element={<AboutPage />} />
               <Route path="/aboutus" element={<AboutPage />} />

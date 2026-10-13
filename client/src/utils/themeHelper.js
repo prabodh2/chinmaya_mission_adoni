@@ -20,13 +20,13 @@ export const applyDynamicTheme = (theme) => {
 };
 
 export const defaultPosterTheme = {
-  primaryColor: '#0B2340',
-  secondaryColor: '#FFF0C5',
-  accentColor: '#F4511E',
-  backgroundColor: '#FFF0C5',
-  textColor: '#0B2340',
-  buttonColor: '#F4511E',
-  buttonHoverColor: '#D84315',
+  primaryColor: '#07162D',
+  secondaryColor: '#FFF5E5',
+  accentColor: '#F0441D',
+  backgroundColor: '#FFF5E5',
+  textColor: '#07162D',
+  buttonColor: '#F0441D',
+  buttonHoverColor: '#D83212',
   cardBackgroundColor: '#FFFFFF',
-  headingColor: '#0B2340',
+  headingColor: '#07162D',
 };
