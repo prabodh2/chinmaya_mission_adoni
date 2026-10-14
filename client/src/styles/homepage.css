@@ -31,7 +31,7 @@
   isolation: isolate;
   display: flex;
   align-items: center;
-  padding: 68px clamp(25px, 8vw, 120px);
+  padding: 44px clamp(25px, 8vw, 120px);
   overflow: hidden;
   background: #061527;
 }

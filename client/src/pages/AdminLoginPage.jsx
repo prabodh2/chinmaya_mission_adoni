@@ -34,7 +34,7 @@ export const AdminLoginPage = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 bg-[var(--bg-dark-section)]">
+    <div className="min-h-[75vh] flex items-center justify-center py-6 px-4 bg-[var(--bg-dark-section)]">
       <div className="bg-[var(--bg-secondary)] border-2 border-[var(--cyan)]/40 p-8 sm:p-10 rounded-3xl max-w-md w-full shadow-2xl space-y-6">
         
         <div className="text-center space-y-2">

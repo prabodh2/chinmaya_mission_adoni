@@ -70,9 +70,9 @@ export const LetsConnectPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-16 px-4 max-w-7xl mx-auto space-y-16">
+    <div className="min-h-screen pt-2 sm:pt-4 pb-14 px-4 max-w-7xl mx-auto space-y-8 sm:space-y-10">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
+      <div className="text-center max-w-3xl mx-auto space-y-2.5">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
           <Flame className="w-4 h-4" />
           CONNECT & VOLUNTEER

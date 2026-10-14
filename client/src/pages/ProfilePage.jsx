@@ -145,7 +145,7 @@ export const ProfilePage = () => {
     : 'Active Member';
 
   return (
-    <div className="min-h-[85vh] py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-8">
+    <div className="min-h-[85vh] pt-3 sm:pt-4 pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
       {/* Top Breadcrumb & Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

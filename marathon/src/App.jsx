@@ -21,7 +21,7 @@ function MarathonLayout() {
   return (
     <div className="min-h-screen flex flex-col justify-between selection:bg-[var(--orange)] selection:text-white w-full max-w-full overflow-x-hidden">
       <Navbar />
-      <main className="flex-grow pt-16 sm:pt-20 md:pt-24 w-full max-w-full overflow-x-hidden">
+      <main className="flex-grow pt-16 md:pt-20 w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
       <Footer />

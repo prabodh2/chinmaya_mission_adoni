@@ -361,9 +361,9 @@ export const AboutPage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 space-y-24 sm:space-y-32">
+    <div className="min-h-screen pb-16 space-y-12 sm:space-y-16">
       {/* 1. ABOUT HERO SECTION */}
-      <section className="relative pt-12 sm:pt-16 pb-8 px-4 max-w-7xl mx-auto overflow-hidden">
+      <section className="relative pt-2 sm:pt-4 pb-4 px-4 max-w-7xl mx-auto overflow-hidden">
         {/* Subtle Background Glow */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--orange)]/10 rounded-full blur-3xl pointer-events-none" />
 

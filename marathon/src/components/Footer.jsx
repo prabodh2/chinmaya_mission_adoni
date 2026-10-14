@@ -287,6 +287,16 @@ export const Footer = ({ overrideData = null }) => {
                 )}
               </p>
             </div>
+
+            {/* Official CHYK Signature Emblem */}
+            <div className="pt-1 flex items-center">
+              <img
+                src="/assets/logos/chyk-signature.png"
+                alt="CHYK - Chinmaya Yuva Kendra"
+                className="h-10 sm:h-12 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform"
+                loading="lazy"
+              />
+            </div>
           </div>
 
           {/* Column 2: Quick Navigation */}

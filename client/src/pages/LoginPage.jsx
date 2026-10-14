@@ -66,7 +66,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent via-[var(--bg-secondary)]/40 to-transparent">
+    <div className="min-h-[75vh] flex items-center justify-center py-4 sm:py-6 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent via-[var(--bg-secondary)]/40 to-transparent">
       <div className="w-full max-w-md space-y-8 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[32px] p-6 sm:p-10 shadow-2xl relative overflow-hidden backdrop-blur-md">
         {/* Glow accent */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-[var(--orange)]/10 rounded-full blur-3xl pointer-events-none" />

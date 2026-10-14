@@ -142,10 +142,10 @@ export const WhoAreWePage = () => {
   }, [selectedMember]);
 
   return (
-    <div className="min-h-screen bg-[#F8F3E8] py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto space-y-10 sm:space-y-12">
+    <div className="min-h-screen bg-[#F8F3E8] pt-2 sm:pt-4 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+      <div className="max-w-4xl mx-auto space-y-8 sm:space-y-10">
         {/* TOP SECTION HEADER (Faithful to Attachment 1 & 2) */}
-        <header className="text-center space-y-2 pt-2">
+        <header className="text-center space-y-1.5">
           <p className="text-xs sm:text-sm font-extrabold tracking-widest text-[#A26E33] uppercase">
             CHINMAYA MISSION · ADONI
           </p>
@@ -156,7 +156,7 @@ export const WhoAreWePage = () => {
             A legacy of wisdom, service and spiritual growth
           </p>
           {/* Decorative golden-ochre accent underline */}
-          <div className="w-14 sm:w-16 h-1 bg-[#C89B59] rounded-full mx-auto mt-3" />
+          <div className="w-14 sm:w-16 h-1 bg-[#C89B59] rounded-full mx-auto mt-2" />
         </header>
 
         {/* ============================================================ */}

@@ -519,7 +519,7 @@ export const RegistrationPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 pt-2 sm:pt-4 pb-14 space-y-6 sm:space-y-8">
       
       {/* Page Header */}
       <div className="text-center space-y-3">

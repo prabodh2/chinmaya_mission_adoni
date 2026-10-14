@@ -127,8 +127,8 @@ export const FaqPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)]">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen pt-2 sm:pt-4 pb-14 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)]">
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         
         {/* Header Section */}
         <div className="text-center space-y-3">

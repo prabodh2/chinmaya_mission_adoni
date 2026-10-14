@@ -173,6 +173,136 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
   );
 };
 
+// Overview Activities as displayed in the initial visual grid (Matching user layout)
+const OVERVIEW_ACTIVITIES = [
+  {
+    id: 'balavihar-classes',
+    title: 'Balavihar Classes',
+    subtitle: 'Every Sunday',
+    category: 'Children & Values',
+    imageUrl: '/assets/our-activities/balavihar@2x.png',
+    description:
+      'Balavihar instills core spiritual, moral, and cultural values in children through engaging stories from the epics, Vedic chanting, bhajans, dynamic games, and character-building discussions every Sunday.',
+    detailedInfo: {
+      location: 'Chinmaya Cultural Complex, Adoni',
+      sections: [
+        {
+          heading: 'Weekly Children Program',
+          paragraphs: [
+            'Balavihar provides a dynamic weekly platform where children explore Indian heritage, ethics, and universal spiritual values in a fun, loving, and encouraging environment.',
+            'Classes are conducted every Sunday with trained Sevaks, nurturing young minds into confident, compassionate, and responsible individuals.',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'kuchipudi-classes',
+    title: 'Kuchipudi Classes',
+    subtitle: 'Indian classical dance',
+    category: 'Classical Dance & Arts',
+    imageUrl: '/assets/our-activities/kuchipudi@2x.png',
+    description:
+      'Rigorous training in the timeless classical dance form of Kuchipudi, developing rhythm, grace, devotion (bhakti), and artistic discipline among children and youth.',
+    detailedInfo: {
+      location: 'Dance Studio, Chinmaya Cultural Complex, Adoni',
+      sections: [
+        {
+          heading: 'Traditional Indian Classical Dance',
+          paragraphs: [
+            'Kuchipudi is one of the premier classical dance traditions of India. Under expert guidance, students learn adavus, mudras, abhinaya, and devotional choreographies celebrating Indian spiritual traditions.',
+            'Regular performances and cultural presentations help students build poise, physical fitness, and deep artistic appreciation.',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'chyk-classes',
+    title: 'CHYK Classes',
+    subtitle: 'Every Sunday',
+    category: 'Chinmaya Yuva Kendra',
+    imageUrl: '/assets/our-activities/chyk@2x.png',
+    description:
+      'Chinmaya Yuva Kendra (CHYK) offers youth dynamic forums, leadership development, Vedanta study classes, youth seminars, and community service projects.',
+    detailedInfo: {
+      location: 'Chinmaya Cultural Complex, Adoni',
+      sections: [
+        {
+          heading: 'Empowering the Youth',
+          paragraphs: [
+            'CHYK brings together young men and women every Sunday to explore practical philosophy, clarity in decision-making, emotional mastery, and purposeful living.',
+            'Through interactive seminars, discussions, camps, and marathon initiatives, CHYK channels youth energy into positive personal transformation and societal service.',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'sankranti-classes',
+    title: 'Sankranti Classes',
+    subtitle: 'Online sessions',
+    category: 'Culture & Celebrations',
+    imageUrl: '/assets/our-activities/sankranti@2x.png',
+    description:
+      'Interactive cultural workshops, traditional festive celebrations, rangoli arts, and online sessions celebrating the auspicious harvest festival of Makara Sankranti.',
+    detailedInfo: {
+      location: 'Online & Ashram Campus, Adoni',
+      sections: [
+        {
+          heading: 'Festive Learning & Community Spirit',
+          paragraphs: [
+            'Sankranti classes and workshops bring families and youth together to celebrate Indian cultural traditions, understand the spiritual symbolism behind solar transitions, and cultivate gratitude for nature.',
+            'Includes online interactive sessions, rangoli traditions, and festive joy connecting participants near and far.',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'bhagavad-gita',
+    title: 'Bhagavad Gita',
+    subtitle: 'Wisdom for life',
+    category: 'Scriptural Wisdom',
+    imageUrl: '/assets/our-activities/gita@2x.png',
+    description:
+      'Systematic study of the timeless verses of Shrimad Bhagavad Gita, illuminating the path of self-discovery, righteous action (Karma Yoga), and inner peace.',
+    detailedInfo: {
+      location: 'Chinmaya Mission Adoni',
+      sections: [
+        {
+          heading: 'Timeless Philosophy for Modern Living',
+          paragraphs: [
+            'Pujya Gurudev Swami Chinmayananda revitalized the Bhagavad Gita for all generations. Regular study circles and discourses expound the profound teachings of Lord Krishna to Arjuna.',
+            'Participants learn how to apply spiritual wisdom in managing daily stress, relationships, career decisions, and leading a balanced, peaceful life.',
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: 'vishnu-sahasranamam',
+    title: 'Vishnu Sahasranamam',
+    subtitle: 'Devotional chanting',
+    category: 'Devotional Chanting',
+    imageUrl: '/assets/our-activities/vishnu@2x.png',
+    description:
+      'Regular collective chanting of the sacred thousand names of Lord Vishnu (Sri Vishnu Sahasranama Stotram), cultivating devotion, mental focus, and divine vibrations.',
+    detailedInfo: {
+      location: 'Temples & Satsang Hall, Adoni',
+      sections: [
+        {
+          heading: 'Sacred Stotra Recitation',
+          paragraphs: [
+            'Chanting the Vishnu Sahasranamam brings serenity, purification of mind, and collective spiritual upliftment. Devotees gather regularly to chant with devotion and correct pronunciation.',
+            'Open to all seekers, elders, and families wishing to immerse themselves in devotional harmony and sacred vibrations.',
+          ],
+        },
+      ],
+    },
+  },
+];
+
 export const ActivitiesPage = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
@@ -526,22 +656,50 @@ export const ActivitiesPage = () => {
     ) || initialActivities[3];
 
   return (
-    <div className="min-h-screen py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 sm:space-y-24">
-      {/* 1. ACTIVITIES PAGE INTRODUCTION */}
-      <header className="text-center max-w-4xl mx-auto space-y-5">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
-          <Flame className="w-4 h-4 text-[var(--orange)]" />
-          <span>CHINMAYA MISSION ADONI ACTIVITIES</span>
+    <div className="min-h-screen pt-1 sm:pt-2 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12">
+      {/* 1. OUR ACTIVITIES OVERVIEW (Matching User Screenshot Exactly, in Website Theme Colors) */}
+      <section className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
+        <header className="text-center space-y-1">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
+            Our Activities
+          </h1>
+          <p className="text-sm sm:text-base md:text-lg text-[var(--text-muted)] font-medium max-w-2xl mx-auto">
+            Learning, culture, devotion, and spiritual growth for all ages.
+          </p>
+        </header>
+
+        {/* 2-Column Grid (Balavihar, Kuchipudi, CHYK, Sankranti, Bhagavad Gita, Vishnu Sahasranamam) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 sm:gap-y-10">
+          {OVERVIEW_ACTIVITIES.map((item) => (
+            <article
+              key={item.id}
+              onClick={() => handleSelectActivity(item)}
+              className="group cursor-pointer space-y-2.5 text-left"
+            >
+              <div className="relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm group-hover:shadow-md transition-all duration-300">
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 block"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-opacity pointer-events-none" />
+                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                  {item.category}
+                </span>
+              </div>
+              <div className="space-y-0.5">
+                <h3 className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug">
+                  {item.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--text-muted)] font-normal">
+                  {item.subtitle}
+                </p>
+              </div>
+            </article>
+          ))}
         </div>
-
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-[var(--text-primary)] tracking-tight">
-          OUR <span className="text-[var(--orange)]">ACTIVITIES</span>
-        </h1>
-
-        <p className="text-base sm:text-lg text-[var(--text-muted)] font-medium leading-relaxed max-w-3xl mx-auto">
-          "At Chinmaya Mission Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values."
-        </p>
-      </header>
+      </section>
 
       {/* 2. SECTION 1: SPIRITUALITY & DEVOTION */}
       <section className="space-y-8">

@@ -325,10 +325,10 @@ export const RegistrationPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-16 px-4 max-w-5xl mx-auto space-y-12">
+    <div className="min-h-screen pt-2 sm:pt-4 pb-14 px-4 max-w-5xl mx-auto space-y-8 sm:space-y-10">
       
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
+      <div className="text-center max-w-3xl mx-auto space-y-2.5">
         <div className="flex flex-wrap items-center justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
             <Sparkles className="w-3.5 h-3.5" />
