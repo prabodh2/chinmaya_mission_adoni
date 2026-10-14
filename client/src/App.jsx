@@ -10,6 +10,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
+import { WhoAreWePage } from './pages/WhoAreWePage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 
@@ -94,6 +95,9 @@ export function App() {
               <Route path="/aboutus" element={<AboutPage />} />
               <Route path="/about-me" element={<AboutPage />} />
               <Route path="/activities" element={<ActivitiesPage />} />
+              <Route path="/who-are-we" element={<WhoAreWePage />} />
+              <Route path="/who-we-are" element={<WhoAreWePage />} />
+              <Route path="/whoarewe" element={<WhoAreWePage />} />
               <Route path="/lets-connect" element={<LetsConnectPage />} />
               
               {/* Marathon portal redirects (marathon is hosted separately) */}

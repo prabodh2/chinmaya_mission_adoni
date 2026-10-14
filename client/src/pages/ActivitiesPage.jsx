@@ -44,7 +44,7 @@ const ActivityCard = ({ activity, onSelect }) => {
               e.currentTarget.src = '/assets/images/activity-chyk.jpg';
             }
           }}
-          className="relative z-10 w-full h-full object-contain p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
+          className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
@@ -122,7 +122,7 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
               onError={(e) => {
                 e.currentTarget.src = '/assets/images/activity-chyk.jpg';
               }}
-              className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500 block"
+              className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-2 group-hover:scale-105 transition-transform duration-500 block"
               loading="lazy"
             />
             <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--orange)] text-white font-bold text-[11px] tracking-wider uppercase shadow-sm z-20">
@@ -657,16 +657,16 @@ export const ActivitiesPage = () => {
             className="bg-white border border-[rgba(11,35,64,0.08)] rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-[0_4px_12px_rgba(11,35,64,0.06),0_16px_40px_rgba(11,35,64,0.1)] relative my-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Image Area (Total image fully visible without cropping) */}
-            <div className="relative w-full h-72 sm:h-96 md:h-[440px] bg-slate-950 shrink-0 overflow-hidden flex items-center justify-center">
-              {/* Ambient blurred backdrop so there are no empty borders */}
+            {/* Modal Image Area: 100% Full Uncropped Image Presentation */}
+            <div className="relative w-full min-h-[300px] sm:min-h-[380px] md:min-h-[460px] max-h-[65vh] bg-[#0B1320] shrink-0 overflow-hidden flex items-center justify-center p-3 sm:p-5">
+              {/* Ambient blurred backdrop so any aspect ratio fills gracefully */}
               <img
                 src={selectedActivity.imageUrl}
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
               />
-              {/* Full uncropped image */}
+              {/* Full uncropped, complete image - NEVER CROPPED, NEVER CUT OFF */}
               <img
                 src={selectedActivity.imageUrl}
                 alt={selectedActivity.imageAlt || selectedActivity.title}
@@ -681,26 +681,27 @@ export const ActivitiesPage = () => {
                     e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                   }
                 }}
-                className="relative z-10 w-full h-full object-contain p-2 block"
+                className="relative z-10 max-h-[58vh] max-w-full w-auto h-auto object-contain mx-auto my-auto drop-shadow-2xl rounded-xl block"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none z-10" />
 
               {/* Close Button */}
               <button
                 onClick={() => setSelectedActivity(null)}
-                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/65 hover:bg-black text-white transition-colors z-20 backdrop-blur-sm cursor-pointer shadow-lg"
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/75 hover:bg-black text-white transition-colors z-30 backdrop-blur-md cursor-pointer shadow-xl border border-white/20"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Header Badges Floating on Image */}
-              <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-none">
-                <span className="px-3.5 py-1.5 rounded-full bg-[var(--orange)] text-white text-xs font-extrabold uppercase tracking-wider shadow-md">
-                  {selectedActivity.category}
-                </span>
+              <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 right-3 sm:right-4 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-none">
+                {selectedActivity.category && (
+                  <span className="px-3.5 py-1.5 rounded-full bg-[var(--orange)] text-white text-xs font-extrabold uppercase tracking-wider shadow-lg">
+                    {selectedActivity.category}
+                  </span>
+                )}
                 {selectedActivity.detailedInfo?.location && (
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-slate-800 text-xs font-bold shadow-md">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white text-xs font-bold shadow-lg border border-white/10">
                     <MapPin className="w-3.5 h-3.5 text-[var(--orange)]" />
                     <span>{selectedActivity.detailedInfo.location}</span>
                   </span>

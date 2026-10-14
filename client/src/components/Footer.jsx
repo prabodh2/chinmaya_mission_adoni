@@ -25,8 +25,9 @@ const MAIN_SITE_FALLBACK_FOOTER = {
       { label: 'Home', url: '/', enabled: true, displayOrder: 1 },
       { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
       { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 3 },
-      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 4 },
-      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 5, openInNewTab: true },
+      { label: 'Who Are We', url: '/who-are-we', enabled: true, displayOrder: 4 },
+      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 5 },
+      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 6, openInNewTab: true },
     ],
   },
   contact: {

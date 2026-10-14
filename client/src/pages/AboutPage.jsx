@@ -25,7 +25,7 @@ export const AboutPage = () => {
   // Fallback default content matching exact prompt specification
   const defaultContent = {
     hero: {
-      title: 'ABOUT CHINMAYA MISSION ADONI',
+      title: 'CHINMAYA MISSION ADONI',
       subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
       intro:
         'Chinmaya Mission Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
@@ -204,6 +204,9 @@ export const AboutPage = () => {
       const cached = localStorage.getItem('cms_about_content');
       if (cached) {
         const parsed = JSON.parse(cached);
+        if (parsed?.hero?.title?.toLowerCase().startsWith('about ')) {
+          parsed.hero.title = parsed.hero.title.replace(/^about\s+/i, '').trim();
+        }
         if (!parsed?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
           parsed.whoWeAre = { ...defaultContent.whoWeAre };
         }
@@ -248,6 +251,9 @@ export const AboutPage = () => {
         if (res.data?.success && res.data?.data) {
           const apiData = res.data.data;
           const merged = { ...defaultContent, ...apiData };
+          if (merged?.hero?.title?.toLowerCase().startsWith('about ')) {
+            merged.hero.title = merged.hero.title.replace(/^about\s+/i, '').trim();
+          }
           if (!merged?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
             merged.whoWeAre = { ...defaultContent.whoWeAre };
           }
@@ -370,7 +376,7 @@ export const AboutPage = () => {
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
-              {data.hero.title}
+              {(data.hero?.title || 'CHINMAYA MISSION ADONI').replace(/^ABOUT\s+/i, '').trim()}
             </h1>
 
             <p className="text-xl sm:text-2xl font-bold font-heading bg-gradient-to-r from-[var(--orange)] via-[var(--yellow)] to-[var(--orange)] bg-clip-text text-transparent">
@@ -427,15 +433,46 @@ export const AboutPage = () => {
             </div>
           </div>
 
-          <div className="space-y-5 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-normal">
-            <p className="p-5 sm:p-6 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
-              {data.whoWeAre.p1}
-            </p>
-            {data.whoWeAre.p2 && data.whoWeAre.p2.trim() !== '' && data.whoWeAre.p2 !== data.whoWeAre.p1 && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            {/* Left: Pujya Gurudev Swami Chinmayananda Image */}
+            <div className="lg:col-span-5">
+              <div className="relative group overflow-hidden rounded-2xl border border-[rgba(11,35,64,0.1)] bg-gradient-to-b from-[#fbf8f3] to-white shadow-md">
+                <div className="relative aspect-[3/4] max-h-[500px] mx-auto w-full overflow-hidden bg-[#FAF6EE]">
+                  <img
+                    src="/assets/swami-chinmayananda-natural.jpg"
+                    alt="Pujya Gurudev Swami Chinmayananda"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = '/assets/leadership/swami-chinmayananda.png';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--navy)]/85 via-[var(--navy)]/20 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 text-white">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-[var(--orange)]/90 text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 shadow-sm">
+                      Pujya Gurudev
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-bold font-heading leading-tight drop-shadow-sm text-white">
+                      Swami Chinmayananda
+                    </h3>
+                    <p className="text-xs text-white/80 font-medium mt-0.5">
+                      Visionary & Founder of Chinmaya Mission
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Existing Content */}
+            <div className="lg:col-span-7 space-y-5 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed font-normal">
               <p className="p-5 sm:p-6 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
-                {data.whoWeAre.p2}
+                {data.whoWeAre.p1}
               </p>
-            )}
+              {data.whoWeAre.p2 && data.whoWeAre.p2.trim() !== '' && data.whoWeAre.p2 !== data.whoWeAre.p1 && (
+                <p className="p-5 sm:p-6 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm">
+                  {data.whoWeAre.p2}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -614,7 +651,7 @@ export const AboutPage = () => {
                       e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                     }
                   }}
-                  className="relative z-10 w-full h-full object-contain p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
+                  className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />

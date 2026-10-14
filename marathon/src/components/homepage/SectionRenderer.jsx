@@ -388,7 +388,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
             </div>
 
             {/* Left Quote Content */}
-            <div className="relative z-10 max-w-2xl text-left">
+            <div className="relative z-10 max-w-3xl text-left">
               <div className="font-serif text-[#FFD12D] text-4xl sm:text-5xl leading-none mb-1 select-none">
                 “
               </div>
@@ -398,17 +398,6 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
               <small className="block font-sans text-xs sm:text-sm text-[#F6D9BA] font-semibold tracking-wide">
                 - Swami Chinmayananda
               </small>
-            </div>
-
-            {/* Right Action Button */}
-            <div className="relative z-10 shrink-0">
-              <a
-                href={`${MAIN_SITE_URL}/about`}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-[#FFF5E5] text-[#07162D] hover:bg-white text-xs sm:text-sm font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl text-decoration-none"
-              >
-                <span>Know More</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
             </div>
           </section>
         </div>
