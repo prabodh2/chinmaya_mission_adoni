@@ -25,6 +25,7 @@ export const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Activities', path: '/activities' },
+    { name: 'Chinmaya Sanjeevaraya Temple', path: '/chinmaya-sanjeevaraya-temple' },
     { name: 'Who Are We', path: '/who-are-we' },
     { name: "Let's Connect", path: '/lets-connect' },
   ];
@@ -32,6 +33,13 @@ export const Navbar = () => {
   const isActive = (path) => {
     if (path.startsWith('/#')) {
       return location.hash === path.substring(1);
+    }
+    if (path === '/chinmaya-sanjeevaraya-temple') {
+      return (
+        location.pathname === '/chinmaya-sanjeevaraya-temple' ||
+        location.pathname === '/chinmaya-sanjeevaraya' ||
+        location.pathname === '/sanjeevaraya-temple'
+      );
     }
     return location.pathname === path;
   };
@@ -46,12 +54,12 @@ export const Navbar = () => {
           </div>
 
           {/* CENTER: Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 xl:gap-8">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-7">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none ${
+                className={`text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none whitespace-nowrap ${
                   isActive(link.path)
                     ? 'text-[var(--orange)] font-extrabold border-b-2 border-[var(--orange)] pb-1'
                     : 'text-[var(--text-primary)] opacity-85'
@@ -66,16 +74,16 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href={MARATHON_PORTAL_URL}
-              className="btn-primary text-decoration-none py-2 px-4 text-xs font-bold shadow-md hover:scale-[1.02] transition-transform flex items-center gap-1.5"
+              className="btn-primary text-decoration-none py-2 px-3.5 xl:px-4 text-xs font-bold shadow-md hover:scale-[1.02] transition-transform flex items-center gap-1.5 whitespace-nowrap"
               title="Visit Anti-Drug Movement Marathon Run 2026 Portal"
             >
-              <Flame className="w-3.5 h-3.5 fill-current text-white" />
+              <Flame className="w-3.5 h-3.5 fill-current text-white shrink-0" />
               <span>MARATHON 2026</span>
-              <ExternalLink className="w-3 h-3 text-white/80" />
+              <ExternalLink className="w-3 h-3 text-white/80 shrink-0" />
             </a>
 
             {/* Mobile Menu Toggle Button */}
-            <div className="flex md:hidden items-center">
+            <div className="flex lg:hidden items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none"
@@ -90,7 +98,7 @@ export const Navbar = () => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-color)] px-4 pt-3 pb-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2">
+        <div className="lg:hidden bg-[var(--bg-secondary)] border-b border-[var(--border-color)] px-4 pt-3 pb-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2">
           {/* Navigation Links */}
           <nav className="flex flex-col space-y-2">
             {navLinks.map((link) => (

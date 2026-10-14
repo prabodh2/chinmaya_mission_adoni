@@ -13,6 +13,7 @@ import { ActivitiesPage } from './pages/ActivitiesPage';
 import { WhoAreWePage } from './pages/WhoAreWePage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
+import { ChinmayaSanjeevarayaTemplePage } from './pages/ChinmayaSanjeevarayaTemplePage';
 
 // Public Authentication Pages
 import { LoginPage } from './pages/LoginPage';
@@ -99,6 +100,11 @@ export function App() {
               <Route path="/who-we-are" element={<WhoAreWePage />} />
               <Route path="/whoarewe" element={<WhoAreWePage />} />
               <Route path="/lets-connect" element={<LetsConnectPage />} />
+              
+              {/* Dedicated Temple & Centre Pages */}
+              <Route path="/chinmaya-sanjeevaraya-temple" element={<ChinmayaSanjeevarayaTemplePage />} />
+              <Route path="/chinmaya-sanjeevaraya" element={<ChinmayaSanjeevarayaTemplePage />} />
+              <Route path="/sanjeevaraya-temple" element={<ChinmayaSanjeevarayaTemplePage />} />
               
               {/* Marathon portal redirects (marathon is hosted separately) */}
               <Route path="/register" element={<MarathonPortalRedirect path="/register" />} />

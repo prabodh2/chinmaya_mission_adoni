@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { activityService, contentService } from '../services/api';
 import {
   Flame,
@@ -18,46 +19,56 @@ import {
 
 // Reusable Activity Card Component (Classic, Clean, Standardized Design)
 const ActivityCard = ({ activity, onSelect }) => {
+  const isSanjeevaraya =
+    activity.id === 'chinmaya-sanjeevaraya-temple' ||
+    activity.id === 'act-1' ||
+    activity.title?.toLowerCase().includes('sanjeevaraya');
+  const cardImgSrc = isSanjeevaraya
+    ? '/assets/images/activity-sanjeevaraya.png?v=5'
+    : (activity.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
+
   return (
     <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden group">
-      {/* Full-width Image Area (Total image fully visible without cropping) */}
-      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950 flex items-center justify-center block">
-        {/* Ambient blurred backdrop so full aspect ratio is preserved without harsh borders */}
+      {/* Full-width Image Area (Compact height matching user layout, fully visible uncropped image) */}
+      <div className="relative h-40 sm:h-44 md:h-48 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
+        {/* Ambient blurred backdrop so full aspect ratio is preserved gracefully */}
         <img
-          src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+          src={cardImgSrc}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
         />
-        {/* Full uncropped image visible completely */}
+        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+        
+        {/* Full uncropped image visible completely - NEVER CROPPED, 100% FULLY VISIBLE */}
         <img
-          src={activity.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
+          src={cardImgSrc}
           alt={activity.imageAlt || activity.title}
           onError={(e) => {
-            if (activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya')) {
-              e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+            if (isSanjeevaraya) {
+              e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png?v=5';
             } else if (activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara')) {
               e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
             } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
               e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-            } else if (activity.id === 'chinmaya-yuva-kendra' || activity.title?.toLowerCase().includes('chyk')) {
-              e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+            } else if (activity.id === 'chinmaya-yuva-kendra' || activity.id === 'chyk-classes' || activity.title?.toLowerCase().includes('chyk')) {
+              e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
             }
           }}
-          className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
+          className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out block"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
         
         {activity.category && (
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
+          <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
             {activity.category}
           </span>
         )}
 
         <button
           onClick={() => onSelect(activity)}
-          className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm z-20 cursor-pointer"
+          className="absolute bottom-2.5 right-2.5 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm z-20 cursor-pointer"
           title="Enlarge Image"
           aria-label={`Enlarge image for ${activity.title}`}
         >
@@ -65,35 +76,46 @@ const ActivityCard = ({ activity, onSelect }) => {
         </button>
       </div>
 
-      {/* Card Body */}
-      <div className="p-5 sm:p-6 flex flex-col flex-1 text-left">
-        <div className="flex items-center gap-3 mb-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+      {/* Card Body - Equal height structure across all cards */}
+      <div className="p-4 sm:p-5 flex flex-col flex-1 text-left">
+        <div className="flex items-center gap-2.5 mb-2">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
             {activity.icon || <Sparkles className="w-4 h-4" />}
           </div>
-          <h3 className="text-base sm:text-lg font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-2">
+          <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1 uppercase tracking-wide truncate">
             {activity.title}
           </h3>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3 flex-1 mb-4 font-normal">
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3 h-[3.8rem] sm:h-[4.2rem] overflow-hidden mb-3 font-normal">
           {activity.description}
         </p>
 
-        {/* Card Footer Meta */}
-        <div className="mt-auto pt-3.5 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
-          <span className="truncate max-w-[55%] text-slate-500 font-medium">
-            {activity.imageSource ? `Source: ${activity.imageSource}` : 'Adoni Wing'}
+        {/* Card Footer Meta - Aligned at exact same baseline */}
+        <div className="mt-auto pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
+          <span className="truncate max-w-[55%] text-slate-500 font-medium text-[11px]">
+            {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission Adoni')}
           </span>
-          <button
-            type="button"
-            onClick={() => onSelect(activity)}
-            className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
-            title={`Know more about ${activity.title}`}
-          >
-            <span>Know More</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-          </button>
+          {activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya') ? (
+            <Link
+              to="/chinmaya-sanjeevaraya-temple"
+              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+              title={`Explore Chinmaya Sanjeevaraya Temple Page`}
+            >
+              <span>Know More</span>
+              <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onSelect(activity)}
+              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+              title={`Know more about ${activity.title}`}
+            >
+              <span>Know More</span>
+              <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+            </button>
+          )}
         </div>
       </div>
     </article>
@@ -107,22 +129,23 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left Column: Visual Image */}
         <div className="lg:col-span-5 order-1">
-          <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-950 flex items-center justify-center">
+          <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-900 flex items-center justify-center">
             {/* Ambient blurred backdrop */}
             <img
-              src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
+              src={activity.imageUrl || '/assets/our-activities/chyk@2x.png'}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
             />
-            {/* Full uncropped image */}
+            <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+            {/* Full uncropped image - 100% FULLY VISIBLE */}
             <img
-              src={activity.imageUrl || '/assets/images/activity-chyk.jpg'}
+              src={activity.imageUrl || '/assets/our-activities/chyk@2x.png'}
               alt={activity.imageAlt || activity.title}
               onError={(e) => {
-                e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+                e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
               }}
-              className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-2 group-hover:scale-105 transition-transform duration-500 block"
+              className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500 block"
               loading="lazy"
             />
             <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--orange)] text-white font-bold text-[11px] tracking-wider uppercase shadow-sm z-20">
@@ -179,8 +202,10 @@ const OVERVIEW_ACTIVITIES = [
     id: 'balavihar-classes',
     title: 'Balavihar Classes',
     subtitle: 'Every Sunday',
-    category: 'Children & Values',
+    category: 'Values & Character',
     imageUrl: '/assets/our-activities/balavihar@2x.png',
+    imageSource: 'Every Sunday | Chinmaya Mission Adoni',
+    icon: <Users className="w-5 h-5" />,
     description:
       'Balavihar instills core spiritual, moral, and cultural values in children through engaging stories from the epics, Vedic chanting, bhajans, dynamic games, and character-building discussions every Sunday.',
     detailedInfo: {
@@ -202,6 +227,8 @@ const OVERVIEW_ACTIVITIES = [
     subtitle: 'Indian classical dance',
     category: 'Classical Dance & Arts',
     imageUrl: '/assets/our-activities/kuchipudi@2x.png',
+    imageSource: 'Indian classical dance | Chinmaya Mission',
+    icon: <Sparkles className="w-5 h-5" />,
     description:
       'Rigorous training in the timeless classical dance form of Kuchipudi, developing rhythm, grace, devotion (bhakti), and artistic discipline among children and youth.',
     detailedInfo: {
@@ -221,8 +248,10 @@ const OVERVIEW_ACTIVITIES = [
     id: 'chyk-classes',
     title: 'CHYK Classes',
     subtitle: 'Every Sunday',
-    category: 'Chinmaya Yuva Kendra',
+    category: 'Youth Leadership',
     imageUrl: '/assets/our-activities/chyk@2x.png',
+    imageSource: 'Chinmaya Yuva Kendra | Every Sunday',
+    icon: <Zap className="w-5 h-5" />,
     description:
       'Chinmaya Yuva Kendra (CHYK) offers youth dynamic forums, leadership development, Vedanta study classes, youth seminars, and community service projects.',
     detailedInfo: {
@@ -244,6 +273,8 @@ const OVERVIEW_ACTIVITIES = [
     subtitle: 'Online sessions',
     category: 'Culture & Celebrations',
     imageUrl: '/assets/our-activities/sankranti@2x.png',
+    imageSource: 'Online sessions & Ashram Campus',
+    icon: <Sun className="w-5 h-5" />,
     description:
       'Interactive cultural workshops, traditional festive celebrations, rangoli arts, and online sessions celebrating the auspicious harvest festival of Makara Sankranti.',
     detailedInfo: {
@@ -265,6 +296,8 @@ const OVERVIEW_ACTIVITIES = [
     subtitle: 'Wisdom for life',
     category: 'Scriptural Wisdom',
     imageUrl: '/assets/our-activities/gita@2x.png',
+    imageSource: 'Wisdom for life | Chinmaya Mission',
+    icon: <Flame className="w-5 h-5" />,
     description:
       'Systematic study of the timeless verses of Shrimad Bhagavad Gita, illuminating the path of self-discovery, righteous action (Karma Yoga), and inner peace.',
     detailedInfo: {
@@ -286,6 +319,8 @@ const OVERVIEW_ACTIVITIES = [
     subtitle: 'Devotional chanting',
     category: 'Devotional Chanting',
     imageUrl: '/assets/our-activities/vishnu@2x.png',
+    imageSource: 'Devotional chanting | Temples & Satsang',
+    icon: <Heart className="w-5 h-5" />,
     description:
       'Regular collective chanting of the sacred thousand names of Lord Vishnu (Sri Vishnu Sahasranama Stotram), cultivating devotion, mental focus, and divine vibrations.',
     detailedInfo: {
@@ -315,7 +350,7 @@ export const ActivitiesPage = () => {
       category: 'Spirituality & Devotion',
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-      imageUrl: '/assets/images/activity-sanjeevaraya.png',
+      imageUrl: '/assets/images/activity-sanjeevaraya.png?v=5',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
       imageSource: 'Chinmaya Mission Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
@@ -492,10 +527,12 @@ export const ActivitiesPage = () => {
             );
             // Critical safeguard: if cached imageUrl is missing, undefined, or empty, fallback to initial match
             let img = act.imageUrl;
-            if (!img || img === 'undefined' || typeof img !== 'string' || img.trim() === '') {
+            if (act.id === 'chinmaya-sanjeevaraya-temple' || act.id === 'act-1' || act.title?.toLowerCase().includes('sanjeevaraya')) {
+              img = '/assets/images/activity-sanjeevaraya.png?v=5';
+            } else if (!img || img === 'undefined' || typeof img !== 'string' || img.trim() === '') {
               img = initialMatch?.imageUrl || '';
             } else if (img.includes('activity-sanjeevaraya.png')) {
-              img = '/assets/images/activity-sanjeevaraya.png';
+              img = '/assets/images/activity-sanjeevaraya.png?v=5';
             } else if (img.includes('devi_group_wing') || img.includes('photo-1511632765486')) {
               img = '/assets/images/activity-devigroup.jpg';
             }
@@ -584,10 +621,17 @@ export const ActivitiesPage = () => {
               );
               if (matchedCard) {
                 let cleanImg = matchedCard.imageUrl;
-                if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
+                if (
+                  item.id === 'chinmaya-sanjeevaraya-temple' ||
+                  item.title?.toLowerCase().includes('sanjeevaraya') ||
+                  matchedCard.id === 'act-1' ||
+                  matchedCard.title?.toLowerCase().includes('sanjeevaraya')
+                ) {
+                  cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
+                } else if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
                   cleanImg = item.imageUrl;
                 } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
-                  cleanImg = '/assets/images/activity-sanjeevaraya.png';
+                  cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
                 }
 
                 return {
@@ -658,7 +702,7 @@ export const ActivitiesPage = () => {
   return (
     <div className="min-h-screen pt-1 sm:pt-2 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12">
       {/* 1. OUR ACTIVITIES OVERVIEW (Matching User Screenshot Exactly, in Website Theme Colors) */}
-      <section className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
+      <section className="space-y-6 sm:space-y-8 max-w-3xl mx-auto">
         <header className="text-center space-y-1">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
             Our Activities
@@ -669,34 +713,13 @@ export const ActivitiesPage = () => {
         </header>
 
         {/* 2-Column Grid (Balavihar, Kuchipudi, CHYK, Sankranti, Bhagavad Gita, Vishnu Sahasranamam) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 sm:gap-y-10">
-          {OVERVIEW_ACTIVITIES.map((item) => (
-            <article
-              key={item.id}
-              onClick={() => handleSelectActivity(item)}
-              className="group cursor-pointer space-y-2.5 text-left"
-            >
-              <div className="relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm group-hover:shadow-md transition-all duration-300">
-                <img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 block"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-opacity pointer-events-none" />
-                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                  {item.category}
-                </span>
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-muted)] font-normal">
-                  {item.subtitle}
-                </p>
-              </div>
-            </article>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+          {OVERVIEW_ACTIVITIES.map((act) => (
+            <ActivityCard
+              key={act.id}
+              activity={act}
+              onSelect={handleSelectActivity}
+            />
           ))}
         </div>
       </section>
@@ -712,7 +735,7 @@ export const ActivitiesPage = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
           {spiritualDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -734,7 +757,7 @@ export const ActivitiesPage = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
           {cultureDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -776,7 +799,7 @@ export const ActivitiesPage = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
             {movementActivities.map((act) => (
               <ActivityCard
                 key={act.id || act._id || act.title}
@@ -819,27 +842,35 @@ export const ActivitiesPage = () => {
             <div className="relative w-full min-h-[300px] sm:min-h-[380px] md:min-h-[460px] max-h-[65vh] bg-[#0B1320] shrink-0 overflow-hidden flex items-center justify-center p-3 sm:p-5">
               {/* Ambient blurred backdrop so any aspect ratio fills gracefully */}
               <img
-                src={selectedActivity.imageUrl}
+                src={
+                  selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')
+                    ? '/assets/images/chinmaya-sanjeevaraya-temple.png'
+                    : selectedActivity.imageUrl
+                }
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
               />
               {/* Full uncropped, complete image - NEVER CROPPED, NEVER CUT OFF */}
               <img
-                src={selectedActivity.imageUrl}
+                src={
+                  selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')
+                    ? '/assets/images/chinmaya-sanjeevaraya-temple.png'
+                    : selectedActivity.imageUrl
+                }
                 alt={selectedActivity.imageAlt || selectedActivity.title}
                 onError={(e) => {
                   if (selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) {
-                    e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
+                    e.currentTarget.src = '/assets/images/chinmaya-sanjeevaraya-temple.png';
                   } else if (selectedActivity.id === 'shanta-malleshwara-temple' || selectedActivity.title?.toLowerCase().includes('malleshwara')) {
                     e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
                   } else if (selectedActivity.id === 'devi-group' || selectedActivity.title?.toLowerCase().includes('devi')) {
                     e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-                  } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.title?.toLowerCase().includes('chyk')) {
-                    e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+                  } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.id === 'chyk-classes' || selectedActivity.title?.toLowerCase().includes('chyk')) {
+                    e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
                   }
                 }}
-                className="relative z-10 max-h-[58vh] max-w-full w-auto h-auto object-contain mx-auto my-auto drop-shadow-2xl rounded-xl block"
+                className="relative z-10 w-full h-full max-h-[58vh] object-contain mx-auto my-auto drop-shadow-2xl rounded-xl block"
               />
 
               {/* Close Button */}
@@ -912,16 +943,27 @@ export const ActivitiesPage = () => {
 
             {/* Modal Footer */}
             <div className="px-6 sm:px-8 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500 shrink-0">
-              <span className="truncate max-w-[65%]">
+              <span className="truncate max-w-[50%]">
                 {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission Adoni'}
               </span>
-              <button
-                type="button"
-                onClick={() => setSelectedActivity(null)}
-                className="btn-primary text-xs py-1.5 px-4 rounded-xl font-bold cursor-pointer"
-              >
-                Close
-              </button>
+              <div className="flex items-center gap-2">
+                {(selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) && (
+                  <Link
+                    to="/chinmaya-sanjeevaraya-temple"
+                    className="text-[var(--orange)] hover:underline font-bold text-xs flex items-center gap-1 mr-2"
+                  >
+                    <span>Full Temple Page</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setSelectedActivity(null)}
+                  className="btn-primary text-xs py-1.5 px-4 rounded-xl font-bold cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>

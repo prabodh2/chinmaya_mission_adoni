@@ -293,7 +293,7 @@ export const HomePage = () => {
   );
 
   return (
-    <div className="min-h-screen space-y-4">
+    <div className="min-h-screen space-y-2">
       {/* Dynamic Sections Rendered According to Admin Order */}
       {sections.length > 0 ? (
         sections.map((section) => (

@@ -41,11 +41,11 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
   switch (section.type) {
     case 'hero':
       return (
-        <section className="relative flex items-center justify-center py-10 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
+        <section className="relative flex items-center justify-center pt-4 sm:pt-6 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-tertiary)] to-[var(--bg-primary)]">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--orange)]/10 pointer-events-none rounded-full blur-3xl" />
           
-          <div className="max-w-5xl mx-auto text-center space-y-6 sm:space-y-8 relative z-10 w-full flex flex-col items-center">
-            <div className="space-y-3 sm:space-y-4">
+          <div className="max-w-5xl mx-auto text-center space-y-5 sm:space-y-6 relative z-10 w-full flex flex-col items-center">
+            <div className="space-y-2.5 sm:space-y-3">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
                 {section.title || 'ANTI-DRUG MOVEMENT MARATHON RUN 2026'}
               </h1>
@@ -113,10 +113,10 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
     case 'marathon':
       return (
-        <section className="pt-10 sm:pt-14 pb-2 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
-          <div className="max-w-7xl mx-auto space-y-6 text-center">
+        <section className="pt-2 sm:pt-3 pb-2 px-4 sm:px-6 lg:px-8 bg-[var(--bg-primary)]">
+          <div className="max-w-7xl mx-auto space-y-3 text-center">
             {section.title && (
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
                   {section.title}
                 </h2>

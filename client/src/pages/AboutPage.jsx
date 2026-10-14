@@ -94,7 +94,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA SANJEEVARAYA TEMPLE',
           content:
             'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl: '/assets/images/activity-sanjeevaraya.png',
+          imageUrl: '/assets/images/activity-sanjeevaraya.png?v=5',
           badge: 'SPIRITUAL TEMPLE',
           iconName: 'Landmark',
         },
@@ -270,10 +270,16 @@ export const AboutPage = () => {
             merged.ourActivities.cards = merged.ourActivities.cards.map((c, idx) => {
               let cleanImg = c.imageUrl;
               const def = defaultContent.ourActivities.cards[idx];
-              if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
+              if (
+                c.id === 'act-1' ||
+                c.title?.toLowerCase().includes('sanjeevaraya') ||
+                c.id === 'chinmaya-sanjeevaraya-temple'
+              ) {
+                cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
+              } else if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
                 cleanImg = def?.imageUrl;
               } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
-                cleanImg = '/assets/images/activity-sanjeevaraya.png';
+                cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
               }
               return { ...c, imageUrl: cleanImg };
             });
@@ -590,13 +596,20 @@ export const AboutPage = () => {
 
             {/* Right Visual Image */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-3xl overflow-hidden border-2 border-[var(--orange)] shadow-2xl group">
+              <div className="relative rounded-3xl overflow-hidden border-2 border-[var(--orange)] shadow-2xl group bg-slate-900 flex items-center justify-center h-80 sm:h-[400px]">
+                <img
+                  src={data.chykSection.imageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
+                />
+                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
                 <img
                   src={data.chykSection.imageUrl}
                   alt="CHYK Youth Power"
-                  className="w-full h-80 sm:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500"
                 />
-                <div className="absolute top-4 right-4 px-4 py-1.5 rounded-full bg-black/80 text-[var(--yellow)] font-extrabold text-xs backdrop-blur-md border border-white/20">
+                <div className="absolute top-4 right-4 px-4 py-1.5 rounded-full bg-black/80 text-[var(--yellow)] font-extrabold text-xs backdrop-blur-md border border-white/20 z-20">
                   YOUTH IN ACTION
                 </div>
               </div>
@@ -617,7 +630,7 @@ export const AboutPage = () => {
         </div>
 
         {/* 4 Standardized Activity & Temple Cards (Clean 2-Column Responsive Grid) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
           {data.ourActivities.cards.map((card) => (
             <article
               key={card.id || card.title}
@@ -627,62 +640,75 @@ export const AboutPage = () => {
                   : 'border-slate-200/90 hover:border-[var(--orange)]/50'
               }`}
             >
-              {/* Full-width Top Image (Total image fully visible without cropping) */}
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950 flex items-center justify-center block">
-                {/* Ambient blurred backdrop so there are no empty borders */}
-                <img
-                  src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-110 pointer-events-none"
-                />
-                {/* Full uncropped image visible completely */}
-                <img
-                  src={card.imageUrl || '/assets/images/activity-sanjeevaraya.png'}
-                  alt={card.title}
-                  onError={(e) => {
-                    if (card.id === 'act-1' || card.title?.toLowerCase().includes('sanjeevaraya')) {
-                      e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
-                    } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
-                      e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
-                    } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
-                      e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-                    } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
-                      e.currentTarget.src = '/assets/images/activity-chyk.jpg';
-                    }
-                  }}
-                  className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto my-auto p-1.5 group-hover:scale-105 transition-transform duration-500 ease-out block"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-30 group-hover:opacity-20 transition-opacity z-10 pointer-events-none" />
-                
-                {card.badge && (
-                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
-                    {card.badge}
-                  </span>
-                )}
-              </div>
+              {/* Full-width Top Image (Compact height matching user layout, fully visible uncropped image) */}
+              {(() => {
+                const isSanjeevaraya =
+                  card.id === 'act-1' ||
+                  card.id === 'chinmaya-sanjeevaraya-temple' ||
+                  card.title?.toLowerCase().includes('sanjeevaraya');
+                const cardImgSrc = isSanjeevaraya
+                  ? '/assets/images/activity-sanjeevaraya.png?v=5'
+                  : (card.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
+
+                return (
+                  <div className="relative h-40 sm:h-44 md:h-48 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
+                    {/* Ambient blurred backdrop so there are no empty borders */}
+                    <img
+                      src={cardImgSrc}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
+                    />
+                    <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+                    {/* Full uncropped image visible completely - NEVER CROPPED, 100% FULLY VISIBLE */}
+                    <img
+                      src={cardImgSrc}
+                      alt={card.title}
+                      onError={(e) => {
+                        if (isSanjeevaraya) {
+                          e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png?v=5';
+                        } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
+                          e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
+                        } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
+                          e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                        } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
+                          e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
+                        }
+                      }}
+                      className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out block"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
+                    
+                    {card.badge && (
+                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
+                        {card.badge}
+                      </span>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Card Body with Consistent Padding & Structured Flow */}
-              <div className="p-6 sm:p-7 flex flex-col flex-1 text-left">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+              <div className="p-4 sm:p-5 flex flex-col flex-1 text-left">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
                     {getActivityIcon(card.iconName)}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-2">
+                  <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1 uppercase tracking-wide truncate">
                     {card.title}
                   </h3>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-4 flex-1 mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3 h-[3.8rem] sm:h-[4.2rem] overflow-hidden mb-3 font-normal">
                   {card.content}
                 </p>
 
                 {/* Bottom Action Button Aligned Across Rows */}
-                <div className="mt-auto pt-4 border-t border-slate-100">
+                <div className="mt-auto pt-3 border-t border-slate-100">
                   <Link
                     to="/activities"
-                    className="btn-secondary w-full justify-center text-xs py-2.5 px-4 text-decoration-none font-bold shadow-sm"
+                    className="btn-secondary w-full justify-center text-xs py-2 px-3 text-decoration-none font-bold shadow-sm"
                   >
                     <span>EXPLORE ACTIVITY DETAILS</span>
                     <ArrowRight className="w-3.5 h-3.5" />
