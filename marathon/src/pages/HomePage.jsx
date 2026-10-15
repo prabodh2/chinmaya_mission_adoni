@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ContinuousVerticalBannerSlider } from '../components/ContinuousVerticalBannerSlider';
 import { TransformationSection } from '../components/TransformationSection';
-import { SectionRenderer } from '../components/homepage/SectionRenderer';
+import { SectionRenderer, QuoteBanner } from '../components/homepage/SectionRenderer';
 import { bannerService, eventService, faqService, activityService, homepageService } from '../services/api';
 import { applyDynamicTheme } from '../utils/themeHelper';
 import {
@@ -26,7 +26,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     primaryButtonLink: '/register',
     secondaryButtonText: 'EXPLORE THE MOVEMENT',
     secondaryButtonLink: '#about',
-    imageUrl: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=1600&auto=format&fit=crop',
+    imageUrl: '/assets/images/hero-runners-graphic.png',
     isEnabled: true,
     order: 1,
   },
@@ -43,15 +43,6 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     order: 2,
   },
   {
-    sectionId: 'faq-1',
-    type: 'faq',
-    title: 'FREQUENTLY ASKED QUESTIONS',
-    subtitle: 'QUESTIONS & ANSWERS',
-    description: 'Everything you need to know about participating, registrations, certificates, and event details.',
-    isEnabled: true,
-    order: 5,
-  },
-  {
     sectionId: 'cta-1',
     type: 'cta',
     title: 'BE PART OF THE MOVEMENT IN ADONI!',
@@ -59,6 +50,15 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     description: 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!',
     primaryButtonText: 'MARATHON REGISTRATION',
     primaryButtonLink: '/register',
+    isEnabled: true,
+    order: 5,
+  },
+  {
+    sectionId: 'faq-1',
+    type: 'faq',
+    title: 'FREQUENTLY ASKED QUESTIONS',
+    subtitle: 'QUESTIONS & ANSWERS',
+    description: 'Everything you need to know about participating, registrations, certificates, and event details.',
     isEnabled: true,
     order: 6,
   },
@@ -288,9 +288,23 @@ export const HomePage = () => {
   const rawSections = (homepageData?.sections && homepageData.sections.length > 0)
     ? homepageData.sections
     : DEFAULT_HOMEPAGE_SECTIONS;
-  const sections = rawSections.filter(
+  const filteredSections = rawSections.filter(
     (s) => s.type !== 'activities' && s.sectionId !== 'activities-1'
   );
+
+  // Guarantee strict section ordering: Hero -> Marathon -> CTA ("Be Part of the Movement") -> FAQ (directly above Footer)
+  const SECTION_ORDER = {
+    hero: 1,
+    marathon: 2,
+    cta: 3,
+    faq: 4,
+  };
+
+  const sections = [...filteredSections].sort((a, b) => {
+    const orderA = SECTION_ORDER[a.type] !== undefined ? SECTION_ORDER[a.type] : 99;
+    const orderB = SECTION_ORDER[b.type] !== undefined ? SECTION_ORDER[b.type] : 99;
+    return orderA - orderB;
+  });
 
   return (
     <div className="min-h-screen space-y-2">
@@ -298,6 +312,9 @@ export const HomePage = () => {
       {sections.length > 0 ? (
         sections.map((section) => (
           <React.Fragment key={section.sectionId || section._id}>
+            {/* Quote Banner placed directly above EVENT DETAILS & COUNTDOWN with zero overlap */}
+            {section.type === 'marathon' && <QuoteBanner />}
+
             <SectionRenderer
               section={section}
               eventConfig={eventConfig}
