@@ -20,12 +20,12 @@ const DEFAULT_FORM_DATA = {
   brand: {
     title: 'ANTI-DRUG 2026',
     description:
-      '"YOUR LIFE. YOUR CHOICE." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
+      '"WE RISE. WE RUN. WE RESIST." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
     logoUrl: '',
   },
   organizedBy: {
     heading: 'ORGANIZED BY:',
-    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+    text: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
   },
   quickNavigation: {
     heading: 'QUICK NAVIGATION',

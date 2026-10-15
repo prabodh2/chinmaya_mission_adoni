@@ -769,7 +769,7 @@ export const HomePageManager = () => {
                   type="text"
                   value={newSection.subtitle}
                   onChange={(e) => setNewSection({ ...newSection, subtitle: e.target.value })}
-                  placeholder="e.g. YOUR LIFE. YOUR CHOICE."
+                  placeholder="e.g. WE RISE. WE RUN. WE RESIST."
                   className="w-full py-3 px-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)]"
                 />
               </div>

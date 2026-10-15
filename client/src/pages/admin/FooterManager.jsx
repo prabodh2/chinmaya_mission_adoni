@@ -29,12 +29,12 @@ const DEFAULT_FORM_DATA = {
   brand: {
     title: 'ANTI-DRUG 2026',
     description:
-      '"YOUR LIFE. YOUR CHOICE." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
+      '"WE RISE. WE RUN. WE RESIST." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
     logoUrl: '',
   },
   organizedBy: {
     heading: 'ORGANIZED BY:',
-    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+    text: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
   },
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
@@ -68,7 +68,7 @@ const DEFAULT_FORM_DATA = {
       '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
   },
   bottomFooter: {
-    copyrightText: '© Chinmaya Mission Adoni.',
+    copyrightText: '© Chinmaya Mission, Adoni.',
     privacyPolicy: { label: 'Privacy Policy', url: '/privacy' },
     termsConditions: { label: 'Terms & Conditions', url: '/terms' },
   },

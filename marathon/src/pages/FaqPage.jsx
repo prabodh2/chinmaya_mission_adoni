@@ -16,7 +16,7 @@ const DEFAULT_MARATHON_FAQS = [
   {
     _id: 'faq-1',
     question: 'When and where is the Anti-Drug Marathon Run 2026?',
-    answer: 'The marathon will be held on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh. All runners must assemble by 5:30 AM.',
+    answer: 'The marathon will be held on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission, Adoni, Andhra Pradesh. All runners must assemble by 5:30 AM.',
   },
   {
     _id: 'faq-2',
@@ -26,7 +26,7 @@ const DEFAULT_MARATHON_FAQS = [
   {
     _id: 'faq-3',
     question: 'Is there an entry fee for registration?',
-    answer: 'No, participation in the Anti-Drug Movement Marathon Run 2026 is completely FREE. It is a community awareness initiative organized by Chinmaya Mission Adoni & Chinmaya Yuva Kendra.',
+    answer: 'No, participation in the Anti-Drug Movement Marathon Run 2026 is completely FREE. It is a community awareness initiative organized by Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni.',
   },
   {
     _id: 'faq-4',

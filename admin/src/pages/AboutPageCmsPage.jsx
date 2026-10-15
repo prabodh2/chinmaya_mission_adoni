@@ -110,7 +110,7 @@ export const AboutPageCmsPage = () => {
               type="text"
               value={form.hero?.title || ''}
               onChange={(e) => setForm({ ...form, hero: { ...form.hero, title: e.target.value } })}
-              placeholder="About Chinmaya Mission Adoni"
+              placeholder="About Chinmaya Mission, Adoni"
               className="w-full py-2.5 px-3 rounded-xl bg-[#0B132B] border border-white/10 font-semibold text-white focus:outline-none focus:border-[#00B4D8]"
             />
           </div>
@@ -169,7 +169,7 @@ export const AboutPageCmsPage = () => {
               rows="4"
               value={form.whoWeAre?.p1 || ''}
               onChange={(e) => setForm({ ...form, whoWeAre: { ...form.whoWeAre, p1: e.target.value } })}
-              placeholder="First narrative paragraph about Chinmaya Mission Adoni..."
+              placeholder="First narrative paragraph about Chinmaya Mission, Adoni..."
               className="w-full py-2.5 px-3 rounded-xl bg-[#0B132B] border border-white/10 font-semibold text-white focus:outline-none focus:border-[#00B4D8]"
             />
           </div>

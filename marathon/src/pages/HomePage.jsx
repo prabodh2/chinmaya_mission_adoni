@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ContinuousVerticalBannerSlider } from '../components/ContinuousVerticalBannerSlider';
 import { TransformationSection } from '../components/TransformationSection';
+import { CountdownTimer } from '../components/CountdownTimer';
 import { SectionRenderer, QuoteBanner } from '../components/homepage/SectionRenderer';
 import { bannerService, eventService, faqService, activityService, homepageService } from '../services/api';
 import { applyDynamicTheme } from '../utils/themeHelper';
@@ -19,9 +20,9 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     sectionId: 'hero-1',
     type: 'hero',
     title: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-    subtitle: '"YOUR LIFE. YOUR CHOICE."',
-    description: 'Run for a Drug-Free Future • Join Thousands of Youth in Adoni Building Health, Strength & Discipline',
-    badgeText: 'CHINMAYA MISSION ADONI & CHYK ADONI',
+    subtitle: 'WE RISE. WE RUN. WE RESIST.',
+    description: 'RUN FOR LIFE. STAND AGAINST DRUGS',
+    badgeText: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
     primaryButtonText: 'REGISTER NOW',
     primaryButtonLink: '/register',
     secondaryButtonText: 'EXPLORE THE MOVEMENT',
@@ -35,7 +36,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     type: 'marathon',
     title: 'EVENT DETAILS & COUNTDOWN',
     subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
-    description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
+    description: 'Starting from Chinmaya Mission, Adoni, Andhra Pradesh.',
     badgeText: 'EVENT INFORMATION',
     primaryButtonText: 'REGISTER FOR MARATHON',
     primaryButtonLink: '/register',
@@ -46,7 +47,7 @@ const DEFAULT_HOMEPAGE_SECTIONS = [
     sectionId: 'cta-1',
     type: 'cta',
     title: 'BE PART OF THE MOVEMENT IN ADONI!',
-    subtitle: 'CHINMAYA MISSION & CHYK ADONI',
+    subtitle: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
     description: 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!',
     primaryButtonText: 'MARATHON REGISTRATION',
     primaryButtonLink: '/register',
@@ -77,7 +78,7 @@ const DEFAULT_ACTIVITIES = [
     _id: 'act-3',
     title: 'Mind & Body Wellness Seminars',
     category: 'Fitness & Wellness',
-    description: 'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
+    description: 'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra, Adoni.',
     imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
     active: true,
   },
@@ -95,7 +96,7 @@ const DEFAULT_FAQS = [
   {
     _id: 'faq-1',
     question: 'When and where is the Anti-Drug Marathon Run 2026?',
-    answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
+    answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission, Adoni, Andhra Pradesh.',
   },
   {
     _id: 'faq-2',
@@ -277,7 +278,7 @@ export const HomePage = () => {
           )}
 
           <p className="text-[11px] text-[var(--text-muted)] pt-4 border-t border-[var(--border-color)]">
-            Chinmaya Mission Adoni & Chinmaya Yuva Kendra
+            Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni
           </p>
         </div>
       </div>
@@ -308,11 +309,23 @@ export const HomePage = () => {
 
   return (
     <div className="min-h-screen space-y-2">
+      {/* Event Countdown: Positioned below the Header and above the Hero banner (2nd image) */}
+      <section className="w-full pt-1 sm:pt-2 pb-1">
+        <CountdownTimer targetDate={eventConfig?.eventDate || '2026-12-20T06:00:00.000+05:30'} />
+      </section>
+
       {/* Dynamic Sections Rendered According to Admin Order */}
       {sections.length > 0 ? (
         sections.map((section) => (
           <React.Fragment key={section.sectionId || section._id}>
-            {/* Quote Banner placed directly above EVENT DETAILS & COUNTDOWN with zero overlap */}
+            {/* 1st Image: Transformation Story placed directly above 2nd Image: Quote Banner */}
+            {section.type === 'marathon' && (
+              <div className="pt-2">
+                <TransformationSection />
+              </div>
+            )}
+
+            {/* 2nd Image: Quote Banner placed directly above EVENT DETAILS & COUNTDOWN with zero overlap */}
             {section.type === 'marathon' && <QuoteBanner />}
 
             <SectionRenderer
@@ -322,20 +335,6 @@ export const HomePage = () => {
               activities={activities}
               faqs={faqs}
             />
-
-            {/* Inject Banner Carousel after Hero Section */}
-            {section.type === 'hero' && banners.vertical && banners.vertical.length > 0 && (
-              <section className="py-4">
-                <ContinuousVerticalBannerSlider banners={banners.vertical} />
-              </section>
-            )}
-
-            {/* Inject Transformation Story after Marathon Section */}
-            {section.type === 'marathon' && (
-              <div className="-mt-4">
-                <TransformationSection />
-              </div>
-            )}
           </React.Fragment>
         ))
       ) : (
@@ -344,6 +343,11 @@ export const HomePage = () => {
           No homepage sections published yet.
         </div>
       )}
+
+      {/* Movement Posters & Inspiration Banner Slider - Positioned directly above Footer */}
+      <section className="py-2">
+        <ContinuousVerticalBannerSlider banners={banners?.vertical || []} />
+      </section>
     </div>
   );
 };

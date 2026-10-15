@@ -97,7 +97,7 @@ app.get('/api/health', (req, res) => {
     status: dbStatus ? 'ok' : 'degraded',
     dbConnected: dbStatus,
     event: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-    organizers: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+    organizers: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
     uptimeSeconds: Math.floor(process.uptime()),
     memoryUsageMB: Math.round(process.memoryUsage().rss / 1024 / 1024),
     timestamp: new Date().toISOString(),

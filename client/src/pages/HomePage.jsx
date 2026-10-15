@@ -173,10 +173,10 @@ export function HomePage() {
         <section className="about-section section-wrap" id="about">
           <div className="about-copy">
             <p className="eyebrow">OUR PURPOSE</p>
-            <h2>About Chinmaya Mission Adoni</h2>
+            <h2>About Chinmaya Mission, Adoni</h2>
             <span className="title-underline" />
             <p>
-              Chinmaya Mission Adoni is a spiritual organization dedicated to spreading timeless wisdom, nurturing cultural values, and inspiring individuals through spiritual learning, education, and community service.
+              Chinmaya Mission, Adoni is a spiritual organization dedicated to spreading timeless wisdom, nurturing cultural values, and inspiring individuals through spiritual learning, education, and community service.
             </p>
             <Link className="text-link" to="/about">
               Learn More <ArrowRight size={15} />

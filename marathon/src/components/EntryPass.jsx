@@ -4,7 +4,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 /**
  * Reusable EntryPass Component
- * Faithfully matches the official Chinmaya Mission Adoni Entry Pass design reference.
+ * Faithfully matches the official Chinmaya Mission, Adoni Entry Pass design reference.
  * 
  * @param {object} props
  * @param {object} props.registration - Registration record data
@@ -23,7 +23,7 @@ export const EntryPass = ({ registration, eventConfig, id = 'official-entry-pass
       })
     : 'Sunday, 20 December';
 
-  const displayLocation = eventConfig?.venue || 'Chinmaya Mission Adoni';
+  const displayLocation = eventConfig?.venue || 'Chinmaya Mission, Adoni';
 
   // Format institution / type string
   const institutionName = (registration.institutionName || '').trim();
@@ -76,10 +76,10 @@ export const EntryPass = ({ registration, eventConfig, id = 'official-entry-pass
           {/* Center: Title & Subtitles */}
           <div style={{ flex: 1, textAlign: 'center', padding: '0 4px' }}>
             <h2 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#0f172a', margin: 0, lineHeight: 1.2 }}>
-              CHINMAYA MISSION ADONI
+              CHINMAYA MISSION, ADONI
             </h2>
             <p style={{ fontSize: '12px', fontWeight: 600, color: '#2563eb', margin: '2px 0 0 0' }}>
-              Chinmaya Yuva Kendra <span style={{ fontWeight: 900, color: '#0f172a' }}>Adoni</span>
+              Chinmaya Yuva Kendra, <span style={{ fontWeight: 900, color: '#0f172a' }}>Adoni</span>
             </p>
             <p style={{ fontSize: '12px', fontWeight: 900, color: '#10b981', letterSpacing: '0.16em', textTransform: 'uppercase', margin: '4px 0 0 0' }}>
               ENTRY PASS
@@ -245,7 +245,7 @@ export const EntryPass = ({ registration, eventConfig, id = 'official-entry-pass
       <div style={{ width: '70%', margin: '10px auto 8px auto', borderTop: '1px solid #dbeafe' }} />
 
       <p style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: '#3b82f6', textAlign: 'center', margin: 0 }}>
-        CHINMAYA MISSION ADONI • CHINMAYA YUVA KENDRA ADONI
+        CHINMAYA MISSION, ADONI • CHINMAYA YUVA KENDRA, ADONI
       </p>
     </div>
   );

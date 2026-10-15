@@ -171,7 +171,7 @@ export const VerifyPassPage = () => {
 
             {/* Organizers Branding */}
             <p className="text-[10px] text-center font-bold text-[var(--text-muted)] uppercase tracking-wider">
-              Chinmaya Mission Adoni • Chinmaya Yuva Kendra Adoni
+              Chinmaya Mission, Adoni • Chinmaya Yuva Kendra, Adoni
             </p>
           </div>
         )}

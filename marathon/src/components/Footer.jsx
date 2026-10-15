@@ -11,11 +11,15 @@ const FALLBACK_FOOTER = {
   brand: {
     title: 'ANTI-DRUG 2026',
     description:
-      '"YOUR LIFE. YOUR CHOICE." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
+      '"WE RISE. WE RUN. WE RESIST." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
   },
   organizedBy: {
     heading: 'ORGANIZED BY:',
-    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+    text: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
+  },
+  initiativeBy: {
+    heading: 'AN INITIATIVE BY',
+    text: 'Chinmaya Yuva Kendra, Adoni',
   },
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
@@ -54,7 +58,7 @@ const FALLBACK_FOOTER = {
       '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
   },
   bottomFooter: {
-    copyrightText: '© Chinmaya Mission Adoni.',
+    copyrightText: '© Chinmaya Mission, Adoni.',
     privacyPolicy: { label: 'Privacy Policy', url: '/privacy' },
     termsConditions: { label: 'Terms & Conditions', url: '/terms' },
   },
@@ -135,6 +139,7 @@ export const Footer = ({ overrideData = null }) => {
   const {
     brand = FALLBACK_FOOTER.brand,
     organizedBy = FALLBACK_FOOTER.organizedBy,
+    initiativeBy = FALLBACK_FOOTER.initiativeBy,
     quickNavigation = FALLBACK_FOOTER.quickNavigation,
     contact = FALLBACK_FOOTER.contact,
     pledge = FALLBACK_FOOTER.pledge,
@@ -192,7 +197,7 @@ export const Footer = ({ overrideData = null }) => {
 
   const address = contact.address || {};
   let line1 = address.line1 || 'Chinmaya Mission Cultural Complex , Adoni';
-  if (line1 === 'Chinmaya Mission Adoni' || !line1.includes('Cultural Complex')) {
+  if (line1 === 'Chinmaya Mission Adoni' || line1 === 'Chinmaya Mission, Adoni' || !line1.includes('Cultural Complex')) {
     line1 = 'Chinmaya Mission Cultural Complex , Adoni';
   }
   const line2 = address.line2 || 'Near Arts College Road';
@@ -248,9 +253,9 @@ export const Footer = ({ overrideData = null }) => {
       className="border-t pt-16 pb-12 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
           
-          {/* Column 1: Brand Info & Organized By */}
+          {/* Column 1: Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="text-xl sm:text-2xl font-black font-heading tracking-wider text-white">
@@ -268,35 +273,6 @@ export const Footer = ({ overrideData = null }) => {
             <p className="text-xs leading-relaxed font-medium opacity-90">
               {brand.description}
             </p>
-
-            <div className="text-xs font-bold pt-1">
-              <span style={headingStyle}>{organizedBy.heading || 'ORGANIZED BY:'}</span>
-              <p className="text-white font-extrabold mt-0.5 leading-snug">
-                {organizedBy.text && organizedBy.text.includes(' & ') ? (
-                  <>
-                    <span className="block">{organizedBy.text.split(' & ')[0]} &</span>
-                    <span className="block">{organizedBy.text.split(' & ')[1]}</span>
-                  </>
-                ) : (
-                  organizedBy.text || (
-                    <>
-                      <span className="block">Chinmaya Mission Adoni &</span>
-                      <span className="block">Chinmaya Yuva Kendra Adoni</span>
-                    </>
-                  )
-                )}
-              </p>
-            </div>
-
-            {/* Official CHYK Signature Emblem */}
-            <div className="pt-1 flex items-center">
-              <img
-                src="/assets/logos/chyk-signature.png"
-                alt="CHYK - Chinmaya Yuva Kendra"
-                className="h-10 sm:h-12 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform"
-                loading="lazy"
-              />
-            </div>
           </div>
 
           {/* Column 2: Quick Navigation */}
@@ -399,18 +375,17 @@ export const Footer = ({ overrideData = null }) => {
             </div>
           </div>
 
-          {/* Column 4: Our Motto */}
+          {/* Column 4: An Initiative By */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
-              {pledgeHeading}
+              {initiativeBy?.heading || 'AN INITIATIVE BY'}
             </h4>
-            <div style={cardStyle} className="p-4 rounded-2xl border text-xs space-y-2">
-              <p className="text-white font-extrabold">{pledgeTitle}</p>
-              <p className="leading-relaxed opacity-90">{pledgeDescription}</p>
-            </div>
+            <p className="text-white font-extrabold text-xs sm:text-sm leading-snug">
+              {initiativeBy?.text || 'Chinmaya Yuva Kendra, Adoni'}
+            </p>
           </div>
 
         </div>
@@ -420,7 +395,7 @@ export const Footer = ({ overrideData = null }) => {
           style={{ borderColor: appearance?.dividerColor || 'rgba(255, 255, 255, 0.1)' }}
           className="pt-8 border-t flex flex-col sm:flex-row items-center justify-between text-xs opacity-75 gap-4"
         >
-          <p>{bottomFooter.copyrightText || '© Chinmaya Mission Adoni.'}</p>
+          <p>{bottomFooter.copyrightText || '© Chinmaya Mission, Adoni.'}</p>
           <div className="flex items-center gap-4">
             {bottomFooter.privacyPolicy?.url && (
               <Link to={bottomFooter.privacyPolicy.url} className="hover:text-white text-decoration-none">

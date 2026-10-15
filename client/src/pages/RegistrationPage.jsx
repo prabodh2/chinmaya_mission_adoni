@@ -332,7 +332,7 @@ export const RegistrationPage = () => {
         <div className="flex flex-wrap items-center justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
             <Sparkles className="w-3.5 h-3.5" />
-            CHINMAYA YUVA KENDRA ADONI
+            CHINMAYA YUVA KENDRA, ADONI
           </span>
         </div>
 

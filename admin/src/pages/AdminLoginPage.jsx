@@ -64,7 +64,7 @@ export const AdminLoginPage = () => {
               ADMINISTRATOR LOGIN
             </h2>
             <p className="text-xs text-[#94A3B8] font-semibold">
-              Chinmaya Mission Adoni Marathon Control Panel
+              Chinmaya Mission, Adoni Marathon Control Panel
             </p>
           </div>
         </div>

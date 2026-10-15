@@ -94,7 +94,7 @@ const ActivityCard = ({ activity, onSelect }) => {
         {/* Card Footer Meta - Aligned at exact same baseline */}
         <div className="mt-auto pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
           <span className="truncate max-w-[55%] text-slate-500 font-medium text-[11px]">
-            {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission Adoni')}
+            {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission, Adoni')}
           </span>
           {activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya') ? (
             <Link
@@ -204,7 +204,7 @@ const OVERVIEW_ACTIVITIES = [
     subtitle: 'Every Sunday',
     category: 'Values & Character',
     imageUrl: '/assets/our-activities/balavihar@2x.png',
-    imageSource: 'Every Sunday | Chinmaya Mission Adoni',
+    imageSource: 'Every Sunday | Chinmaya Mission, Adoni',
     icon: <Users className="w-5 h-5" />,
     description:
       'Balavihar instills core spiritual, moral, and cultural values in children through engaging stories from the epics, Vedic chanting, bhajans, dynamic games, and character-building discussions every Sunday.',
@@ -301,7 +301,7 @@ const OVERVIEW_ACTIVITIES = [
     description:
       'Systematic study of the timeless verses of Shrimad Bhagavad Gita, illuminating the path of self-discovery, righteous action (Karma Yoga), and inner peace.',
     detailedInfo: {
-      location: 'Chinmaya Mission Adoni',
+      location: 'Chinmaya Mission, Adoni',
       sections: [
         {
           heading: 'Timeless Philosophy for Modern Living',
@@ -341,7 +341,7 @@ const OVERVIEW_ACTIVITIES = [
 export const ActivitiesPage = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
-  // Centralized structured data for core Chinmaya Mission Adoni centres & wings
+  // Centralized structured data for core Chinmaya Mission, Adoni centres & wings
   const initialActivities = [
     {
       id: 'chinmaya-sanjeevaraya-temple',
@@ -352,7 +352,7 @@ export const ActivitiesPage = () => {
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
       imageUrl: '/assets/images/activity-sanjeevaraya.png?v=5',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
-      imageSource: 'Chinmaya Mission Adoni Devotional Center',
+      imageSource: 'Chinmaya Mission, Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
       icon: <Landmark className="w-5 h-5 text-[var(--orange)]" />,
       detailedInfo: {
@@ -385,7 +385,7 @@ export const ActivitiesPage = () => {
       section: 'SPIRITUALITY & DEVOTION',
       category: 'Devotion & Community',
       description:
-        'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
+        'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission, Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
       imageUrl: '/assets/images/activity-shantamalleshwara.webp',
       imageAlt: 'Shanta Malleshwara Temple Adoni Worship Center',
       imageSource: 'Shri Shantamalleshwara Swami Temple Adoni',
@@ -440,10 +440,10 @@ export const ActivitiesPage = () => {
       description:
         'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives.',
       additionalDescription:
-        "CHYK Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.",
+        "CHYK, Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.",
       imageUrl: '/assets/images/activity-chyk.jpg',
-      imageAlt: 'Chinmaya Yuva Kendra CHYK Adoni Youth Empowerment',
-      imageSource: 'Chinmaya Yuva Kendra (CHYK) Adoni',
+      imageAlt: 'Chinmaya Yuva Kendra, Adoni Youth Empowerment',
+      imageSource: 'Chinmaya Yuva Kendra, Adoni',
       imageCredit: 'Youth Empowerment & Community Leadership',
       icon: <Zap className="w-5 h-5 text-[var(--orange)]" />,
       featured: true,
@@ -815,7 +815,7 @@ export const ActivitiesPage = () => {
       <footer className="p-10 sm:p-14 rounded-3xl bg-gradient-to-r from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white text-center shadow-2xl space-y-6 relative overflow-hidden border border-white/10">
         <div className="relative z-10 space-y-4 max-w-3xl mx-auto">
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[var(--yellow)] font-extrabold text-xs uppercase tracking-widest border border-white/20">
-            CHINMAYA MISSION ADONI
+            CHINMAYA MISSION, ADONI
           </span>
 
           <h3 className="text-2xl sm:text-4xl font-black font-heading tracking-tight text-white">
@@ -944,7 +944,7 @@ export const ActivitiesPage = () => {
             {/* Modal Footer */}
             <div className="px-6 sm:px-8 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500 shrink-0">
               <span className="truncate max-w-[50%]">
-                {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission Adoni'}
+                {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission, Adoni'}
               </span>
               <div className="flex items-center gap-2">
                 {(selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) && (

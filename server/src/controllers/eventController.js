@@ -6,19 +6,30 @@ export const getEventConfig = async (req, res) => {
     if (!config) {
       config = await EventConfig.create({
         programName: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-        slogan: 'YOUR LIFE. YOUR CHOICE.',
-        subSlogan: 'Run for a Drug-Free Future',
+        slogan: 'WE RISE. WE RUN. WE RESIST.',
+        subSlogan: 'RUN FOR LIFE. STAND AGAINST DRUGS',
         location: 'Adoni, Andhra Pradesh, India',
-        venue: 'Chinmaya Mission Adoni',
+        venue: 'Chinmaya Mission, Adoni',
         eventDate: new Date('2026-12-20T06:00:00.000+05:30'),
         eventTime: '6:00 AM onwards',
-        organizers: ['Chinmaya Mission Adoni', 'Chinmaya Yuva Kendra Adoni'],
+        organizers: ['Chinmaya Mission, Adoni', 'Chinmaya Yuva Kendra, Adoni'],
         registrationOpen: true,
         registrationEndDate: new Date('2026-11-30T23:59:59.000+05:30'),
       });
-    } else if (!config.registrationEndDate || new Date(config.registrationEndDate).getMonth() === 11) {
-      config.registrationEndDate = new Date('2026-11-30T23:59:59.000+05:30');
-      await config.save();
+    } else {
+      let needsSave = false;
+      if (!config.registrationEndDate || new Date(config.registrationEndDate).getMonth() === 11) {
+        config.registrationEndDate = new Date('2026-11-30T23:59:59.000+05:30');
+        needsSave = true;
+      }
+      if (config.slogan === 'YOUR LIFE. YOUR CHOICE.' || !config.slogan) {
+        config.slogan = 'WE RISE. WE RUN. WE RESIST.';
+        config.subSlogan = 'RUN FOR LIFE. STAND AGAINST DRUGS';
+        needsSave = true;
+      }
+      if (needsSave) {
+        await config.save();
+      }
     }
     res.json({ success: true, data: config });
   } catch (err) {

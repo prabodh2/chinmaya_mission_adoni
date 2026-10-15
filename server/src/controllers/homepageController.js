@@ -5,9 +5,9 @@ const DEFAULT_SECTIONS = [
     sectionId: 'hero-1',
     type: 'hero',
     title: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-    subtitle: '"YOUR LIFE. YOUR CHOICE."',
-    description: 'Run for a Drug-Free Future • Join Thousands of Youth in Adoni Building Health, Strength & Discipline',
-    badgeText: 'CHINMAYA MISSION ADONI & CHYK ADONI',
+    subtitle: 'WE RISE. WE RUN. WE RESIST.',
+    description: 'RUN FOR LIFE. STAND AGAINST DRUGS',
+    badgeText: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
     primaryButtonText: 'REGISTER NOW',
     primaryButtonLink: '/register',
     secondaryButtonText: 'EXPLORE THE MOVEMENT',
@@ -21,7 +21,7 @@ const DEFAULT_SECTIONS = [
     type: 'marathon',
     title: 'EVENT DETAILS & COUNTDOWN',
     subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
-    description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
+    description: 'Starting from Chinmaya Mission, Adoni, Andhra Pradesh.',
     badgeText: 'EVENT INFORMATION',
     primaryButtonText: 'REGISTER FOR MARATHON',
     primaryButtonLink: '/register',
@@ -43,7 +43,7 @@ const DEFAULT_SECTIONS = [
     sectionId: 'cta-1',
     type: 'cta',
     title: 'BE PART OF THE MOVEMENT IN ADONI!',
-    subtitle: 'CHINMAYA MISSION & CHYK ADONI',
+    subtitle: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
     description: 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!',
     primaryButtonText: 'MARATHON REGISTRATION',
     primaryButtonLink: '/register',
@@ -85,6 +85,14 @@ const getOrCreateHomePage = async () => {
       sections: DEFAULT_SECTIONS,
     });
     await homePage.save();
+  } else {
+    // Automatically keep Hero slogans up to date
+    const heroSection = homePage.sections?.find((s) => s.type === 'hero' || s.sectionId === 'hero-1');
+    if (heroSection && (/YOUR LIFE/i.test(heroSection.subtitle) || /Run for a Drug-Free/i.test(heroSection.description))) {
+      heroSection.subtitle = 'WE RISE. WE RUN. WE RESIST.';
+      heroSection.description = 'RUN FOR LIFE. STAND AGAINST DRUGS';
+      await homePage.save();
+    }
   }
   return homePage;
 };

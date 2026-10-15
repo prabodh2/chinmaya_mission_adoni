@@ -18,7 +18,7 @@ const footerSchema = new mongoose.Schema(
       description: {
         type: String,
         default:
-          '"YOUR LIFE. YOUR CHOICE." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
+          '"WE RISE. WE RUN. WE RESIST." — A youth-focused anti-drug movement inspiring health, strength, purpose, and clean living across Adoni.',
       },
       logoUrl: {
         type: String,
@@ -32,7 +32,7 @@ const footerSchema = new mongoose.Schema(
       },
       text: {
         type: String,
-        default: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+        default: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
       },
     },
     quickNavigation: {
@@ -87,7 +87,7 @@ const footerSchema = new mongoose.Schema(
     bottomFooter: {
       copyrightText: {
         type: String,
-        default: '© Chinmaya Mission Adoni.',
+        default: '© Chinmaya Mission, Adoni.',
       },
       privacyPolicy: {
         label: { type: String, default: 'Privacy Policy' },

@@ -25,25 +25,25 @@ export const AboutPage = () => {
   // Fallback default content matching exact prompt specification
   const defaultContent = {
     hero: {
-      title: 'CHINMAYA MISSION ADONI',
+      title: 'CHINMAYA MISSION, ADONI',
       subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
       intro:
-        'Chinmaya Mission Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
+        'Chinmaya Mission, Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
       imageUrl: '/assets/images/about-ashram-hero.jpg',
     },
     whoWeAre: {
       heading: 'WHO ARE WE?',
-      p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
+      p1: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
     },
     ourStory: {
       heading: 'OUR STORY',
-      p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
+      p1: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
       p2: 'Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       timeline: [
         {
           year: '1992',
-          title: 'Establishment of Chinmaya Mission Adoni',
+          title: 'Establishment of Chinmaya Mission, Adoni',
           desc: 'Established by Swami Shyamananda (Dr. Shyamala) under the guidance of Swami Sharadapriyananda.',
         },
         {
@@ -69,9 +69,9 @@ export const AboutPage = () => {
       ],
     },
     chykSection: {
-      heading: 'CHINMAYA YUVA KENDRA (CHYK) ADONI',
+      heading: 'CHINMAYA YUVA KENDRA (CHYK), ADONI',
       p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
-      p2: "CHYK Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
+      p2: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
       keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
       imageUrl:
         'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop',
@@ -79,7 +79,7 @@ export const AboutPage = () => {
     spiritualityInAction: {
       heading: 'SPIRITUALITY IN ACTION',
       content:
-        'At Chinmaya Mission Adoni, spirituality extends beyond individual practice into actions that benefit the wider community. The Mission seeks to bring people together through spiritual learning, cultural engagement, festivals and service initiatives, fostering a spirit of unity, compassion and collective responsibility.',
+        'At Chinmaya Mission, Adoni, spirituality extends beyond individual practice into actions that benefit the wider community. The Mission seeks to bring people together through spiritual learning, cultural engagement, festivals and service initiatives, fostering a spirit of unity, compassion and collective responsibility.',
       flow: ['KNOWLEDGE', 'ACTION', 'SERVICE', 'COMMUNITY'],
       imageUrl:
         'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&auto=format&fit=crop',
@@ -87,7 +87,7 @@ export const AboutPage = () => {
     ourActivities: {
       heading: 'OUR ACTIVITIES',
       intro:
-        'At Chinmaya Mission Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
+        'At Chinmaya Mission, Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
       cards: [
         {
           id: 'act-1',
@@ -102,7 +102,7 @@ export const AboutPage = () => {
           id: 'act-2',
           title: 'SHANTA MALLESHWARA TEMPLE',
           content:
-            'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
+            'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission, Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
           imageUrl: '/assets/images/activity-shantamalleshwara.webp',
           badge: 'SACRED CENTRE',
           iconName: 'Flame',
@@ -120,7 +120,7 @@ export const AboutPage = () => {
           id: 'act-4',
           title: 'CHINMAYA YUVA KENDRA (CHYK)',
           content:
-            'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
+            'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK, Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
           imageUrl: '/assets/images/activity-chyk.jpg',
           badge: 'YOUTH WING • FEATURED',
           featured: true,
@@ -131,7 +131,7 @@ export const AboutPage = () => {
     continuingLegacy: {
       heading: 'CONTINUING THE LEGACY',
       content:
-        'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
+        'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission, Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
       highlights: ['1992', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
     },
     conclusion: {
@@ -378,11 +378,11 @@ export const AboutPage = () => {
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30 shadow-sm">
               <Flame className="w-4 h-4 text-[var(--orange)] animate-pulse" />
-              <span>CHINMAYA MISSION ADONI • EST. 2001</span>
+              <span>CHINMAYA MISSION, ADONI • EST. 2001</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
-              {(data.hero?.title || 'CHINMAYA MISSION ADONI').replace(/^ABOUT\s+/i, '').trim()}
+              {(data.hero?.title || 'CHINMAYA MISSION, ADONI').replace(/^ABOUT\s+/i, '').trim()}
             </h1>
 
             <p className="text-xl sm:text-2xl font-bold font-heading bg-gradient-to-r from-[var(--orange)] via-[var(--yellow)] to-[var(--orange)] bg-clip-text text-transparent">
@@ -409,7 +409,7 @@ export const AboutPage = () => {
             <div className="relative rounded-3xl overflow-hidden border-2 border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-2xl group hover:border-[var(--orange)] transition-colors duration-500">
               <img
                 src={data.hero.imageUrl}
-                alt="Chinmaya Mission Adoni Visual"
+                alt="Chinmaya Mission, Adoni Visual"
                 className="w-full h-80 sm:h-[420px] object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--navy)]/90 via-[var(--navy)]/30 to-transparent flex flex-col justify-end p-6 text-white">
@@ -417,7 +417,7 @@ export const AboutPage = () => {
                   SPIRITUAL & CULTURAL CENTRE
                 </span>
                 <h3 className="text-xl font-extrabold font-heading text-white">
-                  Chinmaya Mission Adoni
+                  Chinmaya Mission, Adoni
                 </h3>
                 <p className="text-xs text-slate-300 font-medium">
                   Near Arts College Road, Adoni, Andhra Pradesh

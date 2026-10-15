@@ -65,7 +65,7 @@ export const ChangePasswordPage = () => {
           CHANGE ADMINISTRATOR PASSWORD
         </h2>
         <p className="text-xs text-[#94A3B8] font-medium">
-          Update your secure access key for the Chinmaya Mission Adoni Admin Portal
+          Update your secure access key for the Chinmaya Mission, Adoni Admin Portal
         </p>
       </div>
 

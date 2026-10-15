@@ -3,7 +3,7 @@ import { Award, CheckCircle2, ChevronUp, Flag, Heart, MapPin, Sparkles } from 'l
 
 /**
  * Final Destination Component
- * The terminal station of the journey through the history of Chinmaya Mission Adoni.
+ * The terminal station of the journey through the history of Chinmaya Mission, Adoni.
  */
 export const FinalDestination = ({ onRestartJourney }) => {
   return (

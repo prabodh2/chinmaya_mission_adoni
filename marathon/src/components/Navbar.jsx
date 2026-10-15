@@ -92,7 +92,7 @@ export const Navbar = () => {
             <a
               href={MAIN_SITE_URL}
               className="text-xs xl:text-sm font-bold tracking-wide text-[var(--text-muted)] hover:text-[var(--text-primary)] text-decoration-none flex items-center gap-1 transition-colors"
-              title="Return to Chinmaya Mission Adoni main website"
+              title="Return to Chinmaya Mission, Adoni main website"
             >
               <span>Main Mission Site</span>
               <ExternalLink className="w-3 h-3 opacity-70" />
@@ -116,68 +116,81 @@ export const Navbar = () => {
 
               {/* Logged in User Dropdown */}
               {isUserAuthenticated && normalUser ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-2 py-1.5 px-3 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--orange)] text-[var(--text-primary)] transition-all font-bold text-xs shadow-sm"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-[var(--orange)] text-white flex items-center justify-center font-black text-[11px]">
-                      {normalUser.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    <span className="max-w-[100px] truncate">{normalUser.fullName || 'Account'}</span>
-                    <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-                  </button>
-
-                  {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-60 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl z-50 animate-in fade-in">
-                      {/* User Card */}
-                      <div className="px-4 py-2.5 border-b border-[var(--border-color)]">
-                        <p className="text-xs font-black text-[var(--text-primary)] truncate">{normalUser.fullName}</p>
-                        <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {normalUser.phone}</p>
+                <div className="flex items-center gap-2.5">
+                  <div className="relative">
+                    <button
+                      onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                      className="flex items-center gap-2 py-1.5 px-3 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--orange)] text-[var(--text-primary)] transition-all font-bold text-xs shadow-sm"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[var(--orange)] text-white flex items-center justify-center font-black text-[11px]">
+                        {normalUser.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
                       </div>
+                      <span className="max-w-[100px] truncate">{normalUser.fullName || 'Account'}</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+                    </button>
 
-                      {/* Dropdown Links */}
-                      <div className="py-1">
-                        <Link
-                          to="/my-activity"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] text-decoration-none transition-colors"
-                        >
-                          <Activity className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>My Passes & Activity</span>
-                        </Link>
+                    {userDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-60 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl z-50 animate-in fade-in">
+                        {/* User Card */}
+                        <div className="px-4 py-2.5 border-b border-[var(--border-color)]">
+                          <p className="text-xs font-black text-[var(--text-primary)] truncate">{normalUser.fullName}</p>
+                          <p className="text-[11px] text-[var(--text-muted)] font-mono">+91 {normalUser.phone}</p>
+                        </div>
 
-                        <Link
-                          to="/profile"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] text-decoration-none transition-colors"
-                        >
-                          <User className="w-3.5 h-3.5 text-[var(--orange)]" />
-                          <span>My Profile</span>
-                        </Link>
+                        {/* Dropdown Links */}
+                        <div className="py-1">
+                          <Link
+                            to="/my-activity"
+                            onClick={() => setUserDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] text-decoration-none transition-colors"
+                          >
+                            <Activity className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>My Passes & Activity</span>
+                          </Link>
+
+                          <Link
+                            to="/profile"
+                            onClick={() => setUserDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] text-decoration-none transition-colors"
+                          >
+                            <User className="w-3.5 h-3.5 text-[var(--orange)]" />
+                            <span>My Profile</span>
+                          </Link>
+                        </div>
+
+                        {/* Logout */}
+                        <div className="pt-1 border-t border-[var(--border-color)]">
+                          <button
+                            onClick={() => {
+                              setUserDropdownOpen(false);
+                              if (logoutUser) logoutUser();
+                              else logout();
+                              navigate('/');
+                            }}
+                            className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-500/10 text-left transition-colors"
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span>Sign Out</span>
+                          </button>
+                        </div>
                       </div>
+                    )}
+                  </div>
 
-                      {/* Logout */}
-                      <div className="pt-1 border-t border-[var(--border-color)]">
-                        <button
-                          onClick={() => {
-                            setUserDropdownOpen(false);
-                            if (logoutUser) logoutUser();
-                            else logout();
-                            navigate('/');
-                          }}
-                          className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-500/10 text-left transition-colors"
-                        >
-                          <LogOut className="w-3.5 h-3.5" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  {/* CHYK Logo */}
+                  <div className="flex items-center pl-1 sm:pl-2 border-l border-[var(--border-color)]/60 shrink-0">
+                    <img
+                      src="/assets/logos/chyk-logo.png"
+                      alt="Chinmaya Yuva Kendra, Adoni"
+                      style={{ height: '32px', maxHeight: '32px', width: 'auto', objectFit: 'contain', display: 'block' }}
+                      className="hover:scale-105 transition-transform duration-200 shrink-0"
+                      title="Chinmaya Yuva Kendra, Adoni"
+                    />
+                  </div>
                 </div>
               ) : (
                 /* Unauthenticated state */
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 sm:gap-2.5">
                   <Link
                     to="/login"
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--orange)] text-[var(--text-primary)] text-xs font-bold transition-all text-decoration-none shadow-sm"
@@ -193,12 +206,30 @@ export const Navbar = () => {
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Sign Up</span>
                   </Link>
+
+                  {/* CHYK Logo at right side of the signup button */}
+                  <div className="flex items-center pl-1 sm:pl-2 border-l border-[var(--border-color)]/60 shrink-0">
+                    <img
+                      src="/assets/logos/chyk-logo.png"
+                      alt="Chinmaya Yuva Kendra, Adoni"
+                      style={{ height: '32px', maxHeight: '32px', width: 'auto', objectFit: 'contain', display: 'block' }}
+                      className="hover:scale-105 transition-transform duration-200 shrink-0"
+                      title="Chinmaya Yuva Kendra, Adoni"
+                    />
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Mobile Menu Toggle Button */}
             <div className="flex md:hidden items-center gap-2">
+              <img
+                src="/assets/logos/chyk-logo.png"
+                alt="Chinmaya Yuva Kendra, Adoni"
+                style={{ height: '26px', maxHeight: '26px', width: 'auto', objectFit: 'contain', display: 'block' }}
+                className="mr-1 shrink-0"
+                title="Chinmaya Yuva Kendra, Adoni"
+              />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none"

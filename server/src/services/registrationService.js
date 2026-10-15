@@ -702,7 +702,7 @@ export const registrationService = {
       groupRole: reg.groupRole || null,
       event: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
       date: 'Sunday, 20 December 2026',
-      venue: 'Chinmaya Mission Adoni, Andhra Pradesh',
+      venue: 'Chinmaya Mission, Adoni, Andhra Pradesh',
       message: isConfirmed ? 'Entry pass verified and active.' : `Entry pass is ${reg.status}.`,
     };
   },

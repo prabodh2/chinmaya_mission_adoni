@@ -168,7 +168,7 @@ export const UserManager = () => {
               Registered Users Directory
             </h2>
             <p className="text-xs text-[var(--text-muted)] font-medium">
-              View and manage all registered accounts on Chinmaya Mission Adoni portal.
+              View and manage all registered accounts on Chinmaya Mission, Adoni portal.
             </p>
           </div>
         </div>

@@ -33,6 +33,18 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
           ? section.imageUrl
           : '/assets/images/hero-runners-graphic.png';
 
+      const rawSubtitle = section.subtitle || '';
+      const displaySubtitle =
+        /YOUR LIFE\.?\s*YOUR CHOICE/i.test(rawSubtitle) || !rawSubtitle
+          ? 'WE RISE. WE RUN. WE RESIST.'
+          : rawSubtitle;
+
+      const rawDescription = section.description || '';
+      const displayDescription =
+        /Run for a Drug-Free Future/i.test(rawDescription) || !rawDescription
+          ? 'RUN FOR LIFE. STAND AGAINST DRUGS'
+          : rawDescription;
+
       return (
         <section className="relative overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[var(--bg-primary)] to-[#FFFDF9] border-b border-[var(--border-color)]/30">
           {/* Subtle warm decorative glow */}
@@ -47,14 +59,14 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
                   <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.08] uppercase">
                     {section.title || 'ANTI-DRUG MOVEMENT MARATHON RUN 2026'}
                   </h1>
-                  {section.subtitle && (
+                  {displaySubtitle && (
                     <p className="text-lg sm:text-2xl lg:text-3xl font-black font-heading text-[var(--orange)] tracking-wide">
-                      {section.subtitle}
+                      {displaySubtitle}
                     </p>
                   )}
-                  {section.description && (
-                    <p className="text-sm sm:text-base lg:text-lg font-bold text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed">
-                      {section.description}
+                  {displayDescription && (
+                    <p className="text-sm sm:text-base lg:text-lg font-extrabold text-[var(--text-primary)]/85 max-w-lg mx-auto leading-relaxed tracking-wider uppercase">
+                      {displayDescription}
                     </p>
                   )}
                 </div>
@@ -364,7 +376,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
 
 export const QuoteBanner = () => {
   return (
-    <section className="relative overflow-hidden min-h-[130px] flex flex-col md:flex-row items-center justify-between gap-6 px-4 sm:px-8 lg:px-12 py-6 sm:py-8 text-white bg-[#07162D] border-y border-slate-800/80 shadow-xl">
+    <section className="relative overflow-hidden min-h-[100px] sm:min-h-[120px] flex items-center justify-center px-4 sm:px-8 lg:px-12 py-6 sm:py-7 text-white bg-[#07162D] border-y border-slate-800/80 shadow-xl">
       {/* Background Road Image with Dark Blue Tint */}
       <div
         className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-30 mix-blend-luminosity"
@@ -375,28 +387,15 @@ export const QuoteBanner = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-[#07162D]/95 via-[#07162D]/90 to-[#07162D]/85 pointer-events-none" />
 
-      {/* Left Quote Content - strictly kept in one line */}
-      <div className="relative z-10 flex-1 min-w-0 text-left">
-        <p className="font-serif text-xs sm:text-sm md:text-[15px] lg:text-[1.05rem] xl:text-[1.18rem] text-white font-medium leading-normal mb-1 whitespace-nowrap overflow-x-auto">
-          <span className="font-serif text-[#FFD12D] text-lg sm:text-xl lg:text-2xl mr-1 select-none">“</span>
-          The youth are not useless , they are used less. The youth are not careless , they are cared for less.”
+      {/* Quote Content - Centered in one clean line, italic, size 28 */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
+        <p className="font-serif italic text-base sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium leading-relaxed mb-2 whitespace-nowrap overflow-x-auto">
+          <span className="font-serif not-italic text-[#FFD12D] text-xl sm:text-2xl md:text-3xl lg:text-[34px] mr-1 select-none">“</span>
+          The youth are not useless , they are used less. The youth are not careless , they are cared less.”
         </p>
-        <small className="block font-sans text-xs sm:text-sm text-[#F6D9BA] font-semibold tracking-wide pl-3">
+        <small className="block font-sans not-italic text-xs sm:text-sm text-[#F6D9BA] font-semibold tracking-wider uppercase">
           - Swami Chinmayananda
         </small>
-      </div>
-
-      {/* Right Brand Badge - positioned cleanly on the right with border separator, ZERO overlap */}
-      <div className="relative z-10 shrink-0 text-center md:text-right border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-6">
-        <span className="block text-[10px] sm:text-[11px] font-semibold tracking-widest text-slate-300 uppercase">
-          An Initiative by
-        </span>
-        <span className="block text-sm sm:text-base font-black tracking-wider text-[var(--orange,#F0441D)] mt-0.5">
-          CHINMAYA YUVA KENDRA ADONI
-        </span>
-        <span className="block text-[9px] sm:text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">
-          Together for a Healthy, Brighter Tomorrow
-        </span>
       </div>
     </section>
   );

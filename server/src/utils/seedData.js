@@ -84,16 +84,22 @@ export const seedInitialData = async () => {
     if (!configExists) {
       await EventConfig.create({
         programName: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-        slogan: 'YOUR LIFE. YOUR CHOICE.',
-        subSlogan: 'Run for a Drug-Free Future',
+        slogan: 'WE RISE. WE RUN. WE RESIST.',
+        subSlogan: 'RUN FOR LIFE. STAND AGAINST DRUGS',
         location: 'Adoni, Andhra Pradesh, India',
-        venue: 'Chinmaya Mission Adoni',
+        venue: 'Chinmaya Mission, Adoni',
         eventDate: new Date('2026-12-20T06:00:00.000+05:30'),
         eventTime: '6:00 AM onwards',
-        organizers: ['Chinmaya Mission Adoni', 'Chinmaya Yuva Kendra Adoni'],
+        organizers: ['Chinmaya Mission, Adoni', 'Chinmaya Yuva Kendra, Adoni'],
         registrationOpen: true,
       });
       console.log('[Seed] Event configuration initialized.');
+    } else {
+      if (configExists.slogan === 'YOUR LIFE. YOUR CHOICE.' || !configExists.slogan) {
+        configExists.slogan = 'WE RISE. WE RUN. WE RESIST.';
+        configExists.subSlogan = 'RUN FOR LIFE. STAND AGAINST DRUGS';
+        await configExists.save();
+      }
     }
 
     // 3. Institutions
@@ -163,7 +169,7 @@ export const seedInitialData = async () => {
     const defaultFaqsList = [
       {
         question: 'When and where is the Anti-Drug Marathon Run 2026?',
-        answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission Adoni, Andhra Pradesh.',
+        answer: 'The event will take place on Sunday, 20 December 2026, starting at 6:00 AM from Chinmaya Mission, Adoni, Andhra Pradesh.',
         order: 1,
       },
       {
@@ -211,22 +217,22 @@ export const seedInitialData = async () => {
         sectionKey: 'about_page',
         content: {
           hero: {
-            title: 'ABOUT CHINMAYA MISSION ADONI',
+            title: 'ABOUT CHINMAYA MISSION, ADONI',
             subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
-            intro: 'Chinmaya Mission Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
+            intro: 'Chinmaya Mission, Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
             imageUrl: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1200&auto=format&fit=crop'
           },
           whoWeAre: {
             heading: 'WHO ARE WE?',
-            p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
+            p1: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
             p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.'
           },
           ourStory: {
             heading: 'OUR STORY',
-            p1: 'Chinmaya Mission Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
+            p1: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
             p2: 'Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission, Adoni, has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
             timeline: [
-              { year: '1992', title: 'Establishment of Chinmaya Mission Adoni', desc: 'Established by Swami Shyamananda (Dr. Shyamala) under the guidance of Swami Sharadapriyananda.' },
+              { year: '1992', title: 'Establishment of Chinmaya Mission, Adoni', desc: 'Established by Swami Shyamananda (Dr. Shyamala) under the guidance of Swami Sharadapriyananda.' },
               { year: '2001', title: 'Chinmaya Cultural Complex', desc: 'Inauguration of the Chinmaya Cultural Complex by Pujya Swami Tejomayanandaji.' },
               { year: '2006', title: 'Sri Chinmaya Sanjeevaraya Swami Temple', desc: 'Construction of the sacred Sanjeevaraya Swami temple.' },
               { year: '2019', title: 'Chinmaya Vani Inauguration', desc: 'Inauguration by Pujya Swami Swaroopanandaji.' },
@@ -273,21 +279,21 @@ export const seedInitialData = async () => {
             ]
           },
           chykSection: {
-            heading: 'CHINMAYA YUVA KENDRA (CHYK) ADONI',
+            heading: 'CHINMAYA YUVA KENDRA (CHYK), ADONI',
             p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
-            p2: "CHYK Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
+            p2: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
             keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
             imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop'
           },
           spiritualityInAction: {
             heading: 'SPIRITUALITY IN ACTION',
-            content: 'At Chinmaya Mission Adoni, spirituality extends beyond individual practice into actions that benefit the wider community. The Mission seeks to bring people together through spiritual learning, cultural engagement, festivals and service initiatives, fostering a spirit of unity, compassion and collective responsibility.',
+            content: 'At Chinmaya Mission, Adoni, spirituality extends beyond individual practice into actions that benefit the wider community. The Mission seeks to bring people together through spiritual learning, cultural engagement, festivals and service initiatives, fostering a spirit of unity, compassion and collective responsibility.',
             flow: ['KNOWLEDGE', 'ACTION', 'SERVICE', 'COMMUNITY'],
             imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&auto=format&fit=crop'
           },
           ourActivities: {
             heading: 'OUR ACTIVITIES',
-            intro: 'At Chinmaya Mission Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
+            intro: 'At Chinmaya Mission, Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
             cards: [
               {
                 id: 'act-1',
@@ -299,7 +305,7 @@ export const seedInitialData = async () => {
               {
                 id: 'act-2',
                 title: 'SHANTA MALLESHWARA TEMPLE',
-                content: 'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
+                content: 'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission, Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
                 imageUrl: '/assets/images/activity-shantamalleshwara.webp',
                 badge: 'SACRED CENTRE'
               },
@@ -313,7 +319,7 @@ export const seedInitialData = async () => {
               {
                 id: 'act-4',
                 title: 'CHINMAYA YUVA KENDRA (CHYK)',
-                content: 'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
+                content: 'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK, Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
                 imageUrl: '/assets/images/activity-chyk.jpg',
                 badge: 'YOUTH WING',
                 featured: true
@@ -322,7 +328,7 @@ export const seedInitialData = async () => {
           },
           continuingLegacy: {
             heading: 'CONTINUING THE LEGACY',
-            content: 'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
+            content: 'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission, Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
             highlights: ['1992', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community']
           },
           conclusion: {
@@ -373,9 +379,9 @@ export const seedInitialData = async () => {
             sectionId: 'hero-1',
             type: 'hero',
             title: 'ANTI-DRUG MOVEMENT MARATHON RUN 2026',
-            subtitle: '"YOUR LIFE. YOUR CHOICE."',
-            description: 'Run for a Drug-Free Future • Join Thousands of Youth in Adoni Building Health, Strength & Discipline',
-            badgeText: 'CHINMAYA MISSION ADONI & CHYK ADONI',
+            subtitle: 'WE RISE. WE RUN. WE RESIST.',
+            description: 'RUN FOR LIFE. STAND AGAINST DRUGS',
+            badgeText: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
             primaryButtonText: 'REGISTER NOW',
             primaryButtonLink: '/register',
             secondaryButtonText: 'EXPLORE THE MOVEMENT',
@@ -389,7 +395,7 @@ export const seedInitialData = async () => {
             type: 'marathon',
             title: 'EVENT DETAILS & COUNTDOWN',
             subtitle: 'Sunday, 20 December 2026 • 6:00 AM Onwards',
-            description: 'Starting from Chinmaya Mission Adoni, Andhra Pradesh.',
+            description: 'Starting from Chinmaya Mission, Adoni, Andhra Pradesh.',
             badgeText: 'EVENT INFORMATION',
             primaryButtonText: 'REGISTER FOR MARATHON',
             primaryButtonLink: '/register',
@@ -412,7 +418,7 @@ export const seedInitialData = async () => {
             sectionId: 'cta-1',
             type: 'cta',
             title: 'BE PART OF THE MOVEMENT IN ADONI!',
-            subtitle: 'CHINMAYA MISSION & CHYK ADONI',
+            subtitle: 'CHINMAYA MISSION, ADONI & CHINMAYA YUVA KENDRA, ADONI',
             description: 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!',
             primaryButtonText: 'MARATHON REGISTRATION',
             primaryButtonLink: '/register',
@@ -431,6 +437,14 @@ export const seedInitialData = async () => {
         ],
       });
       console.log('[Seed] Default HomePage CMS configuration created.');
+    } else {
+      const heroSection = homePageExists.sections?.find((s) => s.type === 'hero' || s.sectionId === 'hero-1');
+      if (heroSection && (/YOUR LIFE/i.test(heroSection.subtitle) || /Run for a Drug-Free/i.test(heroSection.description))) {
+        heroSection.subtitle = 'WE RISE. WE RUN. WE RESIST.';
+        heroSection.description = 'RUN FOR LIFE. STAND AGAINST DRUGS';
+        await homePageExists.save();
+        console.log('[Seed] HomePage hero slogans updated.');
+      }
     }
 
     // 9. Initial Footer CMS Configuration
@@ -449,7 +463,7 @@ export const seedInitialData = async () => {
           originalFileName: 'hero_marathon_banner.jpg',
           title: 'Hero Main Horizontal Banner',
           description: 'Main horizontal hero banner image for the Anti-Drug Movement Marathon 2026.',
-          caption: 'YOUR LIFE. YOUR CHOICE. — Anti-Drug Movement 2026',
+          caption: 'WE RISE. WE RUN. WE RESIST. — Anti-Drug Movement 2026',
           altText: 'Anti-Drug Movement Marathon Run 2026 Hero Banner',
           url: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=1600&auto=format&fit=crop',
           publicId: 'hero_main_horiz',
@@ -533,8 +547,8 @@ export const seedInitialData = async () => {
           originalFileName: 'chinmaya_movement.jpg',
           title: 'Vertical Poster 4 - Chinmaya Mission Movement',
           description: 'Vertical poster showcasing Chinmaya Yuva Kendra youth initiative.',
-          caption: 'Chinmaya Mission & CHYK Adoni Movement',
-          altText: 'Chinmaya Mission Movement Adoni',
+          caption: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni Movement',
+          altText: 'Chinmaya Mission, Adoni Movement',
           url: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=800&auto=format&fit=crop',
           publicId: 'vert_poster_4',
           mimeType: 'image/jpeg',
@@ -637,9 +651,9 @@ export const seedInitialData = async () => {
           fileName: 'about_ashram_hero.jpg',
           originalFileName: 'chinmaya_ashram_entrance.jpg',
           title: 'Chinmaya Mission Ashram Main Building',
-          description: 'Near Arts College Road of Chinmaya Mission Adoni.',
-          caption: 'Chinmaya Mission Adoni',
-          altText: 'Chinmaya Mission Adoni Ashram Main Entrance',
+          description: 'Near Arts College Road of Chinmaya Mission, Adoni.',
+          caption: 'Chinmaya Mission, Adoni',
+          altText: 'Chinmaya Mission, Adoni Ashram Main Entrance',
           url: '/assets/images/about-ashram-hero.jpg',
           publicId: 'about_hero',
           mimeType: 'image/jpeg',
@@ -660,7 +674,7 @@ export const seedInitialData = async () => {
           title: 'Chinmaya Sanjeevaraya Temple',
           description: 'Spiritual temple for worship, prayer, and cultural preservation in Adoni.',
           caption: 'Chinmaya Sanjeevaraya Temple • Sacred Spiritual Centre',
-          altText: 'Chinmaya Sanjeevaraya Temple Adoni',
+          altText: 'Chinmaya Sanjeevaraya Temple, Adoni',
           url: '/assets/images/activity-sanjeevaraya.png',
           publicId: 'temple_sanjeevaraya',
           mimeType: 'image/png',
@@ -679,9 +693,9 @@ export const seedInitialData = async () => {
           fileName: 'activity-shantamalleshwara.webp',
           originalFileName: 'activity-shantamalleshwara.webp',
           title: 'Shanta Malleshwara Temple',
-          description: 'Sacred worship centre associated with Chinmaya Mission Adoni.',
+          description: 'Sacred worship centre associated with Chinmaya Mission, Adoni.',
           caption: 'Shanta Malleshwara Temple • Sacred Centre of Worship',
-          altText: 'Shanta Malleshwara Temple Adoni',
+          altText: 'Shanta Malleshwara Temple, Adoni',
           url: '/assets/images/activity-shantamalleshwara.webp',
           publicId: 'temple_shanta_malleshwara',
           mimeType: 'image/webp',
@@ -702,7 +716,7 @@ export const seedInitialData = async () => {
           title: 'Devi Group Devotional Wing',
           description: 'Nurturing devotion, spiritual learning, and cultural values.',
           caption: 'Devi Group • Devotional Wing of Chinmaya Mission',
-          altText: 'Devi Group Devotional Wing Chinmaya Mission Adoni',
+          altText: 'Devi Group Devotional Wing Chinmaya Mission, Adoni',
           url: '/assets/images/activity-devigroup.jpg',
           publicId: 'devi_group_wing',
           mimeType: 'image/jpeg',
@@ -722,8 +736,8 @@ export const seedInitialData = async () => {
           originalFileName: 'chyk_youth.jpg',
           title: 'Chinmaya Yuva Kendra (CHYK) Youth Wing',
           description: 'Empowering young minds with spiritual knowledge, leadership, and action.',
-          caption: 'CHYK Adoni • Youth Wing of Chinmaya Mission',
-          altText: 'CHYK Adoni Youth Wing Activity',
+          caption: 'Chinmaya Yuva Kendra, Adoni • Youth Wing of Chinmaya Mission',
+          altText: 'Chinmaya Yuva Kendra, Adoni Youth Wing Activity',
           url: 'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=800&auto=format&fit=crop',
           publicId: 'chyk_youth_wing',
           mimeType: 'image/jpeg',
@@ -741,10 +755,10 @@ export const seedInitialData = async () => {
         {
           fileName: 'chinmaya_adoni_map_preview.jpg',
           originalFileName: 'map-preview.jpg',
-          title: 'Chinmaya Mission Adoni Map Location',
-          description: 'Near Arts College Road location map preview card for Chinmaya Mission Adoni.',
-          caption: 'Chinmaya Mission Adoni • Near Arts College Road Location',
-          altText: 'Chinmaya Mission Adoni Near Arts College Road Map Location',
+          title: 'Chinmaya Mission, Adoni Map Location',
+          description: 'Near Arts College Road location map preview card for Chinmaya Mission, Adoni.',
+          caption: 'Chinmaya Mission, Adoni • Near Arts College Road Location',
+          altText: 'Chinmaya Mission, Adoni Near Arts College Road Map Location',
           url: '/assets/images/map-preview.jpg',
           publicId: 'adoni_map_preview',
           mimeType: 'image/jpeg',
@@ -763,7 +777,7 @@ export const seedInitialData = async () => {
           fileName: 'chinmaya_mission_logo.png',
           originalFileName: 'logo-1.png',
           title: 'Official Chinmaya Mission Emblem',
-          description: 'Official brand emblem logo for Chinmaya Mission Adoni.',
+          description: 'Official brand emblem logo for Chinmaya Mission, Adoni.',
           caption: 'Chinmaya Mission Official Logo',
           altText: 'Official Chinmaya Mission Emblem',
           url: '/assets/logos/logo-1.png',

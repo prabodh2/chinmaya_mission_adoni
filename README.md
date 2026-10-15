@@ -1,7 +1,8 @@
 # 🏃 Anti-Drug Movement Marathon Run 2026
 
-> **Organized by:** Chinmaya Mission Adoni & Chinmaya Yuva Kendra (CHYK) Adoni  
-> **Slogan:** *"YOUR LIFE. YOUR CHOICE."*  
+> **Organized by:** Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni  
+> **Slogan:** *"WE RISE. WE RUN. WE RESIST."*  
+> **Theme:** *"RUN FOR LIFE. STAND AGAINST DRUGS"*  
 > **Location:** Adoni, Andhra Pradesh, India  
 
 ---
@@ -106,4 +107,4 @@ npm run dev
 
 ## 📜 License & Acknowledgments
 
-© 2026 **Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni**. All Rights Reserved.
+© 2026 **Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni**. All Rights Reserved.

@@ -182,7 +182,7 @@ export const LetsConnectManager = () => {
     if (!phone) return '#';
     const cleanDigits = phone.replace(/[^0-9]/g, '');
     const fullPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
-    const text = encodeURIComponent(`Hello ${name || ''}, Greetings from Chinmaya Mission Adoni! We received your message regarding: `);
+    const text = encodeURIComponent(`Hello ${name || ''}, Greetings from Chinmaya Mission, Adoni! We received your message regarding: `);
     return `https://wa.me/${fullPhone}?text=${text}`;
   };
 
@@ -611,9 +611,9 @@ export const LetsConnectManager = () => {
 
                     <a
                       href={`mailto:${msg.email}?subject=${encodeURIComponent(
-                        `Response from Chinmaya Mission Adoni: ${msg.category || 'Your Inquiry'}`
+                        `Response from Chinmaya Mission, Adoni: ${msg.category || 'Your Inquiry'}`
                       )}&body=${encodeURIComponent(
-                        `Dear ${msg.fullName},\n\nThank you for reaching out to Chinmaya Mission Adoni regarding "${msg.category}".\n\nIn response to your inquiry:\n> ${msg.message}\n\n`
+                        `Dear ${msg.fullName},\n\nThank you for reaching out to Chinmaya Mission, Adoni regarding "${msg.category}".\n\nIn response to your inquiry:\n> ${msg.message}\n\n`
                       )}`}
                       className="btn-secondary text-xs py-1.5 px-3 flex items-center gap-1.5 text-[var(--orange)] border-[var(--orange)]/30 hover:bg-[var(--orange)]/10"
                     >

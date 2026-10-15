@@ -95,7 +95,7 @@ export const AdminLayout = ({ children }) => {
                 </span>
               </div>
               <h1 className="text-sm sm:text-base font-extrabold font-heading text-white truncate max-w-[200px] sm:max-w-none">
-                CHINMAYA MISSION ADONI
+                CHINMAYA MISSION, ADONI
               </h1>
             </div>
           </div>
@@ -180,7 +180,7 @@ export const AdminLayout = ({ children }) => {
 
           <div className="pt-4 border-t border-white/10 text-center">
             <p className="text-[11px] text-[#64748B]">
-              Chinmaya Mission Adoni © 2026
+              Chinmaya Mission, Adoni © 2026
             </p>
           </div>
         </aside>

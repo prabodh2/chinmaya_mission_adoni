@@ -1,5 +1,5 @@
 /**
- * Milestones Data for Chinmaya Mission Adoni Journey
+ * Milestones Data for Chinmaya Mission, Adoni Journey
  * Chronological record of key events, temples, youth activities and cultural milestones.
  * NOTE: All "KM" references have been completely removed.
  */

@@ -137,7 +137,7 @@ export const EventConfigPage = () => {
               type="text"
               value={eventForm.slogan}
               onChange={(e) => setEventForm({ ...eventForm, slogan: e.target.value })}
-              placeholder="YOUR LIFE. YOUR CHOICE. SAY NO TO DRUGS."
+              placeholder="WE RISE. WE RUN. WE RESIST."
               className="w-full py-3 px-4 rounded-xl bg-[#0B132B] border border-white/10 font-bold text-white focus:outline-none focus:border-[#00B4D8]"
             />
           </div>

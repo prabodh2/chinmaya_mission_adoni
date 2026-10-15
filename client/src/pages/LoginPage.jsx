@@ -183,7 +183,7 @@ export const LoginPage = () => {
         {/* Footer / Switch to Signup */}
         <div className="text-center pt-4 border-t border-[var(--border-color)] relative z-10 space-y-3">
           <p className="text-xs text-[var(--text-muted)] font-medium">
-            New to Chinmaya Mission Adoni?{' '}
+            New to Chinmaya Mission, Adoni?{' '}
             <Link
               to={`/signup${searchParams.toString() ? `?${searchParams.toString()}` : ''}`}
               className="text-[var(--orange)] font-bold hover:underline transition-colors ml-1"

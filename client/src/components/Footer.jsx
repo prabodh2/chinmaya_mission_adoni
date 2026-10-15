@@ -11,13 +11,13 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   isEnabled: true,
   disabledMessage: '',
   brand: {
-    title: 'CHINMAYA MISSION ADONI',
+    title: 'CHINMAYA MISSION, ADONI',
     description:
       'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
   },
   organizedBy: {
     heading: 'FOUNDED UNDER PUJYA GURUDEV:',
-    text: 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni',
+    text: 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni',
   },
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
@@ -54,7 +54,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
       '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda',
   },
   bottomFooter: {
-    copyrightText: '© Chinmaya Mission Adoni. All Rights Reserved.',
+    copyrightText: '© Chinmaya Mission, Adoni. All Rights Reserved.',
     privacyPolicy: { label: 'Privacy Policy', url: '/privacy' },
     termsConditions: { label: 'Terms & Conditions', url: '/terms' },
   },
@@ -80,7 +80,7 @@ function sanitizeMainSiteFooter(rawData) {
   if (!brandTitle || brandTitle.includes('ANTI-DRUG') || brandTitle.includes('2026')) {
     data.brand = {
       ...data.brand,
-      title: 'CHINMAYA MISSION ADONI',
+      title: 'CHINMAYA MISSION, ADONI',
       description:
         'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring individuals to lead purposeful lives.',
     };
@@ -141,7 +141,7 @@ function sanitizeMainSiteFooter(rawData) {
 
   // 3b. Sanitize Organized By
   if (data.organizedBy && data.organizedBy.text?.includes('(CHYK)')) {
-    data.organizedBy.text = 'Chinmaya Mission Adoni & Chinmaya Yuva Kendra Adoni';
+    data.organizedBy.text = 'Chinmaya Mission, Adoni & Chinmaya Yuva Kendra, Adoni';
   }
 
   // 4. Sanitize Pledge Section (Replace "THE MARATHON PLEDGE" / "OUR INSPIRATION" with Gurudev's Motto)
@@ -305,8 +305,8 @@ export const Footer = ({ overrideData = null }) => {
                 ) : (
                   organizedBy.text || (
                     <>
-                      <span className="block">Chinmaya Mission Adoni &</span>
-                      <span className="block">Chinmaya Yuva Kendra Adoni</span>
+                      <span className="block">Chinmaya Mission, Adoni &</span>
+                      <span className="block">Chinmaya Yuva Kendra, Adoni</span>
                     </>
                   )
                 )}
@@ -464,7 +464,7 @@ export const Footer = ({ overrideData = null }) => {
           style={{ borderColor: appearance?.dividerColor || 'rgba(255, 255, 255, 0.1)' }}
           className="pt-8 border-t flex flex-col sm:flex-row items-center justify-between text-xs opacity-75 gap-4"
         >
-          <p>{bottomFooter.copyrightText || '© Chinmaya Mission Adoni. All Rights Reserved.'}</p>
+          <p>{bottomFooter.copyrightText || '© Chinmaya Mission, Adoni. All Rights Reserved.'}</p>
           <div className="flex items-center gap-4">
             {bottomFooter.privacyPolicy?.url && (
               <Link to={bottomFooter.privacyPolicy.url} className="hover:text-white text-decoration-none">

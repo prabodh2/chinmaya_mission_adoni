@@ -56,9 +56,9 @@ const MEMBERS_DATA = [
     role: 'RESIDENT · ADONI MISSION',
     name: 'Brahmachari Narayana Chaitanya',
     honorific: 'Brahmachari Narayana Chaitanya',
-    description: 'Serving as the resident of Chinmaya Mission Adoni.',
+    description: 'Serving as the resident of Chinmaya Mission, Adoni.',
     extendedBio:
-      'Serving as the dedicated resident of Chinmaya Mission Adoni, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the Adoni region.',
+      'Serving as the dedicated resident of Chinmaya Mission, Adoni, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the Adoni region.',
     sourceBadge: 'chinmayamissionadoni.org',
     largeImage: '/assets/leadership/narayana-chaitanya.png',
     thumbImage: '/assets/leadership/narayana-chaitanya.png',
@@ -70,22 +70,22 @@ const COMMITTEE_MEMBERS = [
   {
     number: '01',
     name: 'Yaggati Prathap',
-    role: 'President Of Chinmaya Mission Adoni',
+    role: 'President Of Chinmaya Mission, Adoni',
   },
   {
     number: '02',
     name: 'Vitta Radhika',
-    role: 'Vice President Of Chinmaya Mission Adoni',
+    role: 'Vice President Of Chinmaya Mission, Adoni',
   },
   {
     number: '03',
     name: 'Medhal Raghunath',
-    role: 'Secretary Of Chinmaya Mission Adoni',
+    role: 'Secretary Of Chinmaya Mission, Adoni',
   },
   {
     number: '04',
     name: 'Jagadeesh',
-    role: 'Treasurer Of Chinmaya Mission Adoni',
+    role: 'Treasurer Of Chinmaya Mission, Adoni',
   },
 ];
 
@@ -96,7 +96,7 @@ export const WhoAreWePage = () => {
 
   // Set document title
   useEffect(() => {
-    document.title = 'Who Are We | Chinmaya Mission Adoni';
+    document.title = 'Who Are We | Chinmaya Mission, Adoni';
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, []);
 
@@ -223,7 +223,7 @@ export const WhoAreWePage = () => {
                       Portrait
                     </span>
                     <p className="text-xs text-[#554B3E]/80 mt-1">
-                      Resident · Chinmaya Mission Adoni
+                      Resident · Chinmaya Mission, Adoni
                     </p>
                   </div>
                 ) : (

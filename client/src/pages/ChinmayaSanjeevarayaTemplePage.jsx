@@ -11,7 +11,7 @@ import {
 
 export const ChinmayaSanjeevarayaTemplePage = () => {
   useEffect(() => {
-    document.title = 'Chinmaya Sanjeevaraya Temple | Chinmaya Mission Adoni';
+    document.title = 'Chinmaya Sanjeevaraya Temple | Chinmaya Mission, Adoni';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, []);
 
@@ -47,7 +47,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       year: '2006',
       title: 'Sacred Pratishta (Consecration)',
       context: 'Vyaya Nama Samvatsaram',
-      desc: 'Consecrated according to traditional Agama Shastras in line with the vision of Pujya Swamini Shyamananda (Founder, Chinmaya Mission Adoni) and guided by Pujya Swami Pranavananda, with active patronage from Sri Vitta Bhadrayya, Sri B. V. R. Reddy, Sri Achyutha Mohan Reddy, and dedicated devotees.',
+      desc: 'Consecrated according to traditional Agama Shastras in line with the vision of Pujya Swamini Shyamananda (Founder, Chinmaya Mission, Adoni) and guided by Pujya Swami Pranavananda, with active patronage from Sri Vitta Bhadrayya, Sri B. V. R. Reddy, Sri Achyutha Mohan Reddy, and dedicated devotees.',
     },
     {
       year: '2012',
@@ -129,7 +129,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             </p>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission Adoni. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.
+              Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission, Adoni. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.
             </p>
           </div>
 
@@ -157,7 +157,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
                   Sri Chinnaya Sanjeevaraya Swamy
                 </p>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  Presiding Deity • Chinmaya Mission Adoni
+                  Presiding Deity • Chinmaya Mission, Adoni
                 </p>
               </div>
             </div>
@@ -202,7 +202,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             </div>
 
             <p className="text-sm sm:text-base text-slate-700">
-              Today, Sri Chinnaya Sanjeevaraya Swamy stands as the divine protector and guardian deity of the Chinmaya Mission Adoni complex, radiating strength, fearlessness (abhaya), and selfless devotion.
+              Today, Sri Chinnaya Sanjeevaraya Swamy stands as the divine protector and guardian deity of the Chinmaya Mission, Adoni complex, radiating strength, fearlessness (abhaya), and selfless devotion.
             </p>
           </div>
 

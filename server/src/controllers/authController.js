@@ -108,7 +108,7 @@ export const signupUser = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Account created successfully! Welcome to Chinmaya Mission Adoni.',
+      message: 'Account created successfully! Welcome to Chinmaya Mission, Adoni.',
       data: {
         _id: newUser._id,
         fullName: newUser.fullName,
