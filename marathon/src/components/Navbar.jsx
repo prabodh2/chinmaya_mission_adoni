@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5173';
+const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
 
 export const Navbar = () => {
   const {

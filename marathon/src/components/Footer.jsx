@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { footerService } from '../services/api';
 import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
-const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5173';
+const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
 
 const FALLBACK_FOOTER = {
   isEnabled: true,
