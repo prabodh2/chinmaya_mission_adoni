@@ -78,7 +78,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       {/* 1. HERO BANNER: SACRED TEMPLE PRESENTATION */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#1C160C] via-[#241B0E] to-[#120E08] text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]" />
-        
+
         <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Sacred Title & Overview */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
@@ -120,7 +120,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-black/80 via-slate-950 to-black border-2 border-amber-500/40 shadow-2xl shadow-amber-950/50 p-2 sm:p-3 group max-w-sm w-full">
               {/* Soft Golden Ambient Glow */}
               <div className="absolute -inset-1 bg-gradient-to-tr from-amber-500/20 via-orange-500/20 to-transparent blur-xl pointer-events-none" />
-              
+
               <div className="relative rounded-2xl overflow-hidden bg-black/60 flex items-center justify-center min-h-[360px] sm:min-h-[420px]">
                 {/* Full Uncropped Deity Image */}
                 <img
@@ -192,7 +192,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             <h3 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
               The Divine Inspiration Behind the Consecration
             </h3>
-            
+
             <p className="text-sm sm:text-base text-slate-700">
               The <strong className="text-slate-900 font-semibold">Sri Chinnaya Sanjeevaraya Swamy Devasthanam</strong> in Adoni was consecrated in the year <strong className="text-slate-900 font-semibold">2006 (Vyaya Nama Samvatsaram)</strong>. The temple was established in accordance with the profound spiritual vision and inspiration of <strong className="text-[var(--orange)] font-semibold">Pujya Swamini Shyamananda</strong>, the revered founder of Chinmaya Mission, Adoni.
             </p>
@@ -320,5 +320,78 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
         </div>
       </section>
     </div>
+  );
+};
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
+              DEVOTIONAL JOY & CELEBRATIONS
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-slate-900 tracking-tight">
+              Annual Festivals & Observances
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              Throughout the year, devotees gather in thousands to participate in sacred religious observances and festivals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {festivals.map((fest, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/90 flex flex-col justify-between hover:shadow-md hover:border-[var(--orange)]/40 transition-all text-left"
+              >
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center mb-3">
+                    {fest.icon}
+                  </div>
+                  <h3 className="text-base font-extrabold font-heading text-slate-900 mb-1">
+                    {fest.name}
+                  </h3>
+                  <span className="inline-block text-[11px] font-bold text-[var(--orange)] mb-2 uppercase tracking-wide">
+                    {fest.period}
+                  </span>
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                    {fest.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div >
+      </section >
+
+  {/* 6. CALL TO ACTION / VISIT & CONNECT */ }
+  < section className = "max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16" >
+    <div className="rounded-3xl bg-gradient-to-r from-[var(--navy,#0B2340)] via-[#122D50] to-[var(--navy,#0B2340)] text-white p-8 sm:p-12 text-center shadow-xl relative overflow-hidden space-y-6">
+      <div className="relative z-10 max-w-2xl mx-auto space-y-3">
+        <span className="px-3.5 py-1 rounded-full bg-white/10 text-amber-300 font-extrabold text-xs uppercase tracking-widest border border-white/20">
+          VISIT SANJEEVARAYA TEMPLE
+        </span>
+        <h3 className="text-2xl sm:text-3xl font-black font-heading text-white">
+          Experience the Peace & Divine Presence
+        </h3>
+        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+          Whether seeking blessings for strength, inner clarity, family well-being, or joining our regular spiritual discourses, all are warmly welcomed at Chinmaya Sanjeevaraya Temple.
+        </p>
+      </div>
+
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2">
+        <Link
+          to="/lets-connect"
+          className="btn-primary text-xs sm:text-sm py-2.5 sm:py-3 px-6 font-bold shadow-md"
+        >
+          <span>CONNECT WITH ADONI TEMPLE</span>
+          <ChevronRight className="w-4 h-4" />
+        </Link>
+        <Link
+          to="/activities"
+          className="btn-secondary text-xs sm:text-sm py-2.5 sm:py-3 px-6 font-bold bg-white/10 text-white border-white/20 hover:bg-white/20"
+        >
+          <span>EXPLORE ALL ACTIVITIES</span>
+        </Link>
+      </div>
+    </div>
+      </section >
+    </div >
   );
 };
