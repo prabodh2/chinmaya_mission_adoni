@@ -627,18 +627,18 @@ export const AboutPage = () => {
           </p>
         </div>
 
-        {/* 4 Activity Cards across full width */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch">
+        {/* 2 Wide Activity & Temple Cards fulfilling full screen width */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 w-full items-stretch">
           {data.ourActivities.cards.map((card) => (
             <article
               key={card.id || card.title}
-              className={`bg-white rounded-2xl border transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col h-full overflow-hidden group ${
+              className={`bg-white rounded-3xl border transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full overflow-hidden group w-full ${
                 card.featured
                   ? 'border-[var(--orange)]/70 ring-1 ring-[var(--orange)]/20'
                   : 'border-slate-200/90 hover:border-[var(--orange)]/50'
               }`}
             >
-              {/* Full-width Top Image (Compact height matching user layout, fully visible uncropped image) */}
+              {/* Full-width Top Image Area with increased height */}
               {(() => {
                 const isSanjeevaraya =
                   card.id === 'act-1' ||
@@ -649,7 +649,7 @@ export const AboutPage = () => {
                   : (card.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
 
                 return (
-                  <div className="relative h-40 sm:h-44 md:h-48 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
+                  <div className="relative h-56 sm:h-64 md:h-72 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
                     {/* Ambient blurred backdrop so there are no empty borders */}
                     <img
                       src={cardImgSrc}
@@ -679,7 +679,7 @@ export const AboutPage = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
                     
                     {card.badge && (
-                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
+                      <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-xs uppercase tracking-wider border border-white/20 shadow-sm z-20">
                         {card.badge}
                       </span>
                     )}
@@ -688,28 +688,28 @@ export const AboutPage = () => {
               })()}
 
               {/* Card Body with Consistent Padding & Structured Flow */}
-              <div className="p-4 sm:p-5 flex flex-col flex-1 text-left">
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+              <div className="p-6 sm:p-8 flex flex-col flex-1 text-left">
+                <div className="flex items-center gap-3.5 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
                     {getActivityIcon(card.iconName)}
                   </div>
-                  <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1 uppercase tracking-wide truncate">
+                  <h3 className="text-base sm:text-lg md:text-xl font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug uppercase tracking-wide">
                     {card.title}
                   </h3>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3 h-[3.8rem] sm:h-[4.2rem] overflow-hidden mb-3 font-normal">
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3 mb-6 font-normal">
                   {card.content}
                 </p>
 
                 {/* Bottom Action Button Aligned Across Rows */}
-                <div className="mt-auto pt-3 border-t border-slate-100">
+                <div className="mt-auto pt-4 border-t border-slate-100">
                   <Link
                     to="/activities"
-                    className="btn-secondary w-full justify-center text-xs py-2 px-3 text-decoration-none font-bold shadow-sm"
+                    className="btn-secondary w-full justify-center text-sm py-3 px-4 text-decoration-none font-bold shadow-sm rounded-xl flex items-center gap-2"
                   >
                     <span>EXPLORE ACTIVITY DETAILS</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
