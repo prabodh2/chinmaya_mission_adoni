@@ -1,8 +1,7 @@
 # Netlify Root Configuration for Marathon Monorepo
 [build]
-  base = "marathon"
-  command = "npm run build"
-  publish = "dist"
+  command = "cd marathon && npm install && npm run build"
+  publish = "marathon/dist"
 
 [[redirects]]
   from = "/*"
