@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { footerService } from '../services/api';
 import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
 const MARATHON_PORTAL_URL =

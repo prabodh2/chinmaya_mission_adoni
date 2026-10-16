@@ -3,20 +3,20 @@ import { X, Save, Lock } from 'lucide-react';
 import { adminService } from '../../services/api';
 
 export const RegistrationEditModal = ({ registration, onClose, onUpdated }) => {
-  if (!registration) return null;
-
   const [form, setForm] = useState({
-    fullName: registration.fullName || '',
-    age: registration.age ?? '',
-    standard: registration.standard || '',
-    profession: registration.profession || '',
-    contactNumber: registration.contactNumber || '',
-    institutionName: registration.institutionName || '',
-    tShirtSize: registration.tShirtSize || 'M',
-    status: registration.status || 'CONFIRMED',
+    fullName: registration?.fullName || '',
+    age: registration?.age ?? '',
+    standard: registration?.standard || '',
+    profession: registration?.profession || '',
+    contactNumber: registration?.contactNumber || '',
+    institutionName: registration?.institutionName || '',
+    tShirtSize: registration?.tShirtSize || 'M',
+    status: registration?.status || 'CONFIRMED',
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+
+  if (!registration) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
