@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { footerService } from '../services/api';
-import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
 const MARATHON_PORTAL_URL =
   import.meta.env.VITE_MARATHON_URL ||
@@ -268,18 +267,13 @@ export const Footer = ({ overrideData = null }) => {
     color: appearance?.accentColor || '#FF7B00',
   };
 
-  const cardStyle = {
-    backgroundColor: appearance?.cardBackgroundColor || 'rgba(255, 255, 255, 0.05)',
-    borderColor: appearance?.cardBorderColor || 'rgba(255, 255, 255, 0.1)',
-  };
-
   return (
     <footer
       style={footerStyle}
       className="border-t pt-16 pb-12 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
           
           {/* Column 1: Brand Info & Mission */}
           <div className="space-y-4">
@@ -289,39 +283,10 @@ export const Footer = ({ overrideData = null }) => {
               </span>
             </div>
 
-            <p className="text-xs leading-relaxed font-medium opacity-90">
+            <p className="text-xs sm:text-sm leading-relaxed font-medium opacity-90 max-w-sm">
               {brand.description ||
                 'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring purposeful lives.'}
             </p>
-
-            <div className="text-xs font-bold pt-1">
-              <span style={headingStyle}>{organizedBy.heading || 'FOUNDED UNDER GURUDEV:'}</span>
-              <p className="text-white font-extrabold mt-0.5 leading-snug">
-                {organizedBy.text && organizedBy.text.includes(' & ') ? (
-                  <>
-                    <span className="block">{organizedBy.text.split(' & ')[0]} &</span>
-                    <span className="block">{organizedBy.text.split(' & ')[1]}</span>
-                  </>
-                ) : (
-                  organizedBy.text || (
-                    <>
-                      <span className="block">Chinmaya Mission, Adoni &</span>
-                      <span className="block">Chinmaya Yuva Kendra, Adoni</span>
-                    </>
-                  )
-                )}
-              </p>
-            </div>
-
-            {/* Official CHYK Signature Emblem */}
-            <div className="pt-1 flex items-center">
-              <img
-                src="/assets/logos/chyk-signature.png"
-                alt="CHYK - Chinmaya Yuva Kendra"
-                className="h-10 sm:h-12 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform"
-                loading="lazy"
-              />
-            </div>
           </div>
 
           {/* Column 2: Quick Navigation (NO What We Do, NO Marathon Registration) */}
@@ -434,26 +399,6 @@ export const Footer = ({ overrideData = null }) => {
                   </a>
                 )}
               </div>
-            </div>
-          </div>
-
-          {/* Column 4: Chinmaya Mission Motto (NO Marathon Pledge) */}
-          <div className="space-y-3">
-            <h4
-              style={headingStyle}
-              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
-            >
-              {pledge.heading === 'OUR INSPIRATION' ? 'Our Motto' : (pledge.heading || 'Our Motto')}
-            </h4>
-            <div style={cardStyle} className="p-4 rounded-2xl border text-xs space-y-2">
-              <p className="text-white font-extrabold flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[var(--orange)]" />
-                <span>{pledge.title || 'TO GIVE MAXIMUM HAPPINESS'}</span>
-              </p>
-              <p className="leading-relaxed opacity-90">
-                {pledge.description ||
-                  '"To give maximum happiness to the maximum number of people for the maximum time is our motto." — Pujya Gurudev Swami Chinmayananda'}
-              </p>
             </div>
           </div>
 
