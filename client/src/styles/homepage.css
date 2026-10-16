@@ -697,17 +697,6 @@
   filter: drop-shadow(0 4px 5px rgba(105, 73, 45, 0.35));
 }
 
-.event-number {
-  position: absolute;
-  left: 12px;
-  top: 10px;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 700;
-  z-index: 2;
-  text-shadow: 0 1px 5px rgba(7, 22, 45, 0.5);
-}
-
 .event-info {
   padding: 14px 14px 16px;
   display: flex;

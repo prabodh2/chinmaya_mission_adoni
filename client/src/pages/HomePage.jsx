@@ -245,7 +245,7 @@ export function HomePage() {
             </Link>
           </div>
           <div className="events-grid">
-            {events.map((event, i) => (
+            {events.map((event) => (
               <article
                 className="event-card cursor-pointer group"
                 key={event.title}
@@ -271,7 +271,6 @@ export function HomePage() {
                   ) : (
                     <Sun size={56} strokeWidth={1.2} />
                   )}
-                  <span className="event-number">0{i + 1}</span>
                 </div>
                 <div className="event-info">
                   <div className="flex items-start justify-between gap-1">
