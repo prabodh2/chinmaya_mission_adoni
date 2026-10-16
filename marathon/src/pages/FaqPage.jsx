@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
-import { faqService, contactService } from '../services/api';
+import { faqService, contactService, webContentService } from '../services/api';
 
 const DEFAULT_MARATHON_FAQS = [
   {
@@ -52,6 +52,14 @@ const DEFAULT_MARATHON_FAQS = [
 
 export const FaqPage = () => {
   const [faqs, setFaqs] = useState(DEFAULT_MARATHON_FAQS);
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_marathon_faqs');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
   const [openFaq, setOpenFaq] = useState(null);
   const [showAskForm, setShowAskForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -69,11 +77,27 @@ export const FaqPage = () => {
   const ADMIN_PANEL_URL =
     import.meta.env.VITE_ADMIN_URL || 'https://chinmaya-mission-adoni-admin.vercel.app';
 
-  // Fetch dynamic FAQs from backend
+  // Fetch dynamic FAQs from multi-website CMS & backend
   useEffect(() => {
     const fetchFaqs = async () => {
       setLoading(true);
       try {
+        const webRes = await webContentService.getPublicPage('marathon', 'faqs');
+        if (webRes.data?.success && webRes.data?.data) {
+          setPageData(webRes.data.data);
+          try { localStorage.setItem('cached_cms_marathon_faqs', JSON.stringify(webRes.data.data)); } catch (_) {}
+          const items = webRes.data.data.fieldsMap?.faq_list?.items;
+          if (Array.isArray(items) && items.length > 0) {
+            setFaqs(items.map((it) => ({
+              _id: it.itemId || it._id,
+              question: it.title,
+              answer: it.description,
+            })));
+            setLoading(false);
+            return;
+          }
+        }
+
         const res = await faqService.getFAQs();
         const apiFaqs = res.data?.data || res.data || [];
         if (Array.isArray(apiFaqs) && apiFaqs.length > 0) {
@@ -87,6 +111,8 @@ export const FaqPage = () => {
     };
     fetchFaqs();
   }, []);
+
+  const f = pageData?.fieldsMap || {};
 
   const handleSubmitQuestion = async (e) => {
     e.preventDefault();
@@ -133,11 +159,11 @@ export const FaqPage = () => {
         {/* Header Section */}
         <div className="text-center space-y-3">
           <h1 className="text-3xl sm:text-5xl font-black font-heading text-[var(--text-primary)] tracking-tight">
-            FREQUENTLY ASKED QUESTIONS
+            {f.faq_list?.title || 'FREQUENTLY ASKED QUESTIONS'}
           </h1>
 
           <p className="text-sm sm:text-base text-[var(--text-muted)] max-w-2xl mx-auto font-medium">
-            Everything you need to know about the Anti-Drug Movement Marathon Run 2026. Have a question not listed here? Ask our organizers directly!
+            {f.faq_list?.subtitle || 'Everything you need to know about the Anti-Drug Movement Marathon Run 2026. Have a question not listed here? Ask our organizers directly!'}
           </p>
 
           {/* Action Button: Ask Your FAQ */}

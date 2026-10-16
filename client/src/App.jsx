@@ -243,6 +243,22 @@ export function App() {
               }
             />
             <Route
+              path="/admin/update-content"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="UPDATE_CONTENT" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/content"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="UPDATE_CONTENT" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/change-password"
               element={
                 <ProtectedRoute requireAdmin={true}>

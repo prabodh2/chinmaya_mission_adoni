@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { webContentService } from '../services/api';
 import {
   Landmark,
   Flame,
@@ -10,10 +11,33 @@ import {
 } from 'lucide-react';
 
 export const ChinmayaSanjeevarayaTemplePage = () => {
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_chinmaya_temple');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
   useEffect(() => {
     document.title = 'Chinmaya Sanjeevaraya Temple | Chinmaya Mission, Adoni';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    webContentService
+      .getPublicPage('chinmaya', 'temple')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setPageData(res.data.data);
+          try {
+            localStorage.setItem('cached_cms_chinmaya_temple', JSON.stringify(res.data.data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const f = pageData?.fieldsMap || {};
 
   const festivals = [
     {
@@ -121,15 +145,15 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
-              CHINMAYA SANJEEVARAYA TEMPLE
+              {f.temple_hero?.title || 'CHINMAYA SANJEEVARAYA TEMPLE'}
             </h1>
 
             <p className="text-amber-200/90 text-sm sm:text-base font-serif italic">
-              "Sri Chinnaya Sanjeevarya Swamy Devasthanam — A sacred sanctuary of unwavering faith, strength, and timeless devotional heritage."
+              "{f.temple_hero?.subtitle || 'Sri Chinnaya Sanjeevarya Swamy Devasthanam — A sacred sanctuary of unwavering faith, strength, and timeless devotional heritage.'}"
             </p>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission, Adoni. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.
+              {f.temple_hero?.intro || 'Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission, Adoni. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.'}
             </p>
           </div>
 
@@ -142,8 +166,8 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
               <div className="relative rounded-2xl overflow-hidden bg-black/60 flex items-center justify-center min-h-[360px] sm:min-h-[420px]">
                 {/* Full Uncropped Deity Image */}
                 <img
-                  src="/assets/images/chinmaya-sanjeevaraya-temple.png"
-                  alt="Sri Chinnaya Sanjeevaraya Swamy Devasthanam Adoni"
+                  src={f.temple_hero?.imageUrl || '/assets/images/chinmaya-sanjeevaraya-temple.png'}
+                  alt={f.temple_hero?.deityName || 'Sri Chinnaya Sanjeevaraya Swamy Devasthanam Adoni'}
                   onError={(e) => {
                     e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
                   }}
@@ -154,7 +178,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
 
               <div className="text-center pt-3 pb-1 space-y-0.5">
                 <p className="text-xs font-extrabold uppercase tracking-widest text-amber-400">
-                  Sri Chinnaya Sanjeevaraya Swamy
+                  {f.temple_hero?.deityName || 'Sri Chinnaya Sanjeevaraya Swamy'}
                 </p>
                 <p className="text-[11px] text-slate-300 font-medium">
                   Presiding Deity • Chinmaya Mission, Adoni
@@ -369,39 +393,6 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. CALL TO ACTION / VISIT & CONNECT */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="rounded-3xl bg-gradient-to-r from-[var(--navy,#0B2340)] via-[#122D50] to-[var(--navy,#0B2340)] text-white p-8 sm:p-12 text-center shadow-xl relative overflow-hidden space-y-6">
-          <div className="relative z-10 max-w-2xl mx-auto space-y-3">
-            <span className="px-3.5 py-1 rounded-full bg-white/10 text-amber-300 font-extrabold text-xs uppercase tracking-widest border border-white/20">
-              VISIT SANJEEVARAYA TEMPLE
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-black font-heading text-white">
-              Experience the Peace & Divine Presence
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Whether seeking blessings for strength, inner clarity, family well-being, or joining our regular spiritual discourses, all are warmly welcomed at Chinmaya Sanjeevaraya Temple.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2">
-            <Link
-              to="/lets-connect"
-              className="btn-primary text-xs sm:text-sm py-2.5 sm:py-3 px-6 font-bold shadow-md"
-            >
-              <span>CONNECT WITH ADONI TEMPLE</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/activities"
-              className="btn-secondary text-xs sm:text-sm py-2.5 sm:py-3 px-6 font-bold bg-white/10 text-white border-white/20 hover:bg-white/20"
-            >
-              <span>EXPLORE ALL ACTIVITIES</span>
-            </Link>
           </div>
         </div>
       </section>

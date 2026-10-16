@@ -4,7 +4,7 @@ import { ContinuousVerticalBannerSlider } from '../components/ContinuousVertical
 import { TransformationSection } from '../components/TransformationSection';
 import { CountdownTimer } from '../components/CountdownTimer';
 import { SectionRenderer, QuoteBanner } from '../components/homepage/SectionRenderer';
-import { bannerService, eventService, faqService, activityService, homepageService } from '../services/api';
+import { bannerService, eventService, faqService, activityService, homepageService, webContentService } from '../services/api';
 import { applyDynamicTheme } from '../utils/themeHelper';
 import {
   Flame,
@@ -135,6 +135,7 @@ const getCached = (key, fallback) => {
 
 export const HomePage = () => {
   const [homepageData, setHomepageData] = useState(() => getCached('cms_homepage_config', null));
+  const [webContentData, setWebContentData] = useState(() => getCached('cached_cms_marathon_home', null));
   const [loading, setLoading] = useState(() => !getCached('cms_homepage_config', null));
   const [eventConfig, setEventConfig] = useState(() => getCached('cms_event_config', null));
   const [banners, setBanners] = useState(() => getCached('cms_banners', { horizontal: null, vertical: [] }));
@@ -163,7 +164,18 @@ export const HomePage = () => {
       .catch(() => {})
       .finally(() => setLoading(false));
 
-    // 2. Fetch Auxiliary Data (Events, Banners, FAQs, Activities)
+    // 2. Fetch Multi-Website CMS Content for Marathon Home
+    webContentService
+      .getPublicPage('marathon', 'home')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setWebContentData(res.data.data);
+          try { localStorage.setItem('cached_cms_marathon_home', JSON.stringify(res.data.data)); } catch (_) {}
+        }
+      })
+      .catch(() => {});
+
+    // 3. Fetch Auxiliary Data (Events, Banners, FAQs, Activities)
     eventService.getConfig().then((res) => {
       if (res.data?.success) {
         setEventConfig(res.data.data);
@@ -286,9 +298,53 @@ export const HomePage = () => {
   }
 
   // HOMEPAGE IS ON: RENDER SECTIONS (Excluding activities section)
-  const rawSections = (homepageData?.sections && homepageData.sections.length > 0)
+  const baseSections = (homepageData?.sections && homepageData.sections.length > 0)
     ? homepageData.sections
     : DEFAULT_HOMEPAGE_SECTIONS;
+
+  const heroUpdates = webContentData?.fieldsMap?.marathon_hero;
+  const marathonUpdates = webContentData?.fieldsMap?.event_countdown;
+  const ctaUpdates = webContentData?.fieldsMap?.call_to_action;
+
+  const rawSections = baseSections.map((s) => {
+    if (s.type === 'hero' && heroUpdates) {
+      return {
+        ...s,
+        title: heroUpdates.title || s.title,
+        subtitle: heroUpdates.subtitle || s.subtitle,
+        description: heroUpdates.description || s.description,
+        badgeText: heroUpdates.badgeText || s.badgeText,
+        primaryButtonText: heroUpdates.primaryButtonText || s.primaryButtonText,
+        primaryButtonLink: heroUpdates.primaryButtonLink || s.primaryButtonLink,
+        secondaryButtonText: heroUpdates.secondaryButtonText || s.secondaryButtonText,
+        secondaryButtonLink: heroUpdates.secondaryButtonLink || s.secondaryButtonLink,
+        imageUrl: heroUpdates.imageUrl || s.imageUrl,
+      };
+    }
+    if (s.type === 'marathon' && marathonUpdates) {
+      return {
+        ...s,
+        title: marathonUpdates.title || s.title,
+        subtitle: marathonUpdates.subtitle || s.subtitle,
+        description: marathonUpdates.description || s.description,
+        badgeText: marathonUpdates.badgeText || s.badgeText,
+        primaryButtonText: marathonUpdates.primaryButtonText || s.primaryButtonText,
+        primaryButtonLink: marathonUpdates.primaryButtonLink || s.primaryButtonLink,
+      };
+    }
+    if (s.type === 'cta' && ctaUpdates) {
+      return {
+        ...s,
+        title: ctaUpdates.title || s.title,
+        subtitle: ctaUpdates.subtitle || s.subtitle,
+        description: ctaUpdates.description || s.description,
+        primaryButtonText: ctaUpdates.primaryButtonText || s.primaryButtonText,
+        primaryButtonLink: ctaUpdates.primaryButtonLink || s.primaryButtonLink,
+      };
+    }
+    return s;
+  });
+
   const filteredSections = rawSections.filter(
     (s) => s.type !== 'activities' && s.sectionId !== 'activities-1'
   );

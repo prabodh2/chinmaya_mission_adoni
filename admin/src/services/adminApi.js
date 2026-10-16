@@ -226,4 +226,19 @@ export const adminThoughtService = {
   rejectThought: (id) => adminApi.delete(`/admin/thoughts/${id}`),
 };
 
+// --- 14. MULTI-WEBSITE CONTENT MANAGEMENT (UPDATE CONTENT) ---
+export const adminWebContentService = {
+  getWebsites: () => adminApi.get('/admin/content/websites'),
+  getPages: (website) => adminApi.get('/admin/content/pages', { params: { website } }),
+  getPageById: (id) => adminApi.get(`/admin/content/pages/${id}`),
+  createPage: (data) => adminApi.post('/admin/content/pages', data),
+  updatePage: (id, data) => adminApi.put(`/admin/content/pages/${id}`, data),
+  deletePage: (id) => adminApi.delete(`/admin/content/pages/${id}`),
+  uploadPageImage: (id, formData) =>
+    adminApi.post(`/admin/content/pages/${id}/images`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  getPublicPage: (website, pageSlug) => adminApi.get(`/content/website/${website}/page/${pageSlug}`),
+};
+
 export default adminApi;

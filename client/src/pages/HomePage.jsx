@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { webContentService } from '../services/api';
 import {
   Heart,
   CalendarDays,
@@ -81,6 +82,31 @@ export function HomePage() {
   const [active, setActive] = useState('Home');
   const navigate = useNavigate();
 
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_chinmaya_home');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    webContentService
+      .getPublicPage('chinmaya', 'home')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setPageData(res.data.data);
+          try {
+            localStorage.setItem('cached_cms_chinmaya_home', JSON.stringify(res.data.data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const f = pageData?.fieldsMap || {};
+
   const goTo = (label) => {
     setActive(label);
     const targetId = label.toLowerCase();
@@ -89,6 +115,61 @@ export function HomePage() {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  const heroEyebrow = f.hero?.eyebrow || 'CHINMAYA MISSION · ADONI';
+  const heroHeading = f.hero?.heading || 'Inner Transformation for a Better World';
+  const heroDesc = f.hero?.description || 'Through Vedanta, values and service, we strive to build a generation of conscious, compassionate and capable individuals.';
+  const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
+  const primaryBtnLink = f.hero?.primaryBtnLink || '#about';
+  const secondaryBtnText = f.hero?.secondaryBtnText || 'Know About CHYK';
+  const secondaryBtnLink = f.hero?.secondaryBtnLink || '#chyk';
+  const portraitImg = f.hero?.portraitImage || '/assets/swami-chinmayananda-natural.jpg';
+  const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
+  const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
+  const heroBottomNote = f.hero?.bottomNote || 'A journey inward. A difference outward.';
+
+  const aboutEyebrow = f.about_purpose?.eyebrow || 'OUR PURPOSE';
+  const aboutHeading = f.about_purpose?.heading || 'About Chinmaya Mission, Adoni';
+  const aboutDesc = f.about_purpose?.description || 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.';
+  const aboutLinkText = f.about_purpose?.linkText || 'Learn More';
+  const aboutLinkUrl = f.about_purpose?.linkUrl || '/about';
+
+  const valuesEyebrow = f.core_values?.eyebrow || 'WHAT GUIDES US';
+  const valuesHeading = f.core_values?.heading || 'Our Core Values';
+  const dynamicPillars = f.core_values?.items?.length
+    ? f.core_values.items.map((it, idx) => ({
+        id: it.itemId || `pillar-${idx}`,
+        icon: idx === 0 ? Compass : idx === 1 ? Flame : Heart,
+        title: it.title,
+        text: it.description,
+        badgeClass: idx === 0 ? 'pillar-badge-vision' : idx === 1 ? 'pillar-badge-mission' : 'pillar-badge-motto',
+      }))
+    : corePillars;
+
+  const chykEyebrow = f.chyk_section?.eyebrow || 'THE YOUTH WING';
+  const chykHeading = f.chyk_section?.heading || 'CHYK — The Youth Wing';
+  const chykDesc = f.chyk_section?.description || 'CHYK (Chinmaya Yuva Kendra) empowers young minds through value-based education, spiritual learning, cultural activities and social service.';
+  const chykTag1 = f.chyk_section?.tag1 || 'Discover your potential';
+  const chykTag2 = f.chyk_section?.tag2 || 'Serve with purpose';
+  const chykBtnText = f.chyk_section?.buttonText || 'Join CHYK';
+  const chykBtnLink = f.chyk_section?.buttonLink || '/lets-connect';
+  const chykImg = f.chyk_section?.imageUrl || '/assets/youth-runners.png';
+
+  const eventsEyebrow = f.upcoming_events?.eyebrow || 'COME BE A PART';
+  const eventsHeading = f.upcoming_events?.heading || 'Upcoming Events';
+  const eventsLinkText = f.upcoming_events?.linkText || 'View All';
+  const eventsLinkUrl = f.upcoming_events?.linkUrl || '/activities';
+  const dynamicEvents = f.upcoming_events?.items?.length
+    ? f.upcoming_events.items.map((it, idx) => ({
+        title: it.title,
+        subtitle: it.subtitle || '',
+        date: it.dateOrYear || 'Upcoming',
+        kind: idx === 0 ? 'marathon' : idx === 1 ? 'journey' : idx === 2 ? 'wisdom' : 'meditation',
+        image: it.imageUrl || (idx === 0 ? '/assets/chyk-marathon.jpg' : ''),
+        url: it.linkUrl || '/activities',
+        isExternal: it.linkUrl?.startsWith('http'),
+      }))
+    : events;
 
   return (
     <div className="site-shell">
@@ -113,36 +194,55 @@ export function HomePage() {
           <div className="hero-glow" />
           <div className="hero-content">
             <p className="eyebrow">
-              <span className="eyebrow-line" /> CHINMAYA MISSION · ADONI
+              <span className="eyebrow-line" /> {heroEyebrow}
             </p>
             <h1>
-              Inner Transformation<br />
-              <em>for a Better World</em>
+              {heroHeading.includes('for a Better World') ? (
+                <>
+                  Inner Transformation<br />
+                  <em>for a Better World</em>
+                </>
+              ) : (
+                heroHeading
+              )}
             </h1>
-            <p className="hero-description">
-              Through Vedanta, values and service,<br className="desktop-break" /> we strive to build a generation of conscious,<br className="desktop-break" /> compassionate and capable individuals.
+            <p className="hero-description whitespace-pre-line">
+              {heroDesc}
             </p>
             <div className="hero-actions">
-              <a
-                className="btn btn-primary"
-                href="#about"
-                onClick={(e) => {
-                  e.preventDefault();
-                  goTo('About');
-                }}
-              >
-                Explore Our Mission <ArrowRight size={16} />
-              </a>
-              <a
-                className="btn btn-outline"
-                href="#chyk"
-                onClick={(e) => {
-                  e.preventDefault();
-                  goTo('CHYK');
-                }}
-              >
-                Know About CHYK
-              </a>
+              {primaryBtnLink.startsWith('#') ? (
+                <a
+                  className="btn btn-primary"
+                  href={primaryBtnLink}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(primaryBtnLink.replace('#', ''));
+                  }}
+                >
+                  {primaryBtnText} <ArrowRight size={16} />
+                </a>
+              ) : (
+                <Link className="btn btn-primary" to={primaryBtnLink}>
+                  {primaryBtnText} <ArrowRight size={16} />
+                </Link>
+              )}
+
+              {secondaryBtnLink.startsWith('#') ? (
+                <a
+                  className="btn btn-outline"
+                  href={secondaryBtnLink}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(secondaryBtnLink.replace('#', ''));
+                  }}
+                >
+                  {secondaryBtnText}
+                </a>
+              ) : (
+                <Link className="btn btn-outline" to={secondaryBtnLink}>
+                  {secondaryBtnText}
+                </Link>
+              )}
             </div>
           </div>
 
@@ -150,17 +250,17 @@ export function HomePage() {
             <div className="portrait-aura" />
             <div className="portrait-frame">
               <img
-                src="/assets/swami-chinmayananda-natural.jpg"
-                alt="Swami Chinmayananda"
+                src={portraitImg}
+                alt={portraitSig}
                 className="portrait-img"
               />
             </div>
-            <div className="signature">Swami Chinmayananda</div>
+            <div className="signature">{portraitSig}</div>
           </div>
 
           <div className="hero-bottom-note">
             <span>01</span>
-            <span className="note-line" /> A journey inward. A difference outward.
+            <span className="note-line" /> {heroBottomNote}
           </div>
           <div className="sun-disc" />
         </section>
@@ -168,17 +268,14 @@ export function HomePage() {
         {/* ABOUT SECTION */}
         <section className="about-section section-wrap" id="about">
           <div className="about-copy">
-            <p className="eyebrow">OUR PURPOSE</p>
-            <h2>About Chinmaya Mission, Adoni</h2>
+            <p className="eyebrow">{aboutEyebrow}</p>
+            <h2>{aboutHeading}</h2>
             <span className="title-underline" />
-            <p>
-              Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.
-            </p>
-            <p>
-              We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.
-            </p>
-            <Link className="text-link" to="/about">
-              Learn More <ArrowRight size={15} />
+            {aboutDesc.split('\n\n').map((para, idx) => (
+              <p key={idx}>{para}</p>
+            ))}
+            <Link className="text-link" to={aboutLinkUrl}>
+              {aboutLinkText} <ArrowRight size={15} />
             </Link>
           </div>
         </section>
@@ -187,12 +284,12 @@ export function HomePage() {
         <section className="values-section" id="activities">
           <div className="section-wrap">
             <div className="section-heading">
-              <p className="eyebrow">WHAT GUIDES US</p>
-              <h2>Our Core Values</h2>
+              <p className="eyebrow">{valuesEyebrow}</p>
+              <h2>{valuesHeading}</h2>
               <span className="title-underline" />
             </div>
             <div className="pillars-grid">
-              {corePillars.map(({ icon: IconComponent, title, text, badgeClass }) => (
+              {dynamicPillars.map(({ icon: IconComponent, title, text, badgeClass }) => (
                 <article className="pillar-card group" key={title}>
                   <div className="pillar-icon-wrap">
                     <div className={`pillar-icon-badge ${badgeClass}`}>
@@ -211,32 +308,36 @@ export function HomePage() {
         <section className="chyk-section section-wrap" id="chyk">
           <div className="chyk-image">
             <img
-              src="/assets/youth-runners.png"
+              src={chykImg}
               alt="Young people taking part in a healthy community activity"
             />
           </div>
           <div className="chyk-copy">
-            <p className="eyebrow">THE YOUTH WING</p>
+            <p className="eyebrow">{chykEyebrow}</p>
             <h2>
-              CHYK <span>— The Youth Wing</span>
+              {chykHeading.includes('—') ? (
+                <>
+                  {chykHeading.split('—')[0]} <span>— {chykHeading.split('—')[1]}</span>
+                </>
+              ) : (
+                chykHeading
+              )}
             </h2>
             <span className="title-underline" />
-            <p>
-              CHYK (Chinmaya Yuva Kendra) empowers young minds through value-based education, spiritual learning, cultural activities and social service.
-            </p>
+            <p>{chykDesc}</p>
             <div className="chyk-tags">
               <span>
-                <Sparkles size={14} /> Discover your potential
+                <Sparkles size={14} /> {chykTag1}
               </span>
               <span>
-                <Heart size={14} /> Serve with purpose
+                <Heart size={14} /> {chykTag2}
               </span>
             </div>
             <Link
               className="btn btn-primary"
-              to="/lets-connect"
+              to={chykBtnLink}
             >
-              Join CHYK <ArrowRight size={16} />
+              {chykBtnText} <ArrowRight size={16} />
             </Link>
           </div>
         </section>
@@ -245,16 +346,16 @@ export function HomePage() {
         <section className="events-section section-wrap" id="events">
           <div className="events-heading">
             <div>
-              <p className="eyebrow">COME BE A PART</p>
-              <h2>Upcoming Events</h2>
+              <p className="eyebrow">{eventsEyebrow}</p>
+              <h2>{eventsHeading}</h2>
               <span className="title-underline" />
             </div>
-            <Link className="text-link" to="/activities">
-              View All <ArrowRight size={16} />
+            <Link className="text-link" to={eventsLinkUrl}>
+              {eventsLinkText} <ArrowRight size={16} />
             </Link>
           </div>
           <div className="events-grid">
-            {events.map((event) => (
+            {dynamicEvents.map((event) => (
               <article
                 className="event-card cursor-pointer group"
                 key={event.title}

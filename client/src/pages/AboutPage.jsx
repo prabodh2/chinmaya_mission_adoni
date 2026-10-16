@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { contentService } from '../services/api';
+import { contentService, webContentService } from '../services/api';
 import { MilestoneJourney } from '../components/milestones/MilestoneJourney';
 import {
   Flame,
@@ -94,7 +94,7 @@ export const AboutPage = () => {
           title: 'CHINMAYA SANJEEVARAYA TEMPLE',
           content:
             'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl: '/assets/images/activity-sanjeevaraya.png?v=5',
+          imageUrl: '/assets/images/chinmaya-sanjeevaraya-temple.png',
           badge: 'SPIRITUAL TEMPLE',
           iconName: 'Landmark',
         },
@@ -225,7 +225,7 @@ export const AboutPage = () => {
             if (!c.imageUrl || c.imageUrl === 'undefined' || typeof c.imageUrl !== 'string' || c.imageUrl.trim() === '') {
               c.imageUrl = def?.imageUrl;
             } else if (c.imageUrl.includes('activity-sanjeevaraya.png')) {
-              c.imageUrl = '/assets/images/activity-sanjeevaraya.png';
+              c.imageUrl = '/assets/images/chinmaya-sanjeevaraya-temple.png';
             } else if (c.imageUrl.includes('devi_group_wing') || c.imageUrl.includes('photo-1511632765486')) {
               c.imageUrl = '/assets/images/activity-devigroup.jpg';
             }
@@ -245,72 +245,129 @@ export const AboutPage = () => {
   });
 
   const loadAboutContent = () => {
-    contentService
-      .getContent('about_page')
+    webContentService
+      .getPublicPage('chinmaya', 'about')
       .then((res) => {
         if (res.data?.success && res.data?.data) {
-          const apiData = res.data.data;
-          const merged = { ...defaultContent, ...apiData };
-          if (merged?.hero?.title?.toLowerCase().startsWith('about ')) {
-            merged.hero.title = merged.hero.title.replace(/^about\s+/i, '').trim();
+          const pageData = res.data.data;
+          const f = pageData.fieldsMap || {};
+          const merged = { ...defaultContent };
+
+          if (f.about_hero) {
+            merged.hero = {
+              ...merged.hero,
+              title: f.about_hero.title || merged.hero.title,
+              subtitle: f.about_hero.subtitle || merged.hero.subtitle,
+              intro: f.about_hero.intro || merged.hero.intro,
+              imageUrl: f.about_hero.imageUrl || merged.hero.imageUrl,
+            };
           }
-          if (!merged?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
-            merged.whoWeAre = { ...defaultContent.whoWeAre };
+          if (f.who_we_are) {
+            merged.whoWeAre = {
+              ...merged.whoWeAre,
+              heading: f.who_we_are.heading || merged.whoWeAre.heading,
+              p1: f.who_we_are.p1 || merged.whoWeAre.p1,
+              p2: f.who_we_are.p2 || merged.whoWeAre.p2,
+            };
           }
-          if (!merged?.ourStory?.p1?.includes('Swami Shyamananda')) {
-            merged.ourStory = { ...defaultContent.ourStory };
+          if (f.our_story) {
+            merged.ourStory = {
+              ...merged.ourStory,
+              heading: f.our_story.heading || merged.ourStory.heading,
+              p1: f.our_story.p1 || merged.ourStory.p1,
+              timeline: f.our_story.items?.length
+                ? f.our_story.items.map((item) => ({
+                    year: item.dateOrYear || item.order || '',
+                    title: item.title || '',
+                    desc: item.description || '',
+                  }))
+                : merged.ourStory.timeline,
+            };
           }
-          if (!merged?.conclusion?.paragraph3 || merged?.conclusion?.paragraph1?.includes('an important centre for spiritual development')) {
-            merged.conclusion = { ...defaultContent.conclusion };
+          if (f.chyk_section) {
+            merged.chykSection = {
+              ...merged.chykSection,
+              heading: f.chyk_section.heading || merged.chykSection.heading,
+              p1: f.chyk_section.p1 || merged.chykSection.p1,
+              p2: f.chyk_section.p2 || merged.chykSection.p2,
+              imageUrl: f.chyk_section.imageUrl || merged.chykSection.imageUrl,
+            };
           }
-          if (!merged?.continuingLegacy?.highlights?.includes('1992')) {
-            merged.continuingLegacy = { ...defaultContent.continuingLegacy };
+          if (f.spirituality_in_action) {
+            merged.spiritualityInAction = {
+              ...merged.spiritualityInAction,
+              heading: f.spirituality_in_action.heading || merged.spiritualityInAction.heading,
+              content: f.spirituality_in_action.content || merged.spiritualityInAction.content,
+              imageUrl: f.spirituality_in_action.imageUrl || merged.spiritualityInAction.imageUrl,
+            };
           }
-          if (merged.ourActivities?.cards) {
-            merged.ourActivities.cards = merged.ourActivities.cards.map((c, idx) => {
-              let cleanImg = c.imageUrl;
-              const def = defaultContent.ourActivities.cards[idx];
-              if (
-                c.id === 'act-1' ||
-                c.title?.toLowerCase().includes('sanjeevaraya') ||
-                c.id === 'chinmaya-sanjeevaraya-temple'
-              ) {
-                cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
-              } else if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
-                cleanImg = def?.imageUrl;
-              } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
-                cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
-              }
-              return { ...c, imageUrl: cleanImg };
-            });
+          if (f.continuing_legacy) {
+            merged.continuingLegacy = {
+              ...merged.continuingLegacy,
+              heading: f.continuing_legacy.heading || merged.continuingLegacy.heading,
+              content: f.continuing_legacy.content || merged.continuingLegacy.content,
+            };
           }
+          if (f.our_vision) {
+            merged.ourVision = {
+              ...merged.ourVision,
+              heading: f.our_vision.heading || merged.ourVision.heading,
+              quote: f.our_vision.quote || merged.ourVision.quote,
+            };
+          }
+          if (f.our_mission) {
+            merged.ourMission = {
+              ...merged.ourMission,
+              heading: f.our_mission.heading || merged.ourMission.heading,
+              items: f.our_mission.items?.length
+                ? f.our_mission.items.map((item) => ({
+                    id: item.itemId || item._id,
+                    title: item.title,
+                    description: item.description,
+                    iconName: item.subtitle || 'Sparkles',
+                  }))
+                : merged.ourMission.items,
+            };
+          }
+          if (f.closing_cta) {
+            merged.closingCta = {
+              ...merged.closingCta,
+              title: f.closing_cta.title || merged.closingCta.title,
+              subtext: f.closing_cta.subtext || merged.closingCta.subtext,
+              btn1Text: f.closing_cta.btn1Text || merged.closingCta.btn1Text,
+              btn1Link: f.closing_cta.btn1Link || merged.closingCta.btn1Link,
+              btn2Text: f.closing_cta.btn2Text || merged.closingCta.btn2Text,
+              btn2Link: f.closing_cta.btn2Link || merged.closingCta.btn2Link,
+            };
+          }
+
           setContent(merged);
           try {
             localStorage.setItem('cms_about_content', JSON.stringify(merged));
-          } catch (_) {
-            try {
-              const safeMerged = { ...merged };
-              if (safeMerged.ourActivities?.cards) {
-                safeMerged.ourActivities = {
-                  ...safeMerged.ourActivities,
-                  cards: safeMerged.ourActivities.cards.map((c, idx) => {
-                    const def = defaultContent.ourActivities.cards[idx];
-                    return {
-                      ...c,
-                      imageUrl: (c.imageUrl && c.imageUrl.length > 50000) ? (def?.imageUrl || '') : c.imageUrl,
-                    };
-                  }),
-                };
-              }
-              localStorage.setItem('cms_about_content', JSON.stringify(safeMerged));
-            } catch (__) {}
-          }
-        } else {
-          setContent((prev) => prev || defaultContent);
+          } catch (_) {}
+          setLoading(false);
+          return;
         }
       })
-      .catch(() => setContent((prev) => prev || defaultContent))
-      .finally(() => setLoading(false));
+      .catch(() => {})
+      .finally(() => {
+        contentService
+          .getContent('about_page')
+          .then((res) => {
+            if (res.data?.success && res.data?.data) {
+              const apiData = res.data.data;
+              const merged = { ...defaultContent, ...apiData };
+              setContent(merged);
+              try {
+                localStorage.setItem('cms_about_content', JSON.stringify(merged));
+              } catch (_) {}
+            } else {
+              setContent((prev) => prev || defaultContent);
+            }
+          })
+          .catch(() => setContent((prev) => prev || defaultContent))
+          .finally(() => setLoading(false));
+      });
   };
 
   useEffect(() => {
@@ -638,48 +695,39 @@ export const AboutPage = () => {
                   : 'border-slate-200/90 hover:border-[var(--orange)]/50'
               }`}
             >
-              {/* Full-width Top Image Area with increased height */}
+              {/* Full-width Top Image Area with full visibility & crystal clear presentation */}
               {(() => {
                 const isSanjeevaraya =
                   card.id === 'act-1' ||
                   card.id === 'chinmaya-sanjeevaraya-temple' ||
                   card.title?.toLowerCase().includes('sanjeevaraya');
                 const cardImgSrc = isSanjeevaraya
-                  ? '/assets/images/activity-sanjeevaraya.png?v=5'
-                  : (card.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
+                  ? '/assets/images/chinmaya-sanjeevaraya-temple.png'
+                  : (card.imageUrl || '/assets/images/chinmaya-sanjeevaraya-temple.png');
 
                 return (
-                  <div className="relative h-56 sm:h-64 md:h-72 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
-                    {/* Ambient blurred backdrop so there are no empty borders */}
-                    <img
-                      src={cardImgSrc}
-                      alt=""
-                      aria-hidden="true"
-                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
-                    />
-                    <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-                    {/* Full uncropped image visible completely - NEVER CROPPED, 100% FULLY VISIBLE */}
+                  <div className="relative h-64 sm:h-72 md:h-80 w-full shrink-0 overflow-hidden bg-slate-950 flex items-center justify-center p-2.5 sm:p-3 border-b border-slate-100/10 block">
+                    {/* Full uncropped image visible completely - 100% visible, crystal clear, no heads or temples cropped */}
                     <img
                       src={cardImgSrc}
                       alt={card.title}
                       onError={(e) => {
                         if (isSanjeevaraya) {
-                          e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png?v=5';
+                          e.currentTarget.src = '/assets/images/chinmaya-sanjeevaraya-temple.png';
                         } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
                           e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
                         } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
                           e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
                         } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
-                          e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
+                          e.currentTarget.src = '/assets/images/activity-chyk.jpg';
                         }
                       }}
-                      className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out block"
-                      loading="lazy"
+                      className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-sm transition-transform duration-500 ease-out group-hover:scale-[1.02] block"
+                      loading="eager"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
                     
                     {card.badge && (
-                      <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-xs uppercase tracking-wider border border-white/20 shadow-sm z-20">
+                      <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider border border-white/20 shadow-md z-20">
                         {card.badge}
                       </span>
                     )}

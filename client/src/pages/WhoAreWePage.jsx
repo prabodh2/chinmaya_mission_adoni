@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { webContentService } from '../services/api';
 import {
   ChevronLeft,
   ChevronRight,
@@ -89,6 +90,15 @@ const COMMITTEE_MEMBERS = [
 ];
 
 export const WhoAreWePage = () => {
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_chinmaya_who_are_we');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
   // If no one clicks, selectedMember is null (shows only the 4-card layout matching Image 2)
   const [selectedMember, setSelectedMember] = useState(null);
   const showcaseRef = useRef(null);
@@ -97,7 +107,21 @@ export const WhoAreWePage = () => {
   useEffect(() => {
     document.title = 'Who Are We | Chinmaya Mission, Adoni';
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
+    webContentService
+      .getPublicPage('chinmaya', 'who-are-we')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setPageData(res.data.data);
+          try {
+            localStorage.setItem('cached_cms_chinmaya_who_are_we', JSON.stringify(res.data.data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const f = pageData?.fieldsMap || {};
 
   // Handle member selection (click on pic or card)
   const handleSelectMember = (member) => {
@@ -146,13 +170,13 @@ export const WhoAreWePage = () => {
         {/* TOP SECTION HEADER (Faithful to Attachment 1 & 2) */}
         <header className="text-center space-y-1.5">
           <p className="text-xs sm:text-sm font-extrabold tracking-widest text-[#A26E33] uppercase">
-            CHINMAYA MISSION · ADONI
+            {f.leadership_hero?.subtitle || 'CHINMAYA MISSION · ADONI'}
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1B362A] tracking-tight font-heading">
-            Who We Are
+            {f.leadership_hero?.title || 'Who We Are'}
           </h1>
           <p className="text-sm sm:text-base text-[#526558] font-medium max-w-xl mx-auto">
-            A legacy of wisdom, service and spiritual growth
+            {f.leadership_hero?.overview || 'A legacy of wisdom, service and spiritual growth'}
           </p>
           {/* Decorative golden-ochre accent underline */}
           <div className="w-14 sm:w-16 h-1 bg-[#C89B59] rounded-full mx-auto mt-2" />

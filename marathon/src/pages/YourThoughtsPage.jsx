@@ -21,7 +21,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { thoughtService } from '../services/api';
+import { thoughtService, webContentService } from '../services/api';
 
 // Curated pastel color palette matching editorial stationery look
 const COLOR_THEMES = {
@@ -135,14 +135,35 @@ export const YourThoughtsPage = () => {
   // Expanded note view modal for longer notes
   const [expandedThought, setExpandedThought] = useState(null);
 
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_marathon_thoughts');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const boardSectionRef = useRef(null);
   const textareaRef = useRef(null);
 
-  // Set document title
+  // Set document title & fetch multi-website CMS data
   useEffect(() => {
     document.title = 'Your Thoughts & Story Board | Marathon 2026';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    webContentService
+      .getPublicPage('marathon', 'your-thoughts')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setPageData(res.data.data);
+          try { localStorage.setItem('cached_cms_marathon_thoughts', JSON.stringify(res.data.data)); } catch (_) {}
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const f = pageData?.fieldsMap || {};
 
   // Fetch approved thoughts
   const fetchThoughts = async () => {
@@ -309,17 +330,17 @@ export const YourThoughtsPage = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#EBD6A2] shadow-xs backdrop-blur-xs">
             <Sparkles className="w-4 h-4 text-[#F0441D]" />
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#07162D]">
-              Community Reflections & Voices
+              {f.thoughts_hero?.badge || 'Community Reflections & Voices'}
             </span>
           </div>
 
           {/* Elegant Oversized Heading */}
           <div className="space-y-3">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-heading tracking-tight text-[#07162D]">
-              Our Story Board
+              {f.thoughts_hero?.heading || 'Our Story Board'}
             </h1>
             <p className="text-base sm:text-xl text-[#59616D] max-w-2xl mx-auto font-medium leading-relaxed">
-              Every step has a story. Share your thoughts and discover the words that inspire our community.
+              {f.thoughts_hero?.subtitle || 'Every step has a story. Share your thoughts and discover the words that inspire our community.'}
             </p>
           </div>
 
@@ -336,7 +357,7 @@ export const YourThoughtsPage = () => {
               className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-[#F0441D] hover:bg-[#D73511] text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-[0_8px_20px_-4px_rgba(240,68,29,0.35)] hover:shadow-[0_12px_24px_-4px_rgba(240,68,29,0.45)] hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <PenLine className="w-5 h-5" />
-              <span>Write Your Thoughts</span>
+              <span>{f.thoughts_hero?.primaryBtnText || 'Write Your Thoughts'}</span>
             </button>
 
             {/* Secondary Action: Explore the Story Board */}
@@ -345,14 +366,14 @@ export const YourThoughtsPage = () => {
               className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white/90 hover:bg-white text-[#07162D] border border-[#EBD6A2] font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <Compass className="w-5 h-5 text-[#F0441D]" />
-              <span>Explore the Story Board</span>
+              <span>{f.thoughts_hero?.secondaryBtnText || 'Explore the Story Board'}</span>
             </button>
           </div>
 
           {/* Anonymous presentation reminder */}
           <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#59616D] pt-1">
             <ShieldCheck className="w-4 h-4 text-[#138B52]" />
-            <span>All stories are published completely anonymously to inspire fellow runners.</span>
+            <span>{f.thoughts_hero?.privacyNote || 'All stories are published completely anonymously to inspire fellow runners.'}</span>
           </div>
         </div>
       </section>

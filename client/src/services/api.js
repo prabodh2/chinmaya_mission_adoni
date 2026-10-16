@@ -306,4 +306,18 @@ export const thoughtAdminService = {
   rejectThought: (id) => api.delete(`/admin/thoughts/${id}`),
 };
 
+export const webContentService = {
+  getWebsites: () => api.get('/admin/content/websites'),
+  getPages: (website) => api.get('/admin/content/pages', { params: { website } }),
+  getPageById: (id) => api.get(`/admin/content/pages/${id}`),
+  createPage: (data) => api.post('/admin/content/pages', data),
+  updatePage: (id, data) => api.put(`/admin/content/pages/${id}`, data),
+  deletePage: (id) => api.delete(`/admin/content/pages/${id}`),
+  uploadPageImage: (id, formData) =>
+    api.post(`/admin/content/pages/${id}/images`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  getPublicPage: (website, pageSlug) => api.get(`/content/website/${website}/page/${pageSlug}`),
+};
+
 export default api;

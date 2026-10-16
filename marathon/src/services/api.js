@@ -307,4 +307,8 @@ export const thoughtService = {
   getApprovedThoughtById: (id) => api.get(`/thoughts/${id}`),
 };
 
+export const webContentService = {
+  getPublicPage: (website, pageSlug) => api.get(`/content/website/${website}/page/${pageSlug}`),
+};
+
 export default api;

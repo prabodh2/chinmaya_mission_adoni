@@ -17,6 +17,7 @@ import { LetsConnectManager } from './admin/LetsConnectManager';
 import { UserManager } from './admin/UserManager';
 import { AdminProfileManager } from './admin/AdminProfileManager';
 import { StoryBoardManager } from './admin/StoryBoardManager';
+import { UpdateContentManager } from './admin/UpdateContentManager';
 import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
 import { TshirtSummary } from '../components/admin/TshirtSummary';
 import { ClassSummary } from '../components/admin/ClassSummary';
@@ -24,6 +25,7 @@ import { RegistrationDetailsModal } from '../components/admin/RegistrationDetail
 import { RegistrationEditModal } from '../components/admin/RegistrationEditModal';
 import {
   Shield,
+  Globe,
   MessageSquareQuote,
   Users,
   Building,
@@ -68,6 +70,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     if (path.includes('/admin/change-password')) return 'PASSWORD';
     if (path.includes('/admin/lets-connect')) return 'LETS_CONNECT';
     if (path.includes('/admin/images')) return 'IMAGES';
+    if (path.includes('/admin/update-content') || path.includes('/admin/content')) return 'UPDATE_CONTENT';
     if (path.includes('/admin/footer')) return 'FOOTER_CMS';
     if (path.includes('/admin/home')) return 'HOME_PAGE';
     return 'STATS';
@@ -504,6 +507,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           { id: 'STORY_BOARD', label: 'Story Board', icon: MessageSquareQuote },
           { id: 'USERS', label: 'User Directory', icon: UserCheck },
           { id: 'ADMIN_PROFILE', label: 'Admin Profile', icon: Shield },
+          { id: 'UPDATE_CONTENT', label: 'Update Content', icon: Globe },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
@@ -532,6 +536,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           );
         })}
       </div>
+
+      {/* TAB: MULTI-WEBSITE UPDATE CONTENT CMS */}
+      {activeTab === 'UPDATE_CONTENT' && <UpdateContentManager />}
 
       {/* TAB: STORY BOARD MODERATION */}
       {activeTab === 'STORY_BOARD' && <StoryBoardManager />}

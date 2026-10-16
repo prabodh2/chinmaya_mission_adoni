@@ -24,44 +24,34 @@ const ActivityCard = ({ activity, onSelect }) => {
     activity.id === 'act-1' ||
     activity.title?.toLowerCase().includes('sanjeevaraya');
   const cardImgSrc = isSanjeevaraya
-    ? '/assets/images/activity-sanjeevaraya.png?v=5'
-    : (activity.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
+    ? '/assets/images/chinmaya-sanjeevaraya-temple.png'
+    : (activity.imageUrl || '/assets/images/chinmaya-sanjeevaraya-temple.png');
 
   return (
     <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-lg hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col h-full overflow-hidden group w-full">
       {/* Full-width Image Area */}
-      <div className="relative h-48 sm:h-52 md:h-56 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
-        {/* Ambient blurred backdrop so full aspect ratio is preserved gracefully */}
-        <img
-          src={cardImgSrc}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
-        />
-        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-        
-        {/* Full uncropped image visible completely - NEVER CROPPED, 100% FULLY VISIBLE */}
+      <div className="relative h-56 sm:h-60 md:h-64 w-full shrink-0 overflow-hidden bg-slate-950 flex items-center justify-center p-2.5 border-b border-slate-100/10 block">
+        {/* Full uncropped image visible completely - 100% visible, crystal clear, never cropped */}
         <img
           src={cardImgSrc}
           alt={activity.imageAlt || activity.title}
           onError={(e) => {
             if (isSanjeevaraya) {
-              e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png?v=5';
+              e.currentTarget.src = '/assets/images/chinmaya-sanjeevaraya-temple.png';
             } else if (activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara')) {
               e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
             } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
               e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
             } else if (activity.id === 'chinmaya-yuva-kendra' || activity.id === 'chyk-classes' || activity.title?.toLowerCase().includes('chyk')) {
-              e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
+              e.currentTarget.src = '/assets/images/activity-chyk.jpg';
             }
           }}
-          className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out block"
-          loading="lazy"
+          className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl transition-transform duration-500 ease-out group-hover:scale-[1.02] block"
+          loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
         
         {activity.category && (
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] sm:text-[11px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
+          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-white font-bold text-[10px] sm:text-[11px] uppercase tracking-wider border border-white/20 shadow-md z-20">
             {activity.category}
           </span>
         )}
@@ -350,7 +340,7 @@ export const ActivitiesPage = () => {
       category: 'Spirituality & Devotion',
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-      imageUrl: '/assets/images/activity-sanjeevaraya.png?v=5',
+      imageUrl: '/assets/images/chinmaya-sanjeevaraya-temple.png',
       imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
       imageSource: 'Chinmaya Mission, Adoni Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
@@ -528,11 +518,11 @@ export const ActivitiesPage = () => {
             // Critical safeguard: if cached imageUrl is missing, undefined, or empty, fallback to initial match
             let img = act.imageUrl;
             if (act.id === 'chinmaya-sanjeevaraya-temple' || act.id === 'act-1' || act.title?.toLowerCase().includes('sanjeevaraya')) {
-              img = '/assets/images/activity-sanjeevaraya.png?v=5';
+              img = '/assets/images/chinmaya-sanjeevaraya-temple.png';
             } else if (!img || img === 'undefined' || typeof img !== 'string' || img.trim() === '') {
               img = initialMatch?.imageUrl || '';
             } else if (img.includes('activity-sanjeevaraya.png')) {
-              img = '/assets/images/activity-sanjeevaraya.png?v=5';
+              img = '/assets/images/chinmaya-sanjeevaraya-temple.png';
             } else if (img.includes('devi_group_wing') || img.includes('photo-1511632765486')) {
               img = '/assets/images/activity-devigroup.jpg';
             }
@@ -627,11 +617,11 @@ export const ActivitiesPage = () => {
                   matchedCard.id === 'act-1' ||
                   matchedCard.title?.toLowerCase().includes('sanjeevaraya')
                 ) {
-                  cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
+                  cleanImg = '/assets/images/chinmaya-sanjeevaraya-temple.png';
                 } else if (!cleanImg || cleanImg === 'undefined' || typeof cleanImg !== 'string' || cleanImg.trim() === '') {
                   cleanImg = item.imageUrl;
                 } else if (cleanImg.includes('activity-sanjeevaraya.png')) {
-                  cleanImg = '/assets/images/activity-sanjeevaraya.png?v=5';
+                  cleanImg = '/assets/images/chinmaya-sanjeevaraya-temple.png';
                 }
 
                 return {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { contactService } from '../services/api';
+import { contactService, webContentService } from '../services/api';
 import {
   MapPin,
   Phone,
@@ -19,6 +19,31 @@ import { formatPhoneInput } from '../utils/phoneUtils';
 
 export const LetsConnectPage = () => {
   const { user, isAuthenticated } = useAuth();
+
+  const [pageData, setPageData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_chinmaya_lets_connect');
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    webContentService
+      .getPublicPage('chinmaya', 'lets-connect')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          setPageData(res.data.data);
+          try {
+            localStorage.setItem('cached_cms_chinmaya_lets_connect', JSON.stringify(res.data.data));
+          } catch {}
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const f = pageData?.fieldsMap || {};
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -75,14 +100,14 @@ export const LetsConnectPage = () => {
       <div className="text-center max-w-3xl mx-auto space-y-2.5">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
           <Flame className="w-4 h-4" />
-          CONNECT & VOLUNTEER
+          {f.contact_info?.eyebrow || 'CONNECT & VOLUNTEER'}
         </span>
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
-          <span>LET'S CONNECT WITH</span>
+          <span>{f.contact_info?.heading || "LET'S CONNECT WITH"}</span>
           <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION, ADONI</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">
-          Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission, Adoni team.
+          {f.contact_info?.subtitle || 'Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission, Adoni team.'}
         </p>
       </div>
 
@@ -224,7 +249,7 @@ export const LetsConnectPage = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <p>Chinmaya Mission, Adoni, Near Arts College Road, Adoni - 518301, Andhra Pradesh, India</p>
+                  <p>{f.contact_info?.address || 'Chinmaya Mission, Adoni, Near Arts College Road, Adoni - 518301, Andhra Pradesh, India'}</p>
                 </div>
               </div>
 
@@ -233,7 +258,7 @@ export const LetsConnectPage = () => {
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <p>+91 94402 85934 / +91 98490 12345</p>
+                  <p>{f.contact_info?.phone || '+91 94402 85934 / +91 98490 12345'}</p>
                 </div>
               </div>
 
@@ -242,7 +267,7 @@ export const LetsConnectPage = () => {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <p>chinmayamissionadoni@gmail.com</p>
+                  <p>{f.contact_info?.email || 'chinmayamissionadoni@gmail.com'}</p>
                 </div>
               </div>
             </div>
