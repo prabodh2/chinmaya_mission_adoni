@@ -3,34 +3,86 @@ import Media from '../models/Media.js';
 import { uploadToCloudinary } from '../config/cloudinary.js';
 import { seedInitialData } from '../utils/seedData.js';
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ACTIVITY_CACHE_FILE = path.join(__dirname, '../../cache/active_activities.json');
+
+const loadDiskCache = () => {
+  try {
+    if (fs.existsSync(ACTIVITY_CACHE_FILE)) {
+      return JSON.parse(fs.readFileSync(ACTIVITY_CACHE_FILE, 'utf8'));
+    }
+  } catch (_) {}
+  return null;
+};
+
+const saveDiskCache = (data) => {
+  try {
+    const dir = path.dirname(ACTIVITY_CACHE_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(ACTIVITY_CACHE_FILE, JSON.stringify(data), 'utf8');
+  } catch (_) {}
+};
+
+let cachedActivities = loadDiskCache();
+let lastActivitiesCacheTime = cachedActivities ? Date.now() : 0;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5m cache
+
+export const invalidateActivitiesCache = () => {
+  cachedActivities = null;
+  lastActivitiesCacheTime = 0;
+  try {
+    if (fs.existsSync(ACTIVITY_CACHE_FILE)) fs.unlinkSync(ACTIVITY_CACHE_FILE);
+  } catch (_) {}
+};
+
 export const getActivities = async (req, res) => {
   try {
-    let activities = await Activity.find({ active: true }).sort({ order: 1, updatedAt: -1 });
+    const now = Date.now();
+    if (cachedActivities && now - lastActivitiesCacheTime < CACHE_TTL_MS) {
+      return res.json({ success: true, data: cachedActivities });
+    }
 
-    // Also include active activities from Media library
-    const activityMedia = await Media.find({
-      status: 'ACTIVE',
-      $or: [
-        { category: 'Activities' },
-        { page: 'Activities' },
-      ],
-    }).sort({ displayOrder: 1, updatedAt: -1 });
+    let activities = await Activity.find({ active: true })
+      .sort({ order: 1, updatedAt: -1 })
+      .lean();
 
-    const existingUrls = new Set(activities.map((a) => a.imageUrl));
-    const existingTitles = new Set(activities.map((a) => (a.title || '').toLowerCase()));
+    // Only search Media library if Activity collection has no records
+    if ((activities || []).length === 0) {
+      const activityMedia = await Media.find(
+        {
+          status: 'ACTIVE',
+          $or: [{ category: 'Activities' }, { page: 'Activities' }],
+        },
+        { _id: 1, title: 1, section: 1, description: 1, caption: 1, url: 1 }
+      )
+        .sort({ displayOrder: 1, updatedAt: -1 })
+        .lean();
 
-    const extraActivities = activityMedia
-      .filter((m) => !existingUrls.has(m.url) && !existingTitles.has((m.title || '').toLowerCase()))
-      .map((m) => ({
-        _id: m._id,
-        title: m.title,
-        category: m.section || 'Activity',
-        description: m.description || m.caption || m.title,
-        imageUrl: m.url,
-        active: true,
-      }));
+      const existingUrls = new Set((activities || []).map((a) => a.imageUrl));
+      const existingTitles = new Set((activities || []).map((a) => (a.title || '').toLowerCase()));
 
-    activities = [...activities, ...extraActivities];
+      const extraActivities = (activityMedia || [])
+        .filter((m) => !existingUrls.has(m.url) && !existingTitles.has((m.title || '').toLowerCase()))
+        .map((m) => ({
+          _id: m._id,
+          title: m.title,
+          category: m.section || 'Activity',
+          description: m.description || m.caption || m.title,
+          imageUrl: m.url,
+          active: true,
+        }));
+
+      activities = [...(activities || []), ...extraActivities];
+    }
+
+    cachedActivities = activities;
+    lastActivitiesCacheTime = now;
+    saveDiskCache(activities);
 
     res.json({ success: true, data: activities });
   } catch (err) {
@@ -74,6 +126,7 @@ export const createActivity = async (req, res) => {
     });
 
     await activity.save();
+    invalidateActivitiesCache();
 
     res.status(201).json({
       success: true,
@@ -92,6 +145,7 @@ export const toggleActivityStatus = async (req, res) => {
 
     activity.active = !activity.active;
     await activity.save();
+    invalidateActivitiesCache();
 
     res.json({ success: true, message: 'Activity status toggled', data: activity });
   } catch (err) {
@@ -103,6 +157,7 @@ export const deleteActivity = async (req, res) => {
   try {
     const activity = await Activity.findByIdAndDelete(req.params.id);
     if (!activity) return res.status(404).json({ success: false, message: 'Activity not found' });
+    invalidateActivitiesCache();
     try {
       const Media = (await import('../models/Media.js')).default;
       await Media.deleteMany({

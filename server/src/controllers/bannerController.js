@@ -2,39 +2,99 @@ import Banner from '../models/Banner.js';
 import Media from '../models/Media.js';
 import { uploadToCloudinary } from '../config/cloudinary.js';
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const BANNER_CACHE_FILE = path.join(__dirname, '../../cache/active_banners.json');
+
+const loadDiskCache = () => {
+  try {
+    if (fs.existsSync(BANNER_CACHE_FILE)) {
+      return JSON.parse(fs.readFileSync(BANNER_CACHE_FILE, 'utf8'));
+    }
+  } catch (_) {}
+  return null;
+};
+
+const saveDiskCache = (data) => {
+  try {
+    const dir = path.dirname(BANNER_CACHE_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(BANNER_CACHE_FILE, JSON.stringify(data), 'utf8');
+  } catch (_) {}
+};
+
+let cachedActiveBanners = loadDiskCache();
+let lastBannersCacheTime = cachedActiveBanners ? Date.now() : 0;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
+
+export const invalidateBannersCache = () => {
+  cachedActiveBanners = null;
+  lastBannersCacheTime = 0;
+  try {
+    if (fs.existsSync(BANNER_CACHE_FILE)) fs.unlinkSync(BANNER_CACHE_FILE);
+  } catch (_) {}
+};
+
 export const getActiveBanners = async (req, res) => {
   try {
-    const horizontalBanner = await Banner.findOne({ bannerType: 'HORIZONTAL', active: true }).sort({ updatedAt: -1 });
-    let verticalBanners = await Banner.find({ bannerType: 'VERTICAL', active: true }).sort({ order: 1, updatedAt: -1 });
+    const now = Date.now();
+    if (cachedActiveBanners && now - lastBannersCacheTime < CACHE_TTL_MS) {
+      return res.json({
+        success: true,
+        data: cachedActiveBanners,
+      });
+    }
+
+    const horizontalBanner = await Banner.findOne({ bannerType: 'HORIZONTAL', active: true })
+      .sort({ updatedAt: -1 })
+      .lean();
+
+    let verticalBanners = await Banner.find({ bannerType: 'VERTICAL', active: true })
+      .sort({ order: 1, updatedAt: -1 })
+      .lean();
 
     // Filter out any seed vertical posters if any exist
-    verticalBanners = verticalBanners.filter((b) => !/^Vertical Poster/i.test(b.title));
+    verticalBanners = (verticalBanners || []).filter((b) => !/^Vertical Poster/i.test(b.title));
 
-    // Also include any active media items strictly tagged for Vertical Poster Carousel that aren't in banners yet
-    const carouselMedia = await Media.find({
-      status: 'ACTIVE',
-      section: 'Vertical Poster Carousel',
-    }).sort({ displayOrder: 1, updatedAt: -1 });
+    // If banners are already present in Banner collection, skip scanning large base64 Media collection
+    if (verticalBanners.length === 0) {
+      const carouselMedia = await Media.find(
+        { status: 'ACTIVE', section: 'Vertical Poster Carousel' },
+        { _id: 1, title: 1, url: 1, caption: 1, category: 1 }
+      )
+        .sort({ displayOrder: 1, updatedAt: -1 })
+        .lean();
 
-    const existingUrls = new Set(verticalBanners.map((b) => b.imageUrl));
-    const extraBanners = carouselMedia
-      .filter((m) => !existingUrls.has(m.url) && !/^Vertical Poster/i.test(m.title))
-      .map((m) => ({
-        _id: m._id,
-        title: m.title,
-        imageUrl: m.url,
-        tag: m.caption || m.category || '',
-        active: true,
-      }));
+      const existingUrls = new Set(verticalBanners.map((b) => b.imageUrl));
+      const extraBanners = (carouselMedia || [])
+        .filter((m) => !existingUrls.has(m.url) && !/^Vertical Poster/i.test(m.title))
+        .map((m) => ({
+          _id: m._id,
+          title: m.title,
+          imageUrl: m.url,
+          tag: m.caption || m.category || '',
+          active: true,
+        }));
 
-    verticalBanners = [...verticalBanners, ...extraBanners];
+      verticalBanners = [...verticalBanners, ...extraBanners];
+    }
+
+    const result = {
+      horizontal: horizontalBanner || null,
+      vertical: verticalBanners,
+    };
+
+    cachedActiveBanners = result;
+    lastBannersCacheTime = now;
+    saveDiskCache(result);
 
     res.json({
       success: true,
-      data: {
-        horizontal: horizontalBanner,
-        vertical: verticalBanners,
-      },
+      data: result,
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -83,6 +143,7 @@ export const uploadBanner = async (req, res) => {
     });
 
     await banner.save();
+    invalidateBannersCache();
 
     res.status(201).json({
       success: true,
@@ -106,6 +167,7 @@ export const toggleBannerStatus = async (req, res) => {
 
     banner.active = !banner.active;
     await banner.save();
+    invalidateBannersCache();
 
     res.json({ success: true, message: 'Banner status updated', data: banner });
   } catch (err) {
@@ -117,6 +179,7 @@ export const deleteBanner = async (req, res) => {
   try {
     const banner = await Banner.findByIdAndDelete(req.params.id);
     if (!banner) return res.status(404).json({ success: false, message: 'Banner not found' });
+    invalidateBannersCache();
     res.json({ success: true, message: 'Banner deleted successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

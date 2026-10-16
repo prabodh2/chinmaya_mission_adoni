@@ -23,6 +23,8 @@ admin/dist/
 marathon/dist/
 build/
 server/dist/
+server/cache/
+cache/
 
 # OS & Logs
 .DS_Store
