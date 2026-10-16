@@ -164,7 +164,7 @@ export function HomePage() {
             <h2>About Chinmaya Mission, Adoni</h2>
             <span className="title-underline" />
             <p>
-              Chinmaya Mission, Adoni is a spiritual organization dedicated to spreading timeless wisdom, nurturing cultural values, and inspiring individuals through spiritual learning, education, and community service.
+              Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.
             </p>
             <Link className="text-link" to="/about">
               Learn More <ArrowRight size={15} />
