@@ -8,6 +8,8 @@ import {
   ExternalLink,
   Users,
   Sun,
+  Compass,
+  Flame,
 } from 'lucide-react';
 import '../styles/homepage.css';
 
@@ -17,19 +19,25 @@ const MARATHON_PORTAL_URL =
 
 const corePillars = [
   {
-    icon: '/assets/images/vision-icon.png',
+    id: 'vision',
+    icon: Compass,
     title: 'Our Vision',
     text: 'The inner transformation of individuals through knowledge of Vedanta, spiritual practices and service to society, resulting in a happy world around them.',
+    badgeClass: 'pillar-badge-vision',
   },
   {
-    icon: '/assets/images/mission-icon.png',
+    id: 'mission',
+    icon: Flame,
     title: 'Our Mission',
     text: 'To provide to individuals from any background, the wisdom of Vedanta and the practical means for spiritual growth and happiness enabling them to become positive contributors to society.',
+    badgeClass: 'pillar-badge-mission',
   },
   {
-    icon: '/assets/images/motto-icon.png',
+    id: 'motto',
+    icon: Heart,
     title: 'Our Motto',
     text: 'To give maximum happiness to the maximum number for the maximum time.',
+    badgeClass: 'pillar-badge-motto',
   },
 ];
 
@@ -166,6 +174,9 @@ export function HomePage() {
             <p>
               Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.
             </p>
+            <p>
+              We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.
+            </p>
             <Link className="text-link" to="/about">
               Learn More <ArrowRight size={15} />
             </Link>
@@ -181,10 +192,12 @@ export function HomePage() {
               <span className="title-underline" />
             </div>
             <div className="pillars-grid">
-              {corePillars.map(({ icon, title, text }) => (
-                <article className="pillar-card" key={title}>
+              {corePillars.map(({ icon: IconComponent, title, text, badgeClass }) => (
+                <article className="pillar-card group" key={title}>
                   <div className="pillar-icon-wrap">
-                    <img src={icon} alt={title} className="pillar-icon-img" />
+                    <div className={`pillar-icon-badge ${badgeClass}`}>
+                      <IconComponent className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={1.8} />
+                    </div>
                   </div>
                   <h3>{title}</h3>
                   <p>{text}</p>
