@@ -386,16 +386,6 @@
   margin-bottom: 12px;
 }
 
-.decor-leaf {
-  position: absolute;
-  right: 2%;
-  bottom: -5px;
-  color: var(--green);
-  opacity: 0.22;
-  transform: rotate(-35deg);
-  pointer-events: none;
-}
-
 /* Values Section (Vision, Mission & Motto) */
 .values-section {
   background: #ffffff;

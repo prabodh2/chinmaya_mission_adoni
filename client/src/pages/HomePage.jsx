@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
-  Leaf,
   CalendarDays,
   ArrowRight,
   Sparkles,
@@ -171,7 +170,6 @@ export function HomePage() {
               Learn More <ArrowRight size={15} />
             </Link>
           </div>
-          <Leaf className="decor-leaf" size={75} strokeWidth={1} />
         </section>
 
         {/* CORE VALUES SECTION */}
