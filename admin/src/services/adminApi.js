@@ -218,4 +218,12 @@ export const adminContactService = {
   deleteMessage: (id) => adminApi.delete(`/contact/admin/${id}`),
 };
 
+// --- 13. STORY BOARD MODERATION ---
+export const adminThoughtService = {
+  getThoughts: (params) => adminApi.get('/admin/thoughts', { params }),
+  getStats: () => adminApi.get('/admin/thoughts/stats'),
+  approveThought: (id) => adminApi.patch(`/admin/thoughts/${id}/approve`),
+  rejectThought: (id) => adminApi.delete(`/admin/thoughts/${id}`),
+};
+
 export default adminApi;

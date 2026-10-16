@@ -18,6 +18,12 @@ import {
   getAdminProfile,
   updateAdminProfile,
 } from '../controllers/adminController.js';
+import {
+  getAdminThoughts,
+  getAdminThoughtStats,
+  approveThought,
+  rejectThought,
+} from '../controllers/thoughtController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
 
@@ -55,5 +61,13 @@ router.delete('/batches/:batchId', deleteBulkBatch);
 
 // Integrations
 router.post('/registrations/:id/sync-sheets', retrySheetsSync);
+
+// ==========================================
+// Story Board Moderation
+// ==========================================
+router.get('/thoughts', getAdminThoughts);
+router.get('/thoughts/stats', getAdminThoughtStats);
+router.patch('/thoughts/:id/approve', approveThought);
+router.delete('/thoughts/:id', rejectThought);
 
 export default router;

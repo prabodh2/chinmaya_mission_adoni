@@ -8,6 +8,7 @@ import PageContent from '../models/PageContent.js';
 import HomePage from '../models/HomePage.js';
 import Footer from '../models/Footer.js';
 import Media from '../models/Media.js';
+import Thought from '../models/Thought.js';
 import { defaultFooterConfig } from '../controllers/footerController.js';
 
 export const adoniInstitutionsList = [
@@ -798,6 +799,83 @@ export const seedInitialData = async () => {
 
       await Media.insertMany(initialMediaList);
       console.log(`[Seed] ${initialMediaList.length} website media assets seeded into central Media Library.`);
+    }
+
+    // Seed Initial Community Thoughts for Story Board if empty
+    const thoughtCount = await Thought.countDocuments();
+    if (thoughtCount === 0) {
+      const admin = await User.findOne({ role: 'admin' });
+      const seedUserId = admin ? admin._id : null;
+
+      if (seedUserId) {
+        const initialThoughts = [
+          {
+            user: seedUserId,
+            content: "Running for a drug-free generation! Adoni's youth have immense energy and potential. Let's channel it into sports, service, and spiritual strength. 🏃‍♂️🔥",
+            color: 'yellow',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "Every step we take together in this marathon echoes a clear message: Health is true wealth! Proud to be part of Chinmaya Mission's initiative. ✨💪",
+            color: 'mint',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "Discipline, dedication, and fitness. The marathon is not just a race; it's a movement to inspire every family in Adoni towards healthy living. 🌟",
+            color: 'sky',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "Running with my friends from college! Clean minds, active bodies, and a united community. Say NO to drugs, YES to life! 🕊️❤️",
+            color: 'coral',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "Early morning practice runs have taught me resilience. Excited to cross that finish line and celebrate with our community! 🏅🎉",
+            color: 'lavender',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "A journey of five kilometers begins with a single resolute decision. Let's fill the streets with positivity, smiles, and triumph! 🌿🙏",
+            color: 'peach',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "My children and I are participating together. Instilling moral values and active habits early is the greatest gift we can give them. 👨‍👩‍👧‍👦",
+            color: 'cream',
+            status: 'APPROVED',
+            reviewedBy: seedUserId,
+            reviewedAt: new Date(),
+          },
+          {
+            user: seedUserId,
+            content: "Looking forward to volunteering at the hydration station and cheering every single runner as they sprint to victory! 💧🙌",
+            color: 'yellow',
+            status: 'PENDING',
+          },
+        ];
+
+        await Thought.insertMany(initialThoughts);
+        console.log(`[Seed] Seeded ${initialThoughts.length} initial thoughts for Marathon Story Board.`);
+      }
     }
   } catch (err) {
     console.error('[Seed Error]:', err.message);

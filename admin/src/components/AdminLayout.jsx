@@ -12,6 +12,7 @@ import {
   Layout,
   Settings,
   MessageSquare,
+  MessageSquareQuote,
   KeyRound,
   LogOut,
   Menu,
@@ -44,6 +45,7 @@ export const AdminLayout = ({ children }) => {
     {
       title: 'EVENT & REGISTRATIONS',
       items: [
+        { name: 'Story Board', path: '/story-board', icon: MessageSquareQuote },
         { name: 'Registrations', path: '/registrations', icon: Award },
         { name: 'Event Control', path: '/event-config', icon: Calendar },
       ],

@@ -16,6 +16,7 @@ import { AdminImagesPage } from './admin/AdminImagesPage';
 import { LetsConnectManager } from './admin/LetsConnectManager';
 import { UserManager } from './admin/UserManager';
 import { AdminProfileManager } from './admin/AdminProfileManager';
+import { StoryBoardManager } from './admin/StoryBoardManager';
 import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
 import { TshirtSummary } from '../components/admin/TshirtSummary';
 import { ClassSummary } from '../components/admin/ClassSummary';
@@ -23,6 +24,7 @@ import { RegistrationDetailsModal } from '../components/admin/RegistrationDetail
 import { RegistrationEditModal } from '../components/admin/RegistrationEditModal';
 import {
   Shield,
+  MessageSquareQuote,
   Users,
   Building,
   Calendar,
@@ -56,6 +58,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     if (defaultTab) return defaultTab;
     const path = typeof window !== 'undefined' ? window.location.pathname : '';
     if (path.includes('/admin/users')) return 'USERS';
+    if (path.includes('/admin/story-board') || path.includes('/admin/storyboard')) return 'STORY_BOARD';
     if (path.includes('/admin/profile')) return 'ADMIN_PROFILE';
     if (path.includes('/admin/registrations')) return 'REGISTRATIONS';
     if (path.includes('/admin/event-config')) return 'EVENT_CONFIG';
@@ -498,6 +501,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
       <div className="flex flex-wrap items-center gap-2 p-2 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
         {[
           { id: 'STATS', label: 'Dashboard Stats', icon: Users },
+          { id: 'STORY_BOARD', label: 'Story Board', icon: MessageSquareQuote },
           { id: 'USERS', label: 'User Directory', icon: UserCheck },
           { id: 'ADMIN_PROFILE', label: 'Admin Profile', icon: Shield },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
@@ -528,6 +532,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           );
         })}
       </div>
+
+      {/* TAB: STORY BOARD MODERATION */}
+      {activeTab === 'STORY_BOARD' && <StoryBoardManager />}
 
       {/* TAB: USER MANAGEMENT DIRECTORY */}
       {activeTab === 'USERS' && <UserManager />}

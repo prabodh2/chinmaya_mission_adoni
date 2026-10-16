@@ -299,4 +299,11 @@ export const mediaService = {
   deleteMedia: (id, force = false) => api.delete(`/media/${id}`, { params: { force } }),
 };
 
+export const thoughtAdminService = {
+  getThoughts: (params) => api.get('/admin/thoughts', { params }),
+  getStats: () => api.get('/admin/thoughts/stats'),
+  approveThought: (id) => api.patch(`/admin/thoughts/${id}/approve`),
+  rejectThought: (id) => api.delete(`/admin/thoughts/${id}`),
+};
+
 export default api;

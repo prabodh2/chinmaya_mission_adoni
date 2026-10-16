@@ -38,6 +38,7 @@ export const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'FAQs', path: '/faqs' },
+    { name: 'Your Thoughts', path: '/your-thoughts' },
   ];
 
   const isActive = (path) => {

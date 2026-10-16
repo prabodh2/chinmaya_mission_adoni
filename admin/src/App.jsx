@@ -19,6 +19,7 @@ import { BannersPage } from './pages/BannersPage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { FooterCmsPage } from './pages/FooterCmsPage';
 import { ChangePasswordPage } from './pages/ChangePasswordPage';
+import { StoryBoardPage } from './pages/StoryBoardPage';
 
 export function App() {
   return (
@@ -68,6 +69,17 @@ export function App() {
               <ProtectedRoute>
                 <AdminLayout>
                   <AdminProfilePage />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/story-board"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <StoryBoardPage />
                 </AdminLayout>
               </ProtectedRoute>
             }

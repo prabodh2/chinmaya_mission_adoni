@@ -113,6 +113,9 @@ export function App() {
               <Route path="/profile" element={<MarathonPortalRedirect path="/profile" />} />
               <Route path="/my-activity" element={<MarathonPortalRedirect path="/my-activity" />} />
               <Route path="/my-registrations" element={<MarathonPortalRedirect path="/my-activity" />} />
+              <Route path="/your-thoughts" element={<MarathonPortalRedirect path="/your-thoughts" />} />
+              <Route path="/story-board" element={<MarathonPortalRedirect path="/your-thoughts" />} />
+              <Route path="/storyboard" element={<MarathonPortalRedirect path="/your-thoughts" />} />
             </Route>
 
             {/* 2. Standalone Admin Login (NO Public Navbar, NO Public Footer, NO Normal User Pill) */}
@@ -132,6 +135,22 @@ export function App() {
               element={
                 <ProtectedRoute requireAdmin={true}>
                   <AdminDashboardPage defaultTab="STATS" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/story-board"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="STORY_BOARD" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/storyboard"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="STORY_BOARD" />
                 </ProtectedRoute>
               }
             />

@@ -301,4 +301,10 @@ export const mediaService = {
   deleteMedia: (id, force = false) => api.delete(`/media/${id}`, { params: { force } }),
 };
 
+export const thoughtService = {
+  createThought: (data) => api.post('/thoughts', data),
+  getApprovedThoughts: (params) => api.get('/thoughts', { params }),
+  getApprovedThoughtById: (id) => api.get(`/thoughts/${id}`),
+};
+
 export default api;

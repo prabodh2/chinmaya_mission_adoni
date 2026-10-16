@@ -60,9 +60,8 @@ const MEMBERS_DATA = [
     extendedBio:
       'Serving as the dedicated resident of Chinmaya Mission, Adoni, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the Adoni region.',
     sourceBadge: 'chinmayamissionadoni.org',
-    largeImage: '/assets/leadership/narayana-chaitanya.png',
-    thumbImage: '/assets/leadership/narayana-chaitanya.png',
-    isPortraitPlaceholder: true,
+    largeImage: '/assets/leadership/narayana-chaitanya.jpg',
+    thumbImage: '/assets/leadership/narayana-chaitanya-thumb.jpg',
   },
 ];
 
