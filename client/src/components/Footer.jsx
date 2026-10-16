@@ -271,34 +271,34 @@ export const Footer = ({ overrideData = null }) => {
   return (
     <footer
       style={footerStyle}
-      className="border-t pt-10 pb-8 transition-colors duration-300"
+      className="border-t pt-12 pb-10 transition-colors duration-300 w-full"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 mb-8">
+      <div className="w-full px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14 mb-10 items-start">
           
-          {/* Column 1: Brand Info & Mission */}
-          <div className="space-y-4">
+          {/* Column 1: Brand Info & Mission (Col span 5 of 12) */}
+          <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-black font-heading tracking-wider text-white">
+              <span className="text-2xl sm:text-3xl font-black font-heading tracking-wider text-white">
                 CHINMAYA <span style={accentStyle}>MISSION</span>
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm leading-relaxed font-medium opacity-90 max-w-sm">
+            <p className="text-sm sm:text-base leading-relaxed font-normal opacity-90 max-w-xl text-slate-300">
               {brand.description ||
                 'A spiritual and cultural organisation established in 1992, dedicated to sharing timeless Vedic wisdom, human values, and inspiring purposeful lives.'}
             </p>
           </div>
 
-          {/* Column 2: Quick Navigation (NO What We Do, NO Marathon Registration) */}
-          <div className="space-y-3">
+          {/* Column 2: Quick Navigation (Col span 3 of 12) */}
+          <div className="md:col-span-3 lg:pl-6 space-y-4">
             <h4
               style={headingStyle}
-              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
+              className="text-base sm:text-lg font-extrabold tracking-wider uppercase font-heading"
             >
               {quickNavigation.heading || 'QUICK NAVIGATION'}
             </h4>
-            <ul className="space-y-2.5 text-xs font-semibold list-none p-0">
+            <ul className="space-y-3.5 text-sm sm:text-base font-semibold list-none p-0">
               {navLinks.map((link, idx) => {
                 const isExternal = link.url?.startsWith('http');
                 const isMarathonLink = link.label?.toLowerCase().includes('marathon');
@@ -310,15 +310,15 @@ export const Footer = ({ overrideData = null }) => {
                         href={link.url}
                         target={link.openInNewTab ? '_blank' : '_self'}
                         rel="noopener noreferrer"
-                        className={`transition-colors text-decoration-none inline-flex items-center gap-1.5 ${
+                        className={`transition-colors text-decoration-none inline-flex items-center gap-2 ${
                           isMarathonLink
-                            ? 'font-black hover:underline'
+                            ? 'font-bold hover:underline'
                             : 'hover:text-white'
                         }`}
                         style={isMarathonLink ? accentStyle : undefined}
                       >
                         <span>{link.label}</span>
-                        {isMarathonLink && <ExternalLink className="w-3 h-3" />}
+                        {isMarathonLink && <ExternalLink className="w-4 h-4" />}
                       </a>
                     ) : (
                       <Link
@@ -337,54 +337,54 @@ export const Footer = ({ overrideData = null }) => {
             </ul>
           </div>
 
-          {/* Column 3: Location & Contact */}
-          <div className="space-y-3">
+          {/* Column 3: Location & Contact (Col span 4 of 12) */}
+          <div className="md:col-span-4 space-y-4">
             <h4
               style={headingStyle}
-              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
+              className="text-base sm:text-lg font-extrabold tracking-wider uppercase font-heading"
             >
               {contact.heading || 'LOCATION & CONTACT'}
             </h4>
-            <div className="space-y-2.5 text-xs opacity-90">
+            <div className="space-y-4 text-sm sm:text-base opacity-90">
               {fullAddress && (
-                <p className="flex items-start gap-2 leading-relaxed">
-                  <MapPin style={accentStyle} className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>{fullAddress}</span>
+                <p className="flex items-start gap-3 leading-relaxed">
+                  <MapPin style={accentStyle} className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium text-slate-300">{fullAddress}</span>
                 </p>
               )}
 
               {contact.phoneNumbers && contact.phoneNumbers.length > 0 && (
-                <p className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                  <span>{contact.phoneNumbers.join(' / ')}</span>
+                <p className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                  <span className="font-semibold tracking-wide text-white">{contact.phoneNumbers.join(' / ')}</span>
                 </p>
               )}
 
               {contact.emails && contact.emails.length > 0 && (
-                <p className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>{contact.emails.join(', ')}</span>
+                <p className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <span className="font-medium text-slate-300">{contact.emails.join(', ')}</span>
                 </p>
               )}
 
               {/* Contact Buttons */}
-              <div className="flex flex-wrap gap-2 pt-2">
+              <div className="flex flex-wrap gap-3 pt-2">
                 {contact.googleMapsUrl ? (
                   <a
                     href={contact.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 text-[10px] font-bold text-white hover:bg-white/20 text-decoration-none"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
                   >
-                    <Globe className="w-3 h-3 text-cyan-400" />
+                    <Globe className="w-4 h-4 text-cyan-400" />
                     <span>View Map</span>
                   </a>
                 ) : (
                   <Link
                     to="/lets-connect"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 text-[10px] font-bold text-white hover:bg-white/20 text-decoration-none"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
                   >
-                    <MessageSquare className="w-3 h-3 text-cyan-400" />
+                    <MessageSquare className="w-4 h-4 text-cyan-400" />
                     <span>Contact Us</span>
                   </Link>
                 )}
@@ -393,9 +393,9 @@ export const Footer = ({ overrideData = null }) => {
                     href={`https://wa.me/${contact.whatsappNumber.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-[10px] font-bold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 text-decoration-none"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/20 text-xs sm:text-sm font-bold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors text-decoration-none shadow-sm"
                   >
-                    <MessageSquare className="w-3 h-3" />
+                    <MessageSquare className="w-4 h-4" />
                     <span>WhatsApp</span>
                   </a>
                 )}

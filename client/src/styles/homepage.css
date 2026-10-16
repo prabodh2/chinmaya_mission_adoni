@@ -26,14 +26,15 @@
 
 /* Hero Section */
 .hero {
-  min-height: 460px;
+  min-height: 520px;
   position: relative;
   isolation: isolate;
   display: flex;
   align-items: center;
-  padding: 34px clamp(20px, 6vw, 90px);
+  padding: clamp(40px, 5vw, 68px) clamp(24px, 4vw, 64px);
   overflow: hidden;
   background: #061527;
+  width: 100%;
 }
 
 /* Background Video & Scrim */
@@ -89,27 +90,27 @@
 }
 
 .hero-content {
-  max-width: 580px;
+  max-width: clamp(620px, 52vw, 820px);
   z-index: 2;
   position: relative;
 }
 
 .eyebrow {
-  font-size: 11px;
-  letter-spacing: 2.2px;
-  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 2.4px;
+  font-weight: 800;
   color: #FFA14A;
-  margin: 0 0 15px;
+  margin: 0 0 16px;
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   text-transform: uppercase;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 }
 
 .eyebrow-line {
   height: 2px;
-  width: 24px;
+  width: 26px;
   background: #FFA14A;
   box-shadow: 0 0 8px rgba(255, 161, 74, 0.7);
 }
@@ -117,10 +118,10 @@
 .hero h1 {
   font-family: 'Playfair Display', serif;
   font-weight: 600;
-  font-size: clamp(38px, 4.2vw, 60px);
-  line-height: 1.1;
+  font-size: clamp(40px, 4.6vw, 68px);
+  line-height: 1.12;
   letter-spacing: -1.8px;
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   color: #FFFFFF;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
 }
@@ -133,10 +134,11 @@
 
 .hero-description {
   font-family: 'DM Sans', sans-serif;
-  font-size: 14.5px;
+  font-size: clamp(15px, 1.15vw, 18px);
   line-height: 1.85;
   color: rgba(255, 255, 255, 0.92);
-  margin-bottom: 25px;
+  margin-bottom: 28px;
+  max-width: 680px;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -309,28 +311,31 @@
 }
 
 /* Sections Common */
+/* Sections Common */
 .section-wrap {
-  max-width: 1240px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(20px, 5vw, 80px);
-  padding-right: clamp(20px, 5vw, 80px);
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: clamp(24px, 4vw, 64px);
+  padding-right: clamp(24px, 4vw, 64px);
+  box-sizing: border-box;
 }
 
 .title-underline {
   display: block;
-  width: 37px;
-  height: 3px;
+  width: 44px;
+  height: 4px;
   background: var(--orange);
-  border-radius: 3px;
-  margin-bottom: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
 }
 
 .text-link {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--orange);
   transition: gap 0.2s;
@@ -338,31 +343,33 @@
 }
 
 .text-link:hover {
-  gap: 14px;
+  gap: 15px;
 }
 
 /* About Section */
 .about-section {
   display: block;
-  padding-top: 30px;
-  padding-bottom: 26px;
+  width: 100%;
+  padding-top: 48px;
+  padding-bottom: 42px;
   position: relative;
   background: #fffdf9;
 }
 
 .about-copy {
-  max-width: 820px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .about-copy h2 {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .about-copy .eyebrow,
 .section-heading .eyebrow,
 .chyk-copy .eyebrow,
 .events-heading .eyebrow {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .about-copy h2,
@@ -370,79 +377,87 @@
 .chyk-copy h2,
 .events-heading h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  line-height: 1.2;
+  font-size: clamp(28px, 2.6vw, 42px);
+  line-height: 1.22;
   letter-spacing: -0.6px;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   color: var(--navy);
 }
 
 .about-copy > p:not(.eyebrow),
 .chyk-copy > p:not(.eyebrow) {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  line-height: 1.7;
-  color: #626a75;
-  margin-bottom: 12px;
+  font-size: clamp(15px, 1.1vw, 17.5px);
+  line-height: 1.8;
+  color: #4A5568;
+  margin-bottom: 16px;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Values Section (Vision, Mission & Motto) */
 .values-section {
+  width: 100%;
   background: #ffffff;
-  padding-top: 32px;
-  padding-bottom: 38px;
+  padding-top: 48px;
+  padding-bottom: 56px;
 }
 
 .section-heading {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .section-heading h2 {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .pillars-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: clamp(24px, 2.5vw, 40px);
   align-items: stretch;
+  width: 100%;
 }
 
 .pillar-card {
   background: #ffffff;
-  border: 1px solid rgba(240, 68, 29, 0.26);
-  border-radius: 20px;
-  padding: 26px 20px 22px;
+  border: 1.5px solid rgba(240, 68, 29, 0.28);
+  border-radius: 24px;
+  padding: clamp(38px, 3.5vw, 54px) clamp(28px, 2.5vw, 44px);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(11, 35, 64, 0.03);
+  box-shadow: 0 8px 30px rgba(11, 35, 64, 0.05);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  min-height: 340px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pillar-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(240, 68, 29, 0.5);
-  box-shadow: 0 14px 35px rgba(240, 68, 29, 0.1);
+  transform: translateY(-6px);
+  border-color: rgba(240, 68, 29, 0.6);
+  box-shadow: 0 18px 45px rgba(240, 68, 29, 0.14);
 }
 
 .pillar-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
 }
 
 .pillar-icon-badge {
-  width: 60px;
-  height: 60px;
-  border-radius: 18px;
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 14px rgba(7, 22, 45, 0.05);
+  box-shadow: 0 6px 18px rgba(7, 22, 45, 0.08);
 }
 
 .pillar-card:hover .pillar-icon-badge {
@@ -472,17 +487,17 @@
 
 .pillar-card h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: clamp(24px, 1.8vw, 30px);
+  font-weight: 700;
   line-height: 1.25;
   color: #EE6138;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 }
 
 .pillar-card p {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px;
-  line-height: 1.68;
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.75;
   color: #4A5568;
   margin: 0;
 }
@@ -490,20 +505,21 @@
 /* CHYK Section */
 .chyk-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(24px, 4vw, 50px);
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(32px, 4vw, 64px);
   align-items: center;
-  padding-top: 32px;
-  padding-bottom: 32px;
+  padding-top: 52px;
+  padding-bottom: 52px;
   background: linear-gradient(105deg, #fffaf2, #ffffff 65%);
+  width: 100%;
 }
 
 .chyk-image {
-  height: 240px;
+  height: clamp(300px, 26vw, 420px);
   position: relative;
-  border-radius: 18px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 16px 35px rgba(7, 22, 45, 0.12);
+  box-shadow: 0 20px 45px rgba(7, 22, 45, 0.14);
 }
 
 .chyk-image:after {
@@ -529,58 +545,58 @@
 .image-label {
   position: absolute;
   z-index: 1;
-  right: 14px;
-  bottom: 13px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(255, 253, 240, 0.92);
+  right: 18px;
+  bottom: 18px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: rgba(255, 253, 240, 0.94);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   transform: rotate(-2deg);
-  box-shadow: 0 4px 14px rgba(7, 22, 45, 0.08);
+  box-shadow: 0 6px 18px rgba(7, 22, 45, 0.1);
 }
 
 .image-label span {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 24px;
   color: var(--green);
   letter-spacing: 2px;
 }
 
 .image-label small {
   font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--navy);
   font-weight: 600;
 }
 
 .chyk-copy h2 span {
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: 0;
   color: #626a75;
 }
 
 .chyk-copy .btn {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .chyk-tags {
   display: flex;
-  gap: 15px;
+  gap: 18px;
   flex-wrap: wrap;
-  margin: 14px 0 16px;
+  margin: 16px 0 20px;
 }
 
 .chyk-tags span {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: #53615b;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -590,8 +606,9 @@
 
 /* Events Section */
 .events-section {
-  padding-top: 30px;
-  padding-bottom: 36px;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 56px;
   background: #ffffff;
 }
 
@@ -599,7 +616,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .events-heading h2 {
@@ -609,27 +627,29 @@
 .events-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: clamp(20px, 2vw, 32px);
+  width: 100%;
 }
 
 .event-card {
-  border: 1px solid #eee8e2;
-  border-radius: 12px;
+  border: 1px solid #e8e1d8;
+  border-radius: 20px;
   overflow: hidden;
   background: #ffffff;
-  box-shadow: 0 5px 18px rgba(7, 22, 45, 0.06);
+  box-shadow: 0 8px 24px rgba(7, 22, 45, 0.07);
   transition: transform 0.25s, box-shadow 0.25s;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 28px rgba(7, 22, 45, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(7, 22, 45, 0.14);
 }
 
 .event-art {
-  height: 130px;
+  height: clamp(170px, 14vw, 220px);
   position: relative;
   display: grid;
   place-items: center;
@@ -722,7 +742,7 @@
 }
 
 .event-info {
-  padding: 14px 14px 16px;
+  padding: 20px 20px 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -730,25 +750,27 @@
 
 .event-info h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 13px;
-  margin-bottom: 4px;
+  font-size: clamp(16px, 1.2vw, 19px);
+  margin-bottom: 6px;
   color: var(--navy);
+  font-weight: 700;
 }
 
 .event-info > p {
   font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  color: #727985;
-  margin-bottom: 12px;
+  font-size: clamp(12.5px, 0.95vw, 14px);
+  color: #64748B;
+  margin-bottom: 14px;
   flex: 1;
+  line-height: 1.55;
 }
 
 .event-date {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #626a75;
-  font-size: 10px;
+  gap: 8px;
+  color: #475569;
+  font-size: clamp(12px, 0.9vw, 13.5px);
   font-weight: 600;
 }
 
@@ -759,16 +781,17 @@
 
 /* Quote Banner */
 .quote-banner {
-  min-height: 140px;
+  min-height: 170px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 28px clamp(20px, 6vw, 90px);
+  gap: 32px;
+  padding: clamp(36px, 4vw, 60px) clamp(24px, 4vw, 64px);
   color: #ffffff;
   background: linear-gradient(90deg, rgba(7, 22, 45, 0.94), rgba(7, 22, 45, 0.82)), url('/assets/sunset-road.jpg') center 60%/cover no-repeat;
   overflow: hidden;
+  width: 100%;
 }
 
 .quote-overlay {
@@ -781,7 +804,7 @@
 .quote-content {
   position: relative;
   text-align: left;
-  max-width: 720px;
+  max-width: 950px;
 }
 
 .quote-mark {
@@ -794,7 +817,7 @@
 
 .quote-content p {
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: clamp(20px, 1.8vw, 26px);
   line-height: 1.45;
   margin: 0 0 8px;
   color: #ffffff;
@@ -822,16 +845,16 @@
 /* Responsive Media Queries */
 @media (min-width: 1400px) {
   .hero {
-    min-height: 590px;
+    min-height: 580px;
   }
   .hero-portrait {
-    width: 40%;
+    width: 38%;
   }
   .chyk-image {
-    height: 260px;
+    height: 380px;
   }
   .event-art {
-    height: 135px;
+    height: 200px;
   }
 }
 

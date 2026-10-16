@@ -18,7 +18,7 @@
   --pink: #E91E63;
   
   /* Layout Tokens */
-  --container-max: 1280px;
+  --container-max: 100%;
   --section-py-desktop: 80px;
   --section-py-tablet: 60px;
   --section-py-mobile: 40px;
@@ -99,18 +99,11 @@ img {
 /* Global Container System */
 .container-custom {
   width: 100%;
-  max-width: var(--container-max);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-@media (max-width: 640px) {
-  .container-custom {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: clamp(1rem, 3.5vw, 3rem);
+  padding-right: clamp(1rem, 3.5vw, 3rem);
 }
 
 /* Section Padding Utility */

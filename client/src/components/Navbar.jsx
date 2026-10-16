@@ -46,7 +46,7 @@ export const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[var(--glass-bg,#FFFFFF)]/95 backdrop-blur-md border-b border-[var(--glass-border,rgba(11,35,64,0.1))] shadow-sm transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 gap-3 sm:gap-4">
           {/* LEFT CORNER: Official Chinmaya Mission Emblem */}
           <div className="flex items-center shrink-0 h-full py-2">

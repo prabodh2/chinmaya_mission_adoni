@@ -196,7 +196,7 @@ export function HomePage() {
                 <article className="pillar-card group" key={title}>
                   <div className="pillar-icon-wrap">
                     <div className={`pillar-icon-badge ${badgeClass}`}>
-                      <IconComponent className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={1.8} />
+                      <IconComponent className="w-8 h-8 sm:w-9 sm:h-9" strokeWidth={1.8} />
                     </div>
                   </div>
                   <h3>{title}</h3>
