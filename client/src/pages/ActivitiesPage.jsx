@@ -28,9 +28,9 @@ const ActivityCard = ({ activity, onSelect }) => {
     : (activity.imageUrl || '/assets/images/activity-sanjeevaraya.png?v=5');
 
   return (
-    <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden group">
-      {/* Full-width Image Area (Compact height matching user layout, fully visible uncropped image) */}
-      <div className="relative h-40 sm:h-44 md:h-48 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
+    <article className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-lg hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col h-full overflow-hidden group w-full">
+      {/* Full-width Image Area */}
+      <div className="relative h-48 sm:h-52 md:h-56 w-full shrink-0 overflow-hidden bg-slate-900 flex items-center justify-center block">
         {/* Ambient blurred backdrop so full aspect ratio is preserved gracefully */}
         <img
           src={cardImgSrc}
@@ -61,28 +61,28 @@ const ActivityCard = ({ activity, onSelect }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-25 group-hover:opacity-15 transition-opacity z-10 pointer-events-none" />
         
         {activity.category && (
-          <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[9px] sm:text-[10px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
+          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm text-white font-bold text-[10px] sm:text-[11px] uppercase tracking-wider border border-white/20 shadow-sm z-20">
             {activity.category}
           </span>
         )}
 
         <button
           onClick={() => onSelect(activity)}
-          className="absolute bottom-2.5 right-2.5 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm z-20 cursor-pointer"
+          className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm text-slate-800 hover:bg-white hover:text-[var(--orange)] transition-all shadow-sm z-20 cursor-pointer"
           title="Enlarge Image"
           aria-label={`Enlarge image for ${activity.title}`}
         >
-          <Maximize2 className="w-3.5 h-3.5" />
+          <Maximize2 className="w-4 h-4" />
         </button>
       </div>
 
       {/* Card Body - Equal height structure across all cards */}
-      <div className="p-4 sm:p-5 flex flex-col flex-1 text-left">
-        <div className="flex items-center gap-2.5 mb-2">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+      <div className="p-5 sm:p-6 flex flex-col flex-1 text-left">
+        <div className="flex items-center gap-3 mb-2.5">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
             {activity.icon || <Sparkles className="w-4 h-4" />}
           </div>
-          <h3 className="text-sm sm:text-base font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1 uppercase tracking-wide truncate">
+          <h3 className="text-base sm:text-lg font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug line-clamp-1 uppercase tracking-wide truncate">
             {activity.title}
           </h3>
         </div>
@@ -92,28 +92,28 @@ const ActivityCard = ({ activity, onSelect }) => {
         </p>
 
         {/* Card Footer Meta - Aligned at exact same baseline */}
-        <div className="mt-auto pt-3 border-t border-slate-100 text-[11px] font-semibold text-slate-500 flex items-center justify-between">
-          <span className="truncate max-w-[55%] text-slate-500 font-medium text-[11px]">
+        <div className="mt-auto pt-3 border-t border-slate-100 text-xs font-semibold text-slate-500 flex items-center justify-between">
+          <span className="truncate max-w-[55%] text-slate-500 font-medium text-xs">
             {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission, Adoni')}
           </span>
           {activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya') ? (
             <Link
               to="/chinmaya-sanjeevaraya-temple"
-              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs sm:text-sm flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
               title={`Explore Chinmaya Sanjeevaraya Temple Page`}
             >
               <span>Know More</span>
-              <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
             </Link>
           ) : (
             <button
               type="button"
               onClick={() => onSelect(activity)}
-              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs sm:text-sm flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
               title={`Know more about ${activity.title}`}
             >
               <span>Know More</span>
-              <ChevronRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
             </button>
           )}
         </div>
@@ -700,20 +700,20 @@ export const ActivitiesPage = () => {
     ) || initialActivities[3];
 
   return (
-    <div className="min-h-screen pt-1 sm:pt-2 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12">
-      {/* 1. OUR ACTIVITIES OVERVIEW (Matching User Screenshot Exactly, in Website Theme Colors) */}
-      <section className="space-y-6 sm:space-y-8 max-w-3xl mx-auto">
-        <header className="text-center space-y-1">
+    <div className="min-h-screen pt-1 sm:pt-2 pb-16 px-4 sm:px-8 lg:px-12 w-full space-y-12 sm:space-y-16">
+      {/* 1. OUR ACTIVITIES OVERVIEW */}
+      <section className="space-y-8 w-full">
+        <header className="text-center space-y-2 max-w-4xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
             Our Activities
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-[var(--text-muted)] font-medium max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] font-medium max-w-3xl mx-auto">
             Learning, culture, devotion, and spiritual growth for all ages.
           </p>
         </header>
 
-        {/* 2-Column Grid (Balavihar, Kuchipudi, CHYK, Sankranti, Bhagavad Gita, Vishnu Sahasranamam) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+        {/* 3-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
           {OVERVIEW_ACTIVITIES.map((act) => (
             <ActivityCard
               key={act.id}
@@ -725,17 +725,17 @@ export const ActivitiesPage = () => {
       </section>
 
       {/* 2. SECTION 1: SPIRITUALITY & DEVOTION */}
-      <section className="space-y-8">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
+      <section className="space-y-8 w-full">
+        <div className="text-center max-w-4xl mx-auto space-y-2">
           <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] mx-auto">
             <Landmark className="w-5 h-5" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
             SPIRITUALITY & DEVOTION
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
           {spiritualDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -747,17 +747,17 @@ export const ActivitiesPage = () => {
       </section>
 
       {/* 3. SECTION 2: CULTURE & DEVOTION */}
-      <section className="space-y-8">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
+      <section className="space-y-8 w-full">
+        <div className="text-center max-w-4xl mx-auto space-y-2">
           <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--cyan)]/10 text-[var(--cyan)] mx-auto">
             <Heart className="w-5 h-5" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
             CULTURE & DEVOTION
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
           {cultureDevotionActivities.map((act) => (
             <ActivityCard
               key={act.id}
@@ -769,12 +769,12 @@ export const ActivitiesPage = () => {
       </section>
 
       {/* 4. SECTION 3: YOUTH & LEADERSHIP (SPECIAL CHYK SECTION) */}
-      <section className="space-y-8">
-        <div className="text-center max-w-3xl mx-auto space-y-2">
+      <section className="space-y-8 w-full">
+        <div className="text-center max-w-4xl mx-auto space-y-2">
           <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)] text-white mx-auto shadow-sm">
             <Zap className="w-5 h-5 fill-current" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
             YOUTH & LEADERSHIP
           </h2>
         </div>
@@ -789,17 +789,17 @@ export const ActivitiesPage = () => {
 
       {/* 5. SECTION 4: COMMUNITY & MOVEMENT INITIATIVES */}
       {movementActivities.length > 0 && (
-        <section className="space-y-8">
-          <div className="text-center max-w-3xl mx-auto space-y-2">
+        <section className="space-y-8 w-full">
+          <div className="text-center max-w-4xl mx-auto space-y-2">
             <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--yellow)]/20 text-[var(--orange)] mx-auto">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-[var(--text-primary)]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
               COMMUNITY & MOVEMENT INITIATIVES
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
             {movementActivities.map((act) => (
               <ActivityCard
                 key={act.id || act._id || act.title}
@@ -812,8 +812,8 @@ export const ActivitiesPage = () => {
       )}
 
       {/* 6. CLOSING VISUAL SECTION */}
-      <footer className="p-10 sm:p-14 rounded-3xl bg-gradient-to-r from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white text-center shadow-2xl space-y-6 relative overflow-hidden border border-white/10">
-        <div className="relative z-10 space-y-4 max-w-3xl mx-auto">
+      <footer className="p-10 sm:p-14 rounded-3xl bg-gradient-to-r from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white text-center shadow-2xl space-y-6 relative overflow-hidden border border-white/10 w-full">
+        <div className="relative z-10 space-y-4 max-w-4xl mx-auto">
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[var(--yellow)] font-extrabold text-xs uppercase tracking-widest border border-white/20">
             CHINMAYA MISSION, ADONI
           </span>
@@ -822,7 +822,7 @@ export const ActivitiesPage = () => {
             Spirituality • Culture • Youth • Service
           </h3>
 
-          <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
             Inspiring individuals to live by timeless values, empower youth, and foster clean, drug-free living across Adoni.
           </p>
         </div>
