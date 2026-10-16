@@ -13,6 +13,7 @@ import {
   LogIn,
   ExternalLink,
   Sparkles,
+  MessageSquare,
 } from 'lucide-react';
 
 const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
@@ -74,19 +75,27 @@ export const Navbar = () => {
           </div>
 
           {/* CENTER: Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.path}
-                className={`text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none ${
+                to={link.path}
+                className={`text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none flex items-center gap-1.5 ${
                   isActive(link.path)
                     ? 'text-[var(--orange)] font-extrabold'
                     : 'text-[var(--text-primary)] opacity-85'
                 }`}
               >
-                {link.name}
-              </a>
+                {link.name === 'Your Thoughts' && (
+                  <MessageSquare className="w-3.5 h-3.5 text-[var(--orange)]" />
+                )}
+                <span>{link.name}</span>
+                {link.name === 'Your Thoughts' && (
+                  <span className="hidden xl:inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
+                    Live
+                  </span>
+                )}
+              </Link>
             ))}
 
             {/* Link back to Main Chinmaya Mission website */}
@@ -291,14 +300,28 @@ export const Navbar = () => {
           {/* Navigation Links */}
           <nav className="flex flex-col space-y-2 pt-2 border-t border-[var(--border-color)]">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.path}
+                to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-bold px-3 py-2 rounded-xl text-decoration-none text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                className={`text-sm font-bold px-3 py-2.5 rounded-xl text-decoration-none flex items-center justify-between ${
+                  isActive(link.path)
+                    ? 'bg-[var(--orange)]/10 text-[var(--orange)] font-extrabold'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
+                }`}
               >
-                {link.name}
-              </a>
+                <span className="flex items-center gap-2.5">
+                  {link.name === 'Your Thoughts' && (
+                    <MessageSquare className="w-4 h-4 text-[var(--orange)]" />
+                  )}
+                  <span>{link.name}</span>
+                </span>
+                {link.name === 'Your Thoughts' && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--orange)] text-white">
+                    Live
+                  </span>
+                )}
+              </Link>
             ))}
 
             {/* Main Mission Site link */}

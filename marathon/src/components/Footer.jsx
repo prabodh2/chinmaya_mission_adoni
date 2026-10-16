@@ -26,12 +26,13 @@ const FALLBACK_FOOTER = {
     links: [
       { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
       { label: 'FAQs', url: '/faqs', openInNewTab: false, enabled: true, displayOrder: 2 },
+      { label: 'Your Thoughts & Stories', url: '/your-thoughts', openInNewTab: false, enabled: true, displayOrder: 3 },
       {
         label: 'Main Mission Site',
         url: 'https://chinmaya-mission-adoni.vercel.app/',
         openInNewTab: true,
         enabled: true,
-        displayOrder: 3,
+        displayOrder: 4,
       },
     ],
   },
@@ -156,12 +157,13 @@ export const Footer = ({ overrideData = null }) => {
   const defaultMarathonLinks = [
     { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
     { label: 'FAQs', url: '/faqs', openInNewTab: false, enabled: true, displayOrder: 2 },
+    { label: 'Your Thoughts & Stories', url: '/your-thoughts', openInNewTab: false, enabled: true, displayOrder: 3 },
     {
       label: 'Main Mission Site',
       url: 'https://chinmaya-mission-adoni.vercel.app/',
       openInNewTab: true,
       enabled: true,
-      displayOrder: 3,
+      displayOrder: 4,
     },
   ];
 
@@ -174,8 +176,8 @@ export const Footer = ({ overrideData = null }) => {
     return true;
   });
 
-  // Ensure Home, FAQs, and Main Mission Site are the quick navigation links
-  const navLinks = rawLinks.length === 0 || rawLinks.every((l) => ['home', 'faqs', 'main mission site'].includes(l.label?.toLowerCase().trim()))
+  // Ensure Home, FAQs, Your Thoughts, and Main Mission Site are the quick navigation links
+  const navLinks = rawLinks.length === 0 || rawLinks.every((l) => ['home', 'faqs', 'your thoughts', 'your thoughts & stories', 'main mission site'].includes(l.label?.toLowerCase().trim()))
     ? defaultMarathonLinks
     : [
         ...defaultMarathonLinks,
@@ -183,9 +185,11 @@ export const Footer = ({ overrideData = null }) => {
           (l) =>
             l.url !== '/' &&
             l.url !== '/faqs' &&
+            l.url !== '/your-thoughts' &&
             !l.url?.includes('chinmaya-mission-adoni.vercel.app') &&
             l.label?.toLowerCase() !== 'home' &&
             l.label?.toLowerCase() !== 'faqs' &&
+            !l.label?.toLowerCase().includes('thoughts') &&
             !l.label?.toLowerCase().includes('main mission')
         ),
       ];

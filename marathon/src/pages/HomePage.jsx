@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ContinuousVerticalBannerSlider } from '../components/ContinuousVerticalBannerSlider';
 import { TransformationSection } from '../components/TransformationSection';
 import { CountdownTimer } from '../components/CountdownTimer';
+import { CommunityStoryBoardSection } from '../components/homepage/CommunityStoryBoardSection';
 import { SectionRenderer, QuoteBanner } from '../components/homepage/SectionRenderer';
 import { bannerService, eventService, faqService, activityService, homepageService, webContentService } from '../services/api';
 import { applyDynamicTheme } from '../utils/themeHelper';
@@ -399,6 +400,9 @@ export const HomePage = () => {
           No homepage sections published yet.
         </div>
       )}
+
+      {/* Community Story Board & Voices Section */}
+      <CommunityStoryBoardSection />
 
       {/* Movement Posters & Inspiration Banner Slider - Positioned directly above Footer */}
       <section className="py-2">
