@@ -214,10 +214,6 @@ export function HomePage() {
               src="/assets/youth-runners.png"
               alt="Young people taking part in a healthy community activity"
             />
-            <div className="image-label">
-              <span>CHYK</span>
-              <small>Young minds. Big dreams.</small>
-            </div>
           </div>
           <div className="chyk-copy">
             <p className="eyebrow">THE YOUTH WING</p>
