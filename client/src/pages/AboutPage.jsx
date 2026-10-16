@@ -369,7 +369,7 @@ export const AboutPage = () => {
   return (
     <div className="min-h-screen pb-12 space-y-8 sm:space-y-10">
       {/* 1. ABOUT HERO SECTION */}
-      <section className="relative pt-2 sm:pt-3 pb-3 px-4 max-w-7xl mx-auto overflow-hidden">
+      <section className="relative pt-2 sm:pt-3 pb-3 px-4 sm:px-8 lg:px-12 w-full overflow-hidden">
         {/* Subtle Background Glow */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--orange)]/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -429,7 +429,7 @@ export const AboutPage = () => {
       </section>
 
       {/* 2. WHO WE ARE SECTION */}
-      <section id="who-we-are" className="px-4 max-w-7xl mx-auto scroll-mt-24">
+      <section id="who-we-are" className="w-full px-4 sm:px-8 lg:px-12 scroll-mt-24">
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
@@ -489,7 +489,7 @@ export const AboutPage = () => {
       </div>
 
       {/* 4. OUR VISION SECTION */}
-      <section className="px-4 max-w-5xl mx-auto">
+      <section className="w-full px-4 sm:px-8 lg:px-12">
         <div className="relative p-10 sm:p-16 rounded-3xl bg-gradient-to-br from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white shadow-2xl overflow-hidden border border-white/10 text-center">
           {/* Subtle Glow Overlay */}
           <div className="absolute top-0 right-0 w-72 h-72 bg-[var(--orange)]/20 rounded-full blur-3xl pointer-events-none" />
@@ -514,39 +514,37 @@ export const AboutPage = () => {
       </section>
 
       {/* 5. OUR MISSION SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
+      <section className="w-full px-4 sm:px-8 lg:px-12">
+        <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-12 space-y-2.5">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
             {data.ourMission.heading}
           </h2>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-base sm:text-lg text-[var(--text-muted)] font-medium">
             Guiding individuals towards self-transformation, service, and youth empowerment.
           </p>
         </div>
 
-        {/* 5 Mission Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
+        {/* All 5 Mission Items in One Line */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-5 w-full items-stretch">
           {data.ourMission.items.map((item, index) => (
             <div
               key={item.id || index}
-              className={`p-6 sm:p-7 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group h-full ${
-                index === 4 ? 'md:col-span-2 lg:col-span-1' : ''
-              }`}
+              className="p-5 sm:p-6 lg:p-5 xl:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-lg hover:border-[var(--orange)]/50 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group h-full w-full"
             >
               <div>
                 <div className="w-11 h-11 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   {getMissionIcon(item.iconName)}
                 </div>
 
-                <span className="text-[10px] font-bold text-[var(--orange)] tracking-wider uppercase mb-1 block">
+                <span className="text-[10px] sm:text-[11px] font-bold text-[var(--orange)] tracking-wider uppercase mb-1.5 block">
                   PILLAR 0{index + 1}
                 </span>
 
-                <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] font-heading mb-2 group-hover:text-[var(--orange)] transition-colors leading-snug">
+                <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)] font-heading mb-2 group-hover:text-[var(--orange)] transition-colors leading-snug uppercase tracking-tight">
                   {item.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal">
                   {item.description}
                 </p>
               </div>
@@ -556,7 +554,7 @@ export const AboutPage = () => {
       </section>
 
       {/* 6. CHINMAYA YUVA KENDRA (CHYK) ADONI SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
+      <section className="w-full px-4 sm:px-8 lg:px-12">
         <div className="p-8 sm:p-14 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10 relative overflow-hidden">
           {/* Accent Glow */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
@@ -619,18 +617,18 @@ export const AboutPage = () => {
       </section>
 
       {/* 8. OUR ACTIVITIES SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 space-y-3">
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
+      <section className="w-full px-4 sm:px-8 lg:px-12">
+        <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-12 space-y-3">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
             {data.ourActivities.heading}
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             {data.ourActivities.intro}
           </p>
         </div>
 
-        {/* 4 Standardized Activity & Temple Cards (Clean 2-Column Responsive Grid) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto items-stretch">
+        {/* 4 Activity Cards across full width */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full items-stretch">
           {data.ourActivities.cards.map((card) => (
             <article
               key={card.id || card.title}
@@ -721,7 +719,7 @@ export const AboutPage = () => {
       </section>
 
       {/* 9. CONTINUING THE LEGACY SECTION */}
-      <section className="px-4 max-w-7xl mx-auto">
+      <section className="w-full px-4 sm:px-8 lg:px-12">
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-8">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
@@ -751,7 +749,7 @@ export const AboutPage = () => {
 
 
       {/* 10. CLOSING STATEMENT / CTA SECTION */}
-      <section className="px-4 max-w-5xl mx-auto text-center">
+      <section className="w-full px-4 sm:px-8 lg:px-12 text-center">
         <div className="p-10 sm:p-16 rounded-3xl bg-gradient-to-r from-[var(--orange)] via-[#E64A19] to-[var(--orange)] text-white shadow-2xl space-y-6 relative overflow-hidden">
           <div className="relative z-10 space-y-6">
             <h2 className="text-3xl sm:text-5xl font-black font-heading tracking-tight whitespace-pre-line leading-tight">
