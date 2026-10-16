@@ -5,7 +5,6 @@ import {
   Leaf,
   CalendarDays,
   ArrowRight,
-  Flower2,
   Sparkles,
   ExternalLink,
   Users,
@@ -148,16 +147,6 @@ export function HomePage() {
                 alt="Swami Chinmayananda"
                 className="portrait-img"
               />
-            </div>
-            <div className="portrait-symbol">
-              <Flower2 size={26} />
-              <span>
-                Arise<br />
-                Awake<br />
-                and<br />
-                Guide Others
-              </span>
-              <i />
             </div>
             <div className="signature">Swami Chinmayananda</div>
           </div>

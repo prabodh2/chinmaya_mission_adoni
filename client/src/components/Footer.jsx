@@ -271,10 +271,10 @@ export const Footer = ({ overrideData = null }) => {
   return (
     <footer
       style={footerStyle}
-      className="border-t pt-16 pb-12 transition-colors duration-300"
+      className="border-t pt-10 pb-8 transition-colors duration-300"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 mb-8">
           
           {/* Column 1: Brand Info & Mission */}
           <div className="space-y-4">
@@ -408,7 +408,7 @@ export const Footer = ({ overrideData = null }) => {
         {/* Bottom Footer Section */}
         <div
           style={{ borderColor: appearance?.dividerColor || 'rgba(255, 255, 255, 0.1)' }}
-          className="pt-8 border-t flex flex-col sm:flex-row items-center justify-between text-xs opacity-75 gap-4"
+          className="pt-5 border-t flex flex-col sm:flex-row items-center justify-between text-xs opacity-75 gap-3"
         >
           <p>{bottomFooter.copyrightText || '© Chinmaya Mission, Adoni. All Rights Reserved.'}</p>
           <div className="flex items-center gap-4">

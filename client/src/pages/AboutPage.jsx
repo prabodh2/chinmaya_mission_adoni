@@ -367,13 +367,13 @@ export const AboutPage = () => {
   };
 
   return (
-    <div className="min-h-screen pb-16 space-y-12 sm:space-y-16">
+    <div className="min-h-screen pb-12 space-y-8 sm:space-y-10">
       {/* 1. ABOUT HERO SECTION */}
-      <section className="relative pt-2 sm:pt-4 pb-4 px-4 max-w-7xl mx-auto overflow-hidden">
+      <section className="relative pt-2 sm:pt-3 pb-3 px-4 max-w-7xl mx-auto overflow-hidden">
         {/* Subtle Background Glow */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--orange)]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Title & Intro */}
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30 shadow-sm">
