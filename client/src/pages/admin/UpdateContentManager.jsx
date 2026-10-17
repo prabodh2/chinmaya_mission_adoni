@@ -329,6 +329,11 @@ export const UpdateContentManager = () => {
         const saved = res.data.data;
         setActivePage(saved);
         setInitialPageData(JSON.stringify(saved));
+        try {
+          localStorage.removeItem(`cached_cms_${saved.website}_${saved.pageSlug}`);
+          localStorage.setItem('cms_last_updated', Date.now().toString());
+          window.dispatchEvent(new Event('cms_updated'));
+        } catch (_) {}
         showMessage('success', `Content for '${saved.pageTitle}' updated and published successfully!`);
         // Refresh page list metadata
         fetchWebsitePages(selectedWebsite, saved._id);

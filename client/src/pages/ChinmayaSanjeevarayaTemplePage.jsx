@@ -66,27 +66,6 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
     },
   ];
 
-  const timelineMilestones = [
-    {
-      year: '2006',
-      title: 'Sacred Pratishta (Consecration)',
-      context: 'Vyaya Nama Samvatsaram',
-      desc: 'Consecrated according to traditional Agama Shastras in line with the vision of Pujya Swamini Shyamananda (Founder, Chinmaya Mission, Adoni) and guided by Pujya Swami Pranavananda, with active patronage from Sri Vitta Bhadrayya, Sri B. V. R. Reddy, Sri Achyutha Mohan Reddy, and dedicated devotees.',
-    },
-    {
-      year: '2012',
-      title: 'Sacred Kumbhabhishekam & Havan',
-      context: 'Sanctity Renewal & Silver Kavacham',
-      desc: 'Kumbhabhishekam performed under the divine guidance of Pujya Swami Paratparananda and Pujya Swami Pranavananda. Devotees performed a sacred Havan and presented silver armour (Kavacham) and ornamental adornments for the Utsava Murtis.',
-    },
-    {
-      year: 'Present',
-      title: 'Thriving Devotional & Cultural Centre',
-      context: 'Daily Worship & Community Service',
-      desc: 'Continues to stand as a vibrant spiritual beacon in Adoni, serving daily seekers, Balavihar children, CHYK youth, and elders through prayer, cultural enrichment, and spiritual contemplation.',
-    },
-  ];
-
   const devotionalRituals = [
     {
       title: '1. Daily Hanuman Chalisa',
@@ -192,71 +171,62 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       {/* 4. TEMPLE HISTORY & SPIRITUAL SIGNIFICANCE */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
-            SACRED HERITAGE & ORIGINS
-          </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-slate-900 tracking-tight">
-            History and Spiritual Significance
+            {f.temple_history?.heading || 'Sri Chinnaya Sanjeevarya Swamy Devasthanam'}
           </h2>
+          <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[var(--orange)]">
+            {f.temple_history?.location || 'Adoni'}
+          </p>
           <div className="w-16 h-1 bg-[var(--orange)] rounded-full mx-auto mt-2" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Chronicle Narrative */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm border border-slate-200/90 space-y-5 text-left leading-relaxed">
-            <h3 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
-              The Divine Inspiration Behind the Consecration
-            </h3>
-            
-            <p className="text-sm sm:text-base text-slate-700">
-              The <strong className="text-slate-900 font-semibold">Sri Chinnaya Sanjeevaraya Swamy Devasthanam</strong> in Adoni was consecrated in the year <strong className="text-slate-900 font-semibold">2006 (Vyaya Nama Samvatsaram)</strong>. The temple was established in accordance with the profound spiritual vision and inspiration of <strong className="text-[var(--orange)] font-semibold">Pujya Swamini Shyamananda</strong>, the revered founder of Chinmaya Mission, Adoni.
-            </p>
-
-            <p className="text-sm sm:text-base text-slate-700">
-              Under the sacred guidance of <strong className="text-slate-900 font-semibold">Pujya Swami Pranavananda</strong>, the Pratishta Mahotsavam was performed with strict adherence to traditional <em className="text-slate-900 font-medium">Agama Shastras</em>. This auspicious event brought the entire community together, deeply supported by committed patrons including <strong className="text-slate-900 font-semibold">Sri Vitta Bhadrayya</strong>, <strong className="text-slate-900 font-semibold">Sri B. V. R. Reddy</strong>, <strong className="text-slate-900 font-semibold">Sri Achyutha Mohan Reddy</strong>, and the devoted citizens of Adoni.
-            </p>
-
-            <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border-l-4 border-[var(--orange)] space-y-2">
-              <h4 className="text-sm font-bold text-amber-950 uppercase tracking-wider">
-                2012 Sacred Kumbhabhishekam & Silver Kavacham
-              </h4>
-              <p className="text-xs sm:text-sm text-amber-950/90 leading-relaxed">
-                In 2012, to further renew the spiritual sanctity and divine energy of the temple, a sacred <strong className="font-semibold">Kumbhabhishekam</strong> ceremony was solemnized under the guidance of <strong className="font-semibold">Pujya Swami Paratparananda</strong> and <strong className="font-semibold">Pujya Swami Pranavananda</strong>. With enthusiastic community participation, a sacred Havan was conducted, silver armour (Kavacham) was ceremoniously adorned onto the presiding deity, and sacred ornamental pieces were dedicated for the Utsava Murtis.
-              </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Section 1: History and Spiritual Significance */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm border border-slate-200/90 space-y-5 text-left leading-relaxed flex flex-col justify-start">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--orange)] shrink-0" />
+              <h3 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
+                {f.temple_history?.historyTitle || 'History and Spiritual Significance'}
+              </h3>
             </div>
 
             <p className="text-sm sm:text-base text-slate-700">
-              Today, Sri Chinnaya Sanjeevaraya Swamy stands as the divine protector and guardian deity of the Chinmaya Mission, Adoni complex, radiating strength, fearlessness (abhaya), and selfless devotion.
+              {f.temple_history?.historyP1 || 'The Sri Chinmaya Sanjeevaraya Swamy Devasthanam in Adoni was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission, Adoni.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.historyP2 || 'The consecration ceremony was performed in accordance with the traditional Agama Shastras, under the guidance of Pujya Swami Pranavananda, with the support and cooperation of Sri Vitta Bhimayasetty, Sri B. V. R. Reddy, Sri Adapa Mohan Reddy, and the devoted community.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.historyP3 || 'In 2012, a sacred Kumbhabhishekam ceremony was performed to renew the spiritual sanctity of the temple, under the guidance of Pujya Swami Paratparananda and Pujya Swami Pranavananda.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.historyP4 || 'With the whole hearted participation of devotees, a sacred Havan was conducted. Silver armour was offered to the presiding deity, and two ornamental pieces were provided for the festival deities (Utsava Murtis), reflecting the devotion and reverence of the community.'}
             </p>
           </div>
 
-          {/* Timeline Milestones Cards */}
-          <div className="lg:col-span-5 space-y-4 text-left">
-            <h3 className="text-base font-extrabold uppercase tracking-wider text-slate-800 px-1">
-              Key Chronological Milestones
-            </h3>
+          {/* Section 2: Daily Worship and Annual Celebrations */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm border border-slate-200/90 space-y-5 text-left leading-relaxed flex flex-col justify-start">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--orange)] shrink-0" />
+              <h3 className="text-lg sm:text-xl font-bold font-heading text-slate-900">
+                {f.temple_history?.worshipTitle || 'Daily Worship and Annual Celebrations'}
+              </h3>
+            </div>
 
-            {timelineMilestones.map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/90 hover:border-[var(--orange)]/40 transition-colors space-y-1.5"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] font-black text-xs">
-                    {item.year}
-                  </span>
-                  <span className="text-[11px] font-semibold text-slate-600">
-                    {item.context}
-                  </span>
-                </div>
-                <h4 className="text-sm sm:text-base font-bold font-heading text-slate-900">
-                  {item.title}
-                </h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.worshipP1 || 'Daily poojas are performed with devotion and reverence to the presiding deity. Special rituals and religious observances are conducted on auspicious days and during important festivals throughout the year.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.worshipP2 || 'The temple celebrates Shravana Masa, Hanuman Jayanti, and Karthika Deepotsavam with great devotion and spiritual fervour. These sacred observances bring devotees together in prayer, worship, and the celebration of their spiritual traditions.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.worshipP3 || 'The Devasthanam continues to serve as a place of worship and devotion, preserving religious traditions and nurturing the spiritual aspirations of its devotees.'}
+            </p>
           </div>
         </div>
       </section>

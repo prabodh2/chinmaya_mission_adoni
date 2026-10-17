@@ -379,15 +379,15 @@ export const HomePage = () => {
             {/* 1st Image: Transformation Story placed directly above 2nd Image: Quote Banner */}
             {section.type === 'marathon' && (
               <div className="pt-2">
-                <TransformationSection />
+                <TransformationSection content={webContentData?.fieldsMap?.transformation_section} />
               </div>
             )}
 
             {/* 2nd Image: Quote Banner placed directly above EVENT DETAILS & COUNTDOWN with zero overlap */}
-            {section.type === 'marathon' && <QuoteBanner />}
+            {section.type === 'marathon' && <QuoteBanner content={webContentData?.fieldsMap?.quote_banner} />}
 
             {/* MYTHS VS FACTS Slider placed directly above BE PART OF THE MOVEMENT IN ADONI! */}
-            {section.type === 'cta' && <MythsVsFactsSection />}
+            {section.type === 'cta' && <MythsVsFactsSection content={webContentData?.fieldsMap?.myths_vs_facts} />}
 
             <SectionRenderer
               section={section}
@@ -406,7 +406,7 @@ export const HomePage = () => {
       )}
 
       {/* Community Story Board & Voices Section */}
-      <CommunityStoryBoardSection />
+      <CommunityStoryBoardSection content={webContentData?.fieldsMap?.community_storyboard} />
 
       {/* Movement Posters & Inspiration Banner Slider - Positioned directly above Footer */}
       <section className="py-2">

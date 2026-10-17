@@ -40,7 +40,7 @@ export const FinalDestination = ({ onRestartJourney }) => {
 
             {/* Core Prompt Subtitle */}
             <p className="text-base sm:text-xl font-medium text-[#24415C] max-w-2xl mx-auto leading-relaxed italic">
-              “Every milestone is a step in a journey of service, values, culture and spiritual growth.”
+              “Every milestone is a step in a journey of service, values, culture and spiritual growth and His Vision Continues.”
             </p>
           </div>
 

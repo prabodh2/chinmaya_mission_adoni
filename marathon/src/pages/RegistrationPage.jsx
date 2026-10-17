@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { useAuth } from '../context/AuthContext';
-import { registrationService, eventService } from '../services/api';
+import { registrationService, eventService, webContentService } from '../services/api';
 import { SearchableSelect } from '../components/SearchableSelect';
 import { EntryPassModal } from '../components/EntryPassModal';
 import { adoniInstitutionsList } from '../utils/constants';
@@ -91,6 +91,15 @@ export const RegistrationPage = () => {
   // Receipt / Entry Pass Modal State
   const [receiptData, setReceiptData] = useState(null);
 
+  // Dynamic CMS Content for Registration Guidelines
+  const [regContent, setRegContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_marathon_registration');
+      if (cached) return JSON.parse(cached)?.fieldsMap?.reg_guidelines || null;
+    } catch (_) {}
+    return null;
+  });
+
   useEffect(() => {
     if (location.hash === '#marathon-map') {
       setTimeout(() => {
@@ -109,6 +118,14 @@ export const RegistrationPage = () => {
     registrationService.getInstitutions().then((res) => {
       if (res.data?.success && res.data.data.length > 0) {
         setInstitutions(res.data.data);
+      }
+    }).catch(() => {});
+
+    // Fetch Dynamic Content for Registration
+    webContentService.getPublicPage('marathon', 'registration').then((res) => {
+      if (res.data?.success && res.data?.data) {
+        try { localStorage.setItem('cached_cms_marathon_registration', JSON.stringify(res.data.data)); } catch (_) {}
+        setRegContent(res.data.data.fieldsMap?.reg_guidelines || null);
       }
     }).catch(() => {});
   }, [location.hash]);
@@ -526,15 +543,21 @@ export const RegistrationPage = () => {
         <div className="flex flex-wrap items-center justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
             <Sparkles className="w-3.5 h-3.5" />
-            CHINMAYA YUVA KENDRA, ADONI
+            {regContent?.subtitle || 'CHINMAYA YUVA KENDRA, ADONI'}
           </span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-[var(--text-primary)]">
-          MARATHON <span className="text-[var(--orange)]">REGISTRATION</span>
+          {regContent?.title ? (
+            regContent.title
+          ) : (
+            <>MARATHON <span className="text-[var(--orange)]">REGISTRATION</span></>
+          )}
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-muted)] font-medium max-w-xl mx-auto">
-          Last date of registration is <strong className="text-[var(--text-primary)] font-bold">30 November 2026 (30/11/2026)</strong>. Details will be used to generate your official marathon pass and certificate.
+          {regContent?.guidelines || (
+            <>Last date of registration is <strong className="text-[var(--text-primary)] font-bold">30 November 2026 (30/11/2026)</strong>. Details will be used to generate your official marathon pass and certificate.</>
+          )}
         </p>
 
         {/* Authenticated Member Session Banner */}

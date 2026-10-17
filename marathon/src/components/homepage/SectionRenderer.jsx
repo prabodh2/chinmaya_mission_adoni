@@ -292,7 +292,12 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
   }
 };
 
-export const QuoteBanner = () => {
+export const QuoteBanner = ({ content }) => {
+  if (content?._isEnabled === false) return null;
+
+  const quoteText = content?.quoteText || 'The youth are not useless , they are used less. The youth are not careless , they are cared less.';
+  const quoteAuthor = content?.quoteAuthor || '- Swami Chinmayananda';
+
   return (
     <section className="relative overflow-hidden min-h-[100px] sm:min-h-[120px] flex items-center justify-center px-4 sm:px-8 lg:px-12 py-6 sm:py-7 text-white bg-[#07162D] border-y border-slate-800/80 shadow-xl">
       {/* Background Road Image with Dark Blue Tint */}
@@ -309,10 +314,10 @@ export const QuoteBanner = () => {
       <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
         <p className="font-serif italic text-base sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium leading-relaxed mb-2 whitespace-nowrap overflow-x-auto">
           <span className="font-serif not-italic text-[#FFD12D] text-xl sm:text-2xl md:text-3xl lg:text-[34px] mr-1 select-none">“</span>
-          The youth are not useless , they are used less. The youth are not careless , they are cared less.”
+          {quoteText.replace(/^["“]|["”]$/g, '').trim()}”
         </p>
         <small className="block font-sans not-italic text-xs sm:text-sm text-[#F6D9BA] font-semibold tracking-wider uppercase">
-          - Swami Chinmayananda
+          {quoteAuthor}
         </small>
       </div>
     </section>

@@ -6,21 +6,31 @@ import { uploadToCloudinary } from '../config/cloudinary.js';
  * Helper to auto-seed default pages for a website if none exist
  */
 const ensureSeedPagesForWebsite = async (website) => {
-  const existingCount = await WebContent.countDocuments({ website });
-  if (existingCount > 0) return;
-
   const seedPages = DEFAULT_WEBSITE_PAGES[website];
   if (!seedPages || seedPages.length === 0) return;
 
   try {
-    for (const page of seedPages) {
-      await WebContent.findOneAndUpdate(
-        { website: page.website, pageSlug: page.pageSlug },
-        { $setOnInsert: page },
-        { upsert: true, new: true }
-      );
+    for (const seedPage of seedPages) {
+      const existing = await WebContent.findOne({ website, pageSlug: seedPage.pageSlug });
+      if (!existing) {
+        await WebContent.create(seedPage);
+        console.log(`[WebContent] Created default page '${seedPage.pageSlug}' for website '${website}'`);
+      } else if (existing.isSystemPage) {
+        // Check if any default section is missing from the existing page
+        let modified = false;
+        const existingSectionIds = new Set((existing.sections || []).map((s) => s.sectionId));
+        for (const defaultSec of seedPage.sections || []) {
+          if (!existingSectionIds.has(defaultSec.sectionId)) {
+            existing.sections.push(defaultSec);
+            modified = true;
+          }
+        }
+        if (modified) {
+          await existing.save();
+          console.log(`[WebContent] Synced new sections into existing '${seedPage.pageSlug}' for website '${website}'`);
+        }
+      }
     }
-    console.log(`[WebContent] Auto-seeded default pages for website: '${website}'`);
   } catch (err) {
     console.error(`[WebContent] Seed error for website ${website}:`, err.message);
   }

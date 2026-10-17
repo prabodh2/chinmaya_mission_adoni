@@ -15,8 +15,15 @@ import {
   Zap,
 } from 'lucide-react';
 
-export const TransformationSection = () => {
+export const TransformationSection = ({ content }) => {
+  if (content?._isEnabled === false) return null;
+
   const [activeTab, setActiveTab] = useState('ALL');
+
+  const title = content?.title || 'YOUR LIFE. YOUR CHOICE.';
+  const subtitle = content?.subtitle || 'The Anti-Drug Movement Marathon is not just a run — it is a conscious transition from darkness into light, strength, and purposeful living.';
+  const negativeTitle = content?.negativeTitle || 'Peer Pressure & Addiction';
+  const positiveTitle = content?.positiveTitle || 'Clarity, Strength & Purpose';
 
   const negativeTraits = [
     { name: 'Peer Pressure', desc: 'Feeling forced to blend in with risky habits', icon: AlertTriangle },
@@ -41,10 +48,16 @@ export const TransformationSection = () => {
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
         <h2 className="text-3xl sm:text-5xl font-black font-heading text-[var(--text-primary)]">
-          YOUR LIFE. <span className="text-[var(--orange)]">YOUR CHOICE.</span>
+          {title.includes('YOUR CHOICE') ? (
+            <>
+              YOUR LIFE. <span className="text-[var(--orange)]">YOUR CHOICE.</span>
+            </>
+          ) : (
+            title
+          )}
         </h2>
         <p className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-          The Anti-Drug Movement Marathon is not just a run — it is a conscious transition from darkness into light, strength, and purposeful living.
+          {subtitle}
         </p>
       </div>
 
@@ -57,7 +70,7 @@ export const TransformationSection = () => {
           
           <div>
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 font-heading">
-              Peer Pressure & Addiction
+              {negativeTitle}
             </h3>
             <p className="text-slate-300 text-xs sm:text-sm mb-6 leading-relaxed">
               Curiosity, stress, and negative influences lead young minds down a dangerous spiral, robbing youth of their dreams and peace.
@@ -92,7 +105,7 @@ export const TransformationSection = () => {
         <div className="bg-white p-6 sm:p-8 rounded-2xl relative overflow-hidden shadow-sm hover:shadow-md flex flex-col justify-between border border-slate-200/90 border-l-4 border-l-[var(--orange)] group">
           <div>
             <h3 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] mb-2 font-heading">
-              Health, Purpose & Brighter Future
+              {positiveTitle}
             </h3>
             <p className="text-slate-600 text-xs sm:text-sm mb-6 leading-relaxed">
               Running builds physical stamina, mental clarity, genuine friendships, and lasting self-respect.

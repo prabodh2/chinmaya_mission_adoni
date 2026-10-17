@@ -77,9 +77,15 @@ const FALLBACK_THOUGHTS = [
   },
 ];
 
-export const CommunityStoryBoardSection = () => {
+export const CommunityStoryBoardSection = ({ content }) => {
+  if (content?._isEnabled === false) return null;
+
   const [thoughts, setThoughts] = useState(FALLBACK_THOUGHTS);
   const [loading, setLoading] = useState(false);
+
+  const badgeText = content?.badgeText || 'COMMUNITY VOICES & STORY BOARD';
+  const title = content?.title || 'Voices of Strength: Your Thoughts & Stories';
+  const subtitle = content?.subtitle || 'Read real thoughts, pledges, and words of encouragement shared by runners, students, and citizens across Adoni standing united against addiction.';
 
   useEffect(() => {
     let isMounted = true;
@@ -112,13 +118,19 @@ export const CommunityStoryBoardSection = () => {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--orange)]/10 border border-[var(--orange)]/25 text-[var(--orange)] text-xs font-black uppercase tracking-wider mb-3">
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>COMMUNITY VOICES & STORY BOARD</span>
+              <span>{badgeText}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--text-primary,#0B2340)] tracking-tight">
-              Voices of Strength: <span className="text-[var(--orange,#F0441D)]">Your Thoughts & Stories</span>
+              {title.includes('Your Thoughts') ? (
+                <>
+                  Voices of Strength: <span className="text-[var(--orange,#F0441D)]">Your Thoughts & Stories</span>
+                </>
+              ) : (
+                title
+              )}
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[var(--text-muted,#475569)] leading-relaxed">
-              Read real thoughts, pledges, and words of encouragement shared by runners, students, and citizens across Adoni standing united against addiction.
+              {subtitle}
             </p>
           </div>
 

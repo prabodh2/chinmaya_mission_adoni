@@ -248,8 +248,16 @@ export const LetsConnectPage = () => {
                 <div className="w-10 h-10 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] flex items-center justify-center flex-shrink-0 mt-0.5">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <div>
-                  <p>{f.contact_info?.address || 'Chinmaya Mission, Adoni, Near Arts College Road, Adoni - 518301, Andhra Pradesh, India'}</p>
+                <div className="space-y-0.5">
+                  {f.contact_info?.address ? (
+                    <p className="whitespace-pre-line">{f.contact_info.address}</p>
+                  ) : (
+                    <>
+                      <p>Chinmaya Cultural Complex,</p>
+                      <p>Near Arts College Road,</p>
+                      <p>Adoni - 518301.</p>
+                    </>
+                  )}
                 </div>
               </div>
 

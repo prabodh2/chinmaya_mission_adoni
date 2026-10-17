@@ -109,14 +109,28 @@ const CARDS_DATA = [
   },
 ];
 
-export const MythsVsFactsSection = () => {
+export const MythsVsFactsSection = ({ content }) => {
+  if (content?._isEnabled === false) return null;
+
+  const cardsData = (content?.items && content.items.length > 0)
+    ? [
+        { id: 1, type: 'intro' },
+        ...content.items.map((it, idx) => ({
+          id: idx + 2,
+          type: 'content',
+          myth: it.title || '',
+          fact: it.description || '',
+        })),
+      ]
+    : CARDS_DATA;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('next');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const touchStartXRef = useRef(null);
 
-  const totalCards = CARDS_DATA.length;
-  const currentCard = CARDS_DATA[currentIndex];
+  const totalCards = cardsData.length;
+  const currentCard = cardsData[currentIndex] || cardsData[0];
 
   const triggerSlide = useCallback((nextIndex, direction) => {
     if (nextIndex < 0 || nextIndex >= totalCards) return;
@@ -170,6 +184,10 @@ export const MythsVsFactsSection = () => {
   // Format counter (e.g. 01 / 16, 02 / 16, ..., 16 / 16)
   const formattedCounter = `${String(currentIndex + 1).padStart(2, '0')} / ${String(totalCards).padStart(2, '0')}`;
 
+  const badgeText = content?.badgeText || 'Drug Awareness & Truth';
+  const sectionTitle = content?.title || "MYTH's VS FACT's";
+  const sectionSubtitle = content?.subtitle || 'Know the truth. Make the right choice.';
+
   return (
     <section id="myths-vs-facts" className="mvf-section" aria-label="Myths vs Facts Awareness Slider">
       <div className="mvf-container">
@@ -177,13 +195,13 @@ export const MythsVsFactsSection = () => {
         <div className="mvf-header">
           <div className="mvf-badge">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Drug Awareness & Truth</span>
+            <span>{badgeText}</span>
           </div>
           <h2 className="mvf-title">
-            MYTH's VS FACT's
+            {sectionTitle}
           </h2>
           <p className="mvf-subtitle">
-            Know the truth. Make the right choice.
+            {sectionSubtitle}
           </p>
         </div>
 

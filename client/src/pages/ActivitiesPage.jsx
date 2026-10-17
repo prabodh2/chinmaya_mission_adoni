@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { activityService, contentService } from '../services/api';
+import { activityService, contentService, webContentService } from '../services/api';
 import {
   Flame,
   Sparkles,
@@ -353,7 +353,7 @@ export const ActivitiesPage = () => {
             heading: 'History and Spiritual Significance',
             paragraphs: [
               'The Sri Chinnaya Sanjeevarya Swamy Devasthanam in Adoni was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission, Adoni.',
-              'The consecration ceremony was performed in accordance with the traditional Agama Shastras, under the guidance of Pujya Swami Pranavananda, with the support and cooperation of Sri Vitta Bhadrayya, Sri B. V. R. Reddy, Sri Achyutha Mohan Reddy, and the devoted community.',
+              'The consecration ceremony was performed in accordance with the traditional Agama Shastras, under the guidance of Pujya Swami Pranavananda, with the support and cooperation of Sri Vitta Bhimayasetty, Sri B. V. R. Reddy, Sri Adapa Mohan Reddy, and the devoted community.',
               'In 2012, a sacred Kumbhabhishekam ceremony was performed to renew the spiritual sanctity of the temple, under the guidance of Pujya Swami Paratparananda and Pujya Swami Pranavananda.',
               'With the wholehearted participation of devotees, a sacred Havan was conducted. Silver armour was offered to the presiding deity, and two ornamental pieces were provided for the festival deities (Utsava Murtis), reflecting the devotion and reverence of the community.',
             ],
@@ -569,7 +569,26 @@ export const ActivitiesPage = () => {
     return defaultMovementActivities;
   });
 
+  const [heroContent, setHeroContent] = useState(() => {
+    try {
+      const cached = localStorage.getItem('cached_cms_chinmaya_activities');
+      if (cached) return JSON.parse(cached)?.fieldsMap?.activities_hero || null;
+    } catch (_) {}
+    return null;
+  });
+
   const loadActivities = () => {
+    webContentService
+      .getPublicPage('chinmaya', 'activities')
+      .then((res) => {
+        if (res.data?.success && res.data?.data) {
+          try {
+            localStorage.setItem('cached_cms_chinmaya_activities', JSON.stringify(res.data.data));
+          } catch (_) {}
+          setHeroContent(res.data.data.fieldsMap?.activities_hero || null);
+        }
+      })
+      .catch(() => {});
     // 1. Fetch community & movement activities from API
     activityService
       .getActivities()
@@ -697,11 +716,18 @@ export const ActivitiesPage = () => {
       {/* 1. OUR ACTIVITIES OVERVIEW */}
       <section className="space-y-8 w-full">
         <header className="text-center space-y-2 max-w-4xl mx-auto">
+          {heroContent?.badge && (
+            <div className="flex justify-center mb-2">
+              <span className="px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[var(--orange)]/10 text-[var(--orange)] border border-[var(--orange)]/20">
+                {heroContent.badge}
+              </span>
+            </div>
+          )}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
-            Our Activities
+            {heroContent?.heading || 'Our Activities'}
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] font-medium max-w-3xl mx-auto">
-            Learning, culture, devotion, and spiritual growth for all ages.
+            {heroContent?.subtitle || 'Learning, culture, devotion, and spiritual growth for all ages.'}
           </p>
         </header>
 
