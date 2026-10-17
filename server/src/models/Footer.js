@@ -56,10 +56,10 @@ const footerSchema = new mongoose.Schema(
         default: 'LOCATION & CONTACT',
       },
       address: {
-        line1: { type: String, default: 'Chinmaya Mission Cultural Complex , Adoni' },
-        line2: { type: String, default: 'Near Arts College Road' },
+        line1: { type: String, default: 'Chinmaya Cultural Complex,' },
+        line2: { type: String, default: 'Near Arts College Road,' },
         city: { type: String, default: 'Adoni' },
-        pincode: { type: String, default: '518301' },
+        pincode: { type: String, default: '518301.' },
         state: { type: String, default: 'Andhra Pradesh' },
         country: { type: String, default: 'India' },
       },

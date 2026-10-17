@@ -249,13 +249,15 @@ export const LetsConnectPage = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div className="space-y-0.5">
-                  {f.contact_info?.address ? (
-                    <p className="whitespace-pre-line">{f.contact_info.address}</p>
+                  {f.contact_info?.address && !f.contact_info.address.includes('Chinmaya Mission Cultural Complex') ? (
+                    f.contact_info.address.split('\n').filter(Boolean).map((line, idx) => (
+                      <p key={idx} className="m-0 leading-normal">{line}</p>
+                    ))
                   ) : (
                     <>
-                      <p>Chinmaya Cultural Complex,</p>
-                      <p>Near Arts College Road,</p>
-                      <p>Adoni - 518301.</p>
+                      <p className="m-0 leading-normal">Chinmaya Cultural Complex,</p>
+                      <p className="m-0 leading-normal">Near Arts College Road,</p>
+                      <p className="m-0 leading-normal">Adoni - 518301.</p>
                     </>
                   )}
                 </div>

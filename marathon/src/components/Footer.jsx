@@ -95,10 +95,10 @@ const FALLBACK_FOOTER = {
   contact: {
     heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Cultural Complex , Adoni',
-      line2: 'Near Arts College Road',
+      line1: 'Chinmaya Cultural Complex,',
+      line2: 'Near Arts College Road,',
       city: 'Adoni',
-      pincode: '518301',
+      pincode: '518301.',
       state: 'Andhra Pradesh',
       country: 'India',
     },
@@ -256,22 +256,17 @@ export const Footer = ({ overrideData = null }) => {
       : contact.heading;
 
   const address = contact.address || {};
-  let line1 = address.line1 || 'Chinmaya Mission Cultural Complex , Adoni';
-  if (line1 === 'Chinmaya Mission Adoni' || line1 === 'Chinmaya Mission, Adoni' || !line1.includes('Cultural Complex')) {
-    line1 = 'Chinmaya Mission Cultural Complex , Adoni';
-  }
-  const line2 = address.line2 || 'Near Arts College Road';
-  const cityPin = address.city ? `${address.city} - ${address.pincode || '518301'}` : 'Adoni - 518301';
-  const stateStr = address.state || 'Andhra Pradesh';
-
-  const fullAddress = [
-    line1,
-    line2,
-    cityPin,
-    stateStr,
-  ]
-    .filter(Boolean)
-    .join(', ');
+  const addressLines = [
+    address.line1 && address.line1 !== 'Chinmaya Mission Cultural Complex , Adoni' && address.line1 !== 'Chinmaya Mission Adoni'
+      ? (address.line1.endsWith(',') ? address.line1 : `${address.line1},`)
+      : 'Chinmaya Cultural Complex,',
+    address.line2 && address.line2 !== 'Arts College Road'
+      ? (address.line2.endsWith(',') ? address.line2 : `${address.line2},`)
+      : 'Near Arts College Road,',
+    address.city
+      ? `${address.city} - ${(address.pincode || '518301').replace(/\.$/, '')}.`
+      : 'Adoni - 518301.',
+  ];
 
   const pledgeHeading =
     pledge.heading === 'THE MARATHON PLEDGE' || !pledge.heading
@@ -373,12 +368,14 @@ export const Footer = ({ overrideData = null }) => {
               {contactHeading}
             </h4>
             <div className="space-y-2.5 text-xs opacity-90">
-              {fullAddress && (
-                <p className="flex items-start gap-2 leading-relaxed">
-                  <MapPin style={accentStyle} className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span>{fullAddress}</span>
-                </p>
-              )}
+              <div className="flex items-start gap-2 leading-relaxed">
+                <MapPin style={accentStyle} className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  {addressLines.map((line, idx) => (
+                    <p key={idx} className="m-0 leading-normal">{line}</p>
+                  ))}
+                </div>
+              </div>
 
               {contact.phoneNumbers && contact.phoneNumbers.length > 0 && (
                 <p className="flex items-center gap-2">

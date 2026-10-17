@@ -48,10 +48,10 @@ const DEFAULT_FORM_DATA = {
   contact: {
     heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Cultural Complex , Adoni',
-      line2: 'Near Arts College Road',
+      line1: 'Chinmaya Cultural Complex,',
+      line2: 'Near Arts College Road,',
       city: 'Adoni',
-      pincode: '518301',
+      pincode: '518301.',
       state: 'Andhra Pradesh',
       country: 'India',
     },

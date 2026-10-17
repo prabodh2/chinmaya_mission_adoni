@@ -207,7 +207,7 @@ export const WhoAreWePage = () => {
 
             {/* EXPANDED CARD (Identical to Attachment 1) */}
             <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E7DFD3] shadow-[0_4px_24px_rgba(20,50,35,0.08)] bg-white">
-              {/* Photo Area with bottom-left watermark pill */}
+              {/* Photo Area */}
               <div className="relative w-full bg-[#18231C] overflow-hidden group">
                 {selectedMember.isPortraitPlaceholder ? (
                   // Portrait Placeholder view for Brahmachari Narayana Chaitanya

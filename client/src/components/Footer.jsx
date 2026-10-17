@@ -91,10 +91,10 @@ const MAIN_SITE_FALLBACK_FOOTER = {
   contact: {
     heading: 'LOCATION & CONTACT',
     address: {
-      line1: 'Chinmaya Mission Cultural Complex , Adoni',
-      line2: 'Near Arts College Road',
+      line1: 'Chinmaya Cultural Complex,',
+      line2: 'Near Arts College Road,',
       city: 'Adoni',
-      pincode: '518301',
+      pincode: '518301.',
       state: 'Andhra Pradesh',
       country: 'India',
     },
@@ -193,8 +193,12 @@ function sanitizeMainSiteFooter(rawData) {
       heading: 'LOCATION & CONTACT',
       address: {
         ...addr,
-        line1: addr.line1?.includes('Cultural Complex') ? addr.line1 : 'Chinmaya Mission Cultural Complex , Adoni',
-        line2: (addr.line2 === 'Arts College Road' || !addr.line2) ? 'Near Arts College Road' : addr.line2,
+        line1: (addr.line1 && addr.line1 !== 'Chinmaya Mission Cultural Complex , Adoni' && addr.line1 !== 'Chinmaya Mission Adoni')
+          ? addr.line1
+          : 'Chinmaya Cultural Complex,',
+        line2: (addr.line2 === 'Arts College Road' || !addr.line2) ? 'Near Arts College Road,' : addr.line2,
+        city: addr.city || 'Adoni',
+        pincode: addr.pincode || '518301.',
       },
     };
   }
@@ -305,14 +309,17 @@ export const Footer = ({ overrideData = null }) => {
     .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
   const address = contact.address || {};
-  const fullAddress = [
-    address.line1,
-    address.line2,
-    address.city ? `${address.city} - ${address.pincode || ''}` : '',
-    address.state,
-  ]
-    .filter(Boolean)
-    .join(', ');
+  const addressLines = [
+    address.line1 && address.line1 !== 'Chinmaya Mission Cultural Complex , Adoni' && address.line1 !== 'Chinmaya Mission Adoni'
+      ? (address.line1.endsWith(',') ? address.line1 : `${address.line1},`)
+      : 'Chinmaya Cultural Complex,',
+    address.line2 && address.line2 !== 'Arts College Road'
+      ? (address.line2.endsWith(',') ? address.line2 : `${address.line2},`)
+      : 'Near Arts College Road,',
+    address.city
+      ? `${address.city} - ${(address.pincode || '518301').replace(/\.$/, '')}.`
+      : 'Adoni - 518301.',
+  ];
 
   const footerStyle = {
     backgroundColor: appearance?.backgroundColor || '#0B2340',
@@ -392,12 +399,14 @@ export const Footer = ({ overrideData = null }) => {
               {contact.heading || 'LOCATION & CONTACT'}
             </h4>
             <div className="space-y-4 text-sm sm:text-base opacity-90">
-              {fullAddress && (
-                <p className="flex items-start gap-3 leading-relaxed">
-                  <MapPin style={accentStyle} className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                  <span className="font-medium text-slate-300">{fullAddress}</span>
-                </p>
-              )}
+              <div className="flex items-start gap-3 leading-relaxed">
+                <MapPin style={accentStyle} className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <div className="font-medium text-slate-300 space-y-0.5">
+                  {addressLines.map((line, idx) => (
+                    <p key={idx} className="m-0 leading-normal">{line}</p>
+                  ))}
+                </div>
+              </div>
 
               {contact.phoneNumbers && contact.phoneNumbers.length > 0 && (
                 <p className="flex items-center gap-3">

@@ -203,17 +203,6 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
             <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-medium">
               {section.description || 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!'}
             </p>
-            {section.primaryButtonText && (
-              <div>
-                <Link
-                  to={section.primaryButtonLink || '/register'}
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-extrabold text-base shadow-2xl hover:bg-slate-100 transition-transform hover:scale-105 text-decoration-none"
-                >
-                  <Award className="w-5 h-5 text-[var(--orange)]" />
-                  <span>{section.primaryButtonText}</span>
-                </Link>
-              </div>
-            )}
           </div>
         </section>
       );

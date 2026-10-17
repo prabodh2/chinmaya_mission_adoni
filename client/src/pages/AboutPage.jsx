@@ -476,9 +476,11 @@ export const AboutPage = () => {
                 <h3 className="text-xl font-extrabold font-heading text-white">
                   Chinmaya Mission, Adoni
                 </h3>
-                <p className="text-xs text-slate-300 font-medium">
-                  Near Arts College Road, Adoni, Andhra Pradesh
-                </p>
+                <div className="text-xs text-slate-300 font-medium space-y-0.5 mt-1 leading-snug">
+                  <p className="m-0">Chinmaya Cultural Complex,</p>
+                  <p className="m-0">Near Arts College Road,</p>
+                  <p className="m-0">Adoni - 518301.</p>
+                </div>
               </div>
             </div>
           </div>
