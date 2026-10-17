@@ -9,7 +9,6 @@ import {
   Maximize2,
   Sparkles,
   User,
-  ExternalLink,
   Flame,
   ArrowRight,
 } from 'lucide-react';
@@ -23,7 +22,6 @@ const MEMBERS_DATA = [
     description: 'The visionary founder whose teachings continue to inspire generations.',
     extendedBio:
       'Pujya Gurudev Swami Chinmayananda Saraswati (1916–1993) was one of the foremost spiritual leaders and teachers of Vedanta in the modern era. Through his dynamic lectures, insightful commentaries on the Upanishads and Bhagavad Gita, and compassionate guidance, he revitalized spiritual education across India and globally.',
-    sourceBadge: 'chinmaya.com.au',
     largeImage: '/assets/leadership/swami-chinmayananda.png',
     thumbImage: '/assets/leadership/swami-chinmayananda-thumb.jpg',
     isFounder: true,
@@ -37,7 +35,6 @@ const MEMBERS_DATA = [
       "A respected spiritual guide who has contributed to the continuation of Chinmaya Mission's teachings.",
     extendedBio:
       'Pujya Swami Tejomayananda served as the worldwide head of Chinmaya Mission from 1993 to 2017. A poet, philosopher, and profound teacher of Vedanta, Guruji steered the Mission through global expansion while deepening its educational, spiritual, and rural welfare initiatives.',
-    sourceBadge: 'chinmayamission.com',
     largeImage: '/assets/leadership/swami-tejomayananda-official.jpg',
     thumbImage: '/assets/leadership/swami-tejomayananda-thumb.jpg',
   },
@@ -49,7 +46,6 @@ const MEMBERS_DATA = [
     description: "Guiding the Mission's spiritual vision and activities.",
     extendedBio:
       'Pujya Swami Swaroopananda is the current worldwide head of Chinmaya Mission. Internationally renowned for his contemporary and inspiring discourses, Swamiji guides hundreds of Chinmaya Mission centers, schools, and youth projects across the world.',
-    sourceBadge: 'chinmayamission.com',
     largeImage: '/assets/leadership/swami-swaroopananda-official.jpg',
     thumbImage: '/assets/leadership/swami-swaroopananda-thumb.jpg',
   },
@@ -61,7 +57,6 @@ const MEMBERS_DATA = [
     description: 'Serving as the resident of Chinmaya Mission, Adoni.',
     extendedBio:
       'Serving as the dedicated resident of Chinmaya Mission, Adoni, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the Adoni region.',
-    sourceBadge: 'chinmayamissionadoni.org',
     largeImage: '/assets/leadership/narayana-chaitanya.jpg',
     thumbImage: '/assets/leadership/narayana-chaitanya-thumb.jpg',
   },
@@ -243,13 +238,6 @@ export const WhoAreWePage = () => {
                       alt={selectedMember.name}
                       className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain mx-auto drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.01]"
                     />
-                  </div>
-                )}
-
-                {/* Watermark badge in bottom left (as seen in Image 1: "chinmaya.com.au") */}
-                {selectedMember.sourceBadge && (
-                  <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 px-3.5 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-white/95 text-[11px] sm:text-xs font-semibold tracking-wide border border-white/15 shadow-md flex items-center gap-1.5">
-                    <span>{selectedMember.sourceBadge}</span>
                   </div>
                 )}
               </div>

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { webContentService } from '../services/api';
+import { TempleSevaSection } from '../components/TempleSevaSection';
 import {
   Landmark,
   Flame,
   Heart,
   Sparkles,
-  ChevronRight,
   Sun,
   Clock,
   MapPin,
-  Calendar,
-  Compass,
 } from 'lucide-react';
 
 export const SriShanthaMamleshwaraSwamiTemplePage = () => {
@@ -70,50 +67,6 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
       period: 'Month of Magha',
       desc: 'Month-long daily special abhishekams and sacred archanas supported by hundreds of community devotee sponsors, culminating in the joyous celebrations of Mahashivaratri.',
       icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-    },
-  ];
-
-  const devotionalRituals = [
-    {
-      title: '1. Daily Bilvarchana & Rudrabhishekam',
-      badge: 'Every Day',
-      desc: 'Sacred Vedic abhishekam performed with holy water, panchamrutham, and fresh sacred Bilva (bael) leaves, accompanied by recitations of Sri Rudram and Om Namah Shivaya for peace and inner purification.',
-      image: '/assets/images/temple-seva-rudrabhishekam.jpg',
-    },
-    {
-      title: '2. Pradosha Vrata Deeparadhana',
-      badge: 'Every Pradosham & Monday',
-      desc: 'Observed during the sacred twilight Pradosha Kala with special abhishekams, lighting of tiered brass deepas, and collective chanting of Shiva Stotrams for peace, health, and freedom from obstacles.',
-      image: '/assets/images/temple-seva-pradosha.jpg',
-    },
-    {
-      title: '3. Maha Shivaratri & Shiva-Parvati Kalyanam',
-      badge: 'Annual Festival & Magha Masa',
-      desc: 'The grand annual observance featuring night-long Mahashivaratri Jagaran, sacred Laghu Rudra Abhishekam, Rudram Homam by Veda Purohits, and the divine celestial wedding ceremony followed by Mahaprasadam.',
-      image: '/assets/images/temple-seva-shiva-kalyanam.jpg',
-    },
-  ];
-
-  const pujaServices = [
-    {
-      number: '01',
-      title: 'Panchamrutha Rudrabhishekam',
-      desc: 'A sacred Vedic ritual where the Shivalingam is ceremonially bathed with Panchamrutham (milk, curd, honey, ghee, and jaggery) alongside fragrant holy waters. It symbolizes purification, vitality, peace, and divine grace.',
-      price: '₹151',
-    },
-    {
-      number: '02',
-      title: 'Bilvarchana & Sankalpa Archana',
-      frequency: 'Every Monday & Pradosham',
-      desc: 'Devotional offering of sacred trifoliate Bilva leaves chanting the divine names of Lord Shiva. According to Shaivite tradition, Bilvarchana brings peace of mind, removes obstacles, and bestows spiritual wisdom.',
-      price: '₹150',
-    },
-    {
-      number: '03',
-      title: 'Maha Mrityunjaya & Laghu Rudra Pooja',
-      frequency: 'Special Occasions & Shivaratri',
-      desc: 'A powerful Vedic chanting of the Maha Mrityunjaya mantra and Rudra Prashna to ward off negative energies and illness, praying for longevity, holistic health, and spiritual liberation.',
-      price: '₹251',
     },
   ];
 
@@ -276,103 +229,11 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
         </div>
       </section>
 
-      {/* 3. DEVOTIONAL RITUALS & REGULAR SEVAS */}
-      <section className="bg-[#090909] text-white py-12 sm:py-16 border-y border-[#2d2723]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-          {devotionalRituals.map((ritual, idx) => (
-            <div
-              key={idx}
-              className={`flex flex-row items-center gap-4 sm:gap-7 pb-6 sm:pb-8 ${
-                idx < devotionalRituals.length - 1 ? 'border-b border-[#2d2723]' : ''
-              }`}
-            >
-              <img
-                src={ritual.image}
-                alt={ritual.title}
-                className="w-24 sm:w-36 md:w-40 aspect-[3/4] object-cover rounded-xl shrink-0 shadow-lg border border-white/5"
-              />
-              <div className="space-y-2 sm:space-y-2.5 text-left">
-                <h3 className="text-base sm:text-xl font-bold font-heading text-[#f5c46a]">
-                  {ritual.title}
-                </h3>
-                <span className="inline-block px-3 py-1 rounded-full bg-[#1f1f23] text-[#e0e0e0] text-xs sm:text-sm font-medium border border-white/5">
-                  {ritual.badge}
-                </span>
-                <p className="text-slate-200 text-xs sm:text-base leading-relaxed">
-                  {ritual.desc}
-                </p>
-              </div>
-            </div>
-          ))}
+      {/* THE HOURS OF DEVOTION & SEVA */}
+      <TempleSevaSection />
 
-          {/* Sacred Footer Closing */}
-          <div className="pt-4 border-t border-[#2d2723] text-center space-y-1.5">
-            <div className="text-lg sm:text-2xl font-bold text-[#f5c46a] tracking-widest font-serif">
-              ॥ ॐ नमः शिवाय ॥
-            </div>
-            <p className="text-xs sm:text-sm text-[#b8afa2]">
-              With devotion, peace, and the divine grace of Lord Shiva (Shri Shantamalleshwara Swamy)
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. PUJA SERVICES & THEIR SIGNIFICANCE */}
-      <section className="bg-[#0b0b0b] text-[#f5f5f5] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-y border-[#393027]/60">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <div className="text-center max-w-3xl mx-auto space-y-2">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
-              SACRED SEVAS &amp; PUJAS
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-[#f2c16b] tracking-tight">
-              Puja Services &amp; Their Significance
-            </h2>
-            <div className="w-16 h-1 bg-[var(--orange)] rounded-full mx-auto mt-2" />
-            <p className="text-xs sm:text-sm text-[#c5c5c5] font-medium pt-1">
-              Explore our traditional Vedic puja services and their spiritual significance.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pujaServices.map((puja, idx) => (
-              <div
-                key={idx}
-                className="bg-[#151515] border border-[#403326] rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-lg shadow-black/40 hover:-translate-y-1.5 hover:border-[var(--orange)]/80 hover:shadow-2xl transition-all duration-300 text-left group"
-              >
-                <div>
-                  <div className="w-11 h-11 rounded-full bg-[#3b2b18] border border-amber-500/20 text-[#f2c16b] font-bold text-base flex items-center justify-center mb-5 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-200">
-                    {puja.number}
-                  </div>
-
-                  <h3 className="text-lg sm:text-xl font-bold font-heading text-[#f2c16b] leading-snug mb-2 group-hover:text-amber-300 transition-colors">
-                    {puja.title}
-                  </h3>
-
-                  {puja.frequency && (
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#302417] text-[#f2c16b] border border-amber-900/40 text-xs font-semibold mb-3">
-                      {puja.frequency}
-                    </span>
-                  )}
-
-                  <p className="text-sm text-[#d0d0d0] leading-relaxed font-normal mb-6">
-                    {puja.desc}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-[#393027] mt-auto">
-                  <span className="text-sm text-[#bdbdbd] font-medium">Seva Price</span>
-                  <strong className="text-2xl font-black font-heading text-[#f2c16b] tracking-tight">
-                    {puja.price}
-                  </strong>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. ANNUAL FESTIVALS & SPECIAL CELEBRATIONS */}
-      <section className="bg-gradient-to-b from-amber-50/50 to-white py-12 sm:py-16 border-y border-amber-900/10">
+      {/* 3. ANNUAL FESTIVALS & SPECIAL CELEBRATIONS */}
+      <section className="bg-gradient-to-b from-amber-50/50 to-white py-12 sm:py-16 border-t border-amber-900/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
@@ -408,53 +269,6 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. VISITOR INFORMATION & PILGRIM ACCESS */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm border border-slate-200/90 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-[var(--orange)] flex items-center justify-center">
-              <Clock className="w-5 h-5" />
-            </div>
-            <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900">
-              Temple Darshan Timings
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <strong>Morning:</strong> 6:00 AM – 12:00 PM<br />
-              <strong>Evening:</strong> 5:00 PM – 8:30 PM<br />
-              <span className="text-[11px] text-slate-500 italic">
-                Special Deeparadhana performed daily at 6:30 PM. Extended hours on Pradosham and Maha Shivaratri.
-              </span>
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-[var(--orange)] flex items-center justify-center">
-              <Compass className="w-5 h-5" />
-            </div>
-            <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900">
-              Pilgrim Pathway &amp; Bridge
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              The hilltop shrine is reached via the dedicated devotee bridge and footpath bridge constructed by Chinmaya Mission in 2003–2004, offering convenient and safe access for devotees of all ages.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-[var(--orange)] flex items-center justify-center">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <h3 className="text-base sm:text-lg font-bold font-heading text-slate-900">
-              Location &amp; Shrine Address
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <strong>Sri Shantha Mamleshwara Swami Temple</strong><br />
-              Shanta Mallappa Konda, Near Ramanjaneya Nagar / Arts College Road<br />
-              Adoni – 518301, Andhra Pradesh, India.
-            </p>
           </div>
         </div>
       </section>

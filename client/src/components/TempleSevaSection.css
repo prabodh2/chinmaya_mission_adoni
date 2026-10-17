@@ -1,0 +1,696 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap');
+
+/* Main Wrapper Scope */
+.temple-seva-wrapper {
+  --seva-bg-0: #050505;
+  --seva-bg-1: #0B1120;
+  --seva-bg-2: #131a2c;
+  --seva-gold: #FF7A2E;
+  --seva-gold-soft: #d96218;
+  --seva-gold-glow: rgba(255, 122, 46, 0.38);
+  --seva-ivory: #F5F5F5;
+  --seva-ivory-dim: rgba(245, 245, 245, 0.72);
+  --seva-ivory-faint: rgba(245, 245, 245, 0.42);
+  --seva-line: rgba(255, 122, 46, 0.18);
+  --seva-line-soft: rgba(245, 245, 245, 0.08);
+  --seva-blue-glow: rgba(120, 190, 255, 0.35);
+
+  --seva-f-display: "Cinzel", serif;
+  --seva-f-serif: "Cormorant Garamond", "Playfair Display", serif;
+  --seva-f-script: "Playfair Display", serif;
+  --seva-f-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --seva-f-sanskrit: "Tiro Devanagari Sanskrit", serif;
+
+  background: var(--seva-bg-0);
+  color: var(--seva-ivory);
+  font-family: var(--seva-f-serif);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.55;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--seva-line-soft);
+  border-bottom: 1px solid var(--seva-line-soft);
+}
+
+.temple-seva-wrapper ::selection {
+  background: var(--seva-gold);
+  color: var(--seva-bg-0);
+}
+
+/* Container */
+.seva-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 640px) {
+  .seva-container {
+    padding: 0 32px;
+  }
+}
+
+/* Top Bar inside Seva section */
+.seva-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--seva-line-soft);
+  background: rgba(5, 5, 5, 0.88);
+  backdrop-filter: blur(12px);
+  position: relative;
+  z-index: 20;
+}
+
+@media (min-width: 640px) {
+  .seva-top-bar {
+    padding: 20px 36px;
+  }
+}
+
+.seva-temple-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--seva-ivory);
+}
+
+.seva-temple-om {
+  font-family: var(--seva-f-sanskrit);
+  font-size: 26px;
+  color: var(--seva-gold);
+  line-height: 1;
+}
+
+.seva-temple-title {
+  font-family: var(--seva-f-display);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--seva-ivory);
+}
+
+@media (min-width: 640px) {
+  .seva-temple-title {
+    font-size: 13px;
+    letter-spacing: 0.24em;
+  }
+}
+
+.seva-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.seva-my-bookings-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid var(--seva-line);
+  background: rgba(255, 122, 46, 0.08);
+  color: var(--seva-gold);
+  font-family: var(--seva-f-display);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.seva-my-bookings-btn:hover {
+  background: var(--seva-gold);
+  color: var(--seva-bg-0);
+  border-color: var(--seva-gold);
+}
+
+.seva-booking-badge {
+  background: var(--seva-gold);
+  color: var(--seva-bg-0);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.seva-my-bookings-btn:hover .seva-booking-badge {
+  background: var(--seva-bg-0);
+  color: var(--seva-gold);
+}
+
+/* Eyebrow */
+.seva-eyebrow {
+  font-family: var(--seva-f-display);
+  font-size: 11px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--seva-gold);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.seva-eyebrow::before,
+.seva-eyebrow::after {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--seva-gold);
+  opacity: 0.6;
+}
+
+/* Headings */
+.temple-seva-wrapper h2 {
+  font-family: var(--seva-f-display);
+  font-weight: 500;
+  color: var(--seva-ivory);
+  margin: 0;
+  font-size: clamp(28px, 3.8vw, 52px);
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+}
+
+.seva-serif-display {
+  font-family: var(--seva-f-script);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Main Seva Section */
+.seva-section {
+  position: relative;
+  background: var(--seva-bg-0);
+  padding: 70px 0 100px;
+  overflow: hidden;
+}
+
+.seva-ambient-glow-bottom {
+  position: absolute;
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 350px;
+  background: radial-gradient(ellipse at center, rgba(255, 122, 46, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.seva-header-block {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.seva-header-description {
+  margin-top: 20px;
+  color: var(--seva-ivory-dim);
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+/* Grid Layout - 4 Columns */
+.seva-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 1100px) {
+  .seva-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .seva-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card Base */
+.seva-card {
+  background: var(--seva-bg-1);
+  border: 1px solid var(--seva-line-soft);
+  padding: 34px 22px;
+  position: relative;
+  transition: border-color 0.4s ease, transform 0.5s ease;
+}
+
+.seva-card::before,
+.seva-card::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--seva-gold);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.seva-card::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.seva-card::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Pooja Card Specific */
+.seva-pooja-card {
+  min-height: 360px;
+  overflow: hidden;
+  isolation: isolate;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 122, 46, 0.11), transparent 28%),
+    linear-gradient(180deg, rgba(20, 26, 44, 0.78), rgba(7, 10, 20, 0.94));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.025);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 0.4s ease,
+              box-shadow 0.4s ease,
+              background 0.4s ease;
+}
+
+.seva-pooja-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--seva-gold);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 122, 46, 0.2), transparent 32%),
+    linear-gradient(180deg, rgba(27, 34, 56, 0.94), rgba(7, 10, 20, 0.98));
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45), 0 0 32px rgba(255, 122, 46, 0.14);
+}
+
+.seva-pooja-card-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 122, 46, 0.32);
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.26);
+  box-shadow: 0 0 0 8px rgba(255, 122, 46, 0.035), 0 0 28px rgba(255, 122, 46, 0.12);
+  font-size: 32px;
+  color: var(--seva-gold);
+  font-family: var(--seva-f-script);
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.seva-pooja-card:hover .seva-pooja-card-icon {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 10px rgba(255, 122, 46, 0.06), 0 0 36px rgba(255, 122, 46, 0.28);
+}
+
+.seva-pooja-card h3 {
+  font-family: var(--seva-f-display);
+  font-size: 16px;
+  line-height: 1.35;
+  margin-bottom: 14px;
+  letter-spacing: 0.07em;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--seva-ivory);
+}
+
+.seva-pooja-card-desc {
+  font-size: 14px;
+  color: var(--seva-ivory-faint);
+  font-style: italic;
+  line-height: 1.5;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+/* Maha Shivaratri Royal Card */
+.seva-maha-shivaratri-card {
+  background: linear-gradient(160deg, rgba(232,196,74,0.09) 0%, rgba(20,26,44,0.6) 40%, rgba(11,17,32,0.35) 100%) !important;
+  border: 1px solid rgba(232,196,74,0.3) !important;
+  box-shadow: 0 0 32px rgba(232,196,74,0.09), inset 0 0 40px rgba(232,196,74,0.035);
+  position: relative;
+  overflow: hidden;
+}
+
+.seva-maha-shivaratri-card:hover {
+  border-color: rgba(232,196,74,0.55) !important;
+  box-shadow: 0 0 55px rgba(232,196,74,0.18), inset 0 0 55px rgba(232,196,74,0.06);
+}
+
+.seva-maha-shivaratri-card .seva-pooja-card-icon {
+  color: #E8C44A;
+  border-color: rgba(232,196,74,0.4);
+  box-shadow: 0 0 0 8px rgba(232,196,74,0.04), 0 0 28px rgba(232,196,74,0.16);
+}
+
+.seva-maha-shivaratri-card .seva-pooja-card-desc {
+  color: var(--seva-ivory-dim);
+}
+
+.seva-shivaratri-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 40%, rgba(232,196,74,0.07) 0%, transparent 50%);
+  animation: seva-shivaratri-pulse 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes seva-shivaratri-pulse {
+  0% { opacity: 0.45; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+/* Buttons */
+.seva-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--seva-f-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 13px 22px;
+  border: 1px solid var(--seva-gold);
+  background: rgba(255, 122, 46, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 122, 46, 0.06);
+  color: var(--seva-gold);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.seva-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--seva-gold);
+  transform: translateY(101%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.seva-btn:hover {
+  color: var(--seva-bg-0);
+  box-shadow: 0 8px 24px rgba(255, 122, 46, 0.22);
+}
+
+.seva-btn:hover::after {
+  transform: translateY(0);
+}
+
+.seva-btn.solid {
+  background: var(--seva-gold);
+  color: var(--seva-bg-0);
+  border-color: var(--seva-gold);
+}
+
+.seva-btn.solid:hover {
+  background: transparent;
+  color: var(--seva-gold);
+}
+
+.seva-btn.solid:hover::after {
+  transform: translateY(-101%);
+}
+
+.seva-btn.ghost {
+  border-color: var(--seva-line-soft);
+  color: var(--seva-ivory);
+  background: transparent;
+}
+
+.seva-btn.ghost:hover {
+  color: var(--seva-bg-0);
+  border-color: var(--seva-ivory);
+}
+
+.seva-btn.ghost::after {
+  background: var(--seva-ivory);
+}
+
+.seva-btn .arrow {
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  position: relative;
+  display: inline-block;
+}
+
+.seva-btn .arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid currentColor;
+  border-top: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* Modals */
+.seva-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  animation: sevaModalFadeIn 0.3s ease;
+  overflow-y: auto;
+}
+
+@keyframes sevaModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.seva-modal {
+  background: linear-gradient(180deg, #0e152d, #060814);
+  border: 1px solid var(--seva-line);
+  max-width: 740px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 44px 36px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 122, 46, 0.15);
+  animation: sevaModalLift 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  color: var(--seva-ivory);
+  font-family: var(--seva-f-serif);
+}
+
+@keyframes sevaModalLift {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.seva-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--seva-line-soft);
+  background: transparent;
+  color: var(--seva-ivory);
+  cursor: pointer;
+  font-family: var(--seva-f-script);
+  font-size: 24px;
+  display: grid;
+  place-items: center;
+  transition: all 0.25s ease;
+  line-height: 1;
+}
+
+.seva-modal-close:hover {
+  border-color: var(--seva-gold);
+  color: var(--seva-gold);
+  transform: scale(1.08);
+}
+
+/* Modal form controls */
+.seva-input, .seva-select, .seva-textarea {
+  width: 100%;
+  background: rgba(245, 245, 245, 0.035);
+  border: 1px solid var(--seva-line-soft);
+  color: var(--seva-ivory);
+  font-family: var(--seva-f-serif);
+  font-size: 16px;
+  padding: 13px 16px;
+  outline: none;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.seva-input:focus, .seva-select:focus, .seva-textarea:focus {
+  border-color: var(--seva-gold);
+  background: rgba(255, 122, 46, 0.05);
+}
+
+.seva-date-input {
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+.seva-field-label {
+  display: block;
+  font-family: var(--seva-f-display);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  color: var(--seva-ivory-faint);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.seva-modal-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .seva-modal-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .seva-modal {
+    padding: 32px 18px;
+  }
+}
+
+.seva-modal-grid-summary {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px 20px;
+  line-height: 1.6;
+}
+
+@media (max-width: 500px) {
+  .seva-modal-grid-summary {
+    grid-template-columns: 100px 1fr;
+  }
+}
+
+.seva-option-card-btn {
+  padding: 16px 18px;
+  text-align: left;
+  border: 1px solid var(--seva-line-soft);
+  background: transparent;
+  color: var(--seva-ivory);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.seva-option-card-btn:hover {
+  border-color: var(--seva-gold);
+  background: rgba(255, 122, 46, 0.04);
+}
+
+.seva-option-card-btn.selected {
+  border-color: var(--seva-gold);
+  background: rgba(255, 122, 46, 0.1);
+  box-shadow: 0 0 20px rgba(255, 122, 46, 0.15);
+}
+
+/* Divine Om pulse */
+.seva-om-pulse-circle {
+  width: 84px;
+  height: 84px;
+  border: 1px solid var(--seva-gold);
+  border-radius: 50%;
+  margin: 0 auto 28px;
+  display: grid;
+  place-items: center;
+  font-family: var(--seva-f-sanskrit);
+  font-size: 44px;
+  color: var(--seva-gold);
+  box-shadow: 0 0 45px var(--seva-gold-glow);
+  animation: sevaOmPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes sevaOmPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 35px var(--seva-gold-glow); }
+  50% { transform: scale(1.06); box-shadow: 0 0 60px var(--seva-gold-glow), 0 0 90px rgba(255, 122, 46, 0.3); }
+}
+
+.seva-no-payment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  color: #2ecc71;
+  padding: 8px 14px;
+  font-family: var(--seva-f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 14px;
+  border-radius: 2px;
+}
+
+/* Seva Section Footer */
+.seva-temple-footer {
+  border-top: 1px solid var(--seva-line-soft);
+  background: linear-gradient(180deg, #050505, #080c16);
+  padding: 50px 0 36px;
+  text-align: center;
+}
+
+.seva-temple-footer p {
+  color: var(--seva-ivory-faint);
+  font-size: 14px;
+  margin-top: 10px;
+}

@@ -299,44 +299,6 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* CHYK SECTION */}
-        <section className="chyk-section section-wrap" id="chyk">
-          <div className="chyk-image">
-            <img
-              src={chykImg}
-              alt="Young people taking part in a healthy community activity"
-            />
-          </div>
-          <div className="chyk-copy">
-            <p className="eyebrow">{chykEyebrow}</p>
-            <h2>
-              {chykHeading.includes('—') ? (
-                <>
-                  {chykHeading.split('—')[0]} <span>— {chykHeading.split('—')[1]}</span>
-                </>
-              ) : (
-                chykHeading
-              )}
-            </h2>
-            <span className="title-underline" />
-            <p>{chykDesc}</p>
-            <div className="chyk-tags">
-              <span>
-                <Sparkles size={14} /> {chykTag1}
-              </span>
-              <span>
-                <Heart size={14} /> {chykTag2}
-              </span>
-            </div>
-            <Link
-              className="btn btn-primary"
-              to={chykBtnLink}
-            >
-              {chykBtnText} <ArrowRight size={16} />
-            </Link>
-          </div>
-        </section>
-
         {/* UPCOMING EVENTS SECTION */}
         <section className="events-section section-wrap" id="events">
           <div className="events-heading">
@@ -392,6 +354,44 @@ export function HomePage() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        {/* CHYK SECTION */}
+        <section className="chyk-section section-wrap" id="chyk">
+          <div className="chyk-image">
+            <img
+              src={chykImg}
+              alt="Young people taking part in a healthy community activity"
+            />
+          </div>
+          <div className="chyk-copy">
+            <p className="eyebrow">{chykEyebrow}</p>
+            <h2>
+              {chykHeading.includes('—') ? (
+                <>
+                  {chykHeading.split('—')[0]} <span>— {chykHeading.split('—')[1]}</span>
+                </>
+              ) : (
+                chykHeading
+              )}
+            </h2>
+            <span className="title-underline" />
+            <p>{chykDesc}</p>
+            <div className="chyk-tags">
+              <span>
+                <Sparkles size={14} /> {chykTag1}
+              </span>
+              <span>
+                <Heart size={14} /> {chykTag2}
+              </span>
+            </div>
+            <Link
+              className="btn btn-primary"
+              to={chykBtnLink}
+            >
+              {chykBtnText} <ArrowRight size={16} />
+            </Link>
           </div>
         </section>
       </main>
