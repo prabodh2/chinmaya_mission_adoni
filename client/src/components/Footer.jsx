@@ -4,8 +4,7 @@ import { footerService } from '../services/api';
 import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
 const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL ||
-  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
+  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
 
 // Official Platform Social Media Logos
 const YouTubeIcon = ({ className = "w-5 h-5" }) => (
@@ -80,7 +79,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
     links: [
       { label: 'Home', url: '/', enabled: true, displayOrder: 1 },
       { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
-      { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 3 },
+      { label: 'Events', url: '/events', enabled: true, displayOrder: 3 },
       { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', enabled: true, displayOrder: 4 },
       { label: 'Sri Shantha Mamleshwara Swami Temple', url: '/sri-shantha-mamleshwara-swami-temple', enabled: true, displayOrder: 5 },
       { label: 'Sacred Image Gallery', url: '/gallery', enabled: true, displayOrder: 6 },
@@ -160,6 +159,9 @@ function sanitizeMainSiteFooter(rawData) {
       const lower = link.label.toLowerCase().trim();
       if (lower.includes('about')) {
         return { ...link, url: '/about' };
+      }
+      if (lower.includes('activities') || url === '/activities') {
+        return { ...link, label: 'Events', url: '/events' };
       }
       return link;
     });

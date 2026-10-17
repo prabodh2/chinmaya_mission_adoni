@@ -15,8 +15,7 @@ import {
 import '../styles/homepage.css';
 
 const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL ||
-  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
+  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
 
 const corePillars = [
   {
@@ -53,28 +52,28 @@ const events = [
     isExternal: true,
   },
   {
-    title: 'Chinmaya Amrit Yatra',
-    subtitle: 'A 75-year legacy journey',
-    date: 'Dec 31, 2025 – Oct 23, 2026',
+    title: 'Rama Navami',
+    subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
+    date: 'April 15th',
     kind: 'journey',
     icon: '✦',
-    url: '/activities',
+    url: '/events',
   },
   {
-    title: 'Jnana Yajna',
-    subtitle: 'Spiritual discourses',
-    date: 'Regular sessions',
+    title: 'Hanuman Jayanthi',
+    subtitle: 'Special Pooja & Hanuman Chalisa Parayanam',
+    date: 'April 20th',
     kind: 'wisdom',
     icon: 'ॐ',
-    url: '/activities',
+    url: '/events',
   },
   {
-    title: 'Bala Vihar',
-    subtitle: 'Values for life',
-    date: 'Ongoing',
+    title: 'Krishna Janmashtami',
+    subtitle: 'Lord Krishna Birth Celebrations & Utsavam',
+    date: 'August 25th',
     kind: 'meditation',
     icon: '☼',
-    url: '/activities',
+    url: '/events',
   },
 ];
 
@@ -157,18 +156,29 @@ export function HomePage() {
   const eventsEyebrow = f.upcoming_events?.eyebrow || 'COME BE A PART';
   const eventsHeading = f.upcoming_events?.heading || 'Upcoming Events';
   const eventsLinkText = f.upcoming_events?.linkText || 'View All';
-  const eventsLinkUrl = f.upcoming_events?.linkUrl || '/activities';
-  const dynamicEvents = f.upcoming_events?.items?.length
-    ? f.upcoming_events.items.map((it, idx) => ({
-        title: it.title,
-        subtitle: it.subtitle || '',
-        date: it.dateOrYear || 'Upcoming',
-        kind: idx === 0 ? 'marathon' : idx === 1 ? 'journey' : idx === 2 ? 'wisdom' : 'meditation',
-        image: it.imageUrl || (idx === 0 ? '/assets/chyk-marathon.jpg' : ''),
-        url: it.linkUrl || '/activities',
-        isExternal: it.linkUrl?.startsWith('http'),
-      }))
-    : events;
+  const eventsLinkUrl = f.upcoming_events?.linkUrl || '/events';
+  const dynamicEvents =
+    f.upcoming_events?.items?.length &&
+    !f.upcoming_events.items.some(
+      (it) =>
+        it.title?.includes('Amrit Yatra') ||
+        it.title?.includes('Jnana Yajna') ||
+        it.title?.includes('Bala Vihar')
+    )
+      ? f.upcoming_events.items.map((it, idx) => {
+          const isMarathon = it.title?.toLowerCase().includes('marathon') || idx === 0;
+          const targetUrl = isMarathon ? MARATHON_PORTAL_URL : (it.linkUrl || '/events');
+          return {
+            title: it.title,
+            subtitle: it.subtitle || '',
+            date: it.dateOrYear || 'Upcoming',
+            kind: idx === 0 ? 'marathon' : idx === 1 ? 'journey' : idx === 2 ? 'wisdom' : 'meditation',
+            image: it.imageUrl || (idx === 0 ? '/assets/chyk-marathon.jpg' : ''),
+            url: targetUrl,
+            isExternal: targetUrl.startsWith('http'),
+          };
+        })
+      : events;
 
   return (
     <div className="site-shell">
@@ -307,9 +317,6 @@ export function HomePage() {
               <h2>{eventsHeading}</h2>
               <span className="title-underline" />
             </div>
-            <Link className="text-link" to={eventsLinkUrl}>
-              {eventsLinkText} <ArrowRight size={16} />
-            </Link>
           </div>
           <div className="events-grid">
             {dynamicEvents.map((event) => (
@@ -317,11 +324,13 @@ export function HomePage() {
                 className="event-card cursor-pointer group"
                 key={event.title}
                 onClick={() => {
-                  if (event.url) {
-                    if (event.isExternal) {
-                      window.open(event.url, '_blank', 'noopener,noreferrer');
+                  const isMarathon = event.kind === 'marathon' || event.title?.toLowerCase().includes('marathon');
+                  const targetUrl = isMarathon ? MARATHON_PORTAL_URL : event.url;
+                  if (targetUrl) {
+                    if (event.isExternal || targetUrl.startsWith('http')) {
+                      window.open(targetUrl, '_blank', 'noopener,noreferrer');
                     } else {
-                      navigate(event.url);
+                      navigate(targetUrl);
                     }
                   }
                 }}

@@ -130,7 +130,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
                   }
                   alt={
                     f.temple_hero?.deityName ||
-                    'Lord Shiva devotional image — Shri Shantamalleshwara Swami'
+                    'Shri Shantamalleshwara Swamy Sanctum Sanctorum'
                   }
                   onError={(e) => {
                     e.currentTarget.src =
@@ -146,10 +146,10 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
                   {f.temple_hero?.deityName || 'Shri Shantamalleshwara Swamy'}
                 </p>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  Presiding Deity (Lord Shiva) • Chinmaya Mission, Adoni
+                  {f.temple_hero?.deitySubtitle || 'Presiding Deity (Lord Shiva) • Chinmaya Mission, Adoni'}
                 </p>
                 <p className="text-[10px] text-amber-200/60 font-sans tracking-wide pt-0.5">
-                  Lord Shiva Devotional Representation • Hilltop Sanctum, Adoni
+                  {f.temple_hero?.deityTagline || 'Sacred Sanctum Sanctorum • Hilltop Shrine, Adoni'}
                 </p>
               </div>
             </div>

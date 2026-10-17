@@ -37,6 +37,7 @@ const allowedOriginsSet = new Set([
   'https://chinmaya-mission-adoni.vercel.app',
   'https://chinmaya-mission-adoni-nine.vercel.app',
   'https://chinmaya-mission-adoni-admin.vercel.app',
+  'https://marathon-chinmaya-mission-adoni.vercel.app',
   'https://marathon-chinmaya-mission-adoni.netlify.app',
   'http://localhost:5174',
   'http://localhost:5175',

@@ -16,6 +16,7 @@ import { RegistrationPage } from './pages/RegistrationPage';
 import { ChinmayaSanjeevarayaTemplePage } from './pages/ChinmayaSanjeevarayaTemplePage';
 import { SriShanthaMamleshwaraSwamiTemplePage } from './pages/SriShanthaMamleshwaraSwamiTemplePage';
 import { GalleryPage } from './pages/GalleryPage';
+import { SupportOurMissionPage } from './pages/SupportOurMissionPage';
 
 // Public Authentication Pages
 import { LoginPage } from './pages/LoginPage';
@@ -30,8 +31,7 @@ import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
 const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL ||
-  (import.meta.env.DEV ? 'http://localhost:5175' : 'https://marathon-chinmaya-mission-adoni.netlify.app');
+  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
 
 function MarathonPortalRedirect({ path = '' }) {
   useEffect(() => {
@@ -97,11 +97,15 @@ export function App() {
               <Route path="/about-us" element={<AboutPage />} />
               <Route path="/aboutus" element={<AboutPage />} />
               <Route path="/about-me" element={<AboutPage />} />
+              <Route path="/events" element={<ActivitiesPage />} />
               <Route path="/activities" element={<ActivitiesPage />} />
               <Route path="/who-are-we" element={<WhoAreWePage />} />
               <Route path="/who-we-are" element={<WhoAreWePage />} />
               <Route path="/whoarewe" element={<WhoAreWePage />} />
               <Route path="/lets-connect" element={<LetsConnectPage />} />
+              <Route path="/support-our-mission" element={<SupportOurMissionPage />} />
+              <Route path="/support-mission" element={<SupportOurMissionPage />} />
+              <Route path="/supportourmission" element={<SupportOurMissionPage />} />
               
               {/* Dedicated Temple & Centre Pages */}
               <Route path="/chinmaya-sanjeevaraya-temple" element={<ChinmayaSanjeevarayaTemplePage />} />

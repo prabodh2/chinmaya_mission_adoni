@@ -192,8 +192,8 @@ export const AboutPage = () => {
       title: 'Timeless Wisdom.\nInspired Youth.\nMeaningful Service.',
       subtext:
         'We are a community united by knowledge, strengthened by values and inspired by selfless service — working towards a more enlightened and compassionate society.',
-      btn1Text: 'EXPLORE OUR ACTIVITIES',
-      btn1Link: '/activities',
+      btn1Text: 'EXPLORE OUR EVENTS',
+      btn1Link: '/events',
       btn2Text: "LET'S CONNECT",
       btn2Link: '/lets-connect',
     },
@@ -455,8 +455,8 @@ export const AboutPage = () => {
                 <span>EXPLORE OUR MILESTONES</span>
                 <ChevronRight className="w-4 h-4" />
               </a>
-              <Link to="/activities" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
-                <span>OUR ACTIVITIES</span>
+              <Link to="/events" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
+                <span>OUR EVENTS</span>
               </Link>
             </div>
           </div>
@@ -753,10 +753,10 @@ export const AboutPage = () => {
                 {/* Bottom Action Button Aligned Across Rows */}
                 <div className="mt-auto pt-4 border-t border-slate-100">
                   <Link
-                    to="/activities"
+                    to="/events"
                     className="btn-secondary w-full justify-center text-sm py-3 px-4 text-decoration-none font-bold shadow-sm rounded-xl flex items-center gap-2"
                   >
-                    <span>EXPLORE ACTIVITY DETAILS</span>
+                    <span>EXPLORE EVENT DETAILS</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

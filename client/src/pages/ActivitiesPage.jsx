@@ -131,7 +131,7 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
           <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-md group block h-72 sm:h-[360px] bg-slate-900 flex items-center justify-center">
             {/* Ambient blurred backdrop */}
             <img
-              src={activity.imageUrl || '/assets/our-activities/chyk@2x.png'}
+              src={activity.imageUrl || '/assets/our-activities/chyk-classes.jpg'}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
@@ -139,10 +139,10 @@ const ChykFeatureSection = ({ activity, onSelect }) => {
             <div className="absolute inset-0 bg-black/25 pointer-events-none" />
             {/* Full uncropped image - 100% FULLY VISIBLE */}
             <img
-              src={activity.imageUrl || '/assets/our-activities/chyk@2x.png'}
+              src={activity.imageUrl || '/assets/our-activities/chyk-classes.jpg'}
               alt={activity.imageAlt || activity.title}
               onError={(e) => {
-                e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
+                e.currentTarget.src = '/assets/our-activities/chyk-classes.jpg';
               }}
               className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500 block"
               loading="lazy"
@@ -248,7 +248,7 @@ const OVERVIEW_ACTIVITIES = [
     title: 'CHYK Classes',
     subtitle: 'Every Sunday',
     category: 'Youth Leadership',
-    imageUrl: '/assets/our-activities/chyk@2x.png',
+    imageUrl: '/assets/our-activities/chyk-classes.jpg',
     imageSource: 'Chinmaya Yuva Kendra | Every Sunday',
     icon: <Zap className="w-5 h-5" />,
     description:
@@ -463,56 +463,7 @@ export const ActivitiesPage = () => {
     },
   ];
 
-  const defaultMovementActivities = [
-    {
-      id: 'act-1',
-      title: 'Youth Marathon Prep Bootcamps',
-      category: 'Marathon Training',
-      section: 'COMMUNITY & MOVEMENT INITIATIVES',
-      description:
-        'Weekly morning running sessions and endurance training across Adoni schools and colleges.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?q=80&w=800&auto=format&fit=crop',
-      imageAlt: 'Youth Marathon Prep Bootcamps',
-      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-    },
-    {
-      id: 'act-2',
-      title: 'School Anti-Drug Oath & Pledge',
-      category: 'School Drive',
-      section: 'COMMUNITY & MOVEMENT INITIATIVES',
-      description:
-        'Interactive student rallies and pledge signatures taking place in 50+ Adoni institutions.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop',
-      imageAlt: 'School Anti-Drug Oath & Pledge',
-      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-    },
-    {
-      id: 'act-3',
-      title: 'Mind & Body Wellness Seminars',
-      category: 'Fitness & Wellness',
-      section: 'COMMUNITY & MOVEMENT INITIATIVES',
-      description:
-        'Guided meditation, stress management and yoga sessions organized by Chinmaya Yuva Kendra.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
-      imageAlt: 'Mind & Body Wellness Seminars',
-      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-    },
-    {
-      id: 'act-4',
-      title: 'Adoni Torch Relay & Street Rallies',
-      category: 'Awareness Campaign',
-      section: 'COMMUNITY & MOVEMENT INITIATIVES',
-      description:
-        'Torch relay highlighting positive choices, sports culture, and freedom from addiction.',
-      imageUrl:
-        'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800&auto=format&fit=crop',
-      imageAlt: 'Adoni Torch Relay & Street Rallies',
-      icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-    },
-  ];
+  const defaultMovementActivities = [];
 
   const getCached = (key, fallback) => {
     try {
@@ -573,7 +524,19 @@ export const ActivitiesPage = () => {
   const [movementActivities, setMovementActivities] = useState(() => {
     const cached = getCached('cms_movement_activities', null);
     if (Array.isArray(cached) && cached.length > 0) {
-      return cached.filter((a) => !/School Anti-Drug Oath/i.test(a.title || ''));
+      return cached
+        .filter((a) => !/School Anti-Drug Oath|Youth Marathon Prep|Mind & Body Wellness|Torch Relay/i.test(a.title || ''))
+        .map((a) =>
+          a.description?.includes('helps youth build confidence')
+            ? {
+                ...a,
+                description: a.description.replace(
+                  'helps youth build confidence',
+                  'helps youth to build confidence'
+                ),
+              }
+            : a
+        );
     }
     return defaultMovementActivities;
   });
@@ -604,7 +567,7 @@ export const ActivitiesPage = () => {
       .then((res) => {
         if (res.data?.success && Array.isArray(res.data.data)) {
           const list = res.data.data
-            .filter((act) => act.active !== false && !/School Anti-Drug Oath/i.test(act.title || ''))
+            .filter((act) => act.active !== false && !/School Anti-Drug Oath|Youth Marathon Prep|Mind & Body Wellness|Torch Relay/i.test(act.title || ''))
             .map((act) => ({
               id: act._id || act.title,
               title: act.title,
@@ -694,6 +657,8 @@ export const ActivitiesPage = () => {
   };
 
   useEffect(() => {
+    document.title = 'Events | Chinmaya Mission, Adoni';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     loadActivities();
 
     const handleCmsUpdate = (e) => {
@@ -722,7 +687,7 @@ export const ActivitiesPage = () => {
 
   return (
     <div className="min-h-screen pt-1 sm:pt-2 pb-16 px-4 sm:px-8 lg:px-12 w-full space-y-12 sm:space-y-16">
-      {/* 1. OUR ACTIVITIES OVERVIEW */}
+      {/* 1. OUR EVENTS OVERVIEW */}
       <section className="space-y-8 w-full">
         <header className="text-center space-y-2 max-w-4xl mx-auto">
           {heroContent?.badge && (
@@ -733,10 +698,10 @@ export const ActivitiesPage = () => {
             </div>
           )}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
-            {heroContent?.heading || 'Our Activities'}
+            {(!heroContent?.heading || heroContent?.heading.toLowerCase().includes('activities')) ? 'Our Events' : heroContent.heading}
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] font-medium max-w-3xl mx-auto">
-            {heroContent?.subtitle || 'Learning, culture, devotion, and spiritual growth for all ages.'}
+            {(!heroContent?.subtitle || heroContent?.subtitle.toLowerCase().includes('activities')) ? 'Festivals, cultural celebrations, learning, and youth gatherings for all ages.' : heroContent.subtitle}
           </p>
         </header>
 
@@ -874,7 +839,7 @@ export const ActivitiesPage = () => {
                   } else if (selectedActivity.id === 'devi-group' || selectedActivity.title?.toLowerCase().includes('devi')) {
                     e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
                   } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.id === 'chyk-classes' || selectedActivity.title?.toLowerCase().includes('chyk')) {
-                    e.currentTarget.src = '/assets/our-activities/chyk@2x.png';
+                    e.currentTarget.src = '/assets/our-activities/chyk-classes.jpg';
                   }
                 }}
                 className="relative z-10 w-full h-full max-h-[58vh] object-contain mx-auto my-auto drop-shadow-2xl rounded-xl block"

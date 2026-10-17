@@ -77,22 +77,6 @@ export const GALLERY_IMAGES = [
     desc: 'Alternate angle view of the illuminated celestial shrine and Shiva lingam.',
     tag: 'Digital Art',
   },
-  {
-    id: 'jyotirlinga-abhishekam-art',
-    src: '/assets/jyotirlinga-abhishekam.png',
-    title: 'Sacred Panchamrita Abhishekam Art',
-    category: 'Temple & Sanctum',
-    desc: 'Artistic representation of the eternal holy abhishekam to the cosmic Shiva Lingam.',
-    tag: 'Abhishekam Art',
-  },
-  {
-    id: 'hero-portrait',
-    src: '/assets/hero.png',
-    title: 'Sri Santha Malleswara Portrait Iconography',
-    category: 'Temple & Sanctum',
-    desc: 'Formal portrait presentation of the temple deity with celestial aura and holy Trishul.',
-    tag: 'Iconography',
-  },
 
   // 2. Sacred Deities (Pancha Lingas & Goddess)
   {
