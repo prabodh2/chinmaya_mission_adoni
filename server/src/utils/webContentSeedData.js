@@ -35,7 +35,6 @@ export const DEFAULT_WEBSITE_PAGES = {
             { key: 'portraitImage', label: 'Portrait Image URL', type: 'image', value: '/assets/swami-chinmayananda-natural.jpg' },
             { key: 'portraitQuote', label: 'Portrait Quote Symbol', type: 'text', value: 'Arise, Awake and Guide Others' },
             { key: 'portraitSignature', label: 'Portrait Signature', type: 'text', value: 'Swami Chinmayananda' },
-            { key: 'bottomNote', label: 'Bottom Note', type: 'text', value: 'A journey inward. A difference outward.' },
           ],
           items: [],
         },

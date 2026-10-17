@@ -126,7 +126,6 @@ export function HomePage() {
   const portraitImg = f.hero?.portraitImage || '/assets/swami-chinmayananda-natural.jpg';
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
-  const heroBottomNote = f.hero?.bottomNote || 'A journey inward. A difference outward.';
 
   const aboutEyebrow = f.about_purpose?.eyebrow || 'OUR PURPOSE';
   const aboutHeading = f.about_purpose?.heading || 'About Chinmaya Mission, Adoni';
@@ -258,10 +257,6 @@ export function HomePage() {
             <div className="signature">{portraitSig}</div>
           </div>
 
-          <div className="hero-bottom-note">
-            <span>01</span>
-            <span className="note-line" /> {heroBottomNote}
-          </div>
           <div className="sun-disc" />
         </section>
 

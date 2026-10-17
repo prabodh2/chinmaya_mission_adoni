@@ -5,6 +5,7 @@ import { TransformationSection } from '../components/TransformationSection';
 import { CountdownTimer } from '../components/CountdownTimer';
 import { CommunityStoryBoardSection } from '../components/homepage/CommunityStoryBoardSection';
 import { SectionRenderer, QuoteBanner } from '../components/homepage/SectionRenderer';
+import { MythsVsFactsSection } from '../components/homepage/MythsVsFactsSection';
 import { bannerService, eventService, faqService, activityService, homepageService, webContentService } from '../services/api';
 import { applyDynamicTheme } from '../utils/themeHelper';
 import {
@@ -384,6 +385,9 @@ export const HomePage = () => {
 
             {/* 2nd Image: Quote Banner placed directly above EVENT DETAILS & COUNTDOWN with zero overlap */}
             {section.type === 'marathon' && <QuoteBanner />}
+
+            {/* MYTHS VS FACTS Slider placed directly above BE PART OF THE MOVEMENT IN ADONI! */}
+            {section.type === 'cta' && <MythsVsFactsSection />}
 
             <SectionRenderer
               section={section}

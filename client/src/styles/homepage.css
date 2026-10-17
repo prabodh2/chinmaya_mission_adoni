@@ -274,34 +274,6 @@
   pointer-events: none;
 }
 
-.hero-bottom-note {
-  position: absolute;
-  bottom: 28px;
-  left: clamp(24px, 4vw, 64px);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 11.5px;
-  letter-spacing: 0.8px;
-  color: rgba(255, 255, 255, 0.92);
-  font-weight: 600;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
-  z-index: 2;
-}
-
-.hero-bottom-note > span:first-child {
-  color: #FFD12D;
-  font-weight: 700;
-  text-shadow: 0 0 8px rgba(255, 209, 45, 0.6);
-}
-
-.note-line {
-  width: 32px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-
 .sun-disc {
   position: absolute;
   width: 180px;
@@ -905,11 +877,6 @@
   .hero:before,
   .hero:after {
     display: none;
-  }
-  .hero-bottom-note {
-    left: 24px;
-    bottom: 20px;
-    color: rgba(255, 255, 255, 0.95);
   }
   .hero-actions {
     gap: 9px;
