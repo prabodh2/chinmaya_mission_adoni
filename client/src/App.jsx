@@ -15,6 +15,7 @@ import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { ChinmayaSanjeevarayaTemplePage } from './pages/ChinmayaSanjeevarayaTemplePage';
 import { SriShanthaMamleshwaraSwamiTemplePage } from './pages/SriShanthaMamleshwaraSwamiTemplePage';
+import { GalleryPage } from './pages/GalleryPage';
 
 // Public Authentication Pages
 import { LoginPage } from './pages/LoginPage';
@@ -110,6 +111,12 @@ export function App() {
               <Route path="/shri-shantamalleshwara-swami-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
               <Route path="/shantamalleshwara-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
               <Route path="/shanta-malleshwara-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
+              
+              {/* Sacred Image Gallery Page */}
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/images" element={<GalleryPage />} />
+              <Route path="/image" element={<GalleryPage />} />
+              <Route path="/sacred-gallery" element={<GalleryPage />} />
               
               {/* Marathon portal redirects (marathon is hosted separately) */}
               <Route path="/register" element={<MarathonPortalRedirect path="/register" />} />

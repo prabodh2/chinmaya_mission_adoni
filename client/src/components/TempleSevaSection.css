@@ -1,18 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap');
 
-/* Main Wrapper Scope */
-.temple-seva-wrapper {
+/* Main Wrapper & Modal Variables */
+:root,
+.temple-seva-wrapper,
+.seva-modal-backdrop,
+.seva-modal {
   --seva-bg-0: #050505;
   --seva-bg-1: #0B1120;
   --seva-bg-2: #131a2c;
   --seva-gold: #FF7A2E;
+  --seva-gold-bright: #FFA048;
   --seva-gold-soft: #d96218;
-  --seva-gold-glow: rgba(255, 122, 46, 0.38);
-  --seva-ivory: #F5F5F5;
-  --seva-ivory-dim: rgba(245, 245, 245, 0.72);
-  --seva-ivory-faint: rgba(245, 245, 245, 0.42);
-  --seva-line: rgba(255, 122, 46, 0.18);
-  --seva-line-soft: rgba(245, 245, 245, 0.08);
+  --seva-gold-glow: rgba(255, 122, 46, 0.45);
+  --seva-ivory: #FFFFFF;
+  --seva-ivory-dim: #E2E8F0;
+  --seva-ivory-faint: #94A3B8;
+  --seva-line: rgba(255, 122, 46, 0.35);
+  --seva-line-soft: rgba(255, 255, 255, 0.14);
   --seva-blue-glow: rgba(120, 190, 255, 0.35);
 
   --seva-f-display: "Cinzel", serif;
@@ -20,7 +24,9 @@
   --seva-f-script: "Playfair Display", serif;
   --seva-f-mono: ui-monospace, "SF Mono", Menlo, monospace;
   --seva-f-sanskrit: "Tiro Devanagari Sanskrit", serif;
+}
 
+.temple-seva-wrapper {
   background: var(--seva-bg-0);
   color: var(--seva-ivory);
   font-family: var(--seva-f-serif);
@@ -403,38 +409,37 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  font-family: var(--seva-f-display);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.32em;
+  font-family: var(--seva-f-display, "Cinzel", serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  padding: 13px 22px;
-  border: 1px solid var(--seva-gold);
-  background: rgba(255, 122, 46, 0.04);
-  box-shadow: inset 0 0 0 1px rgba(255, 122, 46, 0.06);
-  color: var(--seva-gold);
+  padding: 13px 26px;
+  border: 1px solid #FF7A2E !important;
+  background: rgba(255, 122, 46, 0.12) !important;
+  color: #FFA048 !important;
   cursor: pointer;
-  transition: all 0.35s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  width: 100%;
-  margin-top: 24px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px rgba(255, 122, 46, 0.1);
 }
 
 .seva-btn::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--seva-gold);
+  background: var(--seva-gold, #FF7A2E);
   transform: translateY(101%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
 }
 
 .seva-btn:hover {
-  color: var(--seva-bg-0);
-  box-shadow: 0 8px 24px rgba(255, 122, 46, 0.22);
+  color: #050505 !important;
+  box-shadow: 0 8px 24px rgba(255, 122, 46, 0.35);
 }
 
 .seva-btn:hover::after {
@@ -442,14 +447,16 @@
 }
 
 .seva-btn.solid {
-  background: var(--seva-gold);
-  color: var(--seva-bg-0);
-  border-color: var(--seva-gold);
+  background: linear-gradient(135deg, #FF7A2E 0%, #D95D16 100%) !important;
+  color: #FFFFFF !important;
+  border-color: #FFA048 !important;
+  box-shadow: 0 4px 18px rgba(255, 122, 46, 0.35) !important;
 }
 
 .seva-btn.solid:hover {
-  background: transparent;
-  color: var(--seva-gold);
+  background: linear-gradient(135deg, #FFA048 0%, #FF7A2E 100%) !important;
+  color: #050505 !important;
+  box-shadow: 0 6px 26px rgba(255, 122, 46, 0.55) !important;
 }
 
 .seva-btn.solid:hover::after {
@@ -457,18 +464,19 @@
 }
 
 .seva-btn.ghost {
-  border-color: var(--seva-line-soft);
-  color: var(--seva-ivory);
-  background: transparent;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #F8FAFC !important;
+  background: rgba(255, 255, 255, 0.06) !important;
 }
 
 .seva-btn.ghost:hover {
-  color: var(--seva-bg-0);
-  border-color: var(--seva-ivory);
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.16) !important;
 }
 
 .seva-btn.ghost::after {
-  background: var(--seva-ivory);
+  background: var(--seva-ivory, #FFFFFF);
 }
 
 .seva-btn .arrow {
@@ -511,18 +519,43 @@
 }
 
 .seva-modal {
-  background: linear-gradient(180deg, #0e152d, #060814);
-  border: 1px solid var(--seva-line);
+  background: linear-gradient(180deg, #0d152c 0%, #060914 100%) !important;
+  border: 1px solid rgba(255, 122, 46, 0.45) !important;
   max-width: 740px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
   padding: 44px 36px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 122, 46, 0.15);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 122, 46, 0.25) !important;
   animation: sevaModalLift 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-  color: var(--seva-ivory);
-  font-family: var(--seva-f-serif);
+  color: #FFFFFF !important;
+  font-family: var(--seva-f-serif, "Cormorant Garamond", serif);
+  border-radius: 12px;
+}
+
+.seva-modal h2 {
+  color: #FFFFFF !important;
+  font-family: var(--seva-f-display, "Cinzel", serif) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.seva-modal h3 {
+  color: #FFFFFF !important;
+  font-family: var(--seva-f-display, "Cinzel", serif) !important;
+}
+
+.seva-modal p {
+  color: #E2E8F0 !important;
+}
+
+.seva-modal .seva-eyebrow {
+  color: #FFA048 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3em !important;
+  text-shadow: 0 0 16px rgba(255, 122, 46, 0.5);
 }
 
 @keyframes sevaModalLift {
@@ -536,55 +569,64 @@
   right: 18px;
   width: 40px;
   height: 40px;
-  border: 1px solid var(--seva-line-soft);
-  background: transparent;
-  color: var(--seva-ivory);
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #FFFFFF !important;
   cursor: pointer;
-  font-family: var(--seva-f-script);
-  font-size: 24px;
+  font-family: var(--seva-f-script, serif);
+  font-size: 26px;
   display: grid;
   place-items: center;
   transition: all 0.25s ease;
   line-height: 1;
+  border-radius: 50%;
 }
 
 .seva-modal-close:hover {
-  border-color: var(--seva-gold);
-  color: var(--seva-gold);
+  border-color: #FF7A2E !important;
+  color: #FF7A2E !important;
+  background: rgba(255, 122, 46, 0.15) !important;
   transform: scale(1.08);
 }
 
 /* Modal form controls */
 .seva-input, .seva-select, .seva-textarea {
   width: 100%;
-  background: rgba(245, 245, 245, 0.035);
-  border: 1px solid var(--seva-line-soft);
-  color: var(--seva-ivory);
-  font-family: var(--seva-f-serif);
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #FFFFFF !important;
+  font-family: var(--seva-f-serif, serif);
   font-size: 16px;
   padding: 13px 16px;
   outline: none;
-  transition: border-color 0.25s ease, background 0.25s ease;
-  border-radius: 0;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 6px;
   box-sizing: border-box;
 }
 
+.seva-input::placeholder, .seva-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
 .seva-input:focus, .seva-select:focus, .seva-textarea:focus {
-  border-color: var(--seva-gold);
-  background: rgba(255, 122, 46, 0.05);
+  border-color: #FF7A2E !important;
+  background: rgba(255, 122, 46, 0.1) !important;
+  box-shadow: 0 0 18px rgba(255, 122, 46, 0.28) !important;
 }
 
 .seva-date-input {
   color-scheme: dark;
   cursor: pointer;
+  color: #FFFFFF !important;
 }
 
 .seva-field-label {
   display: block;
-  font-family: var(--seva-f-display);
-  font-size: 10px;
-  letter-spacing: 0.26em;
-  color: var(--seva-ivory-faint);
+  font-family: var(--seva-f-display, "Cinzel", serif);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #FFA048 !important;
+  font-weight: 700;
   text-transform: uppercase;
   margin-bottom: 8px;
 }

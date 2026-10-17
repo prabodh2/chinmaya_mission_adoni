@@ -83,9 +83,10 @@ const MAIN_SITE_FALLBACK_FOOTER = {
       { label: 'Activities Gallery', url: '/activities', enabled: true, displayOrder: 3 },
       { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', enabled: true, displayOrder: 4 },
       { label: 'Sri Shantha Mamleshwara Swami Temple', url: '/sri-shantha-mamleshwara-swami-temple', enabled: true, displayOrder: 5 },
-      { label: 'Who Are We', url: '/who-are-we', enabled: true, displayOrder: 6 },
-      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 7 },
-      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 8, openInNewTab: true },
+      { label: 'Sacred Image Gallery', url: '/gallery', enabled: true, displayOrder: 6 },
+      { label: 'Who Are We', url: '/who-are-we', enabled: true, displayOrder: 7 },
+      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 8 },
+      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 9, openInNewTab: true },
     ],
   },
   contact: {

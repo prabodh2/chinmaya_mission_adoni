@@ -35,6 +35,7 @@ export const Navbar = () => {
       shortName: 'Shantha Mamleshwara Temple',
       path: '/sri-shantha-mamleshwara-swami-temple',
     },
+    { name: 'Gallery', shortName: 'Gallery', path: '/gallery' },
     { name: 'Who Are We', shortName: 'Who Are We', path: '/who-are-we' },
     { name: "Let's Connect", shortName: "Let's Connect", path: '/lets-connect' },
   ];
@@ -56,6 +57,14 @@ export const Navbar = () => {
         location.pathname === '/shri-shantamalleshwara-swami-temple' ||
         location.pathname === '/shantamalleshwara-temple' ||
         location.pathname === '/shanta-malleshwara-temple'
+      );
+    }
+    if (path === '/gallery') {
+      return (
+        location.pathname === '/gallery' ||
+        location.pathname === '/images' ||
+        location.pathname === '/image' ||
+        location.pathname === '/sacred-gallery'
       );
     }
     return location.pathname === path;

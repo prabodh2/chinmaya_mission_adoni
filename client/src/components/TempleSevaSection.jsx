@@ -27,10 +27,10 @@ function isValidEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
 }
 
-function genRefId() {
+function genRefId(prefix = 'SMT') {
   const t = Date.now().toString(36).toUpperCase();
   const r = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `SMT-${t.slice(-5)}-${r}`;
+  return `${prefix}-${t.slice(-5)}-${r}`;
 }
 
 // Local Storage Booking Sync
@@ -283,12 +283,14 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
   // Confirm Booking (WITHOUT PAYMENT)
   const handleConfirmBooking = async () => {
     setIsSubmitting(true);
-    const refId = genRefId();
+    const prefix = service.refIdPrefix || 'SMT';
+    const refId = genRefId(prefix);
     const bookingData = {
       refId,
       pujaName: selectedOption ? selectedOption.name : serviceDisplayName,
       serviceCategory: serviceDisplayName,
       pujaType: service.pujaType,
+      templeName: service.templeName || 'Sri Santha Malleshwara Swami Temple',
       amount: currentAmount,
       name: form.name.trim(),
       gotra: form.gotra.trim(),
@@ -325,10 +327,28 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <span className="seva-eyebrow">
+          <span
+            className="seva-eyebrow"
+            style={{
+              color: '#FFA048',
+              fontWeight: 700,
+              letterSpacing: '0.3em',
+              fontSize: 12,
+              textTransform: 'uppercase',
+            }}
+          >
             {step === 4 ? 'Divine Confirmation' : `Step ${step} of 3`}
           </span>
-          <h2 style={{ marginTop: 14, fontSize: 32 }}>
+          <h2
+            style={{
+              marginTop: 12,
+              fontSize: 32,
+              color: '#FFFFFF',
+              fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+            }}
+          >
             {step === 4 ? 'Sankalpa Received' : serviceDisplayName}
           </h2>
         </div>
@@ -341,9 +361,11 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 key={s}
                 style={{
                   flex: 1,
-                  height: 2,
-                  background: s <= step ? 'var(--seva-gold)' : 'var(--seva-line-soft)',
-                  transition: 'background 0.4s ease',
+                  height: 3,
+                  borderRadius: 2,
+                  background: s <= step ? '#FF7A2E' : 'rgba(255, 255, 255, 0.16)',
+                  boxShadow: s <= step ? '0 0 10px rgba(255, 122, 46, 0.6)' : 'none',
+                  transition: 'background 0.4s ease, box-shadow 0.4s ease',
                 }}
               />
             ))}
@@ -365,7 +387,10 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                     gap: 8,
                   }}
                 >
-                  <label className="seva-field-label" style={{ marginBottom: 0 }}>
+                  <label
+                    className="seva-field-label"
+                    style={{ marginBottom: 0, color: '#FFA048', fontWeight: 700 }}
+                  >
                     Select Seva Package
                   </label>
                   {service.options.length > 6 && (
@@ -402,22 +427,30 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                         type="button"
                         className={`seva-option-card-btn ${isSelected ? 'selected' : ''}`}
                         onClick={() => setSelectedOption(opt)}
+                        style={{
+                          background: isSelected
+                            ? 'rgba(255, 122, 46, 0.16)'
+                            : 'rgba(255, 255, 255, 0.05)',
+                          border: isSelected
+                            ? '1.5px solid #FF7A2E'
+                            : '1px solid rgba(255, 255, 255, 0.18)',
+                        }}
                       >
                         <span
                           style={{
                             fontSize: 15,
-                            fontWeight: 500,
-                            color: isSelected ? 'var(--seva-gold)' : 'var(--seva-ivory)',
+                            fontWeight: 600,
+                            color: isSelected ? '#FFA048' : '#FFFFFF',
                           }}
                         >
                           {opt.name}
                         </span>
                         <span
                           style={{
-                            fontFamily: 'var(--seva-f-display)',
-                            fontSize: 18,
-                            color: 'var(--seva-gold)',
-                            fontWeight: 600,
+                            fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+                            fontSize: 20,
+                            color: '#FF7A2E',
+                            fontWeight: 700,
                           }}
                         >
                           ₹{opt.price.toLocaleString('en-IN')}
@@ -430,54 +463,74 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
             ) : (
               <div
                 style={{
-                  border: '1px solid var(--seva-gold)',
-                  background: 'rgba(255, 122, 46, 0.06)',
-                  padding: '32px 24px',
+                  border: '1.5px solid rgba(255, 122, 46, 0.5)',
+                  background: 'linear-gradient(180deg, rgba(255, 122, 46, 0.14) 0%, rgba(13, 21, 44, 0.85) 100%)',
+                  padding: '36px 26px',
                   textAlign: 'center',
                   marginBottom: 28,
+                  borderRadius: '12px',
+                  boxShadow: '0 12px 35px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(255, 122, 46, 0.1)',
                 }}
               >
                 <div
                   style={{
-                    fontFamily: 'var(--seva-f-script)',
-                    fontStyle: 'italic',
-                    fontSize: 26,
-                    color: 'var(--seva-ivory)',
-                    marginBottom: 8,
+                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+                    fontSize: 24,
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    letterSpacing: '0.03em',
+                    marginBottom: 10,
                   }}
                 >
                   {serviceDisplayName}
                 </div>
                 <div
                   style={{
-                    fontFamily: 'var(--seva-f-display)',
-                    fontSize: 34,
-                    color: 'var(--seva-gold)',
-                    fontWeight: 700,
+                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+                    fontSize: 42,
+                    color: '#FFA048',
+                    fontWeight: 800,
+                    textShadow: '0 0 25px rgba(255, 122, 46, 0.5)',
+                    marginBottom: 14,
                   }}
                 >
-                  ₹{(service.fixedAmount || 0).toLocaleString('en-IN')}
+                  ₹{(service.fixedAmount || currentAmount || 0).toLocaleString('en-IN')}
                 </div>
-                <p
-                  style={{
-                    marginTop: 16,
-                    color: 'var(--seva-ivory-dim)',
-                    fontSize: 16,
-                    fontStyle: 'italic',
-                    lineHeight: 1.6,
-                    maxWidth: 480,
-                    marginInline: 'auto',
-                  }}
-                >
-                  {service.descriptionText || service.desc}
-                </p>
+                {(service.descriptionText || service.desc) && (
+                  <p
+                    style={{
+                      marginTop: 14,
+                      color: '#E2E8F0',
+                      fontSize: 15.5,
+                      fontFamily: 'var(--seva-f-serif, "Cormorant Garamond", serif)',
+                      fontStyle: 'italic',
+                      lineHeight: 1.65,
+                      maxWidth: 520,
+                      marginInline: 'auto',
+                    }}
+                  >
+                    {service.descriptionText || service.desc}
+                  </p>
+                )}
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
               <button
                 className="seva-btn solid"
-                style={{ width: 'auto', padding: '14px 34px' }}
+                style={{
+                  width: 'auto',
+                  padding: '14px 36px',
+                  background: 'linear-gradient(135deg, #FF7A2E 0%, #D95D16 100%)',
+                  color: '#FFFFFF',
+                  border: '1px solid #FFA048',
+                  boxShadow: '0 4px 20px rgba(255, 122, 46, 0.4)',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: '0.22em',
+                }}
                 onClick={() => setStep(2)}
               >
                 Devotee Details <span className="arrow"></span>
@@ -623,62 +676,65 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
           <div>
             <div
               style={{
-                background: 'rgba(255, 122, 46, 0.05)',
-                border: '1px solid var(--seva-line)',
+                background: 'linear-gradient(180deg, rgba(255, 122, 46, 0.12) 0%, rgba(13, 21, 44, 0.85) 100%)',
+                border: '1.5px solid rgba(255, 122, 46, 0.45)',
                 padding: '28px 24px',
                 marginBottom: 24,
+                borderRadius: '10px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
               }}
             >
               <div
                 style={{
-                  fontFamily: 'var(--seva-f-display)',
-                  fontSize: 11,
-                  letterSpacing: '0.3em',
-                  color: 'var(--seva-gold)',
+                  fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+                  fontSize: 12,
+                  letterSpacing: '0.28em',
+                  color: '#FFA048',
                   textTransform: 'uppercase',
-                  marginBottom: 16,
+                  fontWeight: 700,
+                  marginBottom: 18,
                 }}
               >
                 Sacred Sankalpa Summary
               </div>
 
-              <div className="seva-modal-grid-summary" style={{ fontSize: 15 }}>
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Seva Offering:</div>
-                <div style={{ fontWeight: 600 }}>
+              <div className="seva-modal-grid-summary" style={{ fontSize: 15, color: '#FFFFFF' }}>
+                <div style={{ color: '#94A3B8' }}>Seva Offering:</div>
+                <div style={{ fontWeight: 600, color: '#FFFFFF' }}>
                   {selectedOption ? selectedOption.name : serviceDisplayName}
                 </div>
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Devotee:</div>
-                <div>
+                <div style={{ color: '#94A3B8' }}>Devotee:</div>
+                <div style={{ color: '#FFFFFF', fontWeight: 500 }}>
                   {form.name}{' '}
-                  {form.gotra && <span style={{ color: 'var(--seva-gold)' }}>({form.gotra} Gotra)</span>}
+                  {form.gotra && <span style={{ color: '#FFA048' }}>({form.gotra} Gotra)</span>}
                 </div>
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Nakshatra:</div>
-                <div>{form.nakshetra}</div>
+                <div style={{ color: '#94A3B8' }}>Nakshatra:</div>
+                <div style={{ color: '#FFFFFF' }}>{form.nakshetra}</div>
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Seva Date:</div>
-                <div>{form.date}</div>
+                <div style={{ color: '#94A3B8' }}>Seva Date:</div>
+                <div style={{ color: '#FFFFFF', fontWeight: 600 }}>{form.date}</div>
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>WhatsApp:</div>
-                <div>{form.whatsapp}</div>
+                <div style={{ color: '#94A3B8' }}>WhatsApp:</div>
+                <div style={{ color: '#FFFFFF' }}>{form.whatsapp}</div>
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Email:</div>
-                <div>{form.email}</div>
+                <div style={{ color: '#94A3B8' }}>Email:</div>
+                <div style={{ color: '#FFFFFF' }}>{form.email}</div>
 
                 {form.address && (
                   <>
-                    <div style={{ color: 'var(--seva-ivory-faint)' }}>Prayer / Address:</div>
-                    <div>{form.address}</div>
+                    <div style={{ color: '#94A3B8' }}>Prayer / Address:</div>
+                    <div style={{ color: '#FFFFFF' }}>{form.address}</div>
                   </>
                 )}
 
-                <div style={{ color: 'var(--seva-ivory-faint)' }}>Suggested Dakshina:</div>
+                <div style={{ color: '#94A3B8' }}>Suggested Dakshina:</div>
                 <div
                   style={{
-                    color: 'var(--seva-gold)',
-                    fontFamily: 'var(--seva-f-display)',
-                    fontSize: 18,
+                    color: '#FFA048',
+                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+                    fontSize: 22,
                     fontWeight: 700,
                   }}
                 >
@@ -692,10 +748,11 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
               </div>
               <p
                 style={{
-                  marginTop: 10,
-                  fontSize: 13,
-                  color: 'var(--seva-ivory-dim)',
+                  marginTop: 12,
+                  fontSize: 13.5,
+                  color: '#CBD5E1',
                   fontStyle: 'italic',
+                  lineHeight: 1.5,
                 }}
               >
                 Payment has been disabled as requested. Clicking "Confirm Booking" will directly submit
@@ -737,10 +794,10 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
 
             <p
               style={{
-                fontFamily: 'var(--seva-f-script)',
+                fontFamily: 'var(--seva-f-script, "Playfair Display", serif)',
                 fontStyle: 'italic',
-                fontSize: 24,
-                color: 'var(--seva-ivory)',
+                fontSize: 26,
+                color: '#FFFFFF',
                 marginBottom: 12,
               }}
             >
@@ -749,7 +806,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
 
             <p
               style={{
-                color: 'var(--seva-ivory-dim)',
+                color: '#E2E8F0',
                 maxWidth: 520,
                 margin: '0 auto 20px',
                 lineHeight: 1.6,
@@ -757,39 +814,41 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
               }}
             >
               Our Vedic priests will perform{' '}
-              <span style={{ color: 'var(--seva-gold)', fontWeight: 600 }}>
+              <span style={{ color: '#FFA048', fontWeight: 600 }}>
                 {bookingReceipt.pujaName}
               </span>{' '}
               in your name on{' '}
-              <span style={{ color: 'var(--seva-gold)' }}>{bookingReceipt.date}</span> with full Vedic
+              <span style={{ color: '#FFA048', fontWeight: 600 }}>{bookingReceipt.date}</span> with full Vedic
               rituals and gotra chanting.
             </p>
 
             {/* Booking Receipt Card */}
             <div
               style={{
-                background: 'rgba(5, 5, 5, 0.65)',
-                border: '1px solid var(--seva-line)',
-                padding: '20px',
-                maxWidth: '460px',
+                background: 'rgba(5, 5, 5, 0.75)',
+                border: '1px solid rgba(255, 122, 46, 0.45)',
+                padding: '22px',
+                maxWidth: '480px',
                 margin: '0 auto 24px',
                 textAlign: 'left',
-                fontSize: 14,
+                fontSize: 14.5,
+                borderRadius: '8px',
+                color: '#FFFFFF',
               }}
             >
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  borderBottom: '1px solid var(--seva-line-soft)',
-                  paddingBottom: 8,
-                  marginBottom: 10,
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
+                  paddingBottom: 10,
+                  marginBottom: 12,
                 }}
               >
-                <span style={{ color: 'var(--seva-ivory-faint)' }}>Booking Reference</span>
+                <span style={{ color: '#94A3B8' }}>Booking Reference</span>
                 <span
                   style={{
-                    color: 'var(--seva-gold)',
+                    color: '#FFA048',
                     fontFamily: 'var(--seva-f-mono)',
                     fontWeight: 700,
                   }}
@@ -801,31 +860,31 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  marginBottom: 6,
+                  marginBottom: 8,
                 }}
               >
-                <span style={{ color: 'var(--seva-ivory-faint)' }}>Devotee Name:</span>
-                <span>{bookingReceipt.name}</span>
+                <span style={{ color: '#94A3B8' }}>Devotee Name:</span>
+                <span style={{ fontWeight: 600 }}>{bookingReceipt.name}</span>
               </div>
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  marginBottom: 6,
+                  marginBottom: 8,
                 }}
               >
-                <span style={{ color: 'var(--seva-ivory-faint)' }}>Nakshatra:</span>
+                <span style={{ color: '#94A3B8' }}>Nakshatra:</span>
                 <span>{bookingReceipt.nakshetra}</span>
               </div>
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  marginBottom: 6,
+                  marginBottom: 8,
                 }}
               >
-                <span style={{ color: 'var(--seva-ivory-faint)' }}>Status:</span>
-                <span style={{ color: '#2ecc71', fontWeight: 600 }}>Confirmed (No Payment)</span>
+                <span style={{ color: '#94A3B8' }}>Status:</span>
+                <span style={{ color: '#2ecc71', fontWeight: 700 }}>Confirmed (No Payment)</span>
               </div>
             </div>
 
@@ -894,17 +953,32 @@ export function MyBookingsModal({ open, onClose }) {
         </button>
 
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <span className="seva-eyebrow">Your Records</span>
-          <h2 style={{ marginTop: 12, fontSize: 30 }}>Registered Sevas</h2>
+          <span
+            className="seva-eyebrow"
+            style={{ color: '#FFA048', fontWeight: 700, letterSpacing: '0.28em' }}
+          >
+            Your Records
+          </span>
+          <h2
+            style={{
+              marginTop: 12,
+              fontSize: 30,
+              color: '#FFFFFF',
+              fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
+              fontWeight: 600,
+            }}
+          >
+            Registered Sevas
+          </h2>
         </div>
 
         {bookings.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--seva-ivory-dim)' }}>
-            <p style={{ fontStyle: 'italic', fontSize: 18, marginBottom: 16 }}>
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#E2E8F0' }}>
+            <p style={{ fontStyle: 'italic', fontSize: 18, marginBottom: 16, color: '#FFFFFF' }}>
               No sevas booked yet in this session.
             </p>
-            <p style={{ fontSize: 14, color: 'var(--seva-ivory-faint)' }}>
-              Click "Book Now" on any seva below to register your sacred intention.
+            <p style={{ fontSize: 14, color: '#94A3B8' }}>
+              Click "Book Seva" on any seva below to register your sacred intention.
             </p>
           </div>
         ) : (

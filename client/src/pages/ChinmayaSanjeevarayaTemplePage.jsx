@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { webContentService } from '../services/api';
+import { UnifiedBookingModal, MyBookingsModal } from '../components/TempleSevaSection';
 import {
   Landmark,
   Flame,
@@ -8,9 +9,41 @@ import {
   Sparkles,
   ChevronRight,
   Sun,
+  ArrowRight,
 } from 'lucide-react';
 
 export const ChinmayaSanjeevarayaTemplePage = () => {
+  const [selectedPujaService, setSelectedPujaService] = useState(null);
+  const [myBookingsOpen, setMyBookingsOpen] = useState(false);
+  const [bookingsCount, setBookingsCount] = useState(() => {
+    try {
+      const list = JSON.parse(localStorage.getItem('temple_seva_bookings') || '[]');
+      return list.length;
+    } catch {
+      return 0;
+    }
+  });
+
+  const refreshBookingsCount = () => {
+    try {
+      const list = JSON.parse(localStorage.getItem('temple_seva_bookings') || '[]');
+      setBookingsCount(list.length);
+    } catch {}
+  };
+
+  const handleBookPuja = (puja) => {
+    const numericPrice = parseInt(puja.price.replace(/[^\d]/g, ''), 10) || 150;
+    setSelectedPujaService({
+      name: puja.title,
+      desc: puja.desc,
+      descriptionText: puja.desc,
+      fixedAmount: numericPrice,
+      pujaType: puja.title.toLowerCase().replace(/[^a-z0-9]/g, '_'),
+      refIdPrefix: 'CST',
+      templeName: 'Chinmaya Sanjeevaraya Temple',
+    });
+  };
+
   const [pageData, setPageData] = useState(() => {
     try {
       const cached = localStorage.getItem('cached_cms_chinmaya_temple');
@@ -233,35 +266,37 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
 
       {/* DEVOTIONAL RITUALS & REGULAR SEVAS */}
       <section className="bg-[#090909] text-white py-12 sm:py-16 border-y border-[#2d2723]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-          {devotionalRituals.map((ritual, idx) => (
-            <div
-              key={idx}
-              className={`flex flex-row items-center gap-4 sm:gap-7 pb-6 sm:pb-8 ${
-                idx < devotionalRituals.length - 1 ? 'border-b border-[#2d2723]' : ''
-              }`}
-            >
-              <img
-                src={ritual.image}
-                alt={ritual.title}
-                className="w-24 sm:w-36 md:w-40 aspect-[3/4] object-cover rounded-xl shrink-0 shadow-lg border border-white/5"
-              />
-              <div className="space-y-2 sm:space-y-2.5 text-left">
-                <h3 className="text-base sm:text-xl font-bold font-heading text-[#f5c46a]">
-                  {ritual.title}
-                </h3>
-                <span className="inline-block px-3 py-1 rounded-full bg-[#1f1f23] text-[#e0e0e0] text-xs sm:text-sm font-medium border border-white/5">
-                  {ritual.badge}
-                </span>
-                <p className="text-slate-200 text-xs sm:text-base leading-relaxed">
-                  {ritual.desc}
-                </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {devotionalRituals.map((ritual, idx) => (
+              <div
+                key={idx}
+                className="bg-[#141414] border border-[#2d2723] rounded-2xl overflow-hidden flex flex-col shadow-lg shadow-black/40 hover:border-[#f5c46a]/60 hover:-translate-y-1 transition-all duration-300 text-left group"
+              >
+                <div className="w-full h-48 sm:h-52 overflow-hidden bg-black/40 relative">
+                  <img
+                    src={ritual.image}
+                    alt={ritual.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-5 sm:p-6 flex flex-col flex-1 space-y-2.5">
+                  <span className="inline-block self-start px-3 py-1 rounded-full bg-[#1f1f23] text-[#e0e0e0] text-xs font-medium border border-white/5">
+                    {ritual.badge}
+                  </span>
+                  <h3 className="text-base sm:text-lg font-bold font-heading text-[#f5c46a] leading-snug group-hover:text-amber-300 transition-colors">
+                    {ritual.title}
+                  </h3>
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal pt-1">
+                    {ritual.desc}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Sacred Footer Closing */}
-          <div className="pt-4 border-t border-[#2d2723] text-center space-y-1.5">
+          <div className="pt-6 border-t border-[#2d2723] text-center space-y-1.5">
             <div className="text-lg sm:text-2xl font-bold text-[#f5c46a] tracking-widest font-serif">
               ॥ जय श्री राम ॥
             </div>
@@ -275,17 +310,33 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       {/* PUJA SERVICES & THEIR SIGNIFICANCE */}
       <section className="bg-[#0b0b0b] text-[#f5f5f5] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-y border-[#393027]/60">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="text-center max-w-3xl mx-auto space-y-2">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
-              SACRED SEVAS & PUJAS
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-[#f2c16b] tracking-tight">
-              Puja Services &amp; Their Significance
-            </h2>
-            <div className="w-16 h-1 bg-[var(--orange)] rounded-full mx-auto mt-2" />
-            <p className="text-xs sm:text-sm text-[#c5c5c5] font-medium pt-1">
-              Explore our puja services and their spiritual significance.
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="text-left space-y-2">
+              <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
+                SACRED SEVAS &amp; PUJAS
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-[#f2c16b] tracking-tight">
+                Puja Services &amp; Their Significance
+              </h2>
+              <div className="w-16 h-1 bg-[var(--orange)] rounded-full mt-2" />
+              <p className="text-xs sm:text-sm text-[#c5c5c5] font-medium pt-1">
+                Explore our traditional puja services and their spiritual significance.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setMyBookingsOpen(true)}
+              className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500 hover:text-black font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+              title="View your registered seva bookings"
+            >
+              <span>My Bookings</span>
+              {bookingsCount > 0 && (
+                <span className="bg-amber-400 text-black rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-black">
+                  {bookingsCount}
+                </span>
+              )}
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -314,11 +365,22 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-[#393027] mt-auto">
-                  <span className="text-sm text-[#bdbdbd] font-medium">Seva Price</span>
-                  <strong className="text-2xl font-black font-heading text-[#f2c16b] tracking-tight">
-                    {puja.price}
-                  </strong>
+                <div className="pt-4 border-t border-[#393027] mt-auto space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#bdbdbd] font-medium">Seva Price</span>
+                    <strong className="text-2xl font-black font-heading text-[#f2c16b] tracking-tight">
+                      {puja.price}
+                    </strong>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleBookPuja(puja)}
+                    className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[var(--orange)] to-amber-600 hover:from-amber-600 hover:to-[var(--orange)] text-white text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>Book Seva</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             ))}
@@ -366,6 +428,21 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Unified Seva Booking Modal */}
+      {selectedPujaService && (
+        <UnifiedBookingModal
+          service={selectedPujaService}
+          onClose={() => setSelectedPujaService(null)}
+          onBookingSuccess={refreshBookingsCount}
+        />
+      )}
+
+      {/* Devotee's Bookings Drawer / List */}
+      <MyBookingsModal
+        open={myBookingsOpen}
+        onClose={() => setMyBookingsOpen(false)}
+      />
     </div>
   );
 };
