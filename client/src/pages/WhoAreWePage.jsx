@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { webContentService } from '../services/api';
+import { ManagingCommittee } from '../components/ManagingCommittee';
 import {
   ChevronLeft,
   ChevronRight,
@@ -63,29 +64,6 @@ const MEMBERS_DATA = [
     sourceBadge: 'chinmayamissionadoni.org',
     largeImage: '/assets/leadership/narayana-chaitanya.jpg',
     thumbImage: '/assets/leadership/narayana-chaitanya-thumb.jpg',
-  },
-];
-
-const COMMITTEE_MEMBERS = [
-  {
-    number: '01',
-    name: 'Yaggati Prathap',
-    role: 'President Of Chinmaya Mission, Adoni',
-  },
-  {
-    number: '02',
-    name: 'Vitta Radhika',
-    role: 'Vice President Of Chinmaya Mission, Adoni',
-  },
-  {
-    number: '03',
-    name: 'Medhal Raghunath',
-    role: 'Secretary Of Chinmaya Mission, Adoni',
-  },
-  {
-    number: '04',
-    name: 'Jagadeesh',
-    role: 'Treasurer Of Chinmaya Mission, Adoni',
   },
 ];
 
@@ -371,94 +349,9 @@ export const WhoAreWePage = () => {
         </section>
 
         {/* ============================================================ */}
-        {/* COMMITTEE MEMBERS: The People Behind Our Mission             */}
-        {/* Positioned right after Brahmachari Narayana Chaitanya       */}
+        {/* MANAGING COMMITTEE SECTION                                   */}
         {/* ============================================================ */}
-        <section
-          aria-label="Committee members"
-          className="rounded-2xl sm:rounded-3xl bg-white border border-[#E7DFD3] shadow-[0_4px_24px_rgba(20,50,35,0.06)] overflow-hidden transition-all duration-300"
-        >
-          {/* Ornate Traditional Arch Header Banner matching template */}
-          <div
-            className="w-full h-24 sm:h-36 relative overflow-hidden"
-            style={{
-              background:
-                'radial-gradient(ellipse at 0% 0%, transparent 0 35px, #d7ad58 36px 39px, transparent 40px 52px, #d7ad58 53px 56px, transparent 57px), radial-gradient(ellipse at 100% 0%, transparent 0 35px, #d7ad58 36px 39px, transparent 40px 52px, #d7ad58 53px 56px, transparent 57px), linear-gradient(120deg, #07331b, #0e3c21 55%, #07331b)',
-            }}
-            aria-hidden="true"
-          >
-            <span
-              className="absolute -top-10 sm:-top-14 -left-4 text-7xl sm:text-9xl text-[#d7ad58] opacity-90 select-none pointer-events-none"
-              style={{ lineHeight: 1 }}
-            >
-              ❋
-            </span>
-            <span
-              className="absolute -top-10 sm:-top-14 -right-4 text-7xl sm:text-9xl text-[#d7ad58] opacity-90 select-none pointer-events-none"
-              style={{ lineHeight: 1 }}
-            >
-              ❋
-            </span>
-          </div>
-
-          <div className="p-6 sm:p-8 md:p-10 space-y-8">
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <p className="text-xs sm:text-sm font-extrabold tracking-widest text-[#A26E33] uppercase">
-                Chinmaya Mission · Adoni
-              </p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#142F25] font-heading tracking-tight">
-                The People Behind Our Mission
-              </h2>
-              <p className="text-sm sm:text-base text-[#526558] font-medium">
-                United in service. Guided by wisdom.
-              </p>
-              <div className="w-14 sm:w-16 h-1 bg-[#C89B59] rounded-full mx-auto mt-3" />
-            </div>
-
-            {/* Members Grid (2 Columns on Tablet/Desktop) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {COMMITTEE_MEMBERS.map((member) => (
-                <article
-                  key={member.number}
-                  className="border border-[#D7AD58]/40 hover:border-[#D7AD58] rounded-2xl p-4 sm:p-5 bg-[#FAF7F2] hover:bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg shadow-sm flex flex-col group"
-                >
-                  {/* Portrait Placeholder Box with User Silhouette & Badge Number */}
-                  <div className="bg-[#142F25] text-[#D7AD58] min-h-[170px] sm:min-h-[190px] rounded-xl flex flex-col items-center justify-center p-6 gap-3 shadow-inner group-hover:scale-[1.01] transition-transform">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.1"
-                      className="w-10 h-10 text-[#D7AD58] group-hover:scale-110 transition-transform"
-                    >
-                      <circle cx="12" cy="7" r="4" />
-                      <path d="M4 21c.5-4.5 3.3-7 8-7s7.5 2.5 8 7" />
-                    </svg>
-                    <span className="text-xs sm:text-sm font-bold tracking-widest px-3 py-0.5 rounded-full bg-[#D7AD58]/15 border border-[#D7AD58]/30">
-                      {member.number}
-                    </span>
-                  </div>
-
-                  {/* Name and Role */}
-                  <div className="pt-4 text-center sm:text-left">
-                    <h3 className="text-lg sm:text-xl font-bold text-[#142F25] font-heading group-hover:text-[#A26E33] transition-colors leading-snug">
-                      {member.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm font-semibold text-[#A26E33] mt-1 leading-relaxed">
-                      {member.role}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            {/* Footer inside the section */}
-            <div className="text-center text-xs font-bold text-[#A26E33] pt-4 tracking-widest uppercase border-t border-[#E7DFD3]/70">
-              CHINMAYA MISSION · ADONI
-            </div>
-          </div>
-        </section>
+        <ManagingCommittee />
 
         {/* BOTTOM CALLOUT / LINK TO ACTIVITIES & LET'S CONNECT */}
         <footer className="pt-6 border-t border-[#E7DFD3]/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-[#6C7B71]">
