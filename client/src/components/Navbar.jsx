@@ -22,12 +22,21 @@ export const Navbar = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Activities', path: '/activities' },
-    { name: 'Chinmaya Sanjeevaraya Temple', path: '/chinmaya-sanjeevaraya-temple' },
-    { name: 'Who Are We', path: '/who-are-we' },
-    { name: "Let's Connect", path: '/lets-connect' },
+    { name: 'Home', shortName: 'Home', path: '/' },
+    { name: 'About', shortName: 'About', path: '/about' },
+    { name: 'Activities', shortName: 'Activities', path: '/activities' },
+    {
+      name: 'Chinmaya Sanjeevaraya Temple',
+      shortName: 'Sanjeevaraya Temple',
+      path: '/chinmaya-sanjeevaraya-temple',
+    },
+    {
+      name: 'Sri Shantha Mamleshwara Swami Temple',
+      shortName: 'Shantha Mamleshwara Temple',
+      path: '/sri-shantha-mamleshwara-swami-temple',
+    },
+    { name: 'Who Are We', shortName: 'Who Are We', path: '/who-are-we' },
+    { name: "Let's Connect", shortName: "Let's Connect", path: '/lets-connect' },
   ];
 
   const isActive = (path) => {
@@ -39,6 +48,14 @@ export const Navbar = () => {
         location.pathname === '/chinmaya-sanjeevaraya-temple' ||
         location.pathname === '/chinmaya-sanjeevaraya' ||
         location.pathname === '/sanjeevaraya-temple'
+      );
+    }
+    if (path === '/sri-shantha-mamleshwara-swami-temple') {
+      return (
+        location.pathname === '/sri-shantha-mamleshwara-swami-temple' ||
+        location.pathname === '/shri-shantamalleshwara-swami-temple' ||
+        location.pathname === '/shantamalleshwara-temple' ||
+        location.pathname === '/shanta-malleshwara-temple'
       );
     }
     return location.pathname === path;
@@ -54,7 +71,7 @@ export const Navbar = () => {
           </div>
 
           {/* CENTER: Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-7">
+          <nav className="hidden lg:flex items-center gap-2.5 xl:gap-5 2xl:gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -65,7 +82,8 @@ export const Navbar = () => {
                     : 'text-[var(--text-primary)] opacity-85'
                 }`}
               >
-                {link.name}
+                <span className="hidden xl:inline">{link.name}</span>
+                <span className="xl:hidden">{link.shortName || link.name}</span>
               </Link>
             ))}
           </nav>
