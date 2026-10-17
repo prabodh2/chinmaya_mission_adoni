@@ -180,7 +180,7 @@ export const MythsVsFactsSection = () => {
             <span>Drug Awareness & Truth</span>
           </div>
           <h2 className="mvf-title">
-            MYTHS VS FACTS
+            MYTH's VS FACT's
           </h2>
           <p className="mvf-subtitle">
             Know the truth. Make the right choice.

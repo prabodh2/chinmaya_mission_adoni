@@ -258,8 +258,8 @@ const OVERVIEW_ACTIVITIES = [
     },
   },
   {
-    id: 'sankranti-classes',
-    title: 'Sankranti Classes',
+    id: 'sanskrit-classes',
+    title: 'Sanskrit Classes',
     subtitle: 'Online sessions',
     category: 'Culture & Celebrations',
     imageUrl: '/assets/our-activities/sankranti@2x.png',
@@ -552,7 +552,13 @@ export const ActivitiesPage = () => {
 
   const [missionActivities, setMissionActivities] = useState(() => {
     const cached = getCached('cms_mission_activities', null);
-    if (Array.isArray(cached) && cached.length > 0) return cached;
+    if (Array.isArray(cached) && cached.length > 0) {
+      return cached.map((a) =>
+        a.title === 'Sankranti Classes' || a.id === 'sankranti-classes'
+          ? { ...a, title: 'Sanskrit Classes', id: 'sanskrit-classes' }
+          : a
+      );
+    }
     return initialActivities;
   });
   const [movementActivities, setMovementActivities] = useState(() => {
@@ -678,9 +684,6 @@ export const ActivitiesPage = () => {
     };
   }, []);
 
-  const spiritualDevotionActivities = missionActivities.filter(
-    (item) => item.section === 'SPIRITUALITY & DEVOTION'
-  );
   const cultureDevotionActivities = missionActivities.filter(
     (item) => item.section === 'CULTURE & DEVOTION'
   );
@@ -714,27 +717,6 @@ export const ActivitiesPage = () => {
         </div>
       </section>
 
-      {/* 2. SECTION 1: SPIRITUALITY & DEVOTION */}
-      <section className="space-y-8 w-full">
-        <div className="text-center max-w-4xl mx-auto space-y-2">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)]/10 text-[var(--orange)] mx-auto">
-            <Landmark className="w-5 h-5" />
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-            SPIRITUALITY & DEVOTION
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
-          {spiritualDevotionActivities.map((act) => (
-            <ActivityCard
-              key={act.id}
-              activity={act}
-              onSelect={handleSelectActivity}
-            />
-          ))}
-        </div>
-      </section>
 
       {/* 3. SECTION 2: CULTURE & DEVOTION */}
       <section className="space-y-8 w-full">
