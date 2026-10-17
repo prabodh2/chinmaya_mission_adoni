@@ -14,6 +14,7 @@ import { WhoAreWePage } from './pages/WhoAreWePage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
 import { RegistrationPage } from './pages/RegistrationPage';
 import { ChinmayaSanjeevarayaTemplePage } from './pages/ChinmayaSanjeevarayaTemplePage';
+import { SriShanthaMamleshwaraSwamiTemplePage } from './pages/SriShanthaMamleshwaraSwamiTemplePage';
 
 // Public Authentication Pages
 import { LoginPage } from './pages/LoginPage';
@@ -105,6 +106,10 @@ export function App() {
               <Route path="/chinmaya-sanjeevaraya-temple" element={<ChinmayaSanjeevarayaTemplePage />} />
               <Route path="/chinmaya-sanjeevaraya" element={<ChinmayaSanjeevarayaTemplePage />} />
               <Route path="/sanjeevaraya-temple" element={<ChinmayaSanjeevarayaTemplePage />} />
+              <Route path="/sri-shantha-mamleshwara-swami-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
+              <Route path="/shri-shantamalleshwara-swami-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
+              <Route path="/shantamalleshwara-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
+              <Route path="/shanta-malleshwara-temple" element={<SriShanthaMamleshwaraSwamiTemplePage />} />
               
               {/* Marathon portal redirects (marathon is hosted separately) */}
               <Route path="/register" element={<MarathonPortalRedirect path="/register" />} />

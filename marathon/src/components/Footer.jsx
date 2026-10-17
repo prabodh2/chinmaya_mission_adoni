@@ -5,6 +5,62 @@ import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-
 
 const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
 
+// Official Platform Social Media Logos
+const YouTubeIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  </svg>
+);
+
+const InstagramIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+  </svg>
+);
+
+const WhatsAppIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.979-.276-.1-.476-.15-.677.15-.2.3-.777.979-.953 1.18-.175.2-.351.226-.652.075-.3-.15-1.27-.468-2.42-1.493-.894-.798-1.498-1.784-1.674-2.085-.175-.301-.019-.464.132-.614.136-.135.301-.351.452-.527.15-.175.2-.301.3-.502.101-.2.05-.376-.025-.526-.075-.15-.677-1.631-.928-2.235-.245-.589-.494-.509-.677-.518-.176-.01-.376-.01-.577-.01-.2 0-.527.075-.803.376-.276.301-1.053 1.029-1.053 2.511 0 1.482 1.079 2.912 1.23 3.113.15.2 2.122 3.24 5.141 4.544.718.31 1.279.496 1.716.635.722.23 1.379.197 1.9-.12.58-.352 1.78-1.029 2.031-2.023.251-.994.251-1.846.176-2.024-.075-.177-.276-.277-.577-.428zM12.04 2C6.516 2 2.026 6.49 2.026 12.015c0 1.91.536 3.693 1.464 5.223L2 22.026l4.929-1.45a9.98 9.98 0 0 0 5.111 1.439h.004c5.523 0 10.014-4.49 10.014-10.015C22.058 6.49 17.564 2 12.04 2zm0 18.293h-.003a8.28 8.28 0 0 1-4.225-1.155l-.303-.18-3.14.924.939-3.06-.197-.314a8.27 8.27 0 0 1-1.27-4.493c0-4.57 3.72-8.29 8.296-8.29 2.215 0 4.298.864 5.864 2.43 1.567 1.567 2.43 3.65 2.43 5.865 0 4.572-3.72 8.273-8.496 8.273z" />
+  </svg>
+);
+
+const FacebookIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+  </svg>
+);
+
+const SOCIAL_MEDIA_LINKS = [
+  {
+    name: 'YouTube',
+    url: 'https://www.youtube.com/@ChinmayaMissionAdoni',
+    ariaLabel: 'YouTube',
+    icon: YouTubeIcon,
+    hoverBg: 'hover:bg-[#FF0000] hover:border-[#FF0000]',
+  },
+  {
+    name: 'Instagram',
+    url: 'https://www.instagram.com/chinmayamission_adoni?srtk=ZDNlZDc0MzIxNw==',
+    ariaLabel: 'Instagram',
+    icon: InstagramIcon,
+    hoverBg: 'hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] hover:border-transparent',
+  },
+  {
+    name: 'WhatsApp',
+    url: 'https://chat.whatsapp.com/Hd0DpUk36qSGIQ6UTULvke?mode=hq2tcli',
+    ariaLabel: 'WhatsApp Community',
+    icon: WhatsAppIcon,
+    hoverBg: 'hover:bg-[#25D366] hover:border-[#25D366]',
+  },
+  {
+    name: 'Facebook',
+    url: 'https://www.facebook.com/share/1CLMkw18LN/?mibextid=wwXIfr',
+    ariaLabel: 'Facebook',
+    icon: FacebookIcon,
+    hoverBg: 'hover:bg-[#1877F2] hover:border-[#1877F2]',
+  },
+];
+
 const FALLBACK_FOOTER = {
   isEnabled: true,
   disabledMessage: '',
@@ -259,27 +315,7 @@ export const Footer = ({ overrideData = null }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
           
-          {/* Column 1: Brand Info */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="text-xl sm:text-2xl font-black font-heading tracking-wider text-white">
-                {brand.title?.includes('2026') ? (
-                  <>
-                    {brand.title.replace('2026', '')}
-                    <span style={accentStyle}>2026</span>
-                  </>
-                ) : (
-                  brand.title || 'ANTI-DRUG 2026'
-                )}
-              </span>
-            </div>
-
-            <p className="text-xs leading-relaxed font-medium opacity-90">
-              {brand.description}
-            </p>
-          </div>
-
-          {/* Column 2: Quick Navigation */}
+          {/* Column 1: Quick Navigation */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
@@ -321,7 +357,7 @@ export const Footer = ({ overrideData = null }) => {
             </ul>
           </div>
 
-          {/* Column 3: Event Location & Contact */}
+          {/* Column 2: Event Location & Contact */}
           <div className="space-y-3">
             <h4
               style={headingStyle}
@@ -376,6 +412,37 @@ export const Footer = ({ overrideData = null }) => {
                   </a>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Column 3: Connect With Us */}
+          <div className="space-y-3">
+            <h4
+              style={headingStyle}
+              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
+            >
+              CONNECT WITH US
+            </h4>
+            <p className="text-xs text-slate-300 font-medium leading-relaxed">
+              Follow our movement updates, announcements, marathon media, and community stories.
+            </p>
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              {SOCIAL_MEDIA_LINKS.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <a
+                    key={item.name}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.ariaLabel}
+                    title={item.ariaLabel}
+                    className={`group w-10 h-10 rounded-xl bg-white/10 text-slate-200 border border-white/15 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg ${item.hoverBg} focus:outline-none focus:ring-2 focus:ring-[var(--orange)] focus:ring-offset-2 focus:ring-offset-[#0B2340]`}
+                  >
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 

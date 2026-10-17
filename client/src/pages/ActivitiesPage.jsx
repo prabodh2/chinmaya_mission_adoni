@@ -95,6 +95,15 @@ const ActivityCard = ({ activity, onSelect }) => {
               <span>Know More</span>
               <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
             </Link>
+          ) : activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara') ? (
+            <Link
+              to="/sri-shantha-mamleshwara-swami-temple"
+              className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs sm:text-sm flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
+              title={`Explore Sri Shantha Mamleshwara Swami Temple Page`}
+            >
+              <span>Know More</span>
+              <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+            </Link>
           ) : (
             <button
               type="button"
@@ -821,7 +830,7 @@ export const ActivitiesPage = () => {
           </h3>
 
           <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
-            Inspiring individuals to live by timeless values, empower youth, and foster clean, drug-free living across Adoni.
+            Inspiring individuals to live by timeless values, empower youth, and foster clean.
           </p>
         </div>
       </footer>
@@ -948,6 +957,15 @@ export const ActivitiesPage = () => {
                 {(selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) && (
                   <Link
                     to="/chinmaya-sanjeevaraya-temple"
+                    className="text-[var(--orange)] hover:underline font-bold text-xs flex items-center gap-1 mr-2"
+                  >
+                    <span>Full Temple Page</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                )}
+                {(selectedActivity.id === 'shanta-malleshwara-temple' || selectedActivity.title?.toLowerCase().includes('malleshwara')) && (
+                  <Link
+                    to="/sri-shantha-mamleshwara-swami-temple"
                     className="text-[var(--orange)] hover:underline font-bold text-xs flex items-center gap-1 mr-2"
                   >
                     <span>Full Temple Page</span>
