@@ -16,7 +16,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
-const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
+const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'https://chinmaya-mission-adoni-nine.vercel.app';
 
 export const Navbar = () => {
   const {
@@ -101,6 +101,8 @@ export const Navbar = () => {
             {/* Link back to Main Chinmaya Mission website */}
             <a
               href={MAIN_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-xs xl:text-sm font-bold tracking-wide text-[var(--text-muted)] hover:text-[var(--text-primary)] text-decoration-none flex items-center gap-1 transition-colors"
               title="Return to Chinmaya Mission, Adoni main website"
             >
@@ -327,6 +329,8 @@ export const Navbar = () => {
             {/* Main Mission Site link */}
             <a
               href={MAIN_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm font-bold px-3 py-2 rounded-xl text-decoration-none text-[var(--text-muted)] hover:bg-[var(--bg-tertiary)] flex items-center justify-between"
             >
               <span>Main Mission Website</span>

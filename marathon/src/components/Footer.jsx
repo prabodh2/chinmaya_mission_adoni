@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { footerService } from '../services/api';
 import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
-const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'http://localhost:5176';
+const MAIN_SITE_URL = import.meta.env.VITE_MAIN_SITE_URL || 'https://chinmaya-mission-adoni-nine.vercel.app';
 
 // Official Platform Social Media Logos
 const YouTubeIcon = ({ className = "w-5 h-5" }) => (
@@ -85,7 +85,7 @@ const FALLBACK_FOOTER = {
       { label: 'Your Thoughts & Stories', url: '/your-thoughts', openInNewTab: false, enabled: true, displayOrder: 3 },
       {
         label: 'Main Mission Site',
-        url: 'https://chinmaya-mission-adoni.vercel.app/',
+        url: 'https://chinmaya-mission-adoni-nine.vercel.app',
         openInNewTab: true,
         enabled: true,
         displayOrder: 4,
@@ -216,7 +216,7 @@ export const Footer = ({ overrideData = null }) => {
     { label: 'Your Thoughts & Stories', url: '/your-thoughts', openInNewTab: false, enabled: true, displayOrder: 3 },
     {
       label: 'Main Mission Site',
-      url: 'https://chinmaya-mission-adoni.vercel.app/',
+      url: MAIN_SITE_URL,
       openInNewTab: true,
       enabled: true,
       displayOrder: 4,
@@ -242,7 +242,7 @@ export const Footer = ({ overrideData = null }) => {
             l.url !== '/' &&
             l.url !== '/faqs' &&
             l.url !== '/your-thoughts' &&
-            !l.url?.includes('chinmaya-mission-adoni.vercel.app') &&
+            !l.url?.includes('chinmaya-mission-adoni') &&
             l.label?.toLowerCase() !== 'home' &&
             l.label?.toLowerCase() !== 'faqs' &&
             !l.label?.toLowerCase().includes('thoughts') &&
@@ -324,7 +324,14 @@ export const Footer = ({ overrideData = null }) => {
               {quickNavigation.heading || 'QUICK NAVIGATION'}
             </h4>
             <ul className="space-y-2 text-xs font-semibold list-none p-0">
-              {navLinks.map((link, idx) => {
+              {navLinks.map((rawLink, idx) => {
+                const isMainSite =
+                  (rawLink.label || '').toLowerCase().includes('main mission') ||
+                  (rawLink.url || '').toLowerCase().includes('chinmaya-mission-adoni') ||
+                  (rawLink.url || '').toLowerCase().includes('localhost:5176');
+                const link = isMainSite
+                  ? { ...rawLink, url: MAIN_SITE_URL, openInNewTab: true }
+                  : rawLink;
                 const isHighlight =
                   link.url === '/register' || link.label?.toLowerCase().includes('marathon');
                 return (
