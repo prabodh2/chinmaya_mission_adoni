@@ -22,14 +22,6 @@ export const GALLERY_IMAGES = [
     tag: 'Sanctum Photograph',
   },
   {
-    id: 'temple-real-garland',
-    src: '/assets/temple-real-photo-garland.jpeg',
-    title: 'Jyotirlinga Adorned with Divine Garlands',
-    category: 'Temple & Sanctum',
-    desc: 'The divine deity adorned with floral garlands, sacred silver umbrella, and traditional temple offerings.',
-    tag: 'Floral Alankara',
-  },
-  {
     id: 'temple-real-darshan',
     src: '/assets/temple-real-photo.jpeg',
     title: 'Panchamrita Abhisheka Darshan',
@@ -61,22 +53,6 @@ export const GALLERY_IMAGES = [
     desc: 'Panoramic hilltop view of the 12th-century Kakatiya temple complex built on multicolored strata rock.',
     tag: 'Hilltop View',
   },
-  {
-    id: 'jyotirlinga-shrine-hd',
-    src: '/assets/jyotirlinga-shrine-full.png',
-    title: 'Jyotirlinga Celestial Shrine Presentation',
-    category: 'Temple & Sanctum',
-    desc: 'Full high-definition digital representation of the glowing Shiva Jyotirlinga in cosmic glory.',
-    tag: 'Digital Art',
-  },
-  {
-    id: 'jyotirlinga-shrine-hd2',
-    src: '/assets/jyotirlinga-shrine-full2.png',
-    title: 'Jyotirlinga Shrine Celestial View II',
-    category: 'Temple & Sanctum',
-    desc: 'Alternate angle view of the illuminated celestial shrine and Shiva lingam.',
-    tag: 'Digital Art',
-  },
 
   // 2. Sacred Deities (Pancha Lingas & Goddess)
   {
@@ -102,14 +78,6 @@ export const GALLERY_IMAGES = [
     category: 'Sacred Deities',
     desc: 'The eternal Divine Mother Parvati, consort of Lord Shiva, worshipped with Sri Chakra Kumkumarchana.',
     tag: 'Divine Mother',
-  },
-  {
-    id: 'shiva-parvati-kalyanam',
-    src: '/assets/festivals/shiva-parvati-kalyanam.jpg',
-    title: 'Shiva Parvati Kalyana Moorthulu',
-    category: 'Sacred Deities',
-    desc: 'Divine idols adorned for the holy celestial marriage ceremony of Lord Shiva and Goddess Parvati.',
-    tag: 'Kalyanam',
   },
   {
     id: 'shivaya-darshan',
@@ -242,15 +210,6 @@ export const GALLERY_IMAGES = [
     tag: 'Silver Jubilee',
   },
 
-  // 4. Emblems, Icons & Badges
-  {
-    id: 'om-trishul-emblem',
-    src: '/assets/om-trishul-icon.png',
-    title: 'Sacred Om Trishul Temple Emblem',
-    category: 'Emblems & Icons',
-    desc: 'Official emblem combining the sacred sound ॐ with Lord Shiva’s trident and holy damaru.',
-    tag: 'Temple Emblem',
-  },
 ];
 
 export const GalleryPage = () => {
@@ -263,7 +222,6 @@ export const GalleryPage = () => {
     'Temple & Sanctum',
     'Sacred Deities',
     'Festivals & Homams',
-    'Emblems & Icons',
   ];
 
   // Filtered Images
