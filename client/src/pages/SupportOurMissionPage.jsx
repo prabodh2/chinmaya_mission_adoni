@@ -131,14 +131,6 @@ export const SupportOurMissionPage = () => {
         <div className="hero-gold-glow" />
 
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-3 sm:space-y-4">
-          {/* Official Chinmaya Mission Logo Badge */}
-          <div className="inline-flex items-center justify-center p-2.5 sm:p-3 rounded-full bg-white/10 backdrop-blur-md border border-[#C89B59]/40 shadow-xl mb-0.5 sm:mb-1 transition-transform hover:scale-105 duration-300">
-            <img
-              src="/assets/logos/logo-1.png"
-              alt="Chinmaya Mission Lamp Logo"
-              className="h-10 sm:h-12 w-auto object-contain filter drop-shadow"
-            />
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-spiritual-heading text-white tracking-tight drop-shadow-md">
             Support Our Mission
