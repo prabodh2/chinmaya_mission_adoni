@@ -99,29 +99,34 @@ export const Navbar = () => {
     isTempleActive('/chinmaya-sanjeevaraya-temple') ||
     isTempleActive('/sri-shantha-mamleshwara-swami-temple');
 
+  const isChinmayaMissionAdoniActive =
+    location.pathname === '/chinmaya-mission-adoni' ||
+    location.pathname === '/about' ||
+    location.pathname === '/about-us' ||
+    location.pathname === '/aboutus' ||
+    location.pathname === '/about-me';
+
   const isWhoAreWeActive =
     location.pathname === '/who-are-we' ||
     location.pathname === '/who-we-are' ||
     location.pathname === '/whoarewe';
 
-  const isAboutActive =
-    location.pathname === '/about' ||
-    location.pathname === '/about-us' ||
-    location.pathname === '/aboutus' ||
-    location.pathname === '/about-me' ||
-    isWhoAreWeActive;
+  const isAboutActive = isChinmayaMissionAdoniActive || isWhoAreWeActive;
 
   const navItems = [
     { name: 'Home', shortName: 'Home', path: '/' },
     {
-      name: 'About',
-      shortName: 'About',
-      path: '/about',
+      name: 'About Us',
+      shortName: 'About Us',
       type: 'dropdown',
       id: 'about',
       items: [
         {
-          name: 'Who Are We',
+          name: 'Chinmaya Mission Adoni',
+          path: '/chinmaya-mission-adoni',
+        },
+        {
+          name: 'Who are we',
           path: '/who-are-we',
         },
       ],
@@ -156,8 +161,8 @@ export const Navbar = () => {
     if (path.startsWith('/#')) {
       return location.hash === path.substring(1);
     }
-    if (path === '/about') {
-      return isAboutActive;
+    if (path === '/chinmaya-mission-adoni' || path === '/about') {
+      return isChinmayaMissionAdoniActive;
     }
     if (path === '/who-are-we') {
       return isWhoAreWeActive;
@@ -204,10 +209,10 @@ export const Navbar = () => {
                     onMouseEnter={handleAboutMouseEnter}
                     onMouseLeave={handleAboutMouseLeave}
                   >
-                    <Link
-                      to="/about"
-                      onClick={() => setDesktopAboutOpen(false)}
-                      className={`flex items-center gap-1 text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] text-decoration-none whitespace-nowrap ${
+                    <button
+                      type="button"
+                      onClick={() => setDesktopAboutOpen((prev) => !prev)}
+                      className={`flex items-center gap-1 text-xs xl:text-sm font-bold tracking-wide transition-colors hover:text-[var(--orange)] bg-transparent border-none p-0 cursor-pointer whitespace-nowrap focus:outline-none ${
                         isAboutActive
                           ? 'text-[var(--orange)] font-extrabold border-b-2 border-[var(--orange)] pb-1'
                           : 'text-[var(--text-primary)] opacity-85'
@@ -221,17 +226,20 @@ export const Navbar = () => {
                           desktopAboutOpen ? 'rotate-180 text-[var(--orange)]' : 'text-current'
                         }`}
                       />
-                    </Link>
+                    </button>
 
                     {/* Desktop About Dropdown Menu Panel */}
                     {desktopAboutOpen && (
                       <div
-                        className="absolute top-full left-0 mt-2 min-w-[200px] sm:min-w-[220px] bg-white rounded-xl shadow-xl border border-[var(--border-color,#EBD6A2)]/70 py-2 z-50 animate-in fade-in-50 zoom-in-95 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
+                        className="absolute top-full left-0 mt-2 min-w-[220px] sm:min-w-[240px] bg-white rounded-xl shadow-xl border border-[var(--border-color,#EBD6A2)]/70 py-2 z-50 animate-in fade-in-50 zoom-in-95 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
                         role="menu"
                         aria-orientation="vertical"
                       >
                         {item.items.map((subItem) => {
-                          const active = isWhoAreWeActive;
+                          const active =
+                            subItem.path === '/chinmaya-mission-adoni'
+                              ? isChinmayaMissionAdoniActive
+                              : isWhoAreWeActive;
                           return (
                             <Link
                               key={subItem.name}
@@ -350,7 +358,7 @@ export const Navbar = () => {
                     if (isAnyTempleActive) {
                       setMobileTemplesOpen(true);
                     }
-                    if (isWhoAreWeActive) {
+                    if (isAboutActive) {
                       setMobileAboutOpen(true);
                     }
                   }
@@ -395,7 +403,10 @@ export const Navbar = () => {
                     {mobileAboutOpen && (
                       <div className="pl-3 pr-1 py-1.5 flex flex-col space-y-1 ml-2 my-1 border-l-2 border-[var(--orange)]/30">
                         {item.items.map((subItem) => {
-                          const active = isWhoAreWeActive;
+                          const active =
+                            subItem.path === '/chinmaya-mission-adoni'
+                              ? isChinmayaMissionAdoniActive
+                              : isWhoAreWeActive;
                           return (
                             <Link
                               key={subItem.name}

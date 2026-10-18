@@ -77,6 +77,13 @@ const TREASURER = {
   name: 'M. Jagadeesh Chandra Bose',
 };
 
+// Honorary Members Data
+const HONORARY_MEMBERS = [
+  'Vitta Ramesh',
+  'Adappa Mohan Reddy',
+  'S. Sujatha',
+];
+
 // 7 Committee Members Data
 const COMMITTEE_MEMBERS = [
   'E. Sreenivasulu',
@@ -107,7 +114,7 @@ export const ManagingCommittee = () => {
 
         {/* Small uppercase label */}
         <p className="text-xs sm:text-sm mc-designation uppercase">
-          OUR ORGANIZATION
+          OUR CENTER
         </p>
 
         {/* Main Heading */}
@@ -183,7 +190,43 @@ export const ManagingCommittee = () => {
       </div>
 
       {/* ---------------------------------------------------- */}
-      {/* 3. COMMITTEE MEMBERS HEADING & GRID                  */}
+      {/* 3. HONORARY MEMBERS HEADING & GRID                   */}
+      {/* ---------------------------------------------------- */}
+      <div className="space-y-6 pt-2">
+        {/* Honorary Members Heading with decorative lines */}
+        <div className="flex items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
+          <div className="flex items-center gap-1.5 flex-1 justify-end">
+            <span className="h-[1px] w-full bg-gradient-to-r from-transparent to-[#B49350]" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#B49350] shrink-0" />
+          </div>
+          <h3 className="mc-heading-serif text-base sm:text-lg md:text-xl font-bold tracking-wider mc-text-navy uppercase text-center px-2 shrink-0">
+            HONORARY MEMBERS
+          </h3>
+          <div className="flex items-center gap-1.5 flex-1 justify-start">
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#B49350] shrink-0" />
+            <span className="h-[1px] w-full bg-gradient-to-l from-transparent to-[#B49350]" />
+          </div>
+        </div>
+
+        {/* Honorary Members 3-card Grid: 3 cards in one line */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
+          {HONORARY_MEMBERS.map((name, index) => (
+            <article
+              key={index}
+              className="mc-card p-4 sm:p-5 flex flex-col items-center justify-center text-center min-h-[96px] sm:min-h-[104px]"
+            >
+              <CardCorners />
+              <CardDivider className="my-1.5 w-14" />
+              <h4 className="text-sm sm:text-base font-bold mc-name-serif mc-text-navy leading-snug">
+                {name}
+              </h4>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      {/* ---------------------------------------------------- */}
+      {/* 4. COMMITTEE MEMBERS HEADING & GRID                  */}
       {/* ---------------------------------------------------- */}
       <div className="space-y-6 pt-2">
         {/* Committee Members Heading with decorative lines */}

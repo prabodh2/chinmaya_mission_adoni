@@ -9,6 +9,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 // Public Website Pages
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
+import { ChinmayaMissionAdoniPage } from './pages/ChinmayaMissionAdoniPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
 import { WhoAreWePage } from './pages/WhoAreWePage';
 import { LetsConnectPage } from './pages/LetsConnectPage';
@@ -93,6 +94,7 @@ export function App() {
             <Route element={<PublicLayout />}>
               {/* Main Landing Page */}
               <Route path="/" element={<HomePage />} />
+              <Route path="/chinmaya-mission-adoni" element={<ChinmayaMissionAdoniPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about-us" element={<AboutPage />} />
               <Route path="/aboutus" element={<AboutPage />} />
@@ -283,8 +285,8 @@ export function App() {
               }
             />
 
-            {/* Catch-all Redirect to About */}
-            <Route path="*" element={<Navigate to="/about" replace />} />
+            {/* Catch-all Redirect */}
+            <Route path="*" element={<Navigate to="/chinmaya-mission-adoni" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

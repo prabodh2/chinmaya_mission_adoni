@@ -78,7 +78,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
     heading: 'QUICK NAVIGATION',
     links: [
       { label: 'Home', url: '/', enabled: true, displayOrder: 1 },
-      { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
+      { label: 'About Us', url: '/chinmaya-mission-adoni', enabled: true, displayOrder: 2 },
       { label: 'Events', url: '/events', enabled: true, displayOrder: 3 },
       { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', enabled: true, displayOrder: 4 },
       { label: 'Shri Shantamalleshwara Swami Temple', url: '/shri-shantamalleshwara-swami-temple', enabled: true, displayOrder: 5 },
@@ -159,7 +159,7 @@ function sanitizeMainSiteFooter(rawData) {
       const lower = link.label.toLowerCase().trim();
       const linkUrl = (link.url || '').toLowerCase().trim();
       if (lower.includes('about')) {
-        return { ...link, label: 'About Us', url: '/about', displayOrder: 2 };
+        return { ...link, label: 'About Us', url: '/chinmaya-mission-adoni', displayOrder: 2 };
       }
       if (lower.includes('activities') || linkUrl === '/activities' || lower === 'events' || linkUrl === '/events') {
         return { ...link, label: 'Events', url: '/events', displayOrder: 3 };
@@ -204,9 +204,9 @@ function sanitizeMainSiteFooter(rawData) {
     filteredLinks.push({ label: 'Home', url: '/', enabled: true, displayOrder: 1 });
   }
 
-  const hasAbout = filteredLinks.some((l) => l.url === '/about' || l.label?.toLowerCase().includes('about'));
+  const hasAbout = filteredLinks.some((l) => l.url === '/chinmaya-mission-adoni' || l.url === '/about' || l.label?.toLowerCase().includes('about'));
   if (!hasAbout) {
-    filteredLinks.push({ label: 'About Us', url: '/about', enabled: true, displayOrder: 2 });
+    filteredLinks.push({ label: 'About Us', url: '/chinmaya-mission-adoni', enabled: true, displayOrder: 2 });
   }
 
   const hasEvents = filteredLinks.some((l) => l.url === '/events' || l.label?.toLowerCase().includes('event'));

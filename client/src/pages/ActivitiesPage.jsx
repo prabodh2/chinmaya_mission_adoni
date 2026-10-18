@@ -42,6 +42,8 @@ const ActivityCard = ({ activity, onSelect }) => {
               e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
             } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
               e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+            } else if (activity.id === 'satsang' || activity.title?.toLowerCase().includes('satsang')) {
+              e.currentTarget.src = '/assets/images/activity-satsang.jpg';
             } else if (activity.id === 'balavihar-classes' || activity.title?.toLowerCase().includes('balavihar')) {
               e.currentTarget.src = '/assets/our-activities/balavihar-classes.jpg';
             } else if (activity.id === 'kuchipudi-classes' || activity.title?.toLowerCase().includes('kuchipudi')) {
@@ -444,6 +446,32 @@ export const ActivitiesPage = () => {
       },
     },
     {
+      id: 'satsang',
+      title: 'Satsang',
+      section: 'CULTURE & DEVOTION',
+      category: 'Spiritual Fellowship & Discourse',
+      description:
+        'Satsang brings devotees and seekers together in sacred fellowship to engage in spiritual discourse, devotional singing, and collective reflection. Guided by timeless Vedantic teachings, these gatherings nurture inner peace, mutual inspiration, and harmonious community living.',
+      imageUrl: '/assets/images/activity-satsang.jpg',
+      imageAlt: 'Chinmaya Mission Devotional Satsang Gathering',
+      imageSource: 'Chinmaya Mission Satsang Gathering',
+      imageCredit: 'Spiritual Fellowship & Vedantic Learning',
+      icon: <Sun className="w-5 h-5 text-[var(--orange)]" />,
+      detailedInfo: {
+        deity: 'Satsang • Spiritual Fellowship',
+        location: 'Chinmaya Cultural Complex',
+        sections: [
+          {
+            heading: 'Sacred Fellowship & Wisdom for Daily Life',
+            paragraphs: [
+              'Satsang provides a sacred space where seekers and families assemble in the uplifting company of noble thoughts, scriptural wisdom, and devotional fellowship.',
+              'Through inspired discourses, collective chanting, devotional singing, and spiritual discussions, participants discover inner peace, moral clarity, and joy in purposeful living.',
+            ],
+          },
+        ],
+      },
+    },
+    {
       id: 'chinmaya-yuva-kendra',
       title: 'Chinmaya Yuva Kendra (CHYK)',
       section: 'YOUTH & LEADERSHIP',
@@ -525,11 +553,23 @@ export const ActivitiesPage = () => {
   const [missionActivities, setMissionActivities] = useState(() => {
     const cached = getCached('cms_mission_activities', null);
     if (Array.isArray(cached) && cached.length > 0) {
-      return cached.map((a) =>
+      const mapped = cached.map((a) =>
         a.title === 'Sankranti Classes' || a.id === 'sankranti-classes'
           ? { ...a, title: 'Sanskrit Classes', id: 'sanskrit-classes' }
           : a
       );
+      if (!mapped.some((a) => a.id === 'satsang')) {
+        const satsangInitial = initialActivities.find((a) => a.id === 'satsang');
+        if (satsangInitial) {
+          const deviIndex = mapped.findIndex((a) => a.id === 'devi-group');
+          if (deviIndex !== -1) {
+            mapped.splice(deviIndex + 1, 0, satsangInitial);
+          } else {
+            mapped.push(satsangInitial);
+          }
+        }
+      }
+      return mapped;
     }
     return initialActivities;
   });
@@ -613,10 +653,10 @@ export const ActivitiesPage = () => {
                 (c) =>
                   c.id === item.id ||
                   c.title?.toLowerCase() === item.title?.toLowerCase() ||
-                  (idx === 0 && c.id === 'act-1') ||
-                  (idx === 1 && c.id === 'act-2') ||
-                  (idx === 2 && c.id === 'act-3') ||
-                  (idx === 3 && c.id === 'act-4')
+                  (item.id === 'chinmaya-sanjeevaraya-temple' && c.id === 'act-1') ||
+                  (item.id === 'shanta-malleshwara-temple' && c.id === 'act-2') ||
+                  (item.id === 'devi-group' && c.id === 'act-3') ||
+                  (item.id === 'chinmaya-yuva-kendra' && c.id === 'act-4')
               );
               if (matchedCard) {
                 let cleanImg = matchedCard.imageUrl;
@@ -695,7 +735,7 @@ export const ActivitiesPage = () => {
   const chykActivity =
     missionActivities.find(
       (item) => item.id === 'chinmaya-yuva-kendra' || item.title?.includes('CHYK')
-    ) || initialActivities[3];
+    ) || initialActivities.find((a) => a.id === 'chinmaya-yuva-kendra');
 
   return (
     <div className="min-h-screen pt-1 sm:pt-2 pb-16 px-4 sm:px-8 lg:px-12 w-full space-y-12 sm:space-y-16">
@@ -808,6 +848,8 @@ export const ActivitiesPage = () => {
                     e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
                   } else if (selectedActivity.id === 'devi-group' || selectedActivity.title?.toLowerCase().includes('devi')) {
                     e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                  } else if (selectedActivity.id === 'satsang' || selectedActivity.title?.toLowerCase().includes('satsang')) {
+                    e.currentTarget.src = '/assets/images/activity-satsang.jpg';
                   } else if (selectedActivity.id === 'balavihar-classes' || selectedActivity.title?.toLowerCase().includes('balavihar')) {
                     e.currentTarget.src = '/assets/our-activities/balavihar-classes.jpg';
                   } else if (selectedActivity.id === 'kuchipudi-classes' || selectedActivity.title?.toLowerCase().includes('kuchipudi')) {

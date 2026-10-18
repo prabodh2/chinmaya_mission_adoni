@@ -16,7 +16,7 @@ import {
 const MEMBERS_DATA = [
   {
     id: 'founder',
-    role: 'THE FOUNDER',
+    role: 'FOUNDER',
     name: 'Chinmayananda Saraswati',
     honorific: 'Pujya Gurudev Swami Chinmayananda Saraswati',
     description: 'The visionary founder whose teachings continue to inspire generations.',
@@ -28,7 +28,7 @@ const MEMBERS_DATA = [
   },
   {
     id: 'former-head',
-    role: 'FORMER HEAD OF MISSION',
+    role: 'Former Global Head',
     name: 'Pujya Swami Tejomayananda',
     honorific: 'Pujya Swami Tejomayananda (Guruji)',
     description:
@@ -40,8 +40,8 @@ const MEMBERS_DATA = [
   },
   {
     id: 'present-head',
-    role: 'PRESENT HEAD OF MISSION',
-    name: 'Pujya Swami Swaroopanandha',
+    role: 'Global Head',
+    name: 'Pujya Swami Swaroopananda',
     honorific: 'Pujya Swami Swaroopananda',
     description: "Guiding the Mission's spiritual vision and activities.",
     extendedBio:

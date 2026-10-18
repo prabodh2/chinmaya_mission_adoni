@@ -144,7 +144,7 @@ export function HomePage() {
     .replace(/\bAdoni\b/gi, '')
     .replace(/\s{2,}/g, ' ');
   const aboutLinkText = f.about_purpose?.linkText || 'Learn More';
-  const aboutLinkUrl = f.about_purpose?.linkUrl || '/about';
+  const aboutLinkUrl = f.about_purpose?.linkUrl || '/chinmaya-mission-adoni';
 
   const valuesEyebrow = f.core_values?.eyebrow || 'WHAT GUIDES US';
   const valuesHeading = f.core_values?.heading || 'Our Core Values';
