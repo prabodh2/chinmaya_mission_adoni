@@ -50,6 +50,10 @@ const ActivityCard = ({ activity, onSelect }) => {
               e.currentTarget.src = '/assets/our-activities/bhagavad-gita-book.jpg';
             } else if (activity.id === 'chinmaya-yuva-kendra' || activity.id === 'chyk-classes' || activity.title?.toLowerCase().includes('chyk')) {
               e.currentTarget.src = '/assets/images/activity-chyk.jpg';
+            } else if (activity.id === 'sanskrit-classes' || activity.title?.toLowerCase().includes('sanskrit')) {
+              e.currentTarget.src = '/assets/our-activities/sanskrit-classes.jpg';
+            } else if (activity.id === 'vishnu-sahasranamam' || activity.title?.toLowerCase().includes('vishnu')) {
+              e.currentTarget.src = '/assets/our-activities/vishnu-sahasranamam.jpg';
             }
           }}
           className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl transition-transform duration-500 ease-out group-hover:scale-[1.02] block"
@@ -275,21 +279,22 @@ const OVERVIEW_ACTIVITIES = [
   {
     id: 'sanskrit-classes',
     title: 'Sanskrit Classes',
-    subtitle: 'Online sessions',
-    category: 'Culture & Celebrations',
-    imageUrl: '/assets/our-activities/sankranti@2x.png',
-    imageSource: 'Online sessions & Ashram Campus',
+    subtitle: 'Language & Chanting',
+    category: 'Sacred Learning & Chanting',
+    imageUrl: '/assets/our-activities/sanskrit-classes.jpg',
+    imageAlt: 'Sanskrit Classes and Chanting at Chinmaya Mission',
+    imageSource: 'Sanskrit Learning & Chanting Sessions',
     icon: <Sun className="w-5 h-5" />,
     description:
-      'Interactive cultural workshops, traditional festive celebrations, rangoli arts, and online sessions celebrating the auspicious harvest festival of Makara Sankranti.',
+      'Structured Sanskrit learning classes, pronunciation of sacred slokas, Vedic chanting, and scriptural study for devotees, youth, and seekers.',
     detailedInfo: {
-      location: 'Online & Ashram Campus',
+      location: 'Chinmaya Cultural Complex',
       sections: [
         {
-          heading: 'Festive Learning & Community Spirit',
+          heading: 'Learning the Language of the Gods (Devavani)',
           paragraphs: [
-            'Sankranti classes and workshops bring families and youth together to celebrate Indian cultural traditions, understand the spiritual symbolism behind solar transitions, and cultivate gratitude for nature.',
-            'Includes online interactive sessions, rangoli traditions, and festive joy connecting participants near and far.',
+            'Sanskrit classes offer an accessible, structured pathway to learn the Devanagari script, correct pronunciation of sacred mantras, and understand the depth of ancient scriptures.',
+            'Conducted for seekers of all ages, fostering a deeper connection with Vedic heritage, spiritual stotras, and classical wisdom in a devoted classroom setting.',
           ],
         },
       ],
@@ -323,7 +328,8 @@ const OVERVIEW_ACTIVITIES = [
     title: 'Vishnu Sahasranamam',
     subtitle: 'Devotional chanting',
     category: 'Devotional Chanting',
-    imageUrl: '/assets/our-activities/vishnu@2x.png',
+    imageUrl: '/assets/our-activities/vishnu-sahasranamam.jpg',
+    imageAlt: 'Sri Vishnu Sahasranamam Community Chanting and Satsang',
     imageSource: 'Devotional chanting | Temples & Satsang',
     icon: <Heart className="w-5 h-5" />,
     description:
@@ -335,7 +341,7 @@ const OVERVIEW_ACTIVITIES = [
           heading: 'Sacred Stotra Recitation',
           paragraphs: [
             'Chanting the Vishnu Sahasranamam brings serenity, purification of mind, and collective spiritual upliftment. Devotees gather regularly to chant with devotion and correct pronunciation.',
-            'Open to all seekers, elders, and families wishing to immerse themselves in devotional harmony and sacred vibrations.',
+            'Open to all seekers, elders, and families wishing to immerse themselves in devotional harmony, mandala celebrations, and sacred vibrations.',
           ],
         },
       ],
@@ -810,6 +816,10 @@ export const ActivitiesPage = () => {
                     e.currentTarget.src = '/assets/our-activities/bhagavad-gita-book.jpg';
                   } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.id === 'chyk-classes' || selectedActivity.title?.toLowerCase().includes('chyk')) {
                     e.currentTarget.src = '/assets/our-activities/chyk-classes.jpg';
+                  } else if (selectedActivity.id === 'sanskrit-classes' || selectedActivity.title?.toLowerCase().includes('sanskrit')) {
+                    e.currentTarget.src = '/assets/our-activities/sanskrit-classes.jpg';
+                  } else if (selectedActivity.id === 'vishnu-sahasranamam' || selectedActivity.title?.toLowerCase().includes('vishnu')) {
+                    e.currentTarget.src = '/assets/our-activities/vishnu-sahasranamam.jpg';
                   }
                 }}
                 className="relative z-10 w-full h-full max-h-[58vh] object-contain mx-auto my-auto drop-shadow-2xl rounded-xl block"
