@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Landmark,
@@ -7,7 +7,9 @@ import {
   Laptop,
   Calendar,
   ArrowRight,
+  Heart,
 } from 'lucide-react';
+import { DonationModal } from '../components/DonationModal';
 import '../styles/support-our-mission.css';
 
 // Spiritual Lotus SVG Component
@@ -92,6 +94,8 @@ const sevaCategories = [
 ];
 
 export const SupportOurMissionPage = () => {
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+
   useEffect(() => {
     document.title = 'Support Our Mission | Chinmaya Mission';
     window.scrollTo(0, 0);
@@ -388,9 +392,28 @@ export const SupportOurMissionPage = () => {
               Be a Part of the Journey.
             </p>
           </div>
+
+          {/* Donation CTA Button */}
+          <div className="pt-2 sm:pt-4">
+            <button
+              type="button"
+              onClick={() => setIsDonationModalOpen(true)}
+              className="btn-seva-register hover:scale-105 transition-all text-base px-9 py-3.5 cursor-pointer font-bold shadow-lg inline-flex items-center gap-2.5"
+              id="open-donation-modal-btn"
+            >
+              <Heart className="w-5 h-5 text-[#0A192F] fill-current" />
+              <span>Donation</span>
+              <ArrowRight className="w-4 h-4 text-[#0A192F]" />
+            </button>
+          </div>
         </div>
       </section>
 
+      {/* Devotee Donation Modal with Form & Review steps */}
+      <DonationModal
+        isOpen={isDonationModalOpen}
+        onClose={() => setIsDonationModalOpen(false)}
+      />
     </div>
   );
 };
