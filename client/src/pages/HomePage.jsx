@@ -82,7 +82,8 @@ export function HomePage() {
       localStorage.removeItem('cached_cms_chinmaya_home_v2');
       localStorage.removeItem('cached_cms_chinmaya_home_v3');
       localStorage.removeItem('cached_cms_chinmaya_home_v4');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v5');
+      localStorage.removeItem('cached_cms_chinmaya_home_v5');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v6');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -96,7 +97,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v5', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v6', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -129,7 +130,7 @@ export function HomePage() {
 
   const portraitImg = isCustomCloudinary
     ? rawPortrait
-    : '/assets/swami-chinmayananda-himalaya-sunrise.jpg';
+    : '/assets/swami-chinmayananda-golden-tree.jpg';
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
 

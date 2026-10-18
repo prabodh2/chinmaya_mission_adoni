@@ -32,7 +32,7 @@ export const DEFAULT_WEBSITE_PAGES = {
             { key: 'primaryBtnLink', label: 'Primary Button Link', type: 'link', value: '#about' },
             { key: 'secondaryBtnText', label: 'Secondary Button Label', type: 'text', value: 'Know About CHYK' },
             { key: 'secondaryBtnLink', label: 'Secondary Button Link', type: 'link', value: '#chyk' },
-            { key: 'portraitImage', label: 'Portrait Image URL', type: 'image', value: '/assets/swami-chinmayananda-himalaya-sunrise.jpg' },
+            { key: 'portraitImage', label: 'Portrait Image URL', type: 'image', value: '/assets/swami-chinmayananda-golden-tree.jpg' },
             { key: 'portraitQuote', label: 'Portrait Quote Symbol', type: 'text', value: 'Arise, Awake and Guide Others' },
             { key: 'portraitSignature', label: 'Portrait Signature', type: 'text', value: 'Swami Chinmayananda' },
           ],
