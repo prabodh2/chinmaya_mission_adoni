@@ -8,7 +8,6 @@ import {
   Mail,
   MapPin,
   Sparkles,
-  Flame,
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
@@ -16,57 +15,39 @@ import {
   QrCode,
   Printer,
   ShieldCheck,
+  UploadCloud,
+  FileCheck,
+  Trash2,
+  Check,
+  Smartphone,
 } from 'lucide-react';
 
-const NAKSHATRAS = [
-  'Ashwini (అశ్విని)',
-  'Bharani (భరణి)',
-  'Krittika (కృత్తిక)',
-  'Rohini (రోహిణి)',
-  'Mrigashira (మృగశిర)',
-  'Ardra (ఆర్ద్ర)',
-  'Punarvasu (పునర్వసు)',
-  'Pushya (పుష్య)',
-  'Ashlesha (ఆశ్లేష)',
-  'Magha (మఖ)',
-  'Purva Phalguni / Pubba (పూర్వ ఫల్గుని)',
-  'Uttara Phalguni / Uttara (ఉత్తర ఫల్గుని)',
-  'Hasta (హస్త)',
-  'Chitra (చిత్ర)',
-  'Swati (స్వాతి)',
-  'Vishakha (విశాఖ)',
-  'Anuradha (అనూరాధ)',
-  'Jyeshtha (జ్యేష్ఠ)',
-  'Mula (మూల)',
-  'Purva Ashadha (పూర్వాషాఢ)',
-  'Uttara Ashadha (ఉత్తరాషాఢ)',
-  'Shravana (శ్రవణ)',
-  'Dhanishta (ధనిష్ట)',
-  'Shatabhisha (శతభిష)',
-  'Purva Bhadrapada (పూర్వాభాద్ర)',
-  'Uttara Bhadrapada (ఉత్తరాభాద్ర)',
-  'Revati (రేవతి)',
-  'Not Sure / Other',
-];
+const AMOUNT_PRESETS = [501, 1001, 2501, 5001, 11000, 25000];
 
 export const DonationModal = ({
   isOpen,
   onClose,
-  modalTitle = 'Devotee Donation Details',
-  modalSubtitle = 'Pooja Sankalpa & Contribution Record',
+  modalTitle = 'Explore Contribution Options',
+  modalSubtitle = 'Pooja Sankalpa, Devotee Details & Contribution Record',
 }) => {
-  const [step, setStep] = useState('form'); // 'form' | 'review' | 'confirmed'
+  const [step, setStep] = useState('form'); // 'form' | 'review' | 'proof' | 'confirmed'
   const [formData, setFormData] = useState({
+    amount: '',
     name: '',
-    dob: '',
     phoneNumber: '',
-    gotram: '',
-    nakshatra: '',
-    address: '',
     email: '',
+    dob: '',
+    address: '',
+    // Step 3 verification proof fields
+    utrId: '',
+    screenshot: '',
+    screenshotPreview: '',
+    screenshotSize: '',
   });
 
   const [errors, setErrors] = useState({});
+  const [submittedReceipt, setSubmittedReceipt] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Reset or lock scroll when modal opens/closes
   useEffect(() => {
@@ -103,16 +84,25 @@ export const DonationModal = ({
     }
   };
 
-  const validate = () => {
+  // Step 1 Validation (Amount, Name, Phone, Email)
+  const validateStep1 = () => {
     const newErrors = {};
+
+    const numAmount = parseFloat(formData.amount);
+    if (!formData.amount || isNaN(numAmount) || numAmount <= 0) {
+      newErrors.amount = 'Please enter a valid donation amount (₹)';
+    }
+
     if (!formData.name.trim()) {
       newErrors.name = 'Please enter your full name';
     }
+
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = 'Please enter your phone number';
     } else if (!/^[0-9+-\s()]{7,15}$/.test(formData.phoneNumber.trim())) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Please enter your email ID';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
@@ -123,27 +113,120 @@ export const DonationModal = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  // Step 3 Validation (UTR ID, Screenshot Upload)
+  const validateStep3 = () => {
+    const newErrors = {};
+
+    if (!formData.utrId.trim()) {
+      newErrors.utrId = 'Please enter the 12-digit UTR ID / UPI Transaction Reference Number';
+    } else if (formData.utrId.trim().length < 6) {
+      newErrors.utrId = 'Please enter a valid transaction reference number';
+    }
+
+    if (!formData.screenshot) {
+      newErrors.screenshot = 'Please upload a screenshot of your payment as transaction proof';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleReviewClick = (e) => {
     e.preventDefault();
-    if (validate()) {
+    if (validateStep1()) {
       setStep('review');
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleDonePaymentClick = () => {
+    // Moves to Step 3 (Payment Proof form) as requested
+    setStep('proof');
   };
 
-  const handleConfirm = () => {
+  // File Upload Handler with FileReader preview
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      setErrors((prev) => ({
+        ...prev,
+        screenshot: 'Please upload an image (PNG, JPG, JPEG) or PDF receipt',
+      }));
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        screenshot: 'File size should be less than 5MB',
+      }));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({
+        ...prev,
+        screenshot: file.name,
+        screenshotPreview: reader.result,
+        screenshotSize: (file.size / 1024).toFixed(1) + ' KB',
+      }));
+      setErrors((prev) => ({ ...prev, screenshot: '' }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveScreenshot = () => {
+    setFormData((prev) => ({
+      ...prev,
+      screenshot: '',
+      screenshotPreview: '',
+      screenshotSize: '',
+    }));
+  };
+
+  // Final Submission Handler
+  const handleSubmitProof = (e) => {
+    e.preventDefault();
+    if (!validateStep3()) return;
+
+    setIsSubmitting(true);
+
+    const refId = `CMS-${Date.now().toString(36).toUpperCase()}-${Math.random()
+      .toString(36)
+      .slice(2, 6)
+      .toUpperCase()}`;
+
+    const record = {
+      refId,
+      amount: formData.amount,
+      name: formData.name.trim(),
+      phoneNumber: formData.phoneNumber.trim(),
+      email: formData.email.trim(),
+      dob: formData.dob,
+      address: formData.address.trim(),
+      utrId: formData.utrId.trim(),
+      screenshotName: formData.screenshot,
+      submittedAt: new Date().toISOString(),
+      status: 'Payment Proof Submitted (Verification Pending)',
+    };
+
     try {
       const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
-      existing.unshift({
-        ...formData,
-        submittedAt: new Date().toISOString(),
-      });
+      existing.unshift(record);
       localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
     } catch (_) {}
-    setStep('confirmed');
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmittedReceipt(record);
+      setStep('confirmed');
+    }, 450);
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -166,18 +249,16 @@ export const DonationModal = ({
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-white tracking-wide">
-                  {step === 'review'
-                    ? 'Review Details & Contribution'
-                    : step === 'confirmed'
-                    ? 'Sankalpa Registered'
-                    : modalTitle}
+                  {step === 'form' && modalTitle}
+                  {step === 'review' && 'Review Donation & PhonePe QR'}
+                  {step === 'proof' && 'Submit Payment Verification'}
+                  {step === 'confirmed' && 'Contribution Received With Gratitude'}
                 </h3>
                 <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80">
-                  {step === 'review'
-                    ? 'Verify your sacred details before offering seva'
-                    : step === 'confirmed'
-                    ? 'May Pujya Gurudev bless you and your family'
-                    : modalSubtitle}
+                  {step === 'form' && modalSubtitle}
+                  {step === 'review' && 'Verify details and scan the QR code to complete donation'}
+                  {step === 'proof' && 'Enter your UTR ID and upload the payment screenshot'}
+                  {step === 'confirmed' && 'May Pujya Gurudev bless you and your family'}
                 </p>
               </div>
             </div>
@@ -192,22 +273,36 @@ export const DonationModal = ({
             </button>
           </div>
 
-          {/* Step Progress Pill */}
+          {/* 3-Step Progress Indicator */}
           {step !== 'confirmed' && (
             <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-semibold">
-              <span className="flex items-center gap-1.5 text-[#E6BF70]">
-                <span className="w-5 h-5 rounded-full bg-[#C89B59] text-[#0C1A30] font-bold flex items-center justify-center text-[11px]">
-                  1
+              {/* Step 1 */}
+              <span
+                className={`flex items-center gap-1.5 ${
+                  step === 'form' ? 'text-[#E6BF70]' : 'text-slate-300'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
+                    step === 'form'
+                      ? 'bg-[#C89B59] text-[#0C1A30]'
+                      : 'bg-emerald-600/80 text-white'
+                  }`}
+                >
+                  {step !== 'form' ? '✓' : '1'}
                 </span>
-                <span>Devotee Details</span>
+                <span>Details & Amount</span>
               </span>
-              <div className="h-0.5 flex-1 mx-3 bg-white/20">
+
+              <div className="h-0.5 flex-1 mx-2 sm:mx-3 bg-white/20">
                 <div
                   className={`h-full bg-[#C89B59] transition-all duration-300 ${
-                    step === 'review' ? 'w-full' : 'w-0'
+                    step === 'review' || step === 'proof' ? 'w-full' : 'w-0'
                   }`}
                 />
               </div>
+
+              {/* Step 2 */}
               <span
                 className={`flex items-center gap-1.5 ${
                   step === 'review' ? 'text-[#E6BF70]' : 'text-slate-400'
@@ -217,12 +312,40 @@ export const DonationModal = ({
                   className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
                     step === 'review'
                       ? 'bg-[#C89B59] text-[#0C1A30]'
+                      : step === 'proof'
+                      ? 'bg-emerald-600/80 text-white'
                       : 'bg-white/20 text-slate-300'
                   }`}
                 >
-                  2
+                  {step === 'proof' ? '✓' : '2'}
                 </span>
                 <span>Review & QR</span>
+              </span>
+
+              <div className="h-0.5 flex-1 mx-2 sm:mx-3 bg-white/20">
+                <div
+                  className={`h-full bg-[#C89B59] transition-all duration-300 ${
+                    step === 'proof' ? 'w-full' : 'w-0'
+                  }`}
+                />
+              </div>
+
+              {/* Step 3 */}
+              <span
+                className={`flex items-center gap-1.5 ${
+                  step === 'proof' ? 'text-[#E6BF70]' : 'text-slate-400'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
+                    step === 'proof'
+                      ? 'bg-[#C89B59] text-[#0C1A30]'
+                      : 'bg-white/20 text-slate-300'
+                  }`}
+                >
+                  3
+                </span>
+                <span>Proof & UTR</span>
               </span>
             </div>
           )}
@@ -231,10 +354,11 @@ export const DonationModal = ({
         {/* Modal Scrollable Body */}
         <div className="p-5 sm:p-7 overflow-y-auto space-y-6 flex-1 bg-[#FAF7F2]">
           {/* ========================================================= */}
-          {/* STEP 1: FORM INPUTS                                       */}
+          {/* STEP 1: FORM INPUTS (Exact User Order)                    */}
           {/* ========================================================= */}
           {step === 'form' && (
             <form onSubmit={handleReviewClick} className="space-y-5">
+              {/* Sacred Information Callout Banner */}
               <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] text-xs sm:text-sm text-[#4A5568] leading-relaxed shadow-sm">
                 <p className="flex items-start gap-2">
                   <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
@@ -245,8 +369,59 @@ export const DonationModal = ({
                 </p>
               </div>
 
+              {/* 1st Field: Enter the amount how much you will donate */}
+              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] shadow-sm space-y-2.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                  Enter Donation Amount (₹) <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-base">
+                    ₹
+                  </span>
+                  <input
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleChange}
+                    placeholder="e.g., 501, 1001, 2500, 5000"
+                    min="1"
+                    className={`w-full pl-9 pr-3.5 py-3 bg-[#FAF7F2] rounded-xl border text-base font-bold text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                      errors.amount ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                    }`}
+                    required
+                  />
+                </div>
+                {errors.amount && (
+                  <p className="text-xs text-red-500 font-medium">{errors.amount}</p>
+                )}
+
+                {/* Quick Presets */}
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-[11px] text-slate-500 font-semibold mr-1">
+                    Quick Select:
+                  </span>
+                  {AMOUNT_PRESETS.map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => {
+                        setFormData((prev) => ({ ...prev, amount: String(amt) }));
+                        if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }));
+                      }}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                        String(formData.amount) === String(amt)
+                          ? 'bg-[#0C1A30] text-[#E6BF70] border border-[#C89B59] shadow-sm'
+                          : 'bg-white border border-[#D9CEBA] text-slate-700 hover:border-[#C89B59] hover:bg-[#FAF5EA]'
+                      }`}
+                    >
+                      ₹{amt.toLocaleString('en-IN')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* 1. Full Name */}
+                {/* 2nd Field: Name */}
                 <div className="space-y-1.5 sm:col-span-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                     Full Name <span className="text-red-500">*</span>
@@ -268,7 +443,7 @@ export const DonationModal = ({
                   {errors.name && <p className="text-xs text-red-500 font-medium">{errors.name}</p>}
                 </div>
 
-                {/* 2. Phone Number */}
+                {/* 3rd & 4th Field: Phone Number */}
                 <div className="space-y-1.5">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                     Phone Number <span className="text-red-500">*</span>
@@ -292,7 +467,7 @@ export const DonationModal = ({
                   )}
                 </div>
 
-                {/* 3. Email ID */}
+                {/* 5th Field: Email id */}
                 <div className="space-y-1.5">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                     Email ID <span className="text-red-500">*</span>
@@ -316,8 +491,8 @@ export const DonationModal = ({
                   )}
                 </div>
 
-                {/* 4. Date of Birth */}
-                <div className="space-y-1.5">
+                {/* 6th Field: Dob */}
+                <div className="space-y-1.5 sm:col-span-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                     Date of Birth (DOB)
                   </label>
@@ -333,48 +508,7 @@ export const DonationModal = ({
                   </div>
                 </div>
 
-                {/* 5. Gotram */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
-                    Gotram (గోత్రం)
-                  </label>
-                  <div className="relative">
-                    <Flame className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                      type="text"
-                      name="gotram"
-                      value={formData.gotram}
-                      onChange={handleChange}
-                      placeholder="e.g., Bharadwaja, Kaundinya, Kashyapa"
-                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* 6. Nakshatra */}
-                <div className="space-y-1.5 sm:col-span-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
-                    Nakshatra (నక్షత్రం)
-                  </label>
-                  <div className="relative">
-                    <Sparkles className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <select
-                      name="nakshatra"
-                      value={formData.nakshatra}
-                      onChange={handleChange}
-                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all cursor-pointer appearance-none"
-                    >
-                      <option value="">-- Select Birth Star / Nakshatra --</option>
-                      {NAKSHATRAS.map((nak) => (
-                        <option key={nak} value={nak}>
-                          {nak}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* 7. Address */}
+                {/* 7th Field: Address */}
                 <div className="space-y-1.5 sm:col-span-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                     Address (నివాసం)
@@ -414,17 +548,17 @@ export const DonationModal = ({
           )}
 
           {/* ========================================================= */}
-          {/* STEP 2: REVIEW DETAILS VIEW                               */}
+          {/* STEP 2: REVIEW DETAILS & PHONEPE QR CODE                   */}
           {/* ========================================================= */}
           {step === 'review' && (
             <div className="space-y-6">
-              {/* Review Card */}
-              <div className="bg-white rounded-2xl border-2 border-[#C89B59]/40 shadow-sm p-5 sm:p-6 space-y-5 relative overflow-hidden">
+              {/* Devotee Details Summary Card */}
+              <div className="bg-white rounded-2xl border-2 border-[#C89B59]/40 shadow-sm p-5 sm:p-6 space-y-4 relative overflow-hidden">
                 <div className="flex items-center justify-between border-b border-[#EAE0CE] pb-3">
                   <div className="flex items-center gap-2 text-[#0C1A30]">
                     <ShieldCheck className="w-5 h-5 text-[#C89B59]" />
                     <h4 className="font-spiritual-heading font-bold text-base sm:text-lg">
-                      Sankalpa & Devotee Summary
+                      Review Contribution Details
                     </h4>
                   </div>
                   <button
@@ -437,8 +571,23 @@ export const DonationModal = ({
                   </button>
                 </div>
 
+                {/* Prominent Amount Banner */}
+                <div className="bg-gradient-to-r from-[#0C1A30] to-[#142845] p-4 rounded-xl text-white flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#E6BF70] block">
+                      Pledged Donation Amount
+                    </span>
+                    <span className="text-xl sm:text-2xl font-black text-white">
+                      ₹{Number(formData.amount || 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <div className="text-right text-xs text-[#F4E8D3]/80">
+                    <span>Tax Exemption 80G Eligible</span>
+                  </div>
+                </div>
+
                 {/* Details Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-6 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm">
                   <div>
                     <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
                       Devotee Name
@@ -468,7 +617,7 @@ export const DonationModal = ({
 
                   <div>
                     <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Date of Birth
+                      Date of Birth (DOB)
                     </span>
                     <span className="font-semibold text-slate-800">
                       {formData.dob
@@ -478,24 +627,6 @@ export const DonationModal = ({
                             year: 'numeric',
                           })
                         : 'Not Specified'}
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Gotram
-                    </span>
-                    <span className="font-semibold text-[#0C1A30]">
-                      {formData.gotram || 'Not Specified'}
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Nakshatra (Birth Star)
-                    </span>
-                    <span className="font-semibold text-[#0C1A30]">
-                      {formData.nakshatra || 'Not Specified'}
                     </span>
                   </div>
 
@@ -510,21 +641,55 @@ export const DonationModal = ({
                 </div>
               </div>
 
-              {/* QR Code Placeholder Container */}
-              <div className="bg-gradient-to-br from-[#FAF5EA] to-[#F3E8D0] rounded-2xl border-2 border-dashed border-[#C89B59] p-6 text-center space-y-3 shadow-inner">
-                <div className="w-16 h-16 rounded-2xl bg-white border border-[#C89B59]/40 flex items-center justify-center mx-auto text-[#0C1A30] shadow-sm">
-                  <QrCode className="w-8 h-8 text-[#C89B59]" />
-                </div>
-                <div className="space-y-1">
-                  <h5 className="font-spiritual-heading font-bold text-base text-[#0C1A30]">
-                    Payment QR Code
+              {/* PhonePe QR Code Container */}
+              <div className="bg-gradient-to-br from-[#FAF5EA] to-[#F3E8D0] rounded-2xl border-2 border-dashed border-[#C89B59] p-5 sm:p-6 text-center space-y-4 shadow-inner">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-[#5f259f] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                    पे
+                  </div>
+                  <h5 className="font-spiritual-heading font-bold text-lg text-[#0C1A30]">
+                    PhonePe UPI QR Code
                   </h5>
-                  <p className="text-xs sm:text-sm text-[#4A5568] max-w-md mx-auto">
-                    The official donation payment QR code will be displayed here for direct UPI / Net Banking transfer.
-                  </p>
                 </div>
-                <div className="inline-block px-3.5 py-1.5 rounded-full bg-white/80 border border-[#C89B59]/40 text-xs font-bold text-[#8B6508]">
-                  ✨ QR Code will be printed / activated here shortly
+
+                <p className="text-xs sm:text-sm text-[#4A5568] max-w-md mx-auto">
+                  Scan this QR code using <strong>PhonePe</strong>, Google Pay, Paytm, or any UPI
+                  app to complete your donation of{' '}
+                  <strong className="text-[#0C1A30]">
+                    ₹{Number(formData.amount || 0).toLocaleString('en-IN')}
+                  </strong>
+                  .
+                </p>
+
+                {/* QR Code Graphic Box */}
+                <div className="bg-white rounded-2xl p-6 border-2 border-dashed border-[#C89B59] max-w-xs mx-auto shadow-sm text-center space-y-3">
+                  <div className="w-44 h-44 sm:w-48 sm:h-48 mx-auto bg-gradient-to-br from-slate-50 to-[#FAF5EA] rounded-xl border border-[#EAE0CE] flex flex-col items-center justify-center p-3 relative">
+                    <div className="w-14 h-14 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center mb-2 shadow-sm">
+                      <QrCode className="w-9 h-9 text-[#5f259f]" />
+                    </div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#5f259f] text-white text-[10px] font-bold tracking-wider uppercase mb-1">
+                      PhonePe UPI
+                    </span>
+                    <p className="text-xs font-bold text-[#0C1A30]">
+                      Pay ₹{Number(formData.amount || 0).toLocaleString('en-IN')}
+                    </p>
+                    <p className="text-[10px] text-slate-500 mt-0.5">
+                      PhonePe QR will be placed here
+                    </p>
+                  </div>
+                </div>
+
+                {/* Instructional Note */}
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#C89B59]/40 text-xs font-bold text-[#8B6508]">
+                  <span>✨ PhonePe QR code will be added here. Once paid, click Done below!</span>
+                </div>
+
+                <div className="bg-white/80 p-3 rounded-xl border border-[#EAE0CE] text-xs text-slate-600 max-w-md mx-auto">
+                  <p>
+                    <strong>Next Step:</strong> After completing the payment, note your{' '}
+                    <strong>12-digit UTR ID</strong> and take a screenshot of the payment receipt.
+                    Then click <strong>"Done / I Have Paid"</strong> below.
+                  </p>
                 </div>
               </div>
 
@@ -550,13 +715,15 @@ export const DonationModal = ({
                     <span>Print</span>
                   </button>
 
+                  {/* "Done" Button which redirects to Step 3 (Proof form) */}
                   <button
                     type="button"
-                    onClick={handleConfirm}
+                    onClick={handleDonePaymentClick}
                     className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
                   >
                     <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
-                    <span>Confirm & Finish</span>
+                    <span>Done / I Have Paid</span>
+                    <ArrowRight className="w-4 h-4 text-[#0A192F]" />
                   </button>
                 </div>
               </div>
@@ -564,7 +731,194 @@ export const DonationModal = ({
           )}
 
           {/* ========================================================= */}
-          {/* STEP 3: CONFIRMED VIEW                                    */}
+          {/* STEP 3: REDIRECT / PAYMENT PROOF SUBMISSION FORM           */}
+          {/* ========================================================= */}
+          {step === 'proof' && (
+            <form onSubmit={handleSubmitProof} className="space-y-5">
+              {/* Info Banner */}
+              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] text-xs sm:text-sm text-[#4A5568] leading-relaxed shadow-sm">
+                <p className="flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
+                  <span>
+                    Thank you for your payment! Please submit your <strong>UTR Reference ID</strong>{' '}
+                    and upload the <strong>payment screenshot</strong> below for verification and
+                    formal 80G tax receipt issuance.
+                  </span>
+                </p>
+              </div>
+
+              {/* Redirected Devotee Details Summary Card */}
+              <div className="bg-white rounded-2xl border border-[#EAE0CE] p-4 sm:p-5 shadow-sm space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#FAF5EA]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Transferred Contribution Details
+                  </span>
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                    <Check className="w-3 h-3" /> Details Pre-filled
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs sm:text-sm">
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Amount Paid
+                    </span>
+                    <span className="font-extrabold text-[#B8860B] text-base sm:text-lg">
+                      ₹{Number(formData.amount || 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Devotee Name
+                    </span>
+                    <span className="font-bold text-[#0C1A30] truncate block">
+                      {formData.name || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Phone Number
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {formData.phoneNumber || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Email Address
+                    </span>
+                    <span className="font-semibold text-slate-800 truncate block">
+                      {formData.email || '—'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* UTR ID Input */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                  UTR ID / UPI Reference Number <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    name="utrId"
+                    value={formData.utrId}
+                    onChange={handleChange}
+                    placeholder="e.g., 429812345678 (12-digit UTR from PhonePe / UPI receipt)"
+                    maxLength={24}
+                    className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                      errors.utrId ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                    }`}
+                    required
+                  />
+                </div>
+                {errors.utrId ? (
+                  <p className="text-xs text-red-500 font-medium">{errors.utrId}</p>
+                ) : (
+                  <p className="text-[11px] text-slate-500">
+                    Find this 12-digit UTR in your PhonePe / banking transaction details
+                  </p>
+                )}
+              </div>
+
+              {/* Upload Screenshot of Payment */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                  Upload Screenshot of Payment <span className="text-red-500">*</span>
+                </label>
+
+                {!formData.screenshot ? (
+                  <label
+                    className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl bg-white hover:bg-slate-50 transition-all cursor-pointer ${
+                      errors.screenshot ? 'border-red-400 bg-red-50/10' : 'border-[#D9CEBA]'
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#FAF5EA] border border-[#C89B59]/30 flex items-center justify-center text-[#B8860B] mb-2">
+                      <UploadCloud className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-[#0C1A30]">
+                      Click to upload payment screenshot
+                    </span>
+                    <span className="text-[11px] text-slate-500 mt-1">
+                      PNG, JPG, JPEG or PDF (Max 5MB)
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*,application/pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                ) : (
+                  <div className="bg-white rounded-2xl border-2 border-[#C89B59]/40 p-4 shadow-sm flex items-center justify-between">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      {formData.screenshotPreview ? (
+                        <img
+                          src={formData.screenshotPreview}
+                          alt="Payment Proof Preview"
+                          className="w-14 h-14 rounded-lg object-cover border border-[#EAE0CE] shrink-0"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
+                          <FileCheck className="w-7 h-7" />
+                        </div>
+                      )}
+                      <div className="truncate">
+                        <span className="text-xs font-bold text-[#0C1A30] block truncate">
+                          {formData.screenshot}
+                        </span>
+                        <span className="text-[11px] text-emerald-600 font-semibold block">
+                          ✓ File ready to upload ({formData.screenshotSize})
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleRemoveScreenshot}
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                      title="Remove screenshot"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+
+                {errors.screenshot && (
+                  <p className="text-xs text-red-500 font-medium">{errors.screenshot}</p>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('review')}
+                  className="px-4 py-2.5 rounded-xl border border-[#C89B59] text-[#0C1A30] hover:bg-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back to QR Code</span>
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
+                  <span>{isSubmitting ? 'Submitting...' : 'Submit Payment Proof'}</span>
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* ========================================================= */}
+          {/* STEP 4: CONFIRMED VIEW (Success Screen)                    */}
           {/* ========================================================= */}
           {step === 'confirmed' && (
             <div className="text-center py-6 sm:py-8 space-y-5">
@@ -574,21 +928,88 @@ export const DonationModal = ({
 
               <div className="space-y-2 max-w-md mx-auto">
                 <h4 className="text-xl sm:text-2xl font-bold font-spiritual-heading text-[#0C1A30]">
-                  Sankalpa Registered With Gratitude!
+                  Contribution &amp; Payment Proof Submitted!
                 </h4>
                 <p className="text-sm text-[#4A5568] leading-relaxed">
-                  Hari Om, <strong>{formData.name}</strong>. Thank you for your heartfelt intention to support Chinmaya Mission. Your details have been noted for pooja blessings.
+                  Hari Om, <strong>{formData.name}</strong>. Thank you for your generous
+                  contribution of{' '}
+                  <strong className="text-[#0C1A30]">
+                    ₹{Number(formData.amount || 0).toLocaleString('en-IN')}
+                  </strong>{' '}
+                  to Chinmaya Mission.
                 </p>
               </div>
 
-              {/* QR Notice */}
+              {/* Receipt Summary Card */}
+              {submittedReceipt && (
+                <div className="bg-white p-5 rounded-2xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-700 space-y-2.5 shadow-sm text-left">
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500 font-semibold uppercase tracking-wider text-[11px]">
+                      Donation Reference
+                    </span>
+                    <span className="font-mono font-bold text-[#B8860B] text-xs">
+                      {submittedReceipt.refId}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Amount:</span>
+                    <span className="font-extrabold text-[#0C1A30] text-sm">
+                      ₹{Number(submittedReceipt.amount).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">UTR / Transaction ID:</span>
+                    <span className="font-mono font-bold text-slate-800">
+                      {submittedReceipt.utrId}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Devotee Name:</span>
+                    <span className="font-medium text-slate-800">{submittedReceipt.name}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Phone Number:</span>
+                    <span className="font-medium text-slate-800">
+                      {submittedReceipt.phoneNumber}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Payment Screenshot:</span>
+                    <span className="font-medium text-emerald-600">✓ Uploaded &amp; Attached</span>
+                  </div>
+
+                  <div className="flex justify-between pt-1 border-t border-slate-100">
+                    <span className="text-slate-500 font-medium">Verification Status:</span>
+                    <span className="font-bold text-emerald-600">
+                      ✓ Under Accounts Verification
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Tax Exemption Note */}
               <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-600 leading-relaxed shadow-sm">
                 <p>
-                  Official receipt and tax exemption acknowledgement will be shared on <strong>{formData.email}</strong> once your donation is received via the upcoming QR code or bank transfer.
+                  Official 80G tax exemption receipt and formal acknowledgement will be emailed to{' '}
+                  <strong>{formData.email}</strong> once your UTR number is verified by our accounts
+                  department.
                 </p>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                >
+                  <Printer className="w-4 h-4 text-slate-600" />
+                  <span>Print Receipt</span>
+                </button>
                 <button
                   type="button"
                   onClick={onClose}
