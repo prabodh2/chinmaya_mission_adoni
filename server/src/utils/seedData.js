@@ -284,7 +284,7 @@ export const seedInitialData = async () => {
             p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
             p2: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
             keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
-            imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop'
+            imageUrl: '/assets/images/chyk-youth-team.jpg'
           },
           spiritualityInAction: {
             heading: 'SPIRITUALITY IN ACTION',

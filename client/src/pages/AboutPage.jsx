@@ -73,8 +73,7 @@ export const AboutPage = () => {
       p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
       p2: "CHYK aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
       keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
-      imageUrl:
-        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop',
+      imageUrl: '/assets/images/chyk-youth-team.jpg',
     },
     spiritualityInAction: {
       heading: 'SPIRITUALITY IN ACTION',
@@ -219,6 +218,9 @@ export const AboutPage = () => {
         if (!parsed?.continuingLegacy?.highlights?.includes('1992')) {
           parsed.continuingLegacy = { ...defaultContent.continuingLegacy };
         }
+        if (!parsed?.chykSection?.imageUrl || parsed?.chykSection?.imageUrl?.includes('photo-1529156069898-49953e39b3ac')) {
+          parsed.chykSection = { ...parsed.chykSection, imageUrl: '/assets/images/chyk-youth-team.jpg' };
+        }
         if (parsed?.ourActivities?.cards) {
           parsed.ourActivities.cards.forEach((c, idx) => {
             const def = defaultContent.ourActivities.cards[idx];
@@ -285,12 +287,17 @@ export const AboutPage = () => {
             };
           }
           if (f.chyk_section) {
+            const rawChykImg = f.chyk_section.imageUrl;
+            const chykImg = (!rawChykImg || rawChykImg.includes('photo-1529156069898-49953e39b3ac'))
+              ? '/assets/images/chyk-youth-team.jpg'
+              : rawChykImg;
+
             merged.chykSection = {
               ...merged.chykSection,
               heading: f.chyk_section.heading || merged.chykSection.heading,
               p1: f.chyk_section.p1 || merged.chykSection.p1,
               p2: f.chyk_section.p2 || merged.chykSection.p2,
-              imageUrl: f.chyk_section.imageUrl || merged.chykSection.imageUrl,
+              imageUrl: chykImg,
             };
           }
           if (f.spirituality_in_action) {
@@ -664,7 +671,7 @@ export const AboutPage = () => {
                 <img
                   src={data.chykSection.imageUrl}
                   alt="CHYK Youth Power"
-                  className="relative z-10 w-full h-full object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500"
+                  className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                 />
                 <div className="absolute top-4 right-4 px-4 py-1.5 rounded-full bg-black/80 text-[var(--yellow)] font-extrabold text-xs backdrop-blur-md border border-white/20 z-20">
                   YOUTH IN ACTION
