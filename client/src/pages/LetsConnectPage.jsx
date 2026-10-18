@@ -115,7 +115,7 @@ export const LetsConnectPage = () => {
               JOIN THE MOVEMENT
             </h3>
             <p className="text-xs text-[var(--text-muted)] font-medium">
-              Fill out the form below and our volunteer coordination team will get in touch.
+              Fill out the form below and our volunteer coordination team will get in touch with you.
             </p>
           </div>
 
