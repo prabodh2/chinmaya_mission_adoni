@@ -8,7 +8,6 @@ import {
   Mail,
   Send,
   CheckCircle,
-  Flame,
   MessageSquare,
   Clock,
   ExternalLink,
@@ -98,10 +97,6 @@ export const LetsConnectPage = () => {
     <div className="min-h-screen pt-2 sm:pt-4 pb-14 px-4 max-w-7xl mx-auto space-y-8 sm:space-y-10">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-2.5">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30">
-          <Flame className="w-4 h-4" />
-          {f.contact_info?.eyebrow || 'CONNECT & VOLUNTEER'}
-        </span>
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
           <span>{f.contact_info?.heading || "LET'S CONNECT WITH"}</span>
           <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION</span>
