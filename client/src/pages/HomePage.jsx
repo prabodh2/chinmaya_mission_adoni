@@ -259,16 +259,8 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="hero-portrait" aria-hidden="true">
-            <div className="portrait-aura" />
-            <div className="portrait-frame">
-              <img
-                src={portraitImg}
-                alt={portraitSig}
-                className="portrait-img"
-              />
-            </div>
-            <div className="signature">{portraitSig}</div>
+          <div className="hero-signature" aria-hidden="true">
+            {portraitSig}
           </div>
 
           <div className="sun-disc" />

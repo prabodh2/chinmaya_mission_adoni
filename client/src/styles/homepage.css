@@ -257,20 +257,19 @@
   filter: contrast(1.05) brightness(1.03);
 }
 
-.signature {
+.hero-signature {
   position: absolute;
-  left: 53%;
-  bottom: 4px;
-  transform: translateX(-50%);
+  right: clamp(4%, 7vw, 10%);
+  bottom: 24px;
   font-family: 'Playfair Display', serif;
   font-style: normal;
   font-weight: 700;
   color: #ffffff;
-  font-size: clamp(15px, 1.2vw, 19px);
+  font-size: clamp(15px, 1.25vw, 19px);
   letter-spacing: 0.8px;
   white-space: nowrap;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.9);
-  z-index: 4;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -877,6 +876,7 @@
     height: 54%;
     opacity: 0.65;
   }
+  .hero-signature,
   .portrait-symbol,
   .signature {
     display: none;
