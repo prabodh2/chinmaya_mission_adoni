@@ -300,7 +300,8 @@ export const Footer = ({ overrideData = null }) => {
       localStorage.removeItem('cached_main_footer_data');
       localStorage.removeItem('cached_main_footer_data_v3');
       localStorage.removeItem('cached_main_footer_data_v4');
-      const cached = localStorage.getItem('cached_main_footer_data_v5');
+      localStorage.removeItem('cached_main_footer_data_v5');
+      const cached = localStorage.getItem('cached_main_footer_data_v6');
       return cached ? sanitizeMainSiteFooter(JSON.parse(cached)) : MAIN_SITE_FALLBACK_FOOTER;
     } catch {
       return MAIN_SITE_FALLBACK_FOOTER;
@@ -320,7 +321,7 @@ export const Footer = ({ overrideData = null }) => {
           const sanitized = sanitizeMainSiteFooter(res.data.data);
           setFooterData(sanitized);
           try {
-            localStorage.setItem('cached_main_footer_data_v5', JSON.stringify(sanitized));
+            localStorage.setItem('cached_main_footer_data_v6', JSON.stringify(sanitized));
           } catch {}
         }
       })
@@ -375,10 +376,6 @@ export const Footer = ({ overrideData = null }) => {
   const navLinks = (quickNavigation.links || [])
     .filter((link) => link.enabled !== false)
     .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-
-  const midPoint = Math.ceil(navLinks.length / 2);
-  const col1Links = navLinks.slice(0, midPoint);
-  const col2Links = navLinks.slice(midPoint);
 
   const address = contact.address || {};
   const addressLines = [
@@ -451,26 +448,21 @@ export const Footer = ({ overrideData = null }) => {
       <div className="w-full px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-7 items-start">
           
-          {/* Column 1: Quick Navigation (Compact 2 columns) */}
-          <div className="md:col-span-2 lg:col-span-5 space-y-3">
+          {/* Column 1: Quick Navigation (Single column line) */}
+          <div className="md:col-span-1 lg:col-span-4 space-y-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
               {quickNavigation.heading || 'QUICK NAVIGATION'}
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-xs sm:text-[13px] font-medium">
-              <ul className="space-y-2 list-none p-0 m-0">
-                {col1Links.map((link, idx) => renderNavLink(link, idx))}
-              </ul>
-              <ul className="space-y-2 list-none p-0 m-0">
-                {col2Links.map((link, idx) => renderNavLink(link, idx + midPoint))}
-              </ul>
-            </div>
+            <ul className="space-y-2.5 list-none p-0 m-0 text-xs sm:text-[13px] font-medium">
+              {navLinks.map((link, idx) => renderNavLink(link, idx))}
+            </ul>
           </div>
 
           {/* Column 2: Location & Contact */}
-          <div className="space-y-3 lg:col-span-4">
+          <div className="space-y-3 md:col-span-1 lg:col-span-5">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
@@ -538,7 +530,7 @@ export const Footer = ({ overrideData = null }) => {
           </div>
 
           {/* Column 3: Connect With Us */}
-          <div className="space-y-3 lg:col-span-3">
+          <div className="space-y-3 md:col-span-2 lg:col-span-3">
             <h4
               style={headingStyle}
               className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
