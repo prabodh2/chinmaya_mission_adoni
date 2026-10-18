@@ -146,7 +146,7 @@ export const Navbar = () => {
     { name: 'Gallery', shortName: 'Gallery', path: '/gallery' },
     { name: "Let's Connect", shortName: "Let's Connect", path: '/lets-connect' },
     {
-      name: 'Support our mission',
+      name: 'Support Our Mission',
       shortName: 'Support',
       path: '/support-our-mission',
     },
