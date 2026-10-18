@@ -478,19 +478,6 @@ export const AboutPage = () => {
                 alt="Chinmaya Mission Visual"
                 className="w-full h-80 sm:h-[420px] object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--navy)]/90 via-[var(--navy)]/30 to-transparent flex flex-col justify-end p-6 text-white">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--yellow)] px-3 py-1 rounded-full bg-black/40 border border-white/20 backdrop-blur-md w-max mb-2">
-                  SPIRITUAL & CULTURAL CENTRE
-                </span>
-                <h3 className="text-xl font-extrabold font-heading text-white">
-                  Chinmaya Mission
-                </h3>
-                <div className="text-xs text-slate-300 font-medium space-y-0.5 mt-1 leading-snug">
-                  <p className="m-0">Chinmaya Cultural Complex,</p>
-                  <p className="m-0">Near Arts College Road,</p>
-                  <p className="m-0">Adoni - 518301.</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
