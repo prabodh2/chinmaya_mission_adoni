@@ -131,18 +131,6 @@ export const SupportOurMissionPage = () => {
         <div className="hero-gold-glow" />
 
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-3 sm:space-y-4">
-          {/* Chinmaya Mission Official Logo */}
-          <div className="flex justify-center mb-1">
-            <img
-              src="/assets/logos/chinmaya-mission-lamp-logo.png"
-              alt="Chinmaya Mission Logo"
-              className="h-9 sm:h-11 md:h-12 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(246,132,31,0.25)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-300"
-              onError={(e) => {
-                e.currentTarget.src = '/assets/logos/chinmaya-logo-original.png';
-              }}
-            />
-          </div>
-
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-spiritual-heading text-white tracking-tight drop-shadow-md">
             Support Our Mission
           </h1>
