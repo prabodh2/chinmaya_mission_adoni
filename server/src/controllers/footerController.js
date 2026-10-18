@@ -17,10 +17,11 @@ export const defaultFooterConfig = {
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
     links: [
-      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 1 },
-      { label: 'Activities Gallery', url: '/activities', openInNewTab: false, enabled: true, displayOrder: 2 },
-      { label: "Let's Connect", url: '/lets-connect', openInNewTab: false, enabled: true, displayOrder: 3 },
-      { label: 'Marathon Registration', url: '/register', openInNewTab: false, enabled: true, displayOrder: 4 },
+      { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
+      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 2 },
+      { label: 'Events', url: '/events', openInNewTab: false, enabled: true, displayOrder: 3 },
+      { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', openInNewTab: false, enabled: true, displayOrder: 4 },
+      { label: 'Shri Shantamalleshwara Swami Temple', url: '/shri-shantamalleshwara-swami-temple', openInNewTab: false, enabled: true, displayOrder: 5 },
     ],
   },
   contact: {

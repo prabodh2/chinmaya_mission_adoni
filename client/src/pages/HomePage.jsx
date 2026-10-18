@@ -48,8 +48,8 @@ const events = [
     date: 'Sunday, Dec 20, 2026',
     kind: 'marathon',
     image: '/assets/chyk-marathon.jpg',
-    url: MARATHON_PORTAL_URL,
-    isExternal: true,
+    url: null,
+    isExternal: false,
   },
   {
     title: 'Rama Navami',
@@ -153,7 +153,10 @@ export function HomePage() {
   const chykTag2 = f.chyk_section?.tag2 || 'Serve with purpose';
   const chykBtnText = f.chyk_section?.buttonText || 'Join CHYK';
   const chykBtnLink = f.chyk_section?.buttonLink || '/lets-connect';
-  const chykImg = f.chyk_section?.imageUrl || '/assets/youth-runners.png';
+  const rawChykImg = f.chyk_section?.imageUrl;
+  const chykImg = (!rawChykImg || rawChykImg.includes('youth-runners'))
+    ? '/assets/chyk-group.jpg'
+    : rawChykImg;
 
   const eventsEyebrow = f.upcoming_events?.eyebrow || 'COME BE A PART';
   const eventsHeading = f.upcoming_events?.heading || 'Upcoming Events';
@@ -169,7 +172,7 @@ export function HomePage() {
     )
       ? f.upcoming_events.items.map((it, idx) => {
           const isMarathon = it.title?.toLowerCase().includes('marathon') || idx === 0;
-          const targetUrl = isMarathon ? MARATHON_PORTAL_URL : (it.linkUrl || '/events');
+          const targetUrl = isMarathon ? null : (it.linkUrl || '/events');
           return {
             title: it.title,
             subtitle: it.subtitle || '',
@@ -177,7 +180,7 @@ export function HomePage() {
             kind: idx === 0 ? 'marathon' : idx === 1 ? 'journey' : idx === 2 ? 'wisdom' : 'meditation',
             image: it.imageUrl || (idx === 0 ? '/assets/chyk-marathon.jpg' : ''),
             url: targetUrl,
-            isExternal: targetUrl.startsWith('http'),
+            isExternal: Boolean(targetUrl && targetUrl.startsWith('http')),
           };
         })
       : events;
@@ -304,50 +307,53 @@ export function HomePage() {
             </div>
           </div>
           <div className="events-grid">
-            {dynamicEvents.map((event) => (
-              <article
-                className="event-card cursor-pointer group"
-                key={event.title}
-                onClick={() => {
-                  const isMarathon = event.kind === 'marathon' || event.title?.toLowerCase().includes('marathon');
-                  const targetUrl = isMarathon ? MARATHON_PORTAL_URL : event.url;
-                  if (targetUrl) {
+            {dynamicEvents.map((event) => {
+              const isMarathon = event.kind === 'marathon' || event.title?.toLowerCase().includes('marathon');
+              const targetUrl = isMarathon ? null : event.url;
+              const hasLink = Boolean(targetUrl);
+
+              return (
+                <article
+                  className={`event-card group ${hasLink ? 'cursor-pointer' : 'cursor-default'}`}
+                  key={event.title}
+                  onClick={() => {
+                    if (!hasLink) return;
                     if (event.isExternal || targetUrl.startsWith('http')) {
                       window.open(targetUrl, '_blank', 'noopener,noreferrer');
                     } else {
                       navigate(targetUrl);
                     }
-                  }
-                }}
-              >
-                <div className={'event-art ' + event.kind}>
-                  {event.image ? (
-                    <img src={event.image} alt={event.title} className="event-art-img" />
-                  ) : event.kind === 'journey' ? (
-                    <div className="road-sun" />
-                  ) : event.kind === 'wisdom' ? (
-                    <div className="wisdom-symbol">ॐ</div>
-                  ) : event.kind === 'youth' ? (
-                    <Users size={50} />
-                  ) : (
-                    <Sun size={56} strokeWidth={1.2} />
-                  )}
-                </div>
-                <div className="event-info">
-                  <div className="flex items-start justify-between gap-1">
-                    <h3>{event.title}</h3>
-                    {event.isExternal && (
-                      <ExternalLink size={13} className="text-[var(--orange)] shrink-0 mt-0.5 opacity-70 group-hover:opacity-100" />
+                  }}
+                >
+                  <div className={'event-art ' + event.kind}>
+                    {event.image ? (
+                      <img src={event.image} alt={event.title} className="event-art-img" />
+                    ) : event.kind === 'journey' ? (
+                      <div className="road-sun" />
+                    ) : event.kind === 'wisdom' ? (
+                      <div className="wisdom-symbol">ॐ</div>
+                    ) : event.kind === 'youth' ? (
+                      <Users size={50} />
+                    ) : (
+                      <Sun size={56} strokeWidth={1.2} />
                     )}
                   </div>
-                  <p>{event.subtitle}</p>
-                  <div className="event-date">
-                    <CalendarDays size={14} />
-                    {event.date}
+                  <div className="event-info">
+                    <div className="flex items-start justify-between gap-1">
+                      <h3>{event.title}</h3>
+                      {event.isExternal && !isMarathon && (
+                        <ExternalLink size={13} className="text-[var(--orange)] shrink-0 mt-0.5 opacity-70 group-hover:opacity-100" />
+                      )}
+                    </div>
+                    <p>{event.subtitle}</p>
+                    <div className="event-date">
+                      <CalendarDays size={14} />
+                      {event.date}
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </section>
 
@@ -356,7 +362,7 @@ export function HomePage() {
           <div className="chyk-image">
             <img
               src={chykImg}
-              alt="Young people taking part in a healthy community activity"
+              alt="Chinmaya Yuva Kendra and Mission members"
             />
           </div>
           <div className="chyk-copy">

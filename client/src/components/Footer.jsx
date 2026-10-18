@@ -82,10 +82,6 @@ const MAIN_SITE_FALLBACK_FOOTER = {
       { label: 'Events', url: '/events', enabled: true, displayOrder: 3 },
       { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', enabled: true, displayOrder: 4 },
       { label: 'Shri Shantamalleshwara Swami Temple', url: '/shri-shantamalleshwara-swami-temple', enabled: true, displayOrder: 5 },
-      { label: 'Sacred Image Gallery', url: '/gallery', enabled: true, displayOrder: 6 },
-      { label: 'Who Are We', url: '/who-are-we', enabled: true, displayOrder: 7 },
-      { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 8 },
-      { label: 'Marathon 2026 Portal', url: MARATHON_PORTAL_URL, enabled: true, displayOrder: 9, openInNewTab: true },
     ],
   },
   contact: {
@@ -153,14 +149,19 @@ function sanitizeMainSiteFooter(rawData) {
       // Exclude unwanted links
       if (lower.includes('what we do') || url === '/what-we-do') return false;
       if (lower.includes('marathon registration') || url === '/register') return false;
+      if (lower.includes('sacred image gallery') || lower === 'gallery' || url.includes('/gallery')) return false;
+      if (lower.includes('who are we') || lower.includes('who we are') || url.includes('/who-are-we')) return false;
+      if (lower.includes("let's connect") || lower.includes('lets connect') || url.includes('/lets-connect')) return false;
+      if (lower.includes('marathon') || url.includes('marathon')) return false;
       return true;
     })
     .map((link) => {
       const lower = link.label.toLowerCase().trim();
+      const linkUrl = (link.url || '').toLowerCase().trim();
       if (lower.includes('about')) {
         return { ...link, url: '/about' };
       }
-      if (lower.includes('activities') || url === '/activities') {
+      if (lower.includes('activities') || linkUrl === '/activities') {
         return { ...link, label: 'Events', url: '/events' };
       }
       if (
@@ -168,8 +169,8 @@ function sanitizeMainSiteFooter(rawData) {
         lower.includes('malleshwara') ||
         lower.includes('shantamalleshwara') ||
         lower.includes('shantha') ||
-        url.includes('mamleshwara') ||
-        url.includes('malleshwara')
+        linkUrl.includes('mamleshwara') ||
+        linkUrl.includes('malleshwara')
       ) {
         return {
           ...link,
@@ -179,20 +180,6 @@ function sanitizeMainSiteFooter(rawData) {
       }
       return link;
     });
-
-  // Ensure Marathon 2026 Portal link exists
-  const hasMarathonPortalLink = filteredLinks.some((l) =>
-    l.label?.toLowerCase().includes('marathon')
-  );
-  if (!hasMarathonPortalLink) {
-    filteredLinks.push({
-      label: 'Marathon 2026 Portal',
-      url: MARATHON_PORTAL_URL,
-      enabled: true,
-      openInNewTab: true,
-      displayOrder: 99,
-    });
-  }
 
   data.quickNavigation = {
     heading: 'QUICK NAVIGATION',
@@ -247,7 +234,8 @@ export const Footer = ({ overrideData = null }) => {
     if (overrideData) return sanitizeMainSiteFooter(overrideData);
     try {
       localStorage.removeItem('cached_main_footer_data');
-      const cached = localStorage.getItem('cached_main_footer_data_v3');
+      localStorage.removeItem('cached_main_footer_data_v3');
+      const cached = localStorage.getItem('cached_main_footer_data_v4');
       return cached ? sanitizeMainSiteFooter(JSON.parse(cached)) : MAIN_SITE_FALLBACK_FOOTER;
     } catch {
       return MAIN_SITE_FALLBACK_FOOTER;
@@ -267,7 +255,7 @@ export const Footer = ({ overrideData = null }) => {
           const sanitized = sanitizeMainSiteFooter(res.data.data);
           setFooterData(sanitized);
           try {
-            localStorage.setItem('cached_main_footer_data_v3', JSON.stringify(sanitized));
+            localStorage.setItem('cached_main_footer_data_v4', JSON.stringify(sanitized));
           } catch {}
         }
       })
