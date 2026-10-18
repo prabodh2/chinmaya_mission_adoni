@@ -135,6 +135,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               title: 'Rama Navami',
               subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
               dateOrYear: 'April 15th, 2027',
+              imageUrl: '/assets/rama-navami-procession.jpg',
               linkUrl: '/events',
               order: 1,
             },

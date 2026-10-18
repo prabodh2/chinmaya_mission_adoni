@@ -47,6 +47,7 @@ const events = [
     subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
     date: 'April 15th, 2027',
     kind: 'journey',
+    image: '/assets/rama-navami-procession.jpg',
     icon: '✦',
     url: '/events',
     isExternal: false,
@@ -80,7 +81,8 @@ export function HomePage() {
       localStorage.removeItem('cached_cms_chinmaya_home');
       localStorage.removeItem('cached_cms_chinmaya_home_v2');
       localStorage.removeItem('cached_cms_chinmaya_home_v3');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v4');
+      localStorage.removeItem('cached_cms_chinmaya_home_v4');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v5');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -94,7 +96,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v4', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v5', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -184,12 +186,14 @@ export function HomePage() {
     )
       ? rawEventItems.map((it, idx) => {
           const targetUrl = it.linkUrl || '/events';
+          const isRamaNavami = it.title?.toLowerCase().includes('rama navami');
+          const eventImage = it.imageUrl || (isRamaNavami ? '/assets/rama-navami-procession.jpg' : '');
           return {
             title: it.title,
             subtitle: it.subtitle || '',
             date: it.dateOrYear || 'Upcoming',
             kind: idx === 0 ? 'journey' : idx === 1 ? 'wisdom' : idx === 2 ? 'meditation' : 'journey',
-            image: it.imageUrl || '',
+            image: eventImage,
             url: targetUrl,
             isExternal: Boolean(targetUrl && targetUrl.startsWith('http')),
           };
