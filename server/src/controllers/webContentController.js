@@ -43,15 +43,43 @@ export const buildFieldsMap = (sections = []) => {
   const map = {};
   sections.forEach((sec) => {
     if (!sec || !sec.sectionId) return;
+
+    // Automatically exclude marathon items from upcoming_events
+    const rawItems = sec.items || [];
+    const filteredItems = sec.sectionId === 'upcoming_events'
+      ? rawItems.filter(
+          (item) =>
+            item &&
+            item.itemId !== 'event-marathon' &&
+            !item.title?.toLowerCase().includes('marathon')
+        )
+      : rawItems;
+
     map[sec.sectionId] = {
       _name: sec.name,
       _isEnabled: sec.isEnabled !== false,
-      items: sec.items || [],
+      items: filteredItems,
     };
+
     if (Array.isArray(sec.fields)) {
       sec.fields.forEach((f) => {
         if (f && f.key) {
-          map[sec.sectionId][f.key] = f.value;
+          let val = f.value;
+          // Cleanse hero portrait so obsolete cutouts or huge base64 strings don't override the canonical image
+          if (sec.sectionId === 'hero' && f.key === 'portraitImage') {
+            if (
+              !val ||
+              typeof val !== 'string' ||
+              val.startsWith('data:') ||
+              val.includes('cutout') ||
+              val.includes('natural') ||
+              val.includes('suitable-bg') ||
+              !val.startsWith('http')
+            ) {
+              val = '/assets/swami-chinmayananda-himalaya-sunrise.jpg';
+            }
+          }
+          map[sec.sectionId][f.key] = val;
         }
       });
     }

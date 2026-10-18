@@ -131,12 +131,12 @@ export const DEFAULT_WEBSITE_PAGES = {
           ],
           items: [
             {
-              itemId: 'event-marathon',
-              title: '3K Anti-Drug Marathon',
-              subtitle: 'We Rise · We Run · We Resist',
-              dateOrYear: 'Sunday, Dec 20, 2026',
-              imageUrl: '/assets/chyk-marathon.jpg',
-              linkUrl: '',
+              itemId: 'event-shivaratri',
+              title: 'Maha Shivaratri',
+              subtitle: 'Maharudra Abhishekam & Divine Celebrations',
+              dateOrYear: 'February 26th',
+              imageUrl: '/assets/Maha_Shivaratri_upcome_2027.jpeg',
+              linkUrl: '/events',
               order: 1,
             },
             {

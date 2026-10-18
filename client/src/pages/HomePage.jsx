@@ -43,12 +43,12 @@ const corePillars = [
 
 const events = [
   {
-    title: '3K Anti-Drug Marathon',
-    subtitle: 'We Rise · We Run · We Resist',
-    date: 'Sunday, Dec 20, 2026',
-    kind: 'marathon',
-    image: '/assets/chyk-marathon.jpg',
-    url: null,
+    title: 'Maha Shivaratri',
+    subtitle: 'Maharudra Abhishekam & Divine Celebrations',
+    date: 'February 26th',
+    kind: 'journey',
+    image: '/assets/Maha_Shivaratri_upcome_2027.jpeg',
+    url: '/events',
     isExternal: false,
   },
   {
@@ -58,6 +58,7 @@ const events = [
     kind: 'journey',
     icon: '✦',
     url: '/events',
+    isExternal: false,
   },
   {
     title: 'Hanuman Jayanthi',
@@ -66,6 +67,7 @@ const events = [
     kind: 'wisdom',
     icon: 'ॐ',
     url: '/events',
+    isExternal: false,
   },
   {
     title: 'Krishna Janmashtami',
@@ -74,6 +76,7 @@ const events = [
     kind: 'meditation',
     icon: '☼',
     url: '/events',
+    isExternal: false,
   },
 ];
 
@@ -84,7 +87,8 @@ export function HomePage() {
   const [pageData, setPageData] = useState(() => {
     try {
       localStorage.removeItem('cached_cms_chinmaya_home');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v2');
+      localStorage.removeItem('cached_cms_chinmaya_home_v2');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v3');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -98,7 +102,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v2', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v3', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -122,18 +126,16 @@ export function HomePage() {
   const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
   const primaryBtnLink = f.hero?.primaryBtnLink || '#about';
   const rawPortrait = f.hero?.portraitImage;
-  const isOldPortrait =
-    !rawPortrait ||
-    rawPortrait.includes('swami-chinmayananda-natural') ||
-    rawPortrait.includes('swami-chinmayananda-portrait') ||
-    rawPortrait.includes('swami-chinmayananda.png') ||
-    rawPortrait.includes('swami-chinmayananda.jpg') ||
-    rawPortrait.includes('swami-chinmayananda-suitable-bg') ||
-    rawPortrait.includes('swami-chinmayananda-divine-aura');
+  const isCustomCloudinary =
+    rawPortrait &&
+    typeof rawPortrait === 'string' &&
+    rawPortrait.startsWith('http') &&
+    (rawPortrait.includes('cloudinary') || rawPortrait.includes('res.cloudinary.com')) &&
+    !rawPortrait.includes('cutout');
 
-  const portraitImg = isOldPortrait
-    ? '/assets/swami-chinmayananda-himalaya-sunrise.jpg'
-    : rawPortrait;
+  const portraitImg = isCustomCloudinary
+    ? rawPortrait
+    : '/assets/swami-chinmayananda-himalaya-sunrise.jpg';
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
 
@@ -172,23 +174,30 @@ export function HomePage() {
   const eventsHeading = f.upcoming_events?.heading || 'Upcoming Events';
   const eventsLinkText = f.upcoming_events?.linkText || 'View All';
   const eventsLinkUrl = f.upcoming_events?.linkUrl || '/events';
+
+  const rawEventItems = (f.upcoming_events?.items || []).filter(
+    (it) =>
+      it &&
+      it.itemId !== 'event-marathon' &&
+      !it.title?.toLowerCase().includes('marathon')
+  );
+
   const dynamicEvents =
-    f.upcoming_events?.items?.length &&
-    !f.upcoming_events.items.some(
+    rawEventItems.length > 0 &&
+    !rawEventItems.some(
       (it) =>
         it.title?.includes('Amrit Yatra') ||
         it.title?.includes('Jnana Yajna') ||
         it.title?.includes('Bala Vihar')
     )
-      ? f.upcoming_events.items.map((it, idx) => {
-          const isMarathon = it.title?.toLowerCase().includes('marathon') || idx === 0;
-          const targetUrl = isMarathon ? null : (it.linkUrl || '/events');
+      ? rawEventItems.map((it, idx) => {
+          const targetUrl = it.linkUrl || '/events';
           return {
             title: it.title,
             subtitle: it.subtitle || '',
             date: it.dateOrYear || 'Upcoming',
-            kind: idx === 0 ? 'marathon' : idx === 1 ? 'journey' : idx === 2 ? 'wisdom' : 'meditation',
-            image: it.imageUrl || (idx === 0 ? '/assets/chyk-marathon.jpg' : ''),
+            kind: idx === 0 ? 'journey' : idx === 1 ? 'wisdom' : idx === 2 ? 'meditation' : 'journey',
+            image: it.imageUrl || '',
             url: targetUrl,
             isExternal: Boolean(targetUrl && targetUrl.startsWith('http')),
           };
@@ -318,8 +327,7 @@ export function HomePage() {
           </div>
           <div className="events-grid">
             {dynamicEvents.map((event) => {
-              const isMarathon = event.kind === 'marathon' || event.title?.toLowerCase().includes('marathon');
-              const targetUrl = isMarathon ? null : event.url;
+              const targetUrl = event.url;
               const hasLink = Boolean(targetUrl);
 
               return (
@@ -335,23 +343,23 @@ export function HomePage() {
                     }
                   }}
                 >
-                  <div className={'event-art ' + event.kind}>
+                  <div className={'event-art ' + (event.kind || 'journey')}>
                     {event.image ? (
                       <img src={event.image} alt={event.title} className="event-art-img" />
-                    ) : event.kind === 'journey' ? (
-                      <div className="road-sun" />
                     ) : event.kind === 'wisdom' ? (
                       <div className="wisdom-symbol">ॐ</div>
                     ) : event.kind === 'youth' ? (
                       <Users size={50} />
-                    ) : (
+                    ) : event.kind === 'meditation' ? (
                       <Sun size={56} strokeWidth={1.2} />
+                    ) : (
+                      <div className="road-sun" />
                     )}
                   </div>
                   <div className="event-info">
                     <div className="flex items-start justify-between gap-1">
                       <h3>{event.title}</h3>
-                      {event.isExternal && !isMarathon && (
+                      {event.isExternal && (
                         <ExternalLink size={13} className="text-[var(--orange)] shrink-0 mt-0.5 opacity-70 group-hover:opacity-100" />
                       )}
                     </div>
