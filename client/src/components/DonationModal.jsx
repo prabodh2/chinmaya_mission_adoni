@@ -258,7 +258,7 @@ export const DonationModal = ({
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="e.g., Srikanth Sharma"
+                      placeholder="e.g., Ramesh Kummar"
                       className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
                         errors.name ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
                       }`}
@@ -304,7 +304,7 @@ export const DonationModal = ({
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="e.g., devotee@gmail.com"
+                      placeholder="e.g., rameshkummar@gmail.com"
                       className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
                         errors.email ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
                       }`}
