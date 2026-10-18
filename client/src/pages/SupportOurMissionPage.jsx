@@ -120,7 +120,7 @@ export const SupportOurMissionPage = () => {
       {/* ============================================================ */}
       {/* 1. HERO SECTION                                              */}
       {/* ============================================================ */}
-      <section className="hero-spiritual-wrap relative text-white py-16 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8">
+      <section className="hero-spiritual-wrap relative text-white py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8">
         {/* Background Image with peaceful overlay */}
         <img
           src="/assets/temple-hilltop-view.jpeg"
@@ -130,9 +130,9 @@ export const SupportOurMissionPage = () => {
         <div className="hero-spiritual-overlay" />
         <div className="hero-gold-glow" />
 
-        <div className="max-w-4xl mx-auto relative z-10 text-center space-y-5 sm:space-y-6">
+        <div className="max-w-4xl mx-auto relative z-10 text-center space-y-3 sm:space-y-4">
           {/* Official Chinmaya Mission Logo Badge */}
-          <div className="inline-flex items-center justify-center p-3 sm:p-3.5 rounded-full bg-white/10 backdrop-blur-md border border-[#C89B59]/40 shadow-xl mb-1 sm:mb-2 transition-transform hover:scale-105 duration-300">
+          <div className="inline-flex items-center justify-center p-2.5 sm:p-3 rounded-full bg-white/10 backdrop-blur-md border border-[#C89B59]/40 shadow-xl mb-0.5 sm:mb-1 transition-transform hover:scale-105 duration-300">
             <img
               src="/assets/logos/logo-1.png"
               alt="Chinmaya Mission Lamp Logo"
