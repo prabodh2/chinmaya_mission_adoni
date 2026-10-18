@@ -1,4 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import {
+  X,
+  Heart,
+  User,
+  Calendar,
+  Phone,
+  Mail,
+  MapPin,
+  Sparkles,
+  Flame,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle2,
+  Edit3,
+  QrCode,
+  Printer,
+  ShieldCheck,
+} from 'lucide-react';
 import './TempleSevaSection.css';
 
 // Supabase Configuration from existing temple app
@@ -233,54 +251,129 @@ export const POOJA_SERVICES = [
   },
 ];
 
+const NAKSHATRAS = [
+  'Ashwini (అశ్విని)',
+  'Bharani (భరణి)',
+  'Krittika (కృత్తిక)',
+  'Rohini (రోహిణి)',
+  'Mrigashira (మృగశిర)',
+  'Ardra (ఆర్ద్ర)',
+  'Punarvasu (పునర్వసు)',
+  'Pushya (పుష్య)',
+  'Ashlesha (ఆశ్లేష)',
+  'Magha (మఖ)',
+  'Purva Phalguni / Pubba (పూర్వ ఫల్గుని)',
+  'Uttara Phalguni / Uttara (ఉత్తర ఫల్గుని)',
+  'Hasta (హస్త)',
+  'Chitra (చిత్ర)',
+  'Swati (స్వాతి)',
+  'Vishakha (విశాఖ)',
+  'Anuradha (అనూరాధ)',
+  'Jyeshtha (జ్యేష్ఠ)',
+  'Mula (మూల)',
+  'Purva Ashadha (పూర్వాషాఢ)',
+  'Uttara Ashadha (ఉత్తరాషాఢ)',
+  'Shravana (శ్రవణ)',
+  'Dhanishta (ధనిష్ట)',
+  'Shatabhisha (శతభిష)',
+  'Purva Bhadrapada (పూర్వాభాద్ర)',
+  'Uttara Bhadrapada (ఉత్తరాభాద్ర)',
+  'Revati (రేవతి)',
+  'Not Sure / Other',
+];
+
 // ==========================================
-// Unified Seva Booking Modal (No Payment!)
+// Unified Seva Booking Modal (Exact Image 1 Theme)
 // ==========================================
 export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState('form'); // 'form' | 'review' | 'confirmed'
   const [selectedOption, setSelectedOption] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: '',
-    gotra: '',
-    nakshetra: '',
-    whatsapp: '',
+    phoneNumber: '',
     email: '',
-    date: '',
+    dob: '',
+    gotram: '',
+    nakshatra: '',
     address: '',
   });
+  const [errors, setErrors] = useState({});
   const [bookingReceipt, setBookingReceipt] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Initialize selected option
   useEffect(() => {
     if (!service) return;
     if (service.options && service.options.length > 0) {
       setSelectedOption(service.options[0]);
     } else {
       setSelectedOption({
-        name: service.name.replace('|', ' '),
+        name: (service.name || service.title || 'Sacred Seva').replace('|', ' '),
         price: service.fixedAmount || 0,
       });
     }
   }, [service]);
 
+  // Lock body scroll and set up escape key listener
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   if (!service) return null;
 
   const currentAmount = selectedOption ? selectedOption.price : service.fixedAmount || 0;
-  const serviceDisplayName = service.name.replace('|', ' ');
+  const serviceDisplayName = (service.name || service.title || 'Sacred Seva').replace('|', ' ');
 
-  const canContinueDetails =
-    form.name.trim().length > 0 &&
-    form.nakshetra.trim().length > 0 &&
-    form.whatsapp.length === 10 &&
-    isValidEmail(form.email) &&
-    isFutureDate(form.date);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
 
-  const filteredOptions = service.options
-    ? service.options.filter((o) => o.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    : [];
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = 'Please enter your full name';
+    }
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Please enter your phone number';
+    } else if (!/^[0-9+-\s()]{7,15}$/.test(formData.phoneNumber.trim())) {
+      newErrors.phoneNumber = 'Please enter a valid phone number';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Please enter your email ID';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
+    }
 
-  // Confirm Booking (WITHOUT PAYMENT)
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleReviewClick = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      setStep('review');
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // Confirm Seva Booking
   const handleConfirmBooking = async () => {
     setIsSubmitting(true);
     const prefix = service.refIdPrefix || 'SMT';
@@ -289,632 +382,615 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
       refId,
       pujaName: selectedOption ? selectedOption.name : serviceDisplayName,
       serviceCategory: serviceDisplayName,
-      pujaType: service.pujaType,
+      pujaType: service.pujaType || 'seva',
       templeName: service.templeName || 'Shri Shantamalleshwara Swami Temple',
       amount: currentAmount,
-      name: form.name.trim(),
-      gotra: form.gotra.trim(),
-      nakshetra: form.nakshetra.trim(),
-      phone: form.whatsapp.trim(),
-      email: form.email.trim(),
-      date: form.date,
-      address: form.address.trim(),
+      name: formData.name.trim(),
+      gotra: formData.gotram.trim(),
+      nakshetra: formData.nakshatra.trim(),
+      phone: formData.phoneNumber.trim(),
+      email: formData.email.trim(),
+      date: formData.dob || todayStr(),
+      address: formData.address.trim(),
       createdAt: new Date().toISOString(),
       status: 'Confirmed (Priest Sankalpa Scheduled)',
     };
 
-    // 1. Save locally
+    // 1. Save to temple_seva_bookings
     storeBooking(bookingData);
 
-    // 2. Sync to Supabase in background
+    // 2. Also save to devotee_donations_history for unified records
+    try {
+      const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
+      existing.unshift({
+        ...formData,
+        sevaName: bookingData.pujaName,
+        templeName: bookingData.templeName,
+        amount: currentAmount,
+        refId,
+        submittedAt: new Date().toISOString(),
+      });
+      localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
+    } catch (_) {}
+
+    // 3. Sync to Supabase in background
     savePujaToSupabase(bookingData).catch((err) => console.warn('Supabase sync:', err));
 
-    // 3. Complete
+    // 4. Update UI to Confirmed Step
     setTimeout(() => {
       setIsSubmitting(false);
       setBookingReceipt(bookingData);
-      setStep(4);
+      setStep('confirmed');
       if (onBookingSuccess) onBookingSuccess();
-    }, 500);
+    }, 450);
   };
 
   return (
-    <div className="seva-modal-backdrop" onClick={onClose}>
-      <div className="seva-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="seva-modal-close" onClick={onClose} aria-label="Close modal">
-          ×
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-[#061527]/75 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
+      {/* Modal Dialog Card */}
+      <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-[#EAE0CE] w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden z-10 transition-all transform scale-100 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <span
-            className="seva-eyebrow"
-            style={{
-              color: '#FFA048',
-              fontWeight: 700,
-              letterSpacing: '0.3em',
-              fontSize: 12,
-              textTransform: 'uppercase',
-            }}
-          >
-            {step === 4 ? 'Divine Confirmation' : `Step ${step} of 3`}
-          </span>
-          <h2
-            style={{
-              marginTop: 12,
-              fontSize: 32,
-              color: '#FFFFFF',
-              fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-              fontWeight: 600,
-              letterSpacing: '0.03em',
-            }}
-          >
-            {step === 4 ? 'Sankalpa Received' : serviceDisplayName}
-          </h2>
+        <div className="bg-gradient-to-r from-[#0C1A30] via-[#142845] to-[#0C1A30] text-white p-5 sm:p-6 relative border-b border-[#C89B59]/30 shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#C89B59]/20 border border-[#C89B59]/40 flex items-center justify-center shrink-0">
+                <Heart className="w-5 h-5 text-[#E6BF70] fill-current" />
+              </div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-white tracking-wide">
+                  {step === 'review'
+                    ? 'Review Details & Contribution'
+                    : step === 'confirmed'
+                    ? 'Sankalpa Registered'
+                    : 'EXPLORE CONTRIBUTION OPTIONS'}
+                </h3>
+                <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80">
+                  {step === 'review'
+                    ? 'Verify your sacred details before offering seva'
+                    : step === 'confirmed'
+                    ? 'May the presiding deity bless you and your family'
+                    : 'Pooja Sankalpa, Devotee Details & Contribution Record'}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Step Progress Pill */}
+          {step !== 'confirmed' && (
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-semibold">
+              <span className="flex items-center gap-1.5 text-[#E6BF70]">
+                <span className="w-5 h-5 rounded-full bg-[#C89B59] text-[#0C1A30] font-bold flex items-center justify-center text-[11px]">
+                  1
+                </span>
+                <span>Devotee Details</span>
+              </span>
+              <div className="h-0.5 flex-1 mx-3 bg-white/20">
+                <div
+                  className={`h-full bg-[#C89B59] transition-all duration-300 ${
+                    step === 'review' ? 'w-full' : 'w-0'
+                  }`}
+                />
+              </div>
+              <span
+                className={`flex items-center gap-1.5 ${
+                  step === 'review' ? 'text-[#E6BF70]' : 'text-slate-400'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
+                    step === 'review'
+                      ? 'bg-[#C89B59] text-[#0C1A30]'
+                      : 'bg-white/20 text-slate-300'
+                  }`}
+                >
+                  2
+                </span>
+                <span>Review & QR</span>
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Step Indicators */}
-        {step < 4 && (
-          <div style={{ marginBottom: 28, display: 'flex', gap: 8 }}>
-            {[1, 2, 3].map((s) => (
-              <div
-                key={s}
-                style={{
-                  flex: 1,
-                  height: 3,
-                  borderRadius: 2,
-                  background: s <= step ? '#FF7A2E' : 'rgba(255, 255, 255, 0.16)',
-                  boxShadow: s <= step ? '0 0 10px rgba(255, 122, 46, 0.6)' : 'none',
-                  transition: 'background 0.4s ease, box-shadow 0.4s ease',
-                }}
-              />
-            ))}
-          </div>
-        )}
+        {/* Modal Scrollable Body */}
+        <div className="p-5 sm:p-7 overflow-y-auto space-y-6 flex-1 bg-[#FAF7F2]">
+          {/* ========================================================= */}
+          {/* STEP 1: FORM INPUTS                                       */}
+          {/* ========================================================= */}
+          {step === 'form' && (
+            <form onSubmit={handleReviewClick} className="space-y-5">
+              {/* Sacred Information Callout */}
+              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] text-xs sm:text-sm text-[#4A5568] leading-relaxed shadow-sm">
+                <p className="flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
+                  <span>
+                    Please provide your sacred details for the <strong>Pooja Sankalpa</strong>,
+                    temple blessings, and formal donation acknowledgement.
+                  </span>
+                </p>
+              </div>
 
-        {/* STEP 1: Select Seva Option */}
-        {step === 1 && (
-          <div>
-            {service.options && service.options.length > 0 ? (
-              <div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 12,
-                    flexWrap: 'wrap',
-                    gap: 8,
-                  }}
-                >
-                  <label
-                    className="seva-field-label"
-                    style={{ marginBottom: 0, color: '#FFA048', fontWeight: 700 }}
-                  >
-                    Select Seva Package
+              {/* Seva Offering Selection / Summary */}
+              {service.options && service.options.length > 1 ? (
+                <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] shadow-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                      Select Seva Package <span className="text-[#C89B59]">({serviceDisplayName})</span>
+                    </label>
+                    <span className="text-sm font-black text-[#B8860B]">
+                      ₹{currentAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <select
+                      value={selectedOption?.name}
+                      onChange={(e) => {
+                        const opt = service.options.find((o) => o.name === e.target.value);
+                        if (opt) setSelectedOption(opt);
+                      }}
+                      className="w-full px-3.5 py-2.5 bg-[#FAF7F2] rounded-xl border border-[#D9CEBA] text-xs sm:text-sm text-[#0C1A30] font-medium focus:outline-none focus:ring-2 focus:ring-[#C89B59] cursor-pointer"
+                    >
+                      {service.options.map((opt) => (
+                        <option key={opt.name} value={opt.name}>
+                          {opt.name} — ₹{opt.price.toLocaleString('en-IN')}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-[#EAE0CE] shadow-sm flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                      Selected Seva Offering
+                    </span>
+                    <span className="text-sm sm:text-base font-bold text-[#0C1A30]">
+                      {selectedOption?.name || serviceDisplayName}
+                    </span>
+                    {service.templeName && (
+                      <span className="text-xs text-[#C89B59] font-medium block">
+                        {service.templeName}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                      Seva Price
+                    </span>
+                    <span className="text-base sm:text-lg font-black text-[#B8860B]">
+                      ₹{currentAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Devotee Sacred Form Fields (Matching Image 1) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* 1. Full Name */}
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Full Name <span className="text-red-500">*</span>
                   </label>
-                  {service.options.length > 6 && (
+                  <div className="relative">
+                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                       type="text"
-                      placeholder="Search seva..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="seva-input"
-                      style={{ maxWidth: 220, padding: '8px 12px', fontSize: 13 }}
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="e.g., Ramesh Kummar"
+                      className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                        errors.name ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                      }`}
+                      required
                     />
+                  </div>
+                  {errors.name && <p className="text-xs text-red-500 font-medium">{errors.name}</p>}
+                </div>
+
+                {/* 2. Phone Number */}
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="tel"
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      placeholder="e.g., +91 98765 43210"
+                      className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                        errors.phoneNumber ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                      }`}
+                      required
+                    />
+                  </div>
+                  {errors.phoneNumber && (
+                    <p className="text-xs text-red-500 font-medium">{errors.phoneNumber}</p>
                   )}
                 </div>
 
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns:
-                      service.options.length > 2
-                        ? 'repeat(auto-fit, minmax(240px, 1fr))'
-                        : '1fr',
-                    gap: 12,
-                    maxHeight: '340px',
-                    overflowY: 'auto',
-                    paddingRight: 6,
-                    marginBottom: 24,
-                  }}
-                >
-                  {filteredOptions.map((opt) => {
-                    const isSelected = selectedOption && selectedOption.name === opt.name;
-                    return (
-                      <button
-                        key={opt.name}
-                        type="button"
-                        className={`seva-option-card-btn ${isSelected ? 'selected' : ''}`}
-                        onClick={() => setSelectedOption(opt)}
-                        style={{
-                          background: isSelected
-                            ? 'rgba(255, 122, 46, 0.16)'
-                            : 'rgba(255, 255, 255, 0.05)',
-                          border: isSelected
-                            ? '1.5px solid #FF7A2E'
-                            : '1px solid rgba(255, 255, 255, 0.18)',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: 15,
-                            fontWeight: 600,
-                            color: isSelected ? '#FFA048' : '#FFFFFF',
-                          }}
-                        >
-                          {opt.name}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-                            fontSize: 20,
-                            color: '#FF7A2E',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ₹{opt.price.toLocaleString('en-IN')}
-                        </span>
-                      </button>
-                    );
-                  })}
+                {/* 3. Email ID */}
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Email ID <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="e.g., rameshkummar@gmail.com"
+                      className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                        errors.email ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                      }`}
+                      required
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-xs text-red-500 font-medium">{errors.email}</p>
+                  )}
+                </div>
+
+                {/* 4. Date of Birth */}
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Date of Birth (DOB)
+                  </label>
+                  <div className="relative">
+                    <Calendar className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* 5. Gotram */}
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Gotram (గోత్రం)
+                  </label>
+                  <div className="relative">
+                    <Flame className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="text"
+                      name="gotram"
+                      value={formData.gotram}
+                      onChange={handleChange}
+                      placeholder="e.g., Bharadwaja, Kaundinya, Kashya"
+                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* 6. Nakshatra */}
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Nakshatra (నక్షత్రం)
+                  </label>
+                  <div className="relative">
+                    <Sparkles className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <select
+                      name="nakshatra"
+                      value={formData.nakshatra}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all cursor-pointer appearance-none"
+                    >
+                      <option value="">-- Select Birth Star / Nakshatra --</option>
+                      {NAKSHATRAS.map((nak) => (
+                        <option key={nak} value={nak}>
+                          {nak}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* 7. Address */}
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                    Address (నివాసం)
+                  </label>
+                  <div className="relative">
+                    <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
+                    <textarea
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      rows={2}
+                      placeholder="Door No, Street, City, State, Pincode"
+                      className="w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border border-[#D9CEBA] text-sm text-[#0C1A30] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all"
+                    />
+                  </div>
                 </div>
               </div>
-            ) : (
-              <div
-                style={{
-                  border: '1.5px solid rgba(255, 122, 46, 0.5)',
-                  background: 'linear-gradient(180deg, rgba(255, 122, 46, 0.14) 0%, rgba(13, 21, 44, 0.85) 100%)',
-                  padding: '36px 26px',
-                  textAlign: 'center',
-                  marginBottom: 28,
-                  borderRadius: '12px',
-                  boxShadow: '0 12px 35px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(255, 122, 46, 0.1)',
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-                    fontSize: 24,
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    letterSpacing: '0.03em',
-                    marginBottom: 10,
-                  }}
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-semibold transition-colors cursor-pointer"
                 >
-                  {serviceDisplayName}
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-                    fontSize: 42,
-                    color: '#FFA048',
-                    fontWeight: 800,
-                    textShadow: '0 0 25px rgba(255, 122, 46, 0.5)',
-                    marginBottom: 14,
-                  }}
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn-seva-register px-6 py-2.5 text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  ₹{(service.fixedAmount || currentAmount || 0).toLocaleString('en-IN')}
-                </div>
-                {(service.descriptionText || service.desc) && (
-                  <p
-                    style={{
-                      marginTop: 14,
-                      color: '#E2E8F0',
-                      fontSize: 15.5,
-                      fontFamily: 'var(--seva-f-serif, "Cormorant Garamond", serif)',
-                      fontStyle: 'italic',
-                      lineHeight: 1.65,
-                      maxWidth: 520,
-                      marginInline: 'auto',
-                    }}
+                  <span>Review Details</span>
+                  <ArrowRight className="w-4 h-4 text-[#0A192F]" />
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* ========================================================= */}
+          {/* STEP 2: REVIEW DETAILS VIEW                               */}
+          {/* ========================================================= */}
+          {step === 'review' && (
+            <div className="space-y-6">
+              {/* Review Card */}
+              <div className="bg-white rounded-2xl border-2 border-[#C89B59]/40 shadow-sm p-5 sm:p-6 space-y-5 relative overflow-hidden">
+                <div className="flex items-center justify-between border-b border-[#EAE0CE] pb-3">
+                  <div className="flex items-center gap-2 text-[#0C1A30]">
+                    <ShieldCheck className="w-5 h-5 text-[#C89B59]" />
+                    <h4 className="font-spiritual-heading font-bold text-base sm:text-lg">
+                      Sankalpa &amp; Seva Summary
+                    </h4>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setStep('form')}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#B8860B] hover:text-[#8B6508] bg-[#FAF5EA] px-3 py-1.5 rounded-lg border border-[#C89B59]/30 transition-colors cursor-pointer"
                   >
-                    {service.descriptionText || service.desc}
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit Details</span>
+                  </button>
+                </div>
+
+                {/* Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3.5 gap-x-6 text-sm">
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Seva Offering
+                    </span>
+                    <span className="font-bold text-[#0C1A30] text-base">
+                      {selectedOption ? selectedOption.name : serviceDisplayName}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Seva Price / Dakshina
+                    </span>
+                    <span className="font-bold text-[#B8860B] text-base">
+                      ₹{currentAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Devotee Name
+                    </span>
+                    <span className="font-bold text-[#0C1A30] text-base">
+                      {formData.name || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Phone Number
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {formData.phoneNumber || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Email Address
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {formData.email || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Date of Birth
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {formData.dob
+                        ? new Date(formData.dob).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })
+                        : 'Not Specified'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Gotram
+                    </span>
+                    <span className="font-semibold text-[#0C1A30]">
+                      {formData.gotram || 'Not Specified'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Nakshatra (Birth Star)
+                    </span>
+                    <span className="font-semibold text-[#0C1A30]">
+                      {formData.nakshatra || 'Not Specified'}
+                    </span>
+                  </div>
+
+                  <div className="sm:col-span-2 pt-1 border-t border-slate-100">
+                    <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Residential Address
+                    </span>
+                    <span className="font-medium text-slate-700 leading-relaxed">
+                      {formData.address || 'Not Specified'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* QR Code Container */}
+              <div className="bg-gradient-to-br from-[#FAF5EA] to-[#F3E8D0] rounded-2xl border-2 border-dashed border-[#C89B59] p-6 text-center space-y-3 shadow-inner">
+                <div className="w-16 h-16 rounded-2xl bg-white border border-[#C89B59]/40 flex items-center justify-center mx-auto text-[#0C1A30] shadow-sm">
+                  <QrCode className="w-8 h-8 text-[#C89B59]" />
+                </div>
+                <div className="space-y-1">
+                  <h5 className="font-spiritual-heading font-bold text-base text-[#0C1A30]">
+                    Payment QR Code
+                  </h5>
+                  <p className="text-xs sm:text-sm text-[#4A5568] max-w-md mx-auto">
+                    The official seva payment QR code will be displayed here for direct UPI / Net Banking transfer.
                   </p>
-                )}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
-              <button
-                className="seva-btn solid"
-                style={{
-                  width: 'auto',
-                  padding: '14px 36px',
-                  background: 'linear-gradient(135deg, #FF7A2E 0%, #D95D16 100%)',
-                  color: '#FFFFFF',
-                  border: '1px solid #FFA048',
-                  boxShadow: '0 4px 20px rgba(255, 122, 46, 0.4)',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 700,
-                  fontSize: 12,
-                  letterSpacing: '0.22em',
-                }}
-                onClick={() => setStep(2)}
-              >
-                Devotee Details <span className="arrow"></span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 2: Devotee Details */}
-        {step === 2 && (
-          <div>
-            <div className="seva-modal-grid-2" style={{ marginBottom: 16 }}>
-              <div>
-                <label className="seva-field-label">Devotee Full Name *</label>
-                <input
-                  type="text"
-                  className="seva-input"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="As to be chanted in Sankalpa"
-                  required
-                />
-              </div>
-              <div>
-                <label className="seva-field-label">Gotra (Lineage)</label>
-                <input
-                  type="text"
-                  className="seva-input"
-                  value={form.gotra}
-                  onChange={(e) => setForm({ ...form, gotra: e.target.value })}
-                  placeholder="e.g. Bharadwaja, Kashyapa, Shiva"
-                />
-              </div>
-            </div>
-
-            <div className="seva-modal-grid-2" style={{ marginBottom: 16 }}>
-              <div>
-                <label className="seva-field-label">Janma Nakshatra (Star) *</label>
-                <input
-                  type="text"
-                  className="seva-input"
-                  value={form.nakshetra}
-                  onChange={(e) => setForm({ ...form, nakshetra: e.target.value })}
-                  placeholder="Birth Star (e.g. Rohini, Arudra)"
-                  required
-                />
-              </div>
-              <div>
-                <label className="seva-field-label">WhatsApp Mobile * (10 Digits)</label>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  className="seva-input"
-                  value={form.whatsapp}
-                  onChange={(e) => setForm({ ...form, whatsapp: sanitizePhone(e.target.value) })}
-                  placeholder="10-digit mobile number"
-                  maxLength={10}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="seva-modal-grid-2" style={{ marginBottom: 16 }}>
-              <div>
-                <label className="seva-field-label">Preferred Seva Date *</label>
-                <input
-                  className="seva-input seva-date-input"
-                  type="date"
-                  value={form.date}
-                  min={todayStr()}
-                  onChange={(e) => setForm({ ...form, date: e.target.value })}
-                  onClick={(e) => e.currentTarget.showPicker && e.currentTarget.showPicker()}
-                  required
-                />
-                {form.date && !isFutureDate(form.date) && (
-                  <div style={{ marginTop: 5, fontSize: 12, color: '#ff7675' }}>
-                    Please select today or a future date
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="seva-field-label">Email Address *</label>
-                <input
-                  type="email"
-                  className="seva-input"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="For puja photos & confirmation"
-                  required
-                />
-                {form.email && !isValidEmail(form.email) && (
-                  <div style={{ marginTop: 5, fontSize: 12, color: '#ff7675' }}>
-                    Please enter a valid email
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div style={{ marginBottom: 20 }}>
-              <label className="seva-field-label">Address / Prayer Intention (Optional)</label>
-              <textarea
-                rows={2}
-                className="seva-textarea"
-                value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-                placeholder="Enter home address for prasadam or specific prayer intentions for the priests"
-              />
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: 24,
-              }}
-            >
-              <button
-                className="seva-btn ghost"
-                style={{ width: 'auto', padding: '12px 28px' }}
-                onClick={() => setStep(1)}
-              >
-                ← Back
-              </button>
-              <button
-                className="seva-btn solid"
-                style={{
-                  width: 'auto',
-                  padding: '14px 34px',
-                  opacity: canContinueDetails ? 1 : 0.45,
-                }}
-                disabled={!canContinueDetails}
-                onClick={() => canContinueDetails && setStep(3)}
-              >
-                Review Sankalpa <span className="arrow"></span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: Sankalpa Summary & DIRECT CONFIRMATION */}
-        {step === 3 && (
-          <div>
-            <div
-              style={{
-                background: 'linear-gradient(180deg, rgba(255, 122, 46, 0.12) 0%, rgba(13, 21, 44, 0.85) 100%)',
-                border: '1.5px solid rgba(255, 122, 46, 0.45)',
-                padding: '28px 24px',
-                marginBottom: 24,
-                borderRadius: '10px',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-                  fontSize: 12,
-                  letterSpacing: '0.28em',
-                  color: '#FFA048',
-                  textTransform: 'uppercase',
-                  fontWeight: 700,
-                  marginBottom: 18,
-                }}
-              >
-                Sacred Sankalpa Summary
-              </div>
-
-              <div className="seva-modal-grid-summary" style={{ fontSize: 15, color: '#FFFFFF' }}>
-                <div style={{ color: '#94A3B8' }}>Seva Offering:</div>
-                <div style={{ fontWeight: 600, color: '#FFFFFF' }}>
-                  {selectedOption ? selectedOption.name : serviceDisplayName}
                 </div>
-
-                <div style={{ color: '#94A3B8' }}>Devotee:</div>
-                <div style={{ color: '#FFFFFF', fontWeight: 500 }}>
-                  {form.name}{' '}
-                  {form.gotra && <span style={{ color: '#FFA048' }}>({form.gotra} Gotra)</span>}
+                <div className="inline-block px-3.5 py-1.5 rounded-full bg-white/80 border border-[#C89B59]/40 text-xs font-bold text-[#8B6508]">
+                  ✨ QR Code will be printed / activated here shortly
                 </div>
+              </div>
 
-                <div style={{ color: '#94A3B8' }}>Nakshatra:</div>
-                <div style={{ color: '#FFFFFF' }}>{form.nakshetra}</div>
-
-                <div style={{ color: '#94A3B8' }}>Seva Date:</div>
-                <div style={{ color: '#FFFFFF', fontWeight: 600 }}>{form.date}</div>
-
-                <div style={{ color: '#94A3B8' }}>WhatsApp:</div>
-                <div style={{ color: '#FFFFFF' }}>{form.whatsapp}</div>
-
-                <div style={{ color: '#94A3B8' }}>Email:</div>
-                <div style={{ color: '#FFFFFF' }}>{form.email}</div>
-
-                {form.address && (
-                  <>
-                    <div style={{ color: '#94A3B8' }}>Prayer / Address:</div>
-                    <div style={{ color: '#FFFFFF' }}>{form.address}</div>
-                  </>
-                )}
-
-                <div style={{ color: '#94A3B8' }}>Suggested Dakshina:</div>
-                <div
-                  style={{
-                    color: '#FFA048',
-                    fontFamily: 'var(--seva-f-display, "Cinzel", serif)',
-                    fontSize: 22,
-                    fontWeight: 700,
-                  }}
+              {/* Bottom Review Actions */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('form')}
+                  className="px-4 py-2.5 rounded-xl border border-[#C89B59] text-[#0C1A30] hover:bg-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  ₹{currentAmount.toLocaleString('en-IN')}
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back to Edit</span>
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                    title="Print Devotee Summary"
+                  >
+                    <Printer className="w-4 h-4 text-slate-600" />
+                    <span>Print</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleConfirmBooking}
+                    disabled={isSubmitting}
+                    className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
+                    <span>{isSubmitting ? 'Registering...' : 'Confirm & Finish'}</span>
+                  </button>
                 </div>
               </div>
+            </div>
+          )}
 
-              {/* NO PAYMENT NOTICE */}
-              <div className="seva-no-payment-badge">
-                ✓ No Payment Required — Direct Priest Registration
+          {/* ========================================================= */}
+          {/* STEP 3: CONFIRMED VIEW                                    */}
+          {/* ========================================================= */}
+          {step === 'confirmed' && (
+            <div className="text-center py-6 sm:py-8 space-y-5">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto border-2 border-emerald-300">
+                <CheckCircle2 className="w-9 h-9" />
               </div>
-              <p
-                style={{
-                  marginTop: 12,
-                  fontSize: 13.5,
-                  color: '#CBD5E1',
-                  fontStyle: 'italic',
-                  lineHeight: 1.5,
-                }}
-              >
-                Payment has been disabled as requested. Clicking "Confirm Booking" will directly submit
-                your sacred Sankalpa to the temple priests.
-              </p>
-            </div>
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <button
-                className="seva-btn ghost"
-                style={{ width: 'auto', padding: '12px 28px' }}
-                onClick={() => setStep(2)}
-              >
-                ← Back
-              </button>
-              <button
-                className="seva-btn solid"
-                style={{ width: 'auto', padding: '14px 34px' }}
-                onClick={handleConfirmBooking}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Submitting Sankalpa...' : 'Confirm Booking'}{' '}
-                <span className="arrow"></span>
-              </button>
-            </div>
-          </div>
-        )}
+              <div className="space-y-2 max-w-md mx-auto">
+                <h4 className="text-xl sm:text-2xl font-bold font-spiritual-heading text-[#0C1A30]">
+                  Sankalpa Registered With Gratitude!
+                </h4>
+                <p className="text-sm text-[#4A5568] leading-relaxed">
+                  Hari Om, <strong>{formData.name}</strong>. Thank you for booking{' '}
+                  <strong className="text-[#0C1A30]">{bookingReceipt?.pujaName}</strong> at{' '}
+                  <strong>{bookingReceipt?.templeName}</strong>. Your sacred details have been recorded for Vedic archana and priest sankalpa.
+                </p>
+              </div>
 
-        {/* STEP 4: Success / Confirmation */}
-        {step === 4 && bookingReceipt && (
-          <div style={{ textAlign: 'center', padding: '14px 0' }}>
-            <div className="seva-om-pulse-circle">ॐ</div>
+              {bookingReceipt && (
+                <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-700 space-y-2 shadow-sm text-left">
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Booking Reference</span>
+                    <span className="font-mono font-bold text-[#B8860B] text-xs">{bookingReceipt.refId}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Seva Offering:</span>
+                    <span className="font-bold text-[#0C1A30]">{bookingReceipt.pujaName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Devotee Name:</span>
+                    <span className="font-medium text-slate-800">{bookingReceipt.name}</span>
+                  </div>
+                  {bookingReceipt.nakshetra && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-medium">Nakshatra:</span>
+                      <span className="font-medium text-slate-800">{bookingReceipt.nakshetra}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between pt-1 border-t border-slate-100">
+                    <span className="text-slate-500 font-medium">Status:</span>
+                    <span className="font-bold text-emerald-600">✓ Confirmed with Priest</span>
+                  </div>
+                </div>
+              )}
 
-            <p
-              style={{
-                fontFamily: 'var(--seva-f-script, "Playfair Display", serif)',
-                fontStyle: 'italic',
-                fontSize: 26,
-                color: '#FFFFFF',
-                marginBottom: 12,
-              }}
-            >
-              Your divine offering is received, {bookingReceipt.name}.
-            </p>
+              {/* Receipt / QR notice */}
+              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-600 leading-relaxed shadow-sm">
+                <p>
+                  Official receipt and tax exemption acknowledgement will be shared on <strong>{formData.email}</strong> once your donation is received via the upcoming QR code or bank transfer.
+                </p>
+              </div>
 
-            <p
-              style={{
-                color: '#E2E8F0',
-                maxWidth: 520,
-                margin: '0 auto 20px',
-                lineHeight: 1.6,
-                fontSize: 16,
-              }}
-            >
-              Our Vedic priests will perform{' '}
-              <span style={{ color: '#FFA048', fontWeight: 600 }}>
-                {bookingReceipt.pujaName}
-              </span>{' '}
-              in your name on{' '}
-              <span style={{ color: '#FFA048', fontWeight: 600 }}>{bookingReceipt.date}</span> with full Vedic
-              rituals and gotra chanting.
-            </p>
-
-            {/* Booking Receipt Card */}
-            <div
-              style={{
-                background: 'rgba(5, 5, 5, 0.75)',
-                border: '1px solid rgba(255, 122, 46, 0.45)',
-                padding: '22px',
-                maxWidth: '480px',
-                margin: '0 auto 24px',
-                textAlign: 'left',
-                fontSize: 14.5,
-                borderRadius: '8px',
-                color: '#FFFFFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
-                  paddingBottom: 10,
-                  marginBottom: 12,
-                }}
-              >
-                <span style={{ color: '#94A3B8' }}>Booking Reference</span>
-                <span
-                  style={{
-                    color: '#FFA048',
-                    fontFamily: 'var(--seva-f-mono)',
-                    fontWeight: 700,
-                  }}
+              <div className="pt-2 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                 >
-                  {bookingReceipt.refId}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ color: '#94A3B8' }}>Devotee Name:</span>
-                <span style={{ fontWeight: 600 }}>{bookingReceipt.name}</span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ color: '#94A3B8' }}>Nakshatra:</span>
-                <span>{bookingReceipt.nakshetra}</span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ color: '#94A3B8' }}>Status:</span>
-                <span style={{ color: '#2ecc71', fontWeight: 700 }}>Confirmed (No Payment)</span>
+                  <Printer className="w-4 h-4 text-slate-600" />
+                  <span>Print Receipt</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="btn-seva-register px-8 py-2.5 text-sm font-bold cursor-pointer shadow-md"
+                >
+                  Done
+                </button>
               </div>
             </div>
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: 16,
-                flexWrap: 'wrap',
-              }}
-            >
-              <button
-                className="seva-btn"
-                style={{ width: 'auto', padding: '12px 28px' }}
-                onClick={onClose}
-              >
-                Close
-              </button>
-              <button
-                className="seva-btn solid"
-                style={{ width: 'auto', padding: '12px 28px' }}
-                onClick={() => {
-                  window.print();
-                }}
-              >
-                Print / Save Receipt
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

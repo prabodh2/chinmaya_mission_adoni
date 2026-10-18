@@ -349,3 +349,28 @@ img {
 .card-accent-blue {
   border-left: 3px solid #0284C7 !important;
 }
+
+/* Devotee Seva Registration Button - Golden Theme Matching Reference Image 1 */
+.btn-seva-register {
+  background: linear-gradient(180deg, #D4A958 0%, #C39847 100%);
+  color: #0A192F !important;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(195, 152, 71, 0.35);
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+
+.btn-seva-register:hover {
+  background: linear-gradient(180deg, #DEB463 0%, #B88B38 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(195, 152, 71, 0.45);
+  color: #0A192F !important;
+}
+
