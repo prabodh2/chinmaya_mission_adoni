@@ -197,14 +197,14 @@ export const SupportOurMissionPage = () => {
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#FAF7F2]">
         <div className="max-w-5xl mx-auto">
           <article className="spiritual-card overflow-hidden grid grid-cols-1 md:grid-cols-12 items-stretch">
-            {/* Left Column: Photograph of traditional brass lamp / temple worship */}
+            {/* Left Column: Chinmaya Amrit Yatra vehicle & sanctuary */}
             <div className="md:col-span-5 relative min-h-[260px] md:min-h-[420px] bg-[#0C1A30] overflow-hidden group">
               <img
-                src="/assets/images/temple-seva-pradosha.jpg"
-                alt="Traditional brass oil lamp deeparadhana in sacred temple worship"
+                src="/assets/images/chinmaya-amrit-yatra.jpg"
+                alt="Chinmaya Amrit Yatra vehicle and sanctuary at Chinmaya Mission"
                 className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/festivals/kartika_deepam_upcome.jpeg';
+                  e.currentTarget.src = '/assets/images/temple-seva-pradosha.jpg';
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0C1A30]/60 via-transparent to-transparent md:hidden" />
