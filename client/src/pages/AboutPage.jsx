@@ -816,24 +816,6 @@ export const AboutPage = () => {
             <p className="text-sm sm:text-base text-white/90 max-w-2xl mx-auto font-medium leading-relaxed">
               {data.closingCta.subtext}
             </p>
-
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                to={data.closingCta.btn1Link}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-slate-900 font-extrabold text-sm shadow-xl hover:bg-slate-100 transition-all hover:scale-105 text-decoration-none"
-              >
-                <ActivityIcon className="w-4 h-4 text-[var(--orange)]" />
-                <span>{data.closingCta.btn1Text}</span>
-              </Link>
-
-              <Link
-                to={data.closingCta.btn2Link}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-black/30 text-white font-extrabold text-sm border border-white/30 hover:bg-black/40 transition-all text-decoration-none"
-              >
-                <Users className="w-4 h-4 text-[var(--yellow)]" />
-                <span>{data.closingCta.btn2Text}</span>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
