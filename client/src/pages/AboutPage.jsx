@@ -33,18 +33,18 @@ export const AboutPage = () => {
     },
     whoWeAre: {
       heading: 'WHO ARE WE?',
-      p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
+      p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
     },
     ourStory: {
       heading: 'OUR STORY',
-      p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
+      p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
       p2: 'Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       timeline: [
         {
           year: '1992',
           title: 'Establishment of Chinmaya Mission',
-          desc: 'Established by Swami Shyamananda (Dr. Shyamala) under the guidance of Swami Sharadapriyananda.',
+          desc: 'Established by Swamini Shyamananda (Dr. Shyamala) under the guidance of Swamini Sharadapriyananda.',
         },
         {
           year: '2001',
@@ -206,10 +206,10 @@ export const AboutPage = () => {
         if (parsed?.hero?.title?.toLowerCase().startsWith('about ')) {
           parsed.hero.title = parsed.hero.title.replace(/^about\s+/i, '').trim();
         }
-        if (!parsed?.whoWeAre?.p1?.includes('Swami Shyamananda')) {
+        if (!parsed?.whoWeAre?.p1?.includes('Swamini Shyamananda')) {
           parsed.whoWeAre = { ...defaultContent.whoWeAre };
         }
-        if (!parsed?.ourStory?.p1?.includes('Swami Shyamananda')) {
+        if (!parsed?.ourStory?.p1?.includes('Swamini Shyamananda')) {
           parsed.ourStory = { ...defaultContent.ourStory };
         }
         if (!parsed?.conclusion?.paragraph3 || parsed?.conclusion?.paragraph1?.includes('an important centre for spiritual development')) {
@@ -265,23 +265,25 @@ export const AboutPage = () => {
             };
           }
           if (f.who_we_are) {
+            const rawP1 = f.who_we_are.p1 || merged.whoWeAre.p1;
             merged.whoWeAre = {
               ...merged.whoWeAre,
               heading: f.who_we_are.heading || merged.whoWeAre.heading,
-              p1: f.who_we_are.p1 || merged.whoWeAre.p1,
+              p1: rawP1.replace(/Swami Shyamananda/g, 'Swamini Shyamananda').replace(/Swami Sharadapriyananda/g, 'Swamini Sharadapriyananda'),
               p2: f.who_we_are.p2 || merged.whoWeAre.p2,
             };
           }
           if (f.our_story) {
+            const rawP1 = f.our_story.p1 || merged.ourStory.p1;
             merged.ourStory = {
               ...merged.ourStory,
               heading: f.our_story.heading || merged.ourStory.heading,
-              p1: f.our_story.p1 || merged.ourStory.p1,
+              p1: rawP1.replace(/Swami Shyamananda/g, 'Swamini Shyamananda').replace(/Swami Sharadapriyananda/g, 'Swamini Sharadapriyananda'),
               timeline: f.our_story.items?.length
                 ? f.our_story.items.map((item) => ({
                     year: item.dateOrYear || item.order || '',
                     title: item.title || '',
-                    desc: item.description || '',
+                    desc: (item.description || '').replace(/Swami Shyamananda/g, 'Swamini Shyamananda').replace(/Swami Sharadapriyananda/g, 'Swamini Sharadapriyananda'),
                   }))
                 : merged.ourStory.timeline,
             };

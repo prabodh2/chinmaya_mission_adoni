@@ -51,7 +51,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               key: 'description',
               label: 'Overview Paragraph',
               type: 'textarea',
-              value: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
+              value: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
             },
             { key: 'linkText', label: 'Learn More Link Text', type: 'text', value: 'Learn More' },
             { key: 'linkUrl', label: 'Learn More Destination', type: 'link', value: '/about' },
@@ -169,7 +169,7 @@ export const DEFAULT_WEBSITE_PAGES = {
       seo: {
         metaTitle: 'About Chinmaya Mission, Adoni | History & Mission',
         metaDescription: 'Learn about the origin, vision, Swamini Shyamananda, Gurudev legacy, and activities of Chinmaya Mission Adoni.',
-        keywords: 'About Chinmaya Mission, Swami Shyamananda, Adoni, History, CHYK',
+        keywords: 'About Chinmaya Mission, Swamini Shyamananda, Adoni, History, CHYK',
       },
       sections: [
         {
@@ -203,7 +203,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               key: 'p1',
               label: 'First Paragraph',
               type: 'textarea',
-              value: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
+              value: 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.',
             },
             {
               key: 'p2',
@@ -230,7 +230,7 @@ export const DEFAULT_WEBSITE_PAGES = {
             },
           ],
           items: [
-            { itemId: 'm-1992', title: 'Establishment of Chinmaya Mission, Adoni', dateOrYear: '1992', description: 'Established by Swami Shyamananda under the guidance of Swami Sharadapriyananda.', order: 1 },
+            { itemId: 'm-1992', title: 'Establishment of Chinmaya Mission, Adoni', dateOrYear: '1992', description: 'Established by Swamini Shyamananda under the guidance of Swamini Sharadapriyananda.', order: 1 },
             { itemId: 'm-2001', title: 'Chinmaya Cultural Complex Inauguration', dateOrYear: '2001', description: 'Inauguration of the Chinmaya Cultural Complex by Pujya Swami Tejomayanandaji.', order: 2 },
             { itemId: 'm-2012', title: 'Youth Engagement & CHYK Expansion', dateOrYear: '2012', description: 'Empowering young minds through youth forums, leadership camps, and fitness.', order: 3 },
             { itemId: 'm-2018', title: 'Expanding Community Initiatives', dateOrYear: '2018', description: 'Strengthening medical camps, food distribution, and cultural education across Adoni.', order: 4 },
