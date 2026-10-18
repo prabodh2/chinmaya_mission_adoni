@@ -21,7 +21,8 @@ export const LetsConnectPage = () => {
 
   const [pageData, setPageData] = useState(() => {
     try {
-      const cached = localStorage.getItem('cached_cms_chinmaya_lets_connect');
+      localStorage.removeItem('cached_cms_chinmaya_lets_connect');
+      const cached = localStorage.getItem('cached_cms_chinmaya_lets_connect_v2');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -35,7 +36,7 @@ export const LetsConnectPage = () => {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_lets_connect', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_lets_connect_v2', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -98,7 +99,7 @@ export const LetsConnectPage = () => {
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-2.5">
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
-          <span>{f.contact_info?.heading || "LET'S CONNECT WITH"}</span>
+          <span>{f.contact_info?.heading && !f.contact_info.heading.toLowerCase().includes('us') ? f.contact_info.heading : "Let's Connect With"}</span>
           <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">

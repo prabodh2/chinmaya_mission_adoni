@@ -79,6 +79,12 @@ export const buildFieldsMap = (sections = []) => {
               val = '/assets/swami-chinmayananda-himalaya-sunrise.jpg';
             }
           }
+          // Ensure contact_info heading is always Let's Connect With
+          if (sec.sectionId === 'contact_info' && f.key === 'heading') {
+            if (typeof val === 'string' && val.toLowerCase().includes('us')) {
+              val = "Let's Connect With";
+            }
+          }
           map[sec.sectionId][f.key] = val;
         }
       });

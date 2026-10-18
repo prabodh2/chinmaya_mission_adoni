@@ -467,7 +467,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           isEnabled: true,
           fields: [
             { key: 'eyebrow', label: 'Eyebrow', type: 'text', value: 'GET IN TOUCH' },
-            { key: 'heading', label: 'Page Heading', type: 'text', value: "Let's Connect With Us" },
+            { key: 'heading', label: 'Page Heading', type: 'text', value: "Let's Connect With" },
             { key: 'subtitle', label: 'Subtitle Description', type: 'textarea', value: 'We welcome your questions, thoughts, and participation in our spiritual, educational, and cultural activities.' },
             { key: 'address', label: 'Organization Address', type: 'textarea', value: 'Chinmaya Cultural Complex,\nNear Arts College Road,\nAdoni - 518301.' },
             { key: 'addressLine1', label: 'Address Line 1', type: 'text', value: 'Chinmaya Cultural Complex,' },
