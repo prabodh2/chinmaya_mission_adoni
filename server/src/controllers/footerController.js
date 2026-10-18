@@ -70,6 +70,18 @@ export const getPublicFooter = async (req, res) => {
     let footer = await Footer.findOne().lean();
     if (!footer) {
       footer = defaultFooterConfig;
+    } else {
+      const existingLinks = footer.quickNavigation?.links || [];
+      const hasTemple = existingLinks.some(
+        (l) => l.url?.includes('temple') || l.label?.toLowerCase().includes('temple')
+      );
+      if (!hasTemple || existingLinks.length < 5) {
+        footer.quickNavigation = defaultFooterConfig.quickNavigation;
+        Footer.updateOne(
+          { _id: footer._id },
+          { $set: { quickNavigation: defaultFooterConfig.quickNavigation } }
+        ).catch(() => {});
+      }
     }
     res.json({
       success: true,
@@ -96,6 +108,15 @@ export const getAdminFooter = async (req, res) => {
         createdBy: req.user?._id,
         updatedBy: req.user?._id,
       });
+    } else {
+      const existingLinks = footer.quickNavigation?.links || [];
+      const hasTemple = existingLinks.some(
+        (l) => l.url?.includes('temple') || l.label?.toLowerCase().includes('temple')
+      );
+      if (!hasTemple || existingLinks.length < 5) {
+        footer.quickNavigation = defaultFooterConfig.quickNavigation;
+        await footer.save();
+      }
     }
     res.json({
       success: true,

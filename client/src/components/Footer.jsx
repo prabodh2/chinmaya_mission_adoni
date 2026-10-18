@@ -159,10 +159,10 @@ function sanitizeMainSiteFooter(rawData) {
       const lower = link.label.toLowerCase().trim();
       const linkUrl = (link.url || '').toLowerCase().trim();
       if (lower.includes('about')) {
-        return { ...link, url: '/about' };
+        return { ...link, label: 'About Us', url: '/about', displayOrder: 2 };
       }
-      if (lower.includes('activities') || linkUrl === '/activities') {
-        return { ...link, label: 'Events', url: '/events' };
+      if (lower.includes('activities') || linkUrl === '/activities' || lower === 'events' || linkUrl === '/events') {
+        return { ...link, label: 'Events', url: '/events', displayOrder: 3 };
       }
       if (
         lower.includes('mamleshwara') ||
@@ -176,10 +176,74 @@ function sanitizeMainSiteFooter(rawData) {
           ...link,
           label: 'Shri Shantamalleshwara Swami Temple',
           url: '/shri-shantamalleshwara-swami-temple',
+          displayOrder: 5,
+        };
+      }
+      if (lower.includes('sanjeevaraya') || linkUrl.includes('sanjeevaraya')) {
+        return {
+          ...link,
+          label: 'Chinmaya Sanjeevaraya Temple',
+          url: '/chinmaya-sanjeevaraya-temple',
+          displayOrder: 4,
+        };
+      }
+      if (lower === 'home' || linkUrl === '/') {
+        return {
+          ...link,
+          label: 'Home',
+          url: '/',
+          displayOrder: 1,
         };
       }
       return link;
     });
+
+  // Ensure the 5 canonical Chinmaya Mission navigation links are always present
+  const hasHome = filteredLinks.some((l) => l.url === '/' || l.label?.toLowerCase().trim() === 'home');
+  if (!hasHome) {
+    filteredLinks.push({ label: 'Home', url: '/', enabled: true, displayOrder: 1 });
+  }
+
+  const hasAbout = filteredLinks.some((l) => l.url === '/about' || l.label?.toLowerCase().includes('about'));
+  if (!hasAbout) {
+    filteredLinks.push({ label: 'About Us', url: '/about', enabled: true, displayOrder: 2 });
+  }
+
+  const hasEvents = filteredLinks.some((l) => l.url === '/events' || l.label?.toLowerCase().includes('event'));
+  if (!hasEvents) {
+    filteredLinks.push({ label: 'Events', url: '/events', enabled: true, displayOrder: 3 });
+  }
+
+  const hasSanjeevaraya = filteredLinks.some(
+    (l) => l.url?.includes('sanjeevaraya') || l.label?.toLowerCase().includes('sanjeevaraya')
+  );
+  if (!hasSanjeevaraya) {
+    filteredLinks.push({
+      label: 'Chinmaya Sanjeevaraya Temple',
+      url: '/chinmaya-sanjeevaraya-temple',
+      enabled: true,
+      displayOrder: 4,
+    });
+  }
+
+  const hasShantamalleshwara = filteredLinks.some(
+    (l) =>
+      l.url?.includes('malleshwara') ||
+      l.url?.includes('shantamalleshwara') ||
+      l.label?.toLowerCase().includes('malleshwara') ||
+      l.label?.toLowerCase().includes('shantamalleshwara')
+  );
+  if (!hasShantamalleshwara) {
+    filteredLinks.push({
+      label: 'Shri Shantamalleshwara Swami Temple',
+      url: '/shri-shantamalleshwara-swami-temple',
+      enabled: true,
+      displayOrder: 5,
+    });
+  }
+
+  // Sort according to canonical displayOrder
+  filteredLinks.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
   data.quickNavigation = {
     heading: 'QUICK NAVIGATION',
@@ -235,7 +299,8 @@ export const Footer = ({ overrideData = null }) => {
     try {
       localStorage.removeItem('cached_main_footer_data');
       localStorage.removeItem('cached_main_footer_data_v3');
-      const cached = localStorage.getItem('cached_main_footer_data_v4');
+      localStorage.removeItem('cached_main_footer_data_v4');
+      const cached = localStorage.getItem('cached_main_footer_data_v5');
       return cached ? sanitizeMainSiteFooter(JSON.parse(cached)) : MAIN_SITE_FALLBACK_FOOTER;
     } catch {
       return MAIN_SITE_FALLBACK_FOOTER;
@@ -255,7 +320,7 @@ export const Footer = ({ overrideData = null }) => {
           const sanitized = sanitizeMainSiteFooter(res.data.data);
           setFooterData(sanitized);
           try {
-            localStorage.setItem('cached_main_footer_data_v4', JSON.stringify(sanitized));
+            localStorage.setItem('cached_main_footer_data_v5', JSON.stringify(sanitized));
           } catch {}
         }
       })
