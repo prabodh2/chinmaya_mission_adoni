@@ -574,8 +574,8 @@
 
 .events-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(20px, 2vw, 32px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.5vw, 36px);
   width: 100%;
 }
 

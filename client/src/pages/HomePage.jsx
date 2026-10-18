@@ -43,18 +43,9 @@ const corePillars = [
 
 const events = [
   {
-    title: 'Maha Shivaratri',
-    subtitle: 'Maharudra Abhishekam & Divine Celebrations',
-    date: 'February 26th',
-    kind: 'journey',
-    image: '/assets/Maha_Shivaratri_upcome_2027.jpeg',
-    url: '/events',
-    isExternal: false,
-  },
-  {
     title: 'Rama Navami',
     subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
-    date: 'April 15th',
+    date: 'April 15th, 2027',
     kind: 'journey',
     icon: '✦',
     url: '/events',
@@ -63,7 +54,7 @@ const events = [
   {
     title: 'Hanuman Jayanthi',
     subtitle: 'Special Pooja & Hanuman Chalisa Parayanam',
-    date: 'April 20th',
+    date: 'April 20th, 2027',
     kind: 'wisdom',
     icon: 'ॐ',
     url: '/events',
@@ -72,7 +63,7 @@ const events = [
   {
     title: 'Krishna Janmashtami',
     subtitle: 'Lord Krishna Birth Celebrations & Utsavam',
-    date: 'August 25th',
+    date: 'August 25th, 2027',
     kind: 'meditation',
     icon: '☼',
     url: '/events',
@@ -88,7 +79,8 @@ export function HomePage() {
     try {
       localStorage.removeItem('cached_cms_chinmaya_home');
       localStorage.removeItem('cached_cms_chinmaya_home_v2');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v3');
+      localStorage.removeItem('cached_cms_chinmaya_home_v3');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v4');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -102,7 +94,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v3', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v4', JSON.stringify(res.data.data));
           } catch {}
         }
       })
