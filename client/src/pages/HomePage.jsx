@@ -215,7 +215,7 @@ export function HomePage() {
               playsInline
               preload="auto"
             >
-              <source src="/assets/logo.mp4" type="video/mp4" />
+              <source src="/assets/download.mp4" type="video/mp4" />
             </video>
             <div className="hero-video-overlay" />
           </div>
