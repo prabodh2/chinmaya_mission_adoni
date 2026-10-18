@@ -95,6 +95,20 @@ const sevaCategories = [
 
 export const SupportOurMissionPage = () => {
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('Devotee Donation Details');
+  const [modalSubtitle, setModalSubtitle] = useState('Pooja Sankalpa & Contribution Record');
+
+  const openContributionModal = () => {
+    setModalTitle('Explore Contribution Options');
+    setModalSubtitle('Pooja Sankalpa, Devotee Details & Contribution Record');
+    setIsDonationModalOpen(true);
+  };
+
+  const openDonationModal = () => {
+    setModalTitle('Devotee Donation Details');
+    setModalSubtitle('Pooja Sankalpa & Sacred Seva Offering');
+    setIsDonationModalOpen(true);
+  };
 
   useEffect(() => {
     document.title = 'Support Our Mission | Chinmaya Mission';
@@ -231,13 +245,16 @@ export const SupportOurMissionPage = () => {
               </div>
 
               <div className="pt-2">
-                <Link
-                  to="/lets-connect"
-                  className="btn-spiritual-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide"
+                <button
+                  type="button"
+                  onClick={openContributionModal}
+                  className="btn-spiritual-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm"
+                  id="explore-contribution-options-btn"
                 >
+                  <Heart className="w-4 h-4 text-[#C89B59]" />
                   <span>Explore Contribution Options</span>
                   <ArrowRight className="w-4 h-4 text-[#C89B59]" />
-                </Link>
+                </button>
               </div>
             </div>
           </article>
@@ -397,7 +414,7 @@ export const SupportOurMissionPage = () => {
           <div className="pt-2 sm:pt-4">
             <button
               type="button"
-              onClick={() => setIsDonationModalOpen(true)}
+              onClick={openDonationModal}
               className="btn-seva-register hover:scale-105 transition-all text-base px-9 py-3.5 cursor-pointer font-bold shadow-lg inline-flex items-center gap-2.5"
               id="open-donation-modal-btn"
             >
@@ -413,6 +430,8 @@ export const SupportOurMissionPage = () => {
       <DonationModal
         isOpen={isDonationModalOpen}
         onClose={() => setIsDonationModalOpen(false)}
+        modalTitle={modalTitle}
+        modalSubtitle={modalSubtitle}
       />
     </div>
   );

@@ -49,7 +49,12 @@ const NAKSHATRAS = [
   'Not Sure / Other',
 ];
 
-export const DonationModal = ({ isOpen, onClose }) => {
+export const DonationModal = ({
+  isOpen,
+  onClose,
+  modalTitle = 'Devotee Donation Details',
+  modalSubtitle = 'Pooja Sankalpa & Contribution Record',
+}) => {
   const [step, setStep] = useState('form'); // 'form' | 'review' | 'confirmed'
   const [formData, setFormData] = useState({
     name: '',
@@ -162,17 +167,17 @@ export const DonationModal = ({ isOpen, onClose }) => {
               <div>
                 <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-white tracking-wide">
                   {step === 'review'
-                    ? 'Review Donation Details'
+                    ? 'Review Details & Contribution'
                     : step === 'confirmed'
                     ? 'Sankalpa Registered'
-                    : 'Devotee Donation Details'}
+                    : modalTitle}
                 </h3>
                 <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80">
                   {step === 'review'
                     ? 'Verify your sacred details before offering seva'
                     : step === 'confirmed'
                     ? 'May Pujya Gurudev bless you and your family'
-                    : 'Pooja Sankalpa & Contribution Record'}
+                    : modalSubtitle}
                 </p>
               </div>
             </div>
