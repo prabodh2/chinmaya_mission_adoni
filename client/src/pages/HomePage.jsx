@@ -83,7 +83,8 @@ export function HomePage() {
 
   const [pageData, setPageData] = useState(() => {
     try {
-      const cached = localStorage.getItem('cached_cms_chinmaya_home');
+      localStorage.removeItem('cached_cms_chinmaya_home');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v2');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -97,7 +98,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v2', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -121,7 +122,16 @@ export function HomePage() {
   const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
   const primaryBtnLink = f.hero?.primaryBtnLink || '#about';
   const rawPortrait = f.hero?.portraitImage;
-  const portraitImg = (!rawPortrait || rawPortrait.includes('swami-chinmayananda-natural'))
+  const isOldPortrait =
+    !rawPortrait ||
+    rawPortrait.includes('swami-chinmayananda-natural') ||
+    rawPortrait.includes('swami-chinmayananda-portrait') ||
+    rawPortrait.includes('swami-chinmayananda.png') ||
+    rawPortrait.includes('swami-chinmayananda.jpg') ||
+    rawPortrait.includes('swami-chinmayananda-suitable-bg') ||
+    rawPortrait.includes('swami-chinmayananda-divine-aura');
+
+  const portraitImg = isOldPortrait
     ? '/assets/swami-chinmayananda-himalaya-sunrise.jpg'
     : rawPortrait;
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
