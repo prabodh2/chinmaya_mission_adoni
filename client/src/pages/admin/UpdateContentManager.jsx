@@ -38,7 +38,7 @@ export const UpdateContentManager = () => {
       name: 'Chinmaya Mission Website',
       port: 5176,
       url: 'http://localhost:5176',
-      description: 'Main spiritual, cultural, and community website for Chinmaya Mission & CHYK, Adoni.',
+      description: 'Main spiritual, cultural, and community website for Chinmaya Mission & CHYK.',
       color: 'from-blue-600 to-indigo-700',
     },
     {

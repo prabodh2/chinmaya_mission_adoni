@@ -32,7 +32,7 @@ export const TransformationSection = () => {
     { name: 'Inner Confidence', desc: 'Believing in your potential without fake substances', icon: Smile, color: 'text-amber-500' },
     { name: 'Self-Discipline', desc: 'Mastering daily habits and fitness goals', icon: Target, color: 'text-purple-500' },
     { name: 'Life Purpose', desc: 'Directing your energy towards meaningful achievements', icon: Compass, color: 'text-orange-500' },
-    { name: 'Brighter Future', desc: 'Creating a healthy legacy for Adoni and society', icon: Sun, color: 'text-yellow-500' },
+    { name: 'Brighter Future', desc: 'Creating a healthy legacy for society', icon: Sun, color: 'text-yellow-500' },
   ];
 
   return (
@@ -117,7 +117,7 @@ export const TransformationSection = () => {
 
           <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
             <span className="text-xs font-bold text-[var(--orange)] uppercase tracking-wider">
-              RUN FOR A DRUG-FREE ADONI
+              RUN FOR A DRUG-FREE FUTURE
             </span>
             <Link to="/register" className="btn-primary py-2 px-5 text-xs text-decoration-none inline-flex items-center gap-1.5 shadow-sm">
               <span>JOIN THE RUN</span>

@@ -14,7 +14,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
     {
       id: 'p2',
       imageUrl: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800&auto=format&fit=crop',
-      title: 'ADONI YOUTH FOR A DRUG-FREE FUTURE',
+      title: 'YOUTH FOR A DRUG-FREE FUTURE',
       tag: 'DISCIPLINE & PURPOSE',
       color: 'from-cyan-600 to-blue-500',
     },
@@ -42,14 +42,14 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
     {
       id: 'p6',
       imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop',
-      title: 'UNITED SCHOOLS & COLLEGES OF ADONI',
+      title: 'UNITED SCHOOLS & COLLEGES',
       tag: 'COMMUNITY POWER',
       color: 'from-yellow-600 to-orange-500',
     },
     {
       id: 'p7',
       imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
-      title: 'MOVE. INSPIRE. CONNECT. ADONI 2026',
+      title: 'MOVE. INSPIRE. CONNECT. 2026',
       tag: 'ANTI-DRUG MOVEMENT',
       color: 'from-blue-600 to-cyan-400',
     },
@@ -73,7 +73,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
           <span>MOVEMENT POSTERS & INSPIRATION</span>
         </div>
         <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-white tracking-tight uppercase">
-          CHINMAYA YUVA KENDRA, ADONI
+          CHINMAYA YUVA KENDRA
         </h3>
       </div>
 
@@ -96,7 +96,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
             >
               <img
                 src={item.imageUrl}
-                alt={item.title || 'Chinmaya Yuva Kendra, Adoni'}
+                alt={item.title || 'Chinmaya Yuva Kendra'}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90 group-hover:brightness-100 block"
                 loading="lazy"
               />
@@ -112,7 +112,7 @@ export const ContinuousVerticalBannerSlider = ({ banners = [] }) => {
                   {item.title}
                 </h4>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  Chinmaya Yuva Kendra, Adoni
+                  Chinmaya Yuva Kendra
                 </p>
               </div>
             </div>

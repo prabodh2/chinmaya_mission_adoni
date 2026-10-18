@@ -138,8 +138,8 @@ export const Navbar = () => {
           path: '/chinmaya-sanjeevaraya-temple',
         },
         {
-          name: 'Sri Shantha Mamleshwara Swami Temple',
-          path: '/sri-shantha-mamleshwara-swami-temple',
+          name: 'Shri Shantamalleshwara Swami Temple',
+          path: '/shri-shantamalleshwara-swami-temple',
         },
       ],
     },

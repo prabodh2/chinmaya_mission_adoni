@@ -280,7 +280,7 @@ export const SectionRenderer = ({ section, eventConfig, banners, activities, faq
         <section className="py-16 px-4 bg-gradient-to-r from-[var(--orange)] via-[#E64A19] to-[var(--orange)] text-white text-center">
           <div className="max-w-4xl mx-auto space-y-6">
             <h2 className="text-3xl sm:text-5xl font-black font-heading tracking-tight">
-              {section.title || 'BE PART OF THE MOVEMENT IN ADONI!'}
+              {section.title ? section.title.replace(/\s*IN\s*ADONI/gi, '') : 'BE PART OF THE MOVEMENT!'}
             </h2>
             <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto font-medium">
               {section.description || 'Register today individually or submit your school/college bulk student details. Receive your official marathon certificate & pass!'}

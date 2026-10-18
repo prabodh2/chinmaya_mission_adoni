@@ -79,13 +79,13 @@ const TREASURER = {
 
 // 7 Committee Members Data
 const COMMITTEE_MEMBERS = [
+  'E. Sreenivasulu',
+  'B. Sreenivasulu Setty',
   'K. Bhagya Lakshmi',
   'K. Jaya Lakshmi',
   'U. Jyothi',
-  'P. Ramesh',
+  'P. Ramesh Kummar',
   'T. G. Murali',
-  'B. Sreenivasulu Setty',
-  'E. Sreenivasulu',
 ];
 
 export const ManagingCommittee = () => {
@@ -167,15 +167,15 @@ export const ManagingCommittee = () => {
           ))}
         </div>
 
-        {/* TREASURER (Centered Card below leadership row) */}
+        {/* TREASURER (Centered Card below leadership row - sized identical to Joint Secretary cards) */}
         <div className="flex justify-center">
-          <article className="mc-card w-full max-w-md p-5 sm:p-6 flex flex-col items-center justify-center text-center min-h-[110px]">
+          <article className="mc-card w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.9375rem)] max-w-xs p-4 sm:p-5 flex flex-col items-center justify-center text-center min-h-[110px]">
             <CardCorners />
-            <span className="text-xs sm:text-sm mc-designation uppercase">
+            <span className="text-[11px] sm:text-xs mc-designation uppercase">
               {TREASURER.designation}
             </span>
-            <CardDivider className="my-2.5 w-20" />
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mc-name-serif mc-text-navy leading-snug">
+            <CardDivider className="my-2 w-16" />
+            <h3 className="text-base sm:text-lg font-bold mc-name-serif mc-text-navy leading-snug">
               {TREASURER.name}
             </h3>
           </article>

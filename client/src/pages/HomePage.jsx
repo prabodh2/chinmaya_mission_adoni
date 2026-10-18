@@ -115,20 +115,22 @@ export function HomePage() {
     }
   };
 
-  const heroEyebrow = f.hero?.eyebrow || 'CHINMAYA MISSION · ADONI';
+  const heroEyebrow = (f.hero?.eyebrow || 'CHINMAYA MISSION').replace(/[·,]\s*ADONI/gi, '').trim();
   const heroHeading = f.hero?.heading || 'Inner Transformation for a Better World';
   const heroDesc = f.hero?.description || 'Through Vedanta, values and service, we strive to build a generation of conscious, compassionate and capable individuals.';
   const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
   const primaryBtnLink = f.hero?.primaryBtnLink || '#about';
-  const secondaryBtnText = f.hero?.secondaryBtnText || 'Know About CHYK';
-  const secondaryBtnLink = f.hero?.secondaryBtnLink || '#chyk';
-  const portraitImg = f.hero?.portraitImage || '/assets/swami-chinmayananda-natural.jpg';
+  const rawPortrait = f.hero?.portraitImage;
+  const portraitImg = (!rawPortrait || rawPortrait.includes('swami-chinmayananda-natural'))
+    ? '/assets/swami-chinmayananda-himalaya-sunrise.jpg'
+    : rawPortrait;
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
 
   const aboutEyebrow = f.about_purpose?.eyebrow || 'OUR PURPOSE';
-  const aboutHeading = f.about_purpose?.heading || 'About Chinmaya Mission, Adoni';
-  const aboutDesc = f.about_purpose?.description || 'Chinmaya Mission, Adoni, has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.';
+  const aboutHeading = (f.about_purpose?.heading || 'About Chinmaya Mission').replace(/,\s*Adoni/gi, '').trim();
+  const rawAboutDesc = f.about_purpose?.description || 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swami Shyamananda (Dr. Shyamala) under the guidance and blessings of Swami Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.';
+  const aboutDesc = rawAboutDesc.replace(/,\s*Adoni/gi, '').replace(/\bAdoni\b/gi, '').replace(/\s{2,}/g, ' ');
   const aboutLinkText = f.about_purpose?.linkText || 'Learn More';
   const aboutLinkUrl = f.about_purpose?.linkUrl || '/about';
 
@@ -233,23 +235,6 @@ export function HomePage() {
               ) : (
                 <Link className="btn btn-primary" to={primaryBtnLink}>
                   {primaryBtnText} <ArrowRight size={16} />
-                </Link>
-              )}
-
-              {secondaryBtnLink.startsWith('#') ? (
-                <a
-                  className="btn btn-outline"
-                  href={secondaryBtnLink}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    goTo(secondaryBtnLink.replace('#', ''));
-                  }}
-                >
-                  {secondaryBtnText}
-                </a>
-              ) : (
-                <Link className="btn btn-outline" to={secondaryBtnLink}>
-                  {secondaryBtnText}
                 </Link>
               )}
             </div>

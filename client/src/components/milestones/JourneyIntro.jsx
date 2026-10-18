@@ -14,7 +14,7 @@ export const JourneyIntro = () => {
 
       {/* Introductory Description */}
       <p className="text-sm sm:text-base text-[#24415C] leading-relaxed max-w-2xl mx-auto font-medium">
-        From humble beginnings to a journey of service, culture, youth engagement and spiritual learning, these milestones reflect the continuing legacy of Chinmaya Mission, Adoni.
+        From humble beginnings to a journey of service, culture, youth engagement and spiritual learning, these milestones reflect the continuing legacy of Chinmaya Mission.
       </p>
 
       {/* Interactive Road Guide Tip */}

@@ -54,7 +54,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
   });
 
   useEffect(() => {
-    document.title = 'Chinmaya Sanjeevaraya Temple | Chinmaya Mission, Adoni';
+    document.title = 'Chinmaya Sanjeevaraya Temple | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     webContentService
@@ -88,7 +88,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
     {
       name: 'Shravana Masa Poojas',
       period: 'Shravana Masa',
-      desc: 'Month-long devotional observances with collective chanting, special devotional offerings, and spiritual talks drawing families across Adoni.',
+      desc: 'Month-long devotional observances with collective chanting, special devotional offerings, and spiritual talks drawing families from all communities.',
       icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
     },
     {
@@ -153,7 +153,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs uppercase tracking-widest">
               <Landmark className="w-3.5 h-3.5 text-amber-400" />
-              <span>SPIRITUALITY & DEVOTION • ADONI</span>
+              <span>SPIRITUALITY & DEVOTION</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
@@ -165,7 +165,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             </p>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              {f.temple_hero?.intro || 'Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission, Adoni. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.'}
+              {f.temple_hero?.intro || 'Dedicated to Lord Hanuman (Sri Sanjeevaraya Swamy), Chinmaya Sanjeevaraya Temple is a premier devotional center under Chinmaya Mission. Rooted in traditional Agama Shastras and energized by sacred Vedic rituals, the temple serves as an abode of peace, positive vibrations, and community unity for all seekers and devotees.'}
             </p>
           </div>
 
@@ -179,7 +179,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
                 {/* Full Uncropped Deity Image */}
                 <img
                   src={f.temple_hero?.imageUrl || '/assets/images/chinmaya-sanjeevaraya-temple.png'}
-                  alt={f.temple_hero?.deityName || 'Sri Chinnaya Sanjeevaraya Swamy Devasthanam Adoni'}
+                  alt={f.temple_hero?.deityName || 'Sri Chinnaya Sanjeevaraya Swamy Devasthanam'}
                   onError={(e) => {
                     e.currentTarget.src = '/assets/images/activity-sanjeevaraya.png';
                   }}
@@ -193,7 +193,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
                   {f.temple_hero?.deityName || 'Sri Chinnaya Sanjeevaraya Swamy'}
                 </p>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  Presiding Deity • Chinmaya Mission, Adoni
+                  Presiding Deity • Chinmaya Mission
                 </p>
               </div>
             </div>
@@ -208,7 +208,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             {f.temple_history?.heading || 'Sri Chinnaya Sanjeevarya Swamy Devasthanam'}
           </h2>
           <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[var(--orange)]">
-            {f.temple_history?.location || 'Adoni'}
+            {f.temple_history?.location ? f.temple_history.location.replace(/,\s*Adoni/gi, '').replace(/\bAdoni\b/gi, '').trim() || 'Sacred Heritage Shrine' : 'Sacred Heritage Shrine'}
           </p>
           <div className="w-16 h-1 bg-[var(--orange)] rounded-full mx-auto mt-2" />
         </div>
@@ -224,7 +224,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
             </div>
 
             <p className="text-sm sm:text-base text-slate-700">
-              {f.temple_history?.historyP1 || 'The Sri Chinmaya Sanjeevaraya Swamy Devasthanam in Adoni was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission, Adoni.'}
+              {f.temple_history?.historyP1 || 'The Sri Chinmaya Sanjeevaraya Swamy Devasthanam was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission.'}
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">

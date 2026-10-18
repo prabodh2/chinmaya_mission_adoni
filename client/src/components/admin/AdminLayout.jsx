@@ -179,7 +179,7 @@ export const AdminLayout = () => {
 
           <div className="pt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))] text-center">
             <p className="text-[11px] text-[#64748B]">
-              Chinmaya Mission, Adoni © 2026
+              Chinmaya Mission © 2026
             </p>
           </div>
         </aside>

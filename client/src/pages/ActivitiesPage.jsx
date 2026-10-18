@@ -42,6 +42,12 @@ const ActivityCard = ({ activity, onSelect }) => {
               e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
             } else if (activity.id === 'devi-group' || activity.title?.toLowerCase().includes('devi')) {
               e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+            } else if (activity.id === 'balavihar-classes' || activity.title?.toLowerCase().includes('balavihar')) {
+              e.currentTarget.src = '/assets/our-activities/balavihar-classes.jpg';
+            } else if (activity.id === 'kuchipudi-classes' || activity.title?.toLowerCase().includes('kuchipudi')) {
+              e.currentTarget.src = '/assets/our-activities/kuchipudi-classes.jpg';
+            } else if (activity.id === 'bhagavad-gita' || activity.title?.toLowerCase().includes('gita')) {
+              e.currentTarget.src = '/assets/our-activities/bhagavad-gita-book.jpg';
             } else if (activity.id === 'chinmaya-yuva-kendra' || activity.id === 'chyk-classes' || activity.title?.toLowerCase().includes('chyk')) {
               e.currentTarget.src = '/assets/images/activity-chyk.jpg';
             }
@@ -84,7 +90,7 @@ const ActivityCard = ({ activity, onSelect }) => {
         {/* Card Footer Meta - Aligned at exact same baseline */}
         <div className="mt-auto pt-3 border-t border-slate-100 text-xs font-semibold text-slate-500 flex items-center justify-between">
           <span className="truncate max-w-[55%] text-slate-500 font-medium text-xs">
-            {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission, Adoni')}
+            {activity.imageSource ? `Source: ${activity.imageSource}` : (activity.subtitle ? `Source: ${activity.subtitle}` : 'Chinmaya Mission')}
           </span>
           {activity.id === 'chinmaya-sanjeevaraya-temple' || activity.title?.toLowerCase().includes('sanjeevaraya') ? (
             <Link
@@ -97,9 +103,9 @@ const ActivityCard = ({ activity, onSelect }) => {
             </Link>
           ) : activity.id === 'shanta-malleshwara-temple' || activity.title?.toLowerCase().includes('malleshwara') ? (
             <Link
-              to="/sri-shantha-mamleshwara-swami-temple"
+              to="/shri-shantamalleshwara-swami-temple"
               className="text-[var(--orange)] hover:text-[#d04a02] font-bold text-xs sm:text-sm flex items-center gap-1 group/btn transition-colors cursor-pointer shrink-0"
-              title={`Explore Sri Shantha Mamleshwara Swami Temple Page`}
+              title={`Explore Shri Shantamalleshwara Swami Temple Page`}
             >
               <span>Know More</span>
               <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
@@ -202,13 +208,13 @@ const OVERVIEW_ACTIVITIES = [
     title: 'Balavihar Classes',
     subtitle: 'Every Sunday',
     category: 'Values & Character',
-    imageUrl: '/assets/our-activities/balavihar@2x.png',
-    imageSource: 'Every Sunday | Chinmaya Mission, Adoni',
+    imageUrl: '/assets/our-activities/balavihar-classes.jpg',
+    imageSource: 'Every Sunday | Chinmaya Mission',
     icon: <Users className="w-5 h-5" />,
     description:
       'Balavihar instills core spiritual, moral, and cultural values in children through engaging stories from the epics, Vedic chanting, bhajans, dynamic games, and character-building discussions every Sunday.',
     detailedInfo: {
-      location: 'Chinmaya Cultural Complex, Adoni',
+      location: 'Chinmaya Cultural Complex',
       sections: [
         {
           heading: 'Weekly Children Program',
@@ -225,13 +231,13 @@ const OVERVIEW_ACTIVITIES = [
     title: 'Kuchipudi Classes',
     subtitle: 'Indian classical dance',
     category: 'Classical Dance & Arts',
-    imageUrl: '/assets/our-activities/kuchipudi@2x.png',
+    imageUrl: '/assets/our-activities/kuchipudi-classes.jpg',
     imageSource: 'Indian classical dance | Chinmaya Mission',
     icon: <Sparkles className="w-5 h-5" />,
     description:
       'Rigorous training in the timeless classical dance form of Kuchipudi, developing rhythm, grace, devotion (bhakti), and artistic discipline among children and youth.',
     detailedInfo: {
-      location: 'Dance Studio, Chinmaya Cultural Complex, Adoni',
+      location: 'Dance Studio, Chinmaya Cultural Complex',
       sections: [
         {
           heading: 'Traditional Indian Classical Dance',
@@ -254,7 +260,7 @@ const OVERVIEW_ACTIVITIES = [
     description:
       'Chinmaya Yuva Kendra (CHYK) offers youth dynamic forums, leadership development, Vedanta study classes, youth seminars, and community service projects.',
     detailedInfo: {
-      location: 'Chinmaya Cultural Complex, Adoni',
+      location: 'Chinmaya Cultural Complex',
       sections: [
         {
           heading: 'Empowering the Youth',
@@ -277,7 +283,7 @@ const OVERVIEW_ACTIVITIES = [
     description:
       'Interactive cultural workshops, traditional festive celebrations, rangoli arts, and online sessions celebrating the auspicious harvest festival of Makara Sankranti.',
     detailedInfo: {
-      location: 'Online & Ashram Campus, Adoni',
+      location: 'Online & Ashram Campus',
       sections: [
         {
           heading: 'Festive Learning & Community Spirit',
@@ -294,13 +300,13 @@ const OVERVIEW_ACTIVITIES = [
     title: 'Bhagavad Gita',
     subtitle: 'Wisdom for life',
     category: 'Scriptural Wisdom',
-    imageUrl: '/assets/our-activities/gita@2x.png',
+    imageUrl: '/assets/our-activities/bhagavad-gita-book.jpg',
     imageSource: 'Wisdom for life | Chinmaya Mission',
     icon: <Flame className="w-5 h-5" />,
     description:
       'Systematic study of the timeless verses of Shrimad Bhagavad Gita, illuminating the path of self-discovery, righteous action (Karma Yoga), and inner peace.',
     detailedInfo: {
-      location: 'Chinmaya Mission, Adoni',
+      location: 'Chinmaya Mission',
       sections: [
         {
           heading: 'Timeless Philosophy for Modern Living',
@@ -323,7 +329,7 @@ const OVERVIEW_ACTIVITIES = [
     description:
       'Regular collective chanting of the sacred thousand names of Lord Vishnu (Sri Vishnu Sahasranama Stotram), cultivating devotion, mental focus, and divine vibrations.',
     detailedInfo: {
-      location: 'Temples & Satsang Hall, Adoni',
+      location: 'Temples & Satsang Hall',
       sections: [
         {
           heading: 'Sacred Stotra Recitation',
@@ -340,7 +346,7 @@ const OVERVIEW_ACTIVITIES = [
 export const ActivitiesPage = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
 
-  // Centralized structured data for core Chinmaya Mission, Adoni centres & wings
+  // Centralized structured data for core Chinmaya Mission centres & wings
   const initialActivities = [
     {
       id: 'chinmaya-sanjeevaraya-temple',
@@ -350,18 +356,18 @@ export const ActivitiesPage = () => {
       description:
         'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
       imageUrl: '/assets/images/chinmaya-sanjeevaraya-temple.png',
-      imageAlt: 'Chinmaya Sanjeevaraya Temple Adoni Devotional Practice',
-      imageSource: 'Chinmaya Mission, Adoni Devotional Center',
+      imageAlt: 'Chinmaya Sanjeevaraya Temple Devotional Practice',
+      imageSource: 'Chinmaya Mission Devotional Center',
       imageCredit: 'Official Shrine & Devotional Gatherings',
       icon: <Landmark className="w-5 h-5 text-[var(--orange)]" />,
       detailedInfo: {
         deity: 'Sri Chinnaya Sanjeevarya Swamy Devasthanam',
-        location: 'Adoni',
+        location: 'Chinmaya Cultural Complex',
         sections: [
           {
             heading: 'History and Spiritual Significance',
             paragraphs: [
-              'The Sri Chinnaya Sanjeevarya Swamy Devasthanam in Adoni was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission, Adoni.',
+              'The Sri Chinnaya Sanjeevarya Swamy Devasthanam was consecrated in 2006 (Vyaya Nama Samvatsaram), in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission.',
               'The consecration ceremony was performed in accordance with the traditional Agama Shastras, under the guidance of Pujya Swami Pranavananda, with the support and cooperation of Sri Vitta Bhimayasetty, Sri B. V. R. Reddy, Sri Adapa Mohan Reddy, and the devoted community.',
               'In 2012, a sacred Kumbhabhishekam ceremony was performed to renew the spiritual sanctity of the temple, under the guidance of Pujya Swami Paratparananda and Pujya Swami Pranavananda.',
               'With the wholehearted participation of devotees, a sacred Havan was conducted. Silver armour was offered to the presiding deity, and two ornamental pieces were provided for the festival deities (Utsava Murtis), reflecting the devotion and reverence of the community.',
@@ -380,24 +386,24 @@ export const ActivitiesPage = () => {
     },
     {
       id: 'shanta-malleshwara-temple',
-      title: 'Shanta Malleshwara Temple',
+      title: 'Shri Shantamalleshwara Swami Temple',
       section: 'SPIRITUALITY & DEVOTION',
       category: 'Devotion & Community',
       description:
-        'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission, Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
+        'Shri Shantamalleshwara Swami Temple is an important centre of worship and devotion associated with Chinmaya Mission. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
       imageUrl: '/assets/images/activity-shantamalleshwara.webp',
-      imageAlt: 'Shanta Malleshwara Temple Adoni Worship Center',
-      imageSource: 'Shri Shantamalleshwara Swami Temple Adoni',
+      imageAlt: 'Shri Shantamalleshwara Swami Temple Worship Center',
+      imageSource: 'Shri Shantamalleshwara Swami Temple',
       imageCredit: 'Official Festival & Devotional Observances',
       icon: <Flame className="w-5 h-5 text-[var(--orange)]" />,
       detailedInfo: {
-        deity: 'Shanta Malleshwara Temple',
-        location: 'Adoni',
+        deity: 'Shri Shantamalleshwara Swami Temple',
+        location: 'Navarantanagiri',
         sections: [
           {
             heading: 'History and Spiritual Legacy',
             paragraphs: [
-              'Shanta Malleshwara Temple is a sacred centre of worship and devotion associated with Chinmaya Mission, Adoni. The development of the temple commenced in 1996 under the spiritual inspiration and vision of the Mission.',
+              'Shri Shantamalleshwara Swami Temple is a sacred centre of worship and devotion associated with Chinmaya Mission. The development of the temple commenced in 1996 under the spiritual inspiration and vision of the Mission.',
               'In 2003 and 2004, major infrastructural access developments, including the temple bridge and foot bridge, were constructed to facilitate ease of access for pilgrims and devotees.',
               'The temple continues to serve as a vital spiritual sanctum hosting sacred rituals, festivals, and community celebrations throughout the year.',
             ],
@@ -419,12 +425,12 @@ export const ActivitiesPage = () => {
       icon: <Heart className="w-5 h-5 text-[var(--orange)]" />,
       detailedInfo: {
         deity: 'Devi Group • Women’s Cultural Wing',
-        location: 'Adoni',
+        location: 'Chinmaya Cultural Complex',
         sections: [
           {
             heading: 'Spiritual Devotion & Cultural Values',
             paragraphs: [
-              "The Devi Group is dedicated to nurturing devotion, spiritual understanding, and the preservation of cultural values across families in Adoni.",
+              "The Devi Group is dedicated to nurturing devotion, spiritual understanding, and the preservation of cultural values across families.",
               "Through scriptural study, devotional singing, collective poojas, and participation in Chinmaya Mission festivals, members deepen their spiritual connection and foster dharmic values within the household and community.",
             ],
           },
@@ -439,22 +445,22 @@ export const ActivitiesPage = () => {
       description:
         'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives.',
       additionalDescription:
-        "CHYK, Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.",
+        "CHYK encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.",
       imageUrl: '/assets/images/activity-chyk.jpg',
-      imageAlt: 'Chinmaya Yuva Kendra, Adoni Youth Empowerment',
-      imageSource: 'Chinmaya Yuva Kendra, Adoni',
+      imageAlt: 'Chinmaya Yuva Kendra Youth Empowerment',
+      imageSource: 'Chinmaya Yuva Kendra',
       imageCredit: 'Youth Empowerment & Community Leadership',
       icon: <Zap className="w-5 h-5 text-[var(--orange)]" />,
       featured: true,
       detailedInfo: {
         deity: 'Chinmaya Yuva Kendra (CHYK)',
-        location: 'Adoni',
+        location: 'Chinmaya Cultural Complex',
         sections: [
           {
             heading: 'Youth Empowerment & Philosophy in Action',
             paragraphs: [
               'Chinmaya Yuva Kendra (CHYK) is the global youth wing of Chinmaya Mission, empowering youth aged 16 to 30 through spiritual insight, leadership development, and dynamic service.',
-              'In Adoni, CHYK organizes youth camps, marathon training, personality development workshops, study groups, and community awareness rallies such as the Anti-Drug Movement 2026.',
+              'CHYK organizes youth camps, marathon training, personality development workshops, study groups, and community awareness rallies such as the Anti-Drug Movement 2026.',
               'CHYK inspires youth to channel their boundless energy constructively, uniting physical dynamism with spiritual wisdom and moral excellence.',
             ],
           },
@@ -657,7 +663,7 @@ export const ActivitiesPage = () => {
   };
 
   useEffect(() => {
-    document.title = 'Events | Chinmaya Mission, Adoni';
+    document.title = 'Events | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     loadActivities();
 
@@ -701,7 +707,9 @@ export const ActivitiesPage = () => {
             {(!heroContent?.heading || heroContent?.heading.toLowerCase().includes('activities')) ? 'Our Events' : heroContent.heading}
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] font-medium max-w-3xl mx-auto">
-            {(!heroContent?.subtitle || heroContent?.subtitle.toLowerCase().includes('activities')) ? 'Festivals, cultural celebrations, learning, and youth gatherings for all ages.' : heroContent.subtitle}
+            {(!heroContent?.subtitle || heroContent?.subtitle.toLowerCase().includes('activities'))
+              ? 'Festivals, cultural celebrations, learning, and youth gatherings for all ages.'
+              : heroContent.subtitle.replace(/,\s*Adoni/gi, '').replace(/\bin\s+Adoni\b/gi, '').replace(/\bAdoni\b/gi, '').trim()}
           </p>
         </header>
 
@@ -720,15 +728,6 @@ export const ActivitiesPage = () => {
 
       {/* 3. SECTION 2: CULTURE & DEVOTION */}
       <section className="space-y-8 w-full">
-        <div className="text-center max-w-4xl mx-auto space-y-2">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--cyan)]/10 text-[var(--cyan)] mx-auto">
-            <Heart className="w-5 h-5" />
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-            CULTURE & DEVOTION
-          </h2>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
           {cultureDevotionActivities.map((act) => (
             <ActivityCard
@@ -742,15 +741,6 @@ export const ActivitiesPage = () => {
 
       {/* 4. SECTION 3: YOUTH & LEADERSHIP (SPECIAL CHYK SECTION) */}
       <section className="space-y-8 w-full">
-        <div className="text-center max-w-4xl mx-auto space-y-2">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--orange)] text-white mx-auto shadow-sm">
-            <Zap className="w-5 h-5 fill-current" />
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-            YOUTH & LEADERSHIP
-          </h2>
-        </div>
-
         {chykActivity && (
           <ChykFeatureSection
             activity={chykActivity}
@@ -762,15 +752,6 @@ export const ActivitiesPage = () => {
       {/* 5. SECTION 4: COMMUNITY & MOVEMENT INITIATIVES */}
       {movementActivities.length > 0 && (
         <section className="space-y-8 w-full">
-          <div className="text-center max-w-4xl mx-auto space-y-2">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--yellow)]/20 text-[var(--orange)] mx-auto">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-              COMMUNITY & MOVEMENT INITIATIVES
-            </h2>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
             {movementActivities.map((act) => (
               <ActivityCard
@@ -782,23 +763,6 @@ export const ActivitiesPage = () => {
           </div>
         </section>
       )}
-
-      {/* 6. CLOSING VISUAL SECTION */}
-      <footer className="p-10 sm:p-14 rounded-3xl bg-gradient-to-r from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white text-center shadow-2xl space-y-6 relative overflow-hidden border border-white/10 w-full">
-        <div className="relative z-10 space-y-4 max-w-4xl mx-auto">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-[var(--yellow)] font-extrabold text-xs uppercase tracking-widest border border-white/20">
-            CHINMAYA MISSION, ADONI
-          </span>
-
-          <h3 className="text-2xl sm:text-4xl font-black font-heading tracking-tight text-white">
-            Spirituality • Culture • Youth • Service
-          </h3>
-
-          <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
-            Inspiring individuals to live by timeless values, empower youth, and foster clean.
-          </p>
-        </div>
-      </footer>
 
       {/* Detail & History Modal for Activity */}
       {selectedActivity && (
@@ -838,6 +802,12 @@ export const ActivitiesPage = () => {
                     e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
                   } else if (selectedActivity.id === 'devi-group' || selectedActivity.title?.toLowerCase().includes('devi')) {
                     e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
+                  } else if (selectedActivity.id === 'balavihar-classes' || selectedActivity.title?.toLowerCase().includes('balavihar')) {
+                    e.currentTarget.src = '/assets/our-activities/balavihar-classes.jpg';
+                  } else if (selectedActivity.id === 'kuchipudi-classes' || selectedActivity.title?.toLowerCase().includes('kuchipudi')) {
+                    e.currentTarget.src = '/assets/our-activities/kuchipudi-classes.jpg';
+                  } else if (selectedActivity.id === 'bhagavad-gita' || selectedActivity.title?.toLowerCase().includes('gita')) {
+                    e.currentTarget.src = '/assets/our-activities/bhagavad-gita-book.jpg';
                   } else if (selectedActivity.id === 'chinmaya-yuva-kendra' || selectedActivity.id === 'chyk-classes' || selectedActivity.title?.toLowerCase().includes('chyk')) {
                     e.currentTarget.src = '/assets/our-activities/chyk-classes.jpg';
                   }
@@ -916,7 +886,7 @@ export const ActivitiesPage = () => {
             {/* Modal Footer */}
             <div className="px-6 sm:px-8 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500 shrink-0">
               <span className="truncate max-w-[50%]">
-                {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission, Adoni'}
+                {selectedActivity.imageSource ? `Source: ${selectedActivity.imageSource}` : 'Chinmaya Mission'}
               </span>
               <div className="flex items-center gap-2">
                 {(selectedActivity.id === 'chinmaya-sanjeevaraya-temple' || selectedActivity.title?.toLowerCase().includes('sanjeevaraya')) && (
@@ -930,7 +900,7 @@ export const ActivitiesPage = () => {
                 )}
                 {(selectedActivity.id === 'shanta-malleshwara-temple' || selectedActivity.title?.toLowerCase().includes('malleshwara')) && (
                   <Link
-                    to="/sri-shantha-mamleshwara-swami-temple"
+                    to="/shri-shantamalleshwara-swami-temple"
                     className="text-[var(--orange)] hover:underline font-bold text-xs flex items-center gap-1 mr-2"
                   >
                     <span>Full Temple Page</span>

@@ -32,7 +32,7 @@ export const DEFAULT_WEBSITE_PAGES = {
             { key: 'primaryBtnLink', label: 'Primary Button Link', type: 'link', value: '#about' },
             { key: 'secondaryBtnText', label: 'Secondary Button Label', type: 'text', value: 'Know About CHYK' },
             { key: 'secondaryBtnLink', label: 'Secondary Button Link', type: 'link', value: '#chyk' },
-            { key: 'portraitImage', label: 'Portrait Image URL', type: 'image', value: '/assets/swami-chinmayananda-natural.jpg' },
+            { key: 'portraitImage', label: 'Portrait Image URL', type: 'image', value: '/assets/swami-chinmayananda-himalaya-sunrise.jpg' },
             { key: 'portraitQuote', label: 'Portrait Quote Symbol', type: 'text', value: 'Arise, Awake and Guide Others' },
             { key: 'portraitSignature', label: 'Portrait Signature', type: 'text', value: 'Swami Chinmayananda' },
           ],
@@ -293,7 +293,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           fields: [
             { key: 'badge', label: 'Eyebrow Badge', type: 'text', value: 'CENTRE OF SPIRITUAL & CULTURAL ENRICHMENT' },
             { key: 'heading', label: 'Main Heading', type: 'text', value: 'Our Core Activities & Programmes' },
-            { key: 'subtitle', label: 'Subtitle Description', type: 'textarea', value: 'Inspiring purposeful living, cultural awareness, and devotional enrichment across all age groups in Adoni.' },
+            { key: 'subtitle', label: 'Subtitle Description', type: 'textarea', value: 'Inspiring purposeful living, cultural awareness, and devotional enrichment across all age groups.' },
           ],
           items: [],
         },
@@ -446,7 +446,7 @@ export const DEFAULT_WEBSITE_PAGES = {
             {
               itemId: 'lead-resident',
               title: 'Brahmachari Narayana Chaitanya',
-              subtitle: 'Resident · Chinmaya Mission, Adoni',
+              subtitle: 'Resident Brahmachari',
               description: 'Serving as the resident Acharya guiding seekers, daily temple rituals, study circles, and youth initiatives in Adoni.',
               imageUrl: '/assets/leadership/narayana-chaitanya.png',
               order: 4,

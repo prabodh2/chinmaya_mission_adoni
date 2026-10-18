@@ -81,7 +81,7 @@ const MAIN_SITE_FALLBACK_FOOTER = {
       { label: 'About Us', url: '/about', enabled: true, displayOrder: 2 },
       { label: 'Events', url: '/events', enabled: true, displayOrder: 3 },
       { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', enabled: true, displayOrder: 4 },
-      { label: 'Sri Shantha Mamleshwara Swami Temple', url: '/sri-shantha-mamleshwara-swami-temple', enabled: true, displayOrder: 5 },
+      { label: 'Shri Shantamalleshwara Swami Temple', url: '/shri-shantamalleshwara-swami-temple', enabled: true, displayOrder: 5 },
       { label: 'Sacred Image Gallery', url: '/gallery', enabled: true, displayOrder: 6 },
       { label: 'Who Are We', url: '/who-are-we', enabled: true, displayOrder: 7 },
       { label: "Let's Connect", url: '/lets-connect', enabled: true, displayOrder: 8 },
@@ -163,6 +163,20 @@ function sanitizeMainSiteFooter(rawData) {
       if (lower.includes('activities') || url === '/activities') {
         return { ...link, label: 'Events', url: '/events' };
       }
+      if (
+        lower.includes('mamleshwara') ||
+        lower.includes('malleshwara') ||
+        lower.includes('shantamalleshwara') ||
+        lower.includes('shantha') ||
+        url.includes('mamleshwara') ||
+        url.includes('malleshwara')
+      ) {
+        return {
+          ...link,
+          label: 'Shri Shantamalleshwara Swami Temple',
+          url: '/shri-shantamalleshwara-swami-temple',
+        };
+      }
       return link;
     });
 
@@ -232,7 +246,8 @@ export const Footer = ({ overrideData = null }) => {
   const [footerData, setFooterData] = useState(() => {
     if (overrideData) return sanitizeMainSiteFooter(overrideData);
     try {
-      const cached = localStorage.getItem('cached_main_footer_data');
+      localStorage.removeItem('cached_main_footer_data');
+      const cached = localStorage.getItem('cached_main_footer_data_v3');
       return cached ? sanitizeMainSiteFooter(JSON.parse(cached)) : MAIN_SITE_FALLBACK_FOOTER;
     } catch {
       return MAIN_SITE_FALLBACK_FOOTER;
@@ -252,7 +267,7 @@ export const Footer = ({ overrideData = null }) => {
           const sanitized = sanitizeMainSiteFooter(res.data.data);
           setFooterData(sanitized);
           try {
-            localStorage.setItem('cached_main_footer_data', JSON.stringify(sanitized));
+            localStorage.setItem('cached_main_footer_data_v3', JSON.stringify(sanitized));
           } catch {}
         }
       })
@@ -308,6 +323,10 @@ export const Footer = ({ overrideData = null }) => {
     .filter((link) => link.enabled !== false)
     .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
+  const midPoint = Math.ceil(navLinks.length / 2);
+  const col1Links = navLinks.slice(0, midPoint);
+  const col2Links = navLinks.slice(midPoint);
+
   const address = contact.address || {};
   const addressLines = [
     address.line1 && address.line1 !== 'Chinmaya Mission Cultural Complex , Adoni' && address.line1 !== 'Chinmaya Mission Adoni'
@@ -335,72 +354,79 @@ export const Footer = ({ overrideData = null }) => {
     color: appearance?.accentColor || '#FF7B00',
   };
 
+  const renderNavLink = (link, key) => {
+    const isExternal = link.url?.startsWith('http');
+    const isMarathonLink = link.label?.toLowerCase().includes('marathon');
+
+    return (
+      <li key={key} className="leading-snug">
+        {isExternal ? (
+          <a
+            href={link.url}
+            target={link.openInNewTab ? '_blank' : '_self'}
+            rel="noopener noreferrer"
+            className={`transition-colors text-decoration-none inline-flex items-center gap-1.5 ${
+              isMarathonLink
+                ? 'font-bold hover:underline'
+                : 'hover:text-white'
+            }`}
+            style={isMarathonLink ? accentStyle : undefined}
+          >
+            <span>{link.label}</span>
+            {isMarathonLink && <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />}
+          </a>
+        ) : (
+          <Link
+            to={link.url}
+            onClick={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+            }}
+            className="transition-colors text-decoration-none hover:text-white hover:underline block"
+          >
+            {link.label}
+          </Link>
+        )}
+      </li>
+    );
+  };
+
   return (
     <footer
       style={footerStyle}
-      className="border-t pt-12 pb-10 transition-colors duration-300 w-full"
+      className="border-t pt-8 pb-7 transition-colors duration-300 w-full"
     >
       <div className="w-full px-4 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 mb-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 mb-7 items-start">
           
-          {/* Column 1: Quick Navigation */}
-          <div className="space-y-4">
+          {/* Column 1: Quick Navigation (Compact 2 columns) */}
+          <div className="md:col-span-2 lg:col-span-5 space-y-3">
             <h4
               style={headingStyle}
-              className="text-base sm:text-lg font-extrabold tracking-wider uppercase font-heading"
+              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
               {quickNavigation.heading || 'QUICK NAVIGATION'}
             </h4>
-            <ul className="space-y-3.5 text-sm sm:text-base font-semibold list-none p-0">
-              {navLinks.map((link, idx) => {
-                const isExternal = link.url?.startsWith('http');
-                const isMarathonLink = link.label?.toLowerCase().includes('marathon');
-
-                return (
-                  <li key={idx}>
-                    {isExternal ? (
-                      <a
-                        href={link.url}
-                        target={link.openInNewTab ? '_blank' : '_self'}
-                        rel="noopener noreferrer"
-                        className={`transition-colors text-decoration-none inline-flex items-center gap-2 ${
-                          isMarathonLink
-                            ? 'font-bold hover:underline'
-                            : 'hover:text-white'
-                        }`}
-                        style={isMarathonLink ? accentStyle : undefined}
-                      >
-                        <span>{link.label}</span>
-                        {isMarathonLink && <ExternalLink className="w-4 h-4" />}
-                      </a>
-                    ) : (
-                      <Link
-                        to={link.url}
-                        onClick={() => {
-                          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-                        }}
-                        className="transition-colors text-decoration-none hover:text-white hover:underline"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-xs sm:text-[13px] font-medium">
+              <ul className="space-y-2 list-none p-0 m-0">
+                {col1Links.map((link, idx) => renderNavLink(link, idx))}
+              </ul>
+              <ul className="space-y-2 list-none p-0 m-0">
+                {col2Links.map((link, idx) => renderNavLink(link, idx + midPoint))}
+              </ul>
+            </div>
           </div>
 
           {/* Column 2: Location & Contact */}
-          <div className="space-y-4">
+          <div className="space-y-3 lg:col-span-4">
             <h4
               style={headingStyle}
-              className="text-base sm:text-lg font-extrabold tracking-wider uppercase font-heading"
+              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
               {contact.heading || 'LOCATION & CONTACT'}
             </h4>
-            <div className="space-y-4 text-sm sm:text-base opacity-90">
-              <div className="flex items-start gap-3 leading-relaxed">
-                <MapPin style={accentStyle} className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div className="space-y-3 text-xs sm:text-[13px] opacity-90">
+              <div className="flex items-start gap-2.5 leading-relaxed">
+                <MapPin style={accentStyle} className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <div className="font-medium text-slate-300 space-y-0.5">
                   {addressLines.map((line, idx) => (
                     <p key={idx} className="m-0 leading-normal">{line}</p>
@@ -409,37 +435,37 @@ export const Footer = ({ overrideData = null }) => {
               </div>
 
               {contact.phoneNumbers && contact.phoneNumbers.length > 0 && (
-                <p className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                <p className="flex items-center gap-2.5 m-0">
+                  <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
                   <span className="font-semibold tracking-wide text-white">{contact.phoneNumbers.join(' / ')}</span>
                 </p>
               )}
 
               {contact.emails && contact.emails.length > 0 && (
-                <p className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                <p className="flex items-center gap-2.5 m-0">
+                  <Mail className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span className="font-medium text-slate-300">{contact.emails.join(', ')}</span>
                 </p>
               )}
 
               {/* Contact Buttons */}
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-wrap gap-2.5 pt-1">
                 {contact.googleMapsUrl ? (
                   <a
                     href={contact.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-xs font-semibold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
                   >
-                    <Globe className="w-4 h-4 text-cyan-400" />
+                    <Globe className="w-3.5 h-3.5 text-cyan-400" />
                     <span>View Map</span>
                   </a>
                 ) : (
                   <Link
                     to="/lets-connect"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-xs font-semibold text-white hover:bg-white/20 transition-colors text-decoration-none shadow-sm"
                   >
-                    <MessageSquare className="w-4 h-4 text-cyan-400" />
+                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
                     <span>Contact Us</span>
                   </Link>
                 )}
@@ -448,9 +474,9 @@ export const Footer = ({ overrideData = null }) => {
                     href={`https://wa.me/${contact.whatsappNumber.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/20 text-xs sm:text-sm font-bold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors text-decoration-none shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-xs font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors text-decoration-none shadow-sm"
                   >
-                    <MessageSquare className="w-4 h-4" />
+                    <MessageSquare className="w-3.5 h-3.5" />
                     <span>WhatsApp</span>
                   </a>
                 )}
@@ -459,17 +485,17 @@ export const Footer = ({ overrideData = null }) => {
           </div>
 
           {/* Column 3: Connect With Us */}
-          <div className="space-y-4">
+          <div className="space-y-3 lg:col-span-3">
             <h4
               style={headingStyle}
-              className="text-base sm:text-lg font-extrabold tracking-wider uppercase font-heading"
+              className="text-xs sm:text-sm font-extrabold tracking-wider uppercase font-heading"
             >
               CONNECT WITH US
             </h4>
-            <p className="text-sm text-slate-300 font-medium leading-relaxed">
+            <p className="text-xs sm:text-[13px] text-slate-300 font-normal leading-relaxed m-0">
               Stay connected with Chinmaya Mission, Adoni. Follow our official channels for daily updates, satsangs, and youth programs.
             </p>
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
               {SOCIAL_MEDIA_LINKS.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -480,9 +506,9 @@ export const Footer = ({ overrideData = null }) => {
                     rel="noopener noreferrer"
                     aria-label={item.ariaLabel}
                     title={item.ariaLabel}
-                    className={`group w-11 h-11 rounded-2xl bg-white/10 text-slate-200 border border-white/15 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg ${item.hoverBg} focus:outline-none focus:ring-2 focus:ring-[var(--orange)] focus:ring-offset-2 focus:ring-offset-[#0B2340]`}
+                    className={`group w-9 h-9 rounded-xl bg-white/10 text-slate-200 border border-white/15 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg ${item.hoverBg} focus:outline-none focus:ring-2 focus:ring-[var(--orange)] focus:ring-offset-2 focus:ring-offset-[#0B2340]`}
                   >
-                    <Icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+                    <Icon className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                   </a>
                 );
               })}
@@ -494,9 +520,9 @@ export const Footer = ({ overrideData = null }) => {
         {/* Bottom Footer Section */}
         <div
           style={{ borderColor: appearance?.dividerColor || 'rgba(255, 255, 255, 0.1)' }}
-          className="pt-5 border-t flex flex-col sm:flex-row items-center justify-between text-xs opacity-75 gap-3"
+          className="pt-4 border-t flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs opacity-75 gap-2 sm:gap-3"
         >
-          <p>{bottomFooter.copyrightText || '© Chinmaya Mission, Adoni. All Rights Reserved.'}</p>
+          <p className="m-0">{bottomFooter.copyrightText || '© Chinmaya Mission, Adoni. All Rights Reserved.'}</p>
           <div className="flex items-center gap-4">
             {bottomFooter.privacyPolicy?.url && (
               <Link to={bottomFooter.privacyPolicy.url} className="hover:text-white text-decoration-none">

@@ -39,10 +39,15 @@ const DEFAULT_FORM_DATA = {
   quickNavigation: {
     heading: 'QUICK NAVIGATION',
     links: [
-      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 1 },
-      { label: 'Activities Gallery', url: '/activities', openInNewTab: false, enabled: true, displayOrder: 2 },
-      { label: "Let's Connect", url: '/lets-connect', openInNewTab: false, enabled: true, displayOrder: 3 },
-      { label: 'Marathon Registration', url: '/register', openInNewTab: false, enabled: true, displayOrder: 4 },
+      { label: 'Home', url: '/', openInNewTab: false, enabled: true, displayOrder: 1 },
+      { label: 'About Us', url: '/about', openInNewTab: false, enabled: true, displayOrder: 2 },
+      { label: 'Events', url: '/events', openInNewTab: false, enabled: true, displayOrder: 3 },
+      { label: 'Chinmaya Sanjeevaraya Temple', url: '/chinmaya-sanjeevaraya-temple', openInNewTab: false, enabled: true, displayOrder: 4 },
+      { label: 'Shri Shantamalleshwara Swami Temple', url: '/shri-shantamalleshwara-swami-temple', openInNewTab: false, enabled: true, displayOrder: 5 },
+      { label: 'Sacred Image Gallery', url: '/gallery', openInNewTab: false, enabled: true, displayOrder: 6 },
+      { label: 'Who Are We', url: '/who-are-we', openInNewTab: false, enabled: true, displayOrder: 7 },
+      { label: "Let's Connect", url: '/lets-connect', openInNewTab: false, enabled: true, displayOrder: 8 },
+      { label: 'Marathon 2026 Portal', url: 'https://marathon-chinmaya-mission-adoni.vercel.app/', openInNewTab: true, enabled: true, displayOrder: 9 },
     ],
   },
   contact: {

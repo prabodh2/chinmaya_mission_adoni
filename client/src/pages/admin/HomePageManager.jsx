@@ -696,7 +696,7 @@ export const HomePageManager = () => {
 
           <div className="border-4 border-[var(--cyan)] rounded-3xl overflow-hidden shadow-2xl bg-[var(--bg-primary)]">
             <div className="p-3 bg-[var(--bg-dark-section)] text-white text-xs font-mono font-bold flex items-center justify-between px-6">
-              <span>https://anti-drug-marathon-adoni.org/ (Published Preview)</span>
+              <span>https://anti-drug-marathon.org/ (Published Preview)</span>
               <span>STATUS: {isEnabled ? 'PUBLISHED ONLINE' : 'OFFLINE MODE'}</span>
             </div>
 

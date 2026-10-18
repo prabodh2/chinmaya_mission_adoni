@@ -104,10 +104,10 @@ export const LetsConnectPage = () => {
         </span>
         <h1 className="text-4xl sm:text-5xl font-black font-heading text-[var(--text-primary)] leading-tight">
           <span>{f.contact_info?.heading || "LET'S CONNECT WITH"}</span>
-          <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION, ADONI</span>
+          <span className="block text-[var(--orange)] mt-1 sm:mt-2">CHINMAYA MISSION</span>
         </h1>
         <p className="text-base text-[var(--text-muted)] font-medium">
-          {f.contact_info?.subtitle || 'Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission, Adoni team.'}
+          {f.contact_info?.subtitle ? f.contact_info.subtitle.replace(/,\s*Adoni/gi, '') : 'Have questions regarding marathon registration, volunteering opportunities, youth programs, or community activities? Reach out to our Chinmaya Mission team.'}
         </p>
       </div>
 

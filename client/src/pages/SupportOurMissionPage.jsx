@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 export const SupportOurMissionPage = () => {
   useEffect(() => {
-    document.title = 'Support Our Mission | Chinmaya Mission Adoni';
+    document.title = 'Support Our Mission | Chinmaya Mission';
     window.scrollTo(0, 0);
   }, []);
 

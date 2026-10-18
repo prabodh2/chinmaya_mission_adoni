@@ -9,11 +9,11 @@ export const LeftLogo = ({ className = '' }) => {
     <Link
       to="/"
       className={`flex items-center group text-decoration-none focus:outline-none ${className}`}
-      aria-label="Chinmaya Mission, Adoni"
+      aria-label="Chinmaya Mission"
     >
       <img
         src={LOGO_1}
-        alt="Chinmaya Mission, Adoni"
+        alt="Chinmaya Mission"
         loading="eager"
         decoding="async"
         style={{ height: '42px', maxHeight: '42px', width: 'auto', objectFit: 'contain', display: 'block' }}

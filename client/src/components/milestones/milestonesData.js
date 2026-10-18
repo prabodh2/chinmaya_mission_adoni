@@ -1,5 +1,5 @@
 /**
- * Milestones Data for Chinmaya Mission, Adoni Journey
+ * Milestones Data for Chinmaya Mission Journey
  * Chronological record of key events, temples, youth activities and cultural milestones.
  * NOTE: All "KM" references have been completely removed.
  */
@@ -10,8 +10,8 @@ export const MILESTONES_DATA = [
     year: '1992',
     displayYear: '1992',
     signYear: '1992',
-    title: 'Chinmaya Mission, Adoni Established',
-    description: 'Chinmaya Mission, Adoni, was established.',
+    title: 'Chinmaya Mission Established',
+    description: 'Chinmaya Mission was established.',
     type: 'foundation',
     tag: 'Foundation Stop',
     era: 'beginning',
@@ -38,7 +38,7 @@ export const MILESTONES_DATA = [
     displayYear: '1995',
     signYear: '1995',
     title: 'Andhra Pradesh CHYK Camp',
-    description: 'Andhra Pradesh CHYK Camp was organised successfully, Adoni mission was honoured with the best upcoming center award.',
+    description: 'Andhra Pradesh CHYK Camp was organised successfully, and the mission was honoured with the best upcoming center award.',
     highlightBadge: 'Best Upcoming Center Award',
     type: 'award',
     tag: 'Youth Camp & Award',

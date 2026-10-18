@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ShieldCheck,
   AlertTriangle,
+  Lock,
 } from 'lucide-react';
 import './MythsVsFactsSection.css';
 
@@ -128,6 +129,21 @@ export const MythsVsFactsSection = ({ content }) => {
   const [slideDirection, setSlideDirection] = useState('next');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const touchStartXRef = useRef(null);
+
+  // Set of card IDs whose Fact answers have been revealed by clicking
+  const [revealedCardIds, setRevealedCardIds] = useState(() => new Set());
+
+  const toggleFactReveal = useCallback((cardId) => {
+    setRevealedCardIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(cardId)) {
+        next.delete(cardId);
+      } else {
+        next.add(cardId);
+      }
+      return next;
+    });
+  }, []);
 
   const totalCards = cardsData.length;
   const currentCard = cardsData[currentIndex] || cardsData[0];
@@ -278,8 +294,28 @@ export const MythsVsFactsSection = ({ content }) => {
                       </p>
                     </div>
 
-                    {/* FACT Block */}
-                    <div className="mvf-block-fact">
+                    {/* FACT Block (Click-to-reveal interaction) */}
+                    <div
+                      className={`mvf-block-fact ${revealedCardIds.has(currentCard.id) ? 'is-revealed' : 'is-hidden'}`}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={revealedCardIds.has(currentCard.id)}
+                      aria-label={
+                        revealedCardIds.has(currentCard.id)
+                          ? 'Fact revealed. Click to hide.'
+                          : 'Fact hidden. Click to reveal the fact.'
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFactReveal(currentCard.id);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleFactReveal(currentCard.id);
+                        }
+                      }}
+                    >
                       <div className="mvf-block-header">
                         <span className="mvf-block-badge mvf-badge-fact">
                           <CheckCircle2 className="w-4 h-4 mvf-block-icon-fact" />
@@ -287,9 +323,16 @@ export const MythsVsFactsSection = ({ content }) => {
                         </span>
                         <ShieldCheck className="w-4 h-4 text-emerald-500" />
                       </div>
-                      <p className="mvf-block-text">
-                        {currentCard.fact}
-                      </p>
+                      {revealedCardIds.has(currentCard.id) ? (
+                        <p className="mvf-block-text mvf-fact-revealed">
+                          {currentCard.fact}
+                        </p>
+                      ) : (
+                        <div className="mvf-fact-reveal-prompt">
+                          <Lock className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Click to reveal the fact</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

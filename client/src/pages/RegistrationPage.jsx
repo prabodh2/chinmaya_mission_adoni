@@ -349,7 +349,7 @@ export const RegistrationPage = () => {
         <div className="flex flex-wrap items-center justify-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-extrabold text-xs tracking-widest uppercase bg-[var(--orange)]/15 text-[var(--orange)] border border-[var(--orange)]/30">
             <Sparkles className="w-3.5 h-3.5" />
-            {regContent?.subtitle || 'CHINMAYA YUVA KENDRA, ADONI'}
+            {regContent?.subtitle ? regContent.subtitle.replace(/[·,]\s*ADONI/gi, '') : 'CHINMAYA YUVA KENDRA'}
           </span>
         </div>
 
@@ -545,7 +545,7 @@ export const RegistrationPage = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-[var(--text-primary)] mb-1 uppercase tracking-wider">
-                    School / College Name in Adoni *
+                    School / College Name *
                   </label>
                   <SearchableSelect
                     options={[...institutions, 'OTHER']}

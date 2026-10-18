@@ -429,7 +429,7 @@ export const MyActivityPage = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-[var(--text-primary)]">Your Messages & Connection Requests</h2>
-                  <p className="text-xs text-[var(--text-muted)]">Track responses to your inquiries sent to Chinmaya Mission, Adoni</p>
+                  <p className="text-xs text-[var(--text-muted)]">Track responses to your inquiries sent to Chinmaya Mission</p>
                 </div>
 
                 <Link

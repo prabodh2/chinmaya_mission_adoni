@@ -7,14 +7,13 @@ import {
   Heart,
   Sparkles,
   Sun,
-  Clock,
-  MapPin,
 } from 'lucide-react';
 
 export const SriShanthaMamleshwaraSwamiTemplePage = () => {
   const [pageData, setPageData] = useState(() => {
     try {
-      const cached = localStorage.getItem('cached_cms_shantamalleshwara_temple');
+      localStorage.removeItem('cached_cms_shantamalleshwara_temple');
+      const cached = localStorage.getItem('cached_cms_shantamalleshwara_temple_v2');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -22,7 +21,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
   });
 
   useEffect(() => {
-    document.title = 'Sri Shantha Mamleshwara Swami Temple | Chinmaya Mission, Adoni';
+    document.title = 'Shri Shantamalleshwara Swami Temple | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     webContentService
@@ -32,7 +31,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
           setPageData(res.data.data);
           try {
             localStorage.setItem(
-              'cached_cms_shantamalleshwara_temple',
+              'cached_cms_shantamalleshwara_temple_v2',
               JSON.stringify(res.data.data)
             );
           } catch {}
@@ -59,7 +58,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
     {
       name: 'Karthika Deepotsavam',
       period: 'Karthika Masa (Every Monday)',
-      desc: 'The hilltop sanctum is illuminated with hundreds of sacred earthen lamps (deepams), offering a magnificent radiant spectacle across Adoni with special evening deeparadhana.',
+      desc: 'The hilltop sanctum is illuminated with hundreds of sacred earthen lamps (deepams), offering a magnificent radiant spectacle with special evening deeparadhana.',
       icon: <Sun className="w-5 h-5 text-amber-500" />,
     },
     {
@@ -81,38 +80,22 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs uppercase tracking-widest">
               <Landmark className="w-3.5 h-3.5 text-amber-400" />
-              <span>SPIRITUALITY &amp; DEVOTION • ADONI</span>
+              <span>SPIRITUALITY &amp; DEVOTION</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
-              {f.temple_hero?.title || 'SRI SHANTHA MAMLESHWARA SWAMI TEMPLE'}
+              SHRI SHANTAMALLESHWARA SWAMI TEMPLE
             </h1>
 
             <p className="text-amber-200/90 text-sm sm:text-base font-serif italic">
               "{f.temple_hero?.subtitle ||
-                'Shri Shantamalleshwara Swami Devasthanam — A revered hilltop sanctuary of peace, divine grace, and timeless Shaivite heritage in Adoni.'}"
+                'Shri Shantamalleshwara Swami Devasthanam — A revered hilltop sanctuary of peace, divine grace, and timeless Shaivite heritage.'}"
             </p>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               {f.temple_hero?.intro ||
-                'Dedicated to Lord Shiva (Shri Shantamalleshwara Swamy), this sanctified hilltop shrine stands majestically atop the hillock near Ramanjaneya Nagar in Adoni. Nurtured and maintained with profound devotion by the Chinmaya Mission Adoni Committee for over 25 years, the temple serves as an abode of profound silence, positive spiritual energy, and community harmony for all seekers and devotees.'}
+                'Dedicated to Lord Shiva (Shri Shantamalleshwara Swami), this sanctified hilltop shrine stands majestically atop the hillock on Navarantanagiri, Shanta Mallappa Konda. Nurtured and maintained with profound devotion by the Chinmaya Mission Committee for over 25 years, the temple serves as an abode of profound silence, positive spiritual energy, and community harmony for all seekers and devotees.'}
             </p>
-
-            {/* Quick Highlights / Visiting Pills */}
-            <div className="pt-2 flex flex-wrap gap-2.5 sm:gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-amber-200 font-medium">
-                <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Morning: 6:00 AM – 12:00 PM</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-amber-200 font-medium">
-                <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Evening: 5:00 PM – 8:30 PM</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-amber-200 font-medium">
-                <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Ramanjaneya Nagar, Adoni</span>
-              </span>
-            </div>
           </div>
 
           {/* Right Column: Full Deity Image (100% Uncropped & Highlighted) */}
@@ -122,19 +105,20 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
               <div className="absolute -inset-1 bg-gradient-to-tr from-amber-500/20 via-orange-500/20 to-transparent blur-xl pointer-events-none" />
 
               <div className="relative rounded-2xl overflow-hidden bg-black/60 flex items-center justify-center min-h-[360px] sm:min-h-[420px]">
-                {/* Full Uncropped Deity Image */}
+                {/* Full Uncropped Deity Image (Garlanded Sanctum) */}
                 <img
                   src={
-                    f.temple_hero?.imageUrl ||
-                    '/assets/images/shri-shantamalleshwara-shiva.jpg'
+                    (f.temple_hero?.imageUrl && !f.temple_hero.imageUrl.includes('media_'))
+                      ? f.temple_hero.imageUrl
+                      : '/assets/images/shri-shantamalleshwara-sanctum.jpg'
                   }
                   alt={
                     f.temple_hero?.deityName ||
-                    'Shri Shantamalleshwara Swamy Sanctum Sanctorum'
+                    'Shri Shantamalleshwara Swami Sanctum Sanctorum'
                   }
                   onError={(e) => {
                     e.currentTarget.src =
-                      '/assets/images/activity-shantamalleshwara.webp';
+                      '/assets/images/shri-shantamalleshwara-shiva.jpg';
                   }}
                   className="w-full h-auto max-h-[460px] object-contain mx-auto my-auto block rounded-xl group-hover:scale-105 transition-transform duration-700 ease-out"
                   loading="eager"
@@ -143,13 +127,12 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
 
               <div className="text-center pt-3 pb-1 space-y-0.5">
                 <p className="text-xs font-extrabold uppercase tracking-widest text-amber-400">
-                  {f.temple_hero?.deityName || 'Shri Shantamalleshwara Swamy'}
+                  {f.temple_hero?.deityName || 'Shri Shantamalleshwara Swami'}
                 </p>
                 <p className="text-[11px] text-slate-300 font-medium">
-                  {f.temple_hero?.deitySubtitle || 'Presiding Deity (Lord Shiva) • Chinmaya Mission, Adoni'}
-                </p>
-                <p className="text-[10px] text-amber-200/60 font-sans tracking-wide pt-0.5">
-                  {f.temple_hero?.deityTagline || 'Sacred Sanctum Sanctorum • Hilltop Shrine, Adoni'}
+                  {f.temple_hero?.deitySubtitle
+                    ? f.temple_hero.deitySubtitle.replace(/Chinmaya Mission,\s*Adoni/i, 'Navarantanagiri')
+                    : 'Presiding Deity (Lord Shiva) • Navarantanagiri'}
                 </p>
               </div>
             </div>
@@ -161,11 +144,12 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-10">
         <div className="text-center max-w-3xl mx-auto space-y-2">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-slate-900 tracking-tight">
-            {f.temple_history?.heading || 'Sri Shantha Mamleshwara Swami Temple'}
+            Shri Shantamalleshwara Swami Temple
           </h2>
           <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[var(--orange)]">
-            {f.temple_history?.location ||
-              'Ramanjaneya Nagar, Shanta Mallappa Konda, Adoni'}
+            {f.temple_history?.location && !f.temple_history.location.includes('Ramanjaneya Nagar')
+              ? f.temple_history.location
+              : 'Navarantanagiri, Shanta Mallappa Konda, Adoni'}
           </p>
           <div className="w-16 h-1 bg-[var(--orange)] rounded-full mx-auto mt-2" />
         </div>
@@ -181,13 +165,12 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
             </div>
 
             <p className="text-sm sm:text-base text-slate-700">
-              {f.temple_history?.historyP1 ||
-                'The Sri Shantha Mamleshwara Swami Temple (also known as Shri Shantamalleshwara Swamy Devasthanam) in Adoni is an ancient and sanctified hilltop seat of Lord Shiva, revered for generations as an abode of profound peace, meditation, and spiritual grace.'}
+              The Shri Shantamalleshwara Swami Temple (also known as Shri Shantamalleshwara Swami Devasthanam) is an ancient and sanctified hilltop seat of Lord Shiva, revered for generations as an abode of profound peace, meditation, and spiritual grace.
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">
               {f.temple_history?.historyP2 ||
-                'The development and continuous preservation of this sacred shrine commenced in 1996 under the spiritual guidance and vision of Chinmaya Mission, Adoni. For over 25 years, the Chinmaya Mission Adoni Committee has diligently nurtured, protected, and managed the temple precinct.'}
+                'The development and continuous preservation of this sacred shrine commenced in 1996 under the spiritual guidance and vision of Chinmaya Mission. For over 25 years, the Chinmaya Mission Committee has diligently nurtured, protected, and managed the temple precinct.'}
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">
@@ -197,7 +180,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
 
             <p className="text-sm sm:text-base text-slate-700">
               {f.temple_history?.historyP4 ||
-                'In 2025, the grand Maha Kumbhabhishekam was successfully solemnized with sacred Vedic rituals and Agama Shastras. A permanent metal Omkara (ॐ) symbol installed on the summit is illuminated each night, standing as an uplifting spiritual beacon across the city of Adoni.'}
+                'In 2025, the grand Maha Kumbhabhishekam was successfully solemnized with sacred Vedic rituals and Agama Shastras. A permanent metal Omkara (ॐ) symbol installed on the summit is illuminated each night, standing as an uplifting spiritual beacon across the entire region.'}
             </p>
           </div>
 
@@ -213,7 +196,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
 
             <p className="text-sm sm:text-base text-slate-700">
               {f.temple_history?.worshipP1 ||
-                'Daily poojas and abhishekams are performed with devotion and reverent chanting to Lord Shiva (Shri Shantamalleshwara Swamy), invoking tranquility, good health, and spiritual clarity for all devotees and their families.'}
+                'Daily poojas and abhishekams are performed with devotion and reverent chanting to Lord Shiva (Shri Shantamalleshwara Swami), invoking tranquility, good health, and spiritual clarity for all devotees and their families.'}
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">

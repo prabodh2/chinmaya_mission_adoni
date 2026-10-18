@@ -466,7 +466,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
               MARATHON MANAGEMENT SYSTEM
             </h1>
             <p className="text-xs text-[var(--text-muted)] font-semibold">
-              Chinmaya Mission, Adoni • Chinmaya Yuva Kendra, Adoni
+              Chinmaya Mission • Chinmaya Yuva Kendra
             </p>
           </div>
         </div>

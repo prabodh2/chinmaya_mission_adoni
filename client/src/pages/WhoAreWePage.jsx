@@ -50,13 +50,13 @@ const MEMBERS_DATA = [
     thumbImage: '/assets/leadership/swami-swaroopananda-thumb.jpg',
   },
   {
-    id: 'resident-adoni',
-    role: 'RESIDENT · ADONI MISSION',
+    id: 'resident-acharya',
+    role: 'RESIDENT BRAHMACHARI',
     name: 'Brahmachari Narayana Chaitanya',
     honorific: 'Brahmachari Narayana Chaitanya',
-    description: 'Serving as the resident of Chinmaya Mission, Adoni.',
+    description: 'Serving as the resident of Chinmaya Mission.',
     extendedBio:
-      'Serving as the dedicated resident of Chinmaya Mission, Adoni, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the Adoni region.',
+      'Serving as the dedicated resident of Chinmaya Mission, coordinating spiritual discourses, youth mentoring programs, daily temple pujas, and community welfare initiatives across the region.',
     largeImage: '/assets/leadership/narayana-chaitanya.jpg',
     thumbImage: '/assets/leadership/narayana-chaitanya-thumb.jpg',
   },
@@ -78,7 +78,7 @@ export const WhoAreWePage = () => {
 
   // Set document title
   useEffect(() => {
-    document.title = 'Who Are We | Chinmaya Mission, Adoni';
+    document.title = 'Who Are We | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
     webContentService
@@ -143,7 +143,7 @@ export const WhoAreWePage = () => {
         {/* TOP SECTION HEADER (Faithful to Attachment 1 & 2) */}
         <header className="text-center space-y-1.5">
           <p className="text-xs sm:text-sm font-extrabold tracking-widest text-[#A26E33] uppercase">
-            {f.leadership_hero?.subtitle || 'CHINMAYA MISSION · ADONI'}
+            {(f.leadership_hero?.subtitle || 'CHINMAYA MISSION').replace(/[·,]\s*ADONI/gi, '').trim()}
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1B362A] tracking-tight font-heading">
             {f.leadership_hero?.title || 'Who We Are'}
@@ -219,7 +219,7 @@ export const WhoAreWePage = () => {
                       Portrait
                     </span>
                     <p className="text-xs text-[#554B3E]/80 mt-1">
-                      Resident · Chinmaya Mission, Adoni
+                      Resident · Chinmaya Mission
                     </p>
                   </div>
                 ) : (
@@ -345,7 +345,7 @@ export const WhoAreWePage = () => {
         <footer className="pt-6 border-t border-[#E7DFD3]/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-[#6C7B71]">
           <div className="flex items-center gap-2">
             <Flame className="w-4 h-4 text-[#A26E33]" />
-            <span>Chinmaya Mission & Yuva Kendra (CHYK) Adoni</span>
+            <span>Chinmaya Mission & Yuva Kendra (CHYK)</span>
           </div>
           <div className="flex items-center gap-3">
             <Link

@@ -290,7 +290,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
       pujaName: selectedOption ? selectedOption.name : serviceDisplayName,
       serviceCategory: serviceDisplayName,
       pujaType: service.pujaType,
-      templeName: service.templeName || 'Sri Santha Malleshwara Swami Temple',
+      templeName: service.templeName || 'Shri Shantamalleshwara Swami Temple',
       amount: currentAmount,
       name: form.name.trim(),
       gotra: form.gotra.trim(),
@@ -1124,7 +1124,7 @@ export const TempleSevaSection = () => {
       <header className="seva-top-bar">
         <a href="#services" className="seva-temple-brand">
           <span className="seva-temple-om">ॐ</span>
-          <span className="seva-temple-title">Sri Santha Malleshwara Swami Temple</span>
+          <span className="seva-temple-title">Shri Shantamalleshwara Swami Temple</span>
         </a>
 
         <div className="seva-top-actions">
@@ -1224,7 +1224,7 @@ export const TempleSevaSection = () => {
           >
             ॐ नमः शिवाय
           </div>
-          <p>Sri Santha Malleshwara Swami Temple — Adoni Sanctuary</p>
+          <p>Shri Shantamalleshwara Swami Temple Sanctuary</p>
           <p style={{ fontSize: 12, color: 'var(--seva-ivory-faint)' }}>
             All bookings are processed directly without payment. Sanctified priests conduct sevas with devotion.
           </p>

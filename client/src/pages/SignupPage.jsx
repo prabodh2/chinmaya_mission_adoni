@@ -142,7 +142,7 @@ export const SignupPage = () => {
             Create Your Account
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] font-medium">
-            One account for all Chinmaya Mission, Adoni events, services, and activities
+            One account for all Chinmaya Mission events, services, and activities
           </p>
         </div>
 

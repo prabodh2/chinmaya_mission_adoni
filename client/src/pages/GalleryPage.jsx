@@ -8,7 +8,7 @@ export const GALLERY_IMAGES = [
   {
     id: 'hero-lingam',
     src: '/assets/hero-lingam-new.jpeg',
-    title: 'Sri Santha Malleswara Jyotirlinga (Hero Sanctum)',
+    title: 'Shri Shantamalleshwara Swami Jyotirlinga (Hero Sanctum)',
     category: 'Temple & Sanctum',
     desc: 'Sacred Ishana Lingam representing the cosmic space element, consecrated with arrow marks from Kakatiya times.',
     tag: 'Principal Shrine',
@@ -50,7 +50,7 @@ export const GALLERY_IMAGES = [
     src: '/assets/temple-trishul-hilltop.jpeg',
     title: 'Sacred Golden Trishul on Hilltop',
     category: 'Temple & Sanctum',
-    desc: 'The majestic golden trident erected on Navaratna Shikhara hill overlooking the town of Adoni.',
+    desc: 'The majestic golden trident erected on Navaratna Shikhara hill overlooking the hills.',
     tag: 'Sacred Trishul',
   },
   {
@@ -140,7 +140,7 @@ export const GALLERY_IMAGES = [
     src: '/gallery/Sevak_Team.jpeg',
     title: 'Temple Sevak Team & Priests',
     category: 'Sacred Deities',
-    desc: 'Chinmaya Mission sevaks and priests dedicated to preserving the heritage of Sri Santha Malleswara.',
+    desc: 'Chinmaya Mission sevaks and priests dedicated to preserving the heritage of Shri Shantamalleshwara Swami.',
     tag: 'Sevak Sangha',
   },
 
@@ -238,7 +238,7 @@ export const GALLERY_IMAGES = [
     src: '/assets/rajat_mahotsav_past.jpeg',
     title: 'Rajata Mahotsav Silver Jubilee',
     category: 'Festivals & Homams',
-    desc: 'Celebrating 25 years of temple revival and cultural heritage preservation in Adoni.',
+    desc: 'Celebrating 25 years of temple revival and cultural heritage preservation.',
     tag: 'Silver Jubilee',
   },
 
@@ -257,7 +257,6 @@ export const GalleryPage = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [activeLightboxIndex, setActiveLightboxIndex] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
 
   const categories = [
     'All',
@@ -290,14 +289,6 @@ export const GalleryPage = () => {
     });
     return c;
   }, []);
-
-  // Copy Image Path to Clipboard
-  const handleCopyPath = (src, id) => {
-    navigator.clipboard.writeText(src).then(() => {
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
 
   // Keyboard navigation for Lightbox
   useEffect(() => {
@@ -336,11 +327,11 @@ export const GalleryPage = () => {
         <div className="gallery-subnav">
           <div className="gallery-subnav-left">
             <span className="gallery-subnav-om">ॐ</span>
-            <span className="gallery-subnav-title">Sri Santha Malleshwara Temple Visual Archive</span>
+            <span className="gallery-subnav-title">Shri Shantamalleshwara Swami Temple Visual Archive</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to="/sri-shantha-mamleshwara-swami-temple" className="gallery-subnav-back">
+            <Link to="/shri-shantamalleshwara-swami-temple" className="gallery-subnav-back">
               ← Temple Sanctuary & Sevas
             </Link>
           </div>
@@ -351,7 +342,7 @@ export const GalleryPage = () => {
           <span className="gallery-eyebrow">Visual Heritage</span>
           <h1 className="gallery-hero-title">The Sacred Image Archive</h1>
           <p className="gallery-hero-subtitle">
-            Every sacred sanctum photograph, deity darshan, Vedic havan, festival celebration, and ceremonial seal of Sri Santha Malleshwara Swami Temple and Chinmaya Mission.
+            Every sacred sanctum photograph, deity darshan, Vedic havan, festival celebration, and ceremonial seal of Shri Shantamalleshwara Swami Temple and Chinmaya Mission.
           </p>
         </section>
       </div>
@@ -452,31 +443,6 @@ export const GalleryPage = () => {
                     <h2 className="gallery-card-title">{img.title}</h2>
                     <p className="gallery-card-desc">{img.desc}</p>
                   </div>
-
-                  {/* Card Actions Footer */}
-                  <div className="gallery-card-footer">
-                    <span className="gallery-card-path" title={img.src}>
-                      {img.src}
-                    </span>
-
-                    <div className="gallery-card-actions">
-                      <button
-                        className="gallery-action-btn"
-                        onClick={() => handleCopyPath(img.src, img.id)}
-                        title="Copy image link"
-                      >
-                        {copiedId === img.id ? '✓ Copied' : '📋 Path'}
-                      </button>
-                      <a
-                        href={img.src}
-                        download
-                        className="gallery-action-btn"
-                        title="Download original file"
-                      >
-                        ⬇
-                      </a>
-                    </div>
-                  </div>
                 </div>
               </article>
             ))}
@@ -546,13 +512,6 @@ export const GalleryPage = () => {
                 <span style={{ fontFamily: 'var(--f-mono)', fontSize: 13, color: 'var(--ivory-faint)' }}>
                   {activeLightboxIndex + 1} / {filteredImages.length}
                 </span>
-                <a
-                  href={currentLightboxImg.src}
-                  download
-                  className="gallery-download-btn"
-                >
-                  Download Image ⬇
-                </a>
               </div>
             </div>
           </div>
@@ -563,7 +522,7 @@ export const GalleryPage = () => {
       <footer className="gallery-sacred-footer-banner">
         <div className="gallery-content-wrap">
           <div className="gallery-mantra">ॐ नमः शिवाय</div>
-          <p className="gallery-mantra-sub">Sri Santha Malleshwara Swami Temple — Adoni Sanctuary</p>
+          <p className="gallery-mantra-sub">Shri Shantamalleshwara Swami Temple Sanctuary</p>
           <p className="gallery-mantra-count">
             Navaratna Shikhara Sacred Heritage · {GALLERY_IMAGES.length} Images Archived
           </p>
