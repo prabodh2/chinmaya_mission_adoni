@@ -132,11 +132,11 @@ export const SupportOurMissionPage = () => {
 
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-3 sm:space-y-4">
           {/* Chinmaya Mission Official Logo */}
-          <div className="flex justify-center mb-1 sm:mb-2">
+          <div className="flex justify-center mb-1">
             <img
               src="/assets/logos/chinmaya-mission-lamp-logo.png"
               alt="Chinmaya Mission Logo"
-              className="h-16 sm:h-20 md:h-24 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(246,132,31,0.25)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-300"
+              className="h-9 sm:h-11 md:h-12 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(246,132,31,0.25)] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-300"
               onError={(e) => {
                 e.currentTarget.src = '/assets/logos/chinmaya-logo-original.png';
               }}
@@ -366,17 +366,6 @@ export const SupportOurMissionPage = () => {
               );
             })}
           </div>
-
-          {/* Register for Seva Button */}
-          <div className="text-center pt-2 sm:pt-4">
-            <Link
-              to="/lets-connect"
-              className="btn-seva-register"
-            >
-              <span>Register for Seva</span>
-              <ArrowRight className="w-4 h-4 text-[#0A192F]" />
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -411,20 +400,6 @@ export const SupportOurMissionPage = () => {
             <p className="text-lg sm:text-xl md:text-2xl font-spiritual-heading italic font-semibold text-[#0C1A30] tracking-wide">
               Be a Part of the Journey.
             </p>
-          </div>
-
-          {/* Donation CTA Button */}
-          <div className="pt-2 sm:pt-4">
-            <button
-              type="button"
-              onClick={openDonationModal}
-              className="btn-seva-register hover:scale-105 transition-all text-base px-9 py-3.5 cursor-pointer font-bold shadow-lg inline-flex items-center gap-2.5"
-              id="open-donation-modal-btn"
-            >
-              <Heart className="w-5 h-5 text-[#0A192F] fill-current" />
-              <span>Donation</span>
-              <ArrowRight className="w-4 h-4 text-[#0A192F]" />
-            </button>
           </div>
         </div>
       </section>
