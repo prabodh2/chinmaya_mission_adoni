@@ -9,7 +9,6 @@ import {
   Zap,
   HeartHandshake,
   Compass,
-  Quote,
   ArrowRight,
   Users,
   Sun,
@@ -712,30 +711,6 @@ export const ChinmayaMissionAdoniPage = () => {
         <MilestoneJourney />
       </div>
 
-      {/* 4. OUR VISION SECTION */}
-      <section className="w-full px-4 sm:px-8 lg:px-12">
-        <div className="relative p-10 sm:p-16 rounded-3xl bg-gradient-to-br from-[var(--navy)] via-[#0F2D52] to-[var(--navy)] text-white shadow-2xl overflow-hidden border border-white/10 text-center">
-          {/* Subtle Glow Overlay */}
-          <div className="absolute top-0 right-0 w-72 h-72 bg-[var(--orange)]/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-[var(--yellow)]/15 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 text-[var(--yellow)] flex items-center justify-center mx-auto border border-white/20">
-              <Quote className="w-8 h-8" />
-            </div>
-
-            <span className="text-xs font-extrabold tracking-widest text-[var(--yellow)] uppercase px-4 py-1.5 rounded-full bg-white/10 border border-white/20 inline-block">
-              {data.ourVision.heading}
-            </span>
-
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading leading-relaxed max-w-3xl mx-auto text-slate-100">
-              "{data.ourVision.quote}"
-            </h2>
-
-
-          </div>
-        </div>
-      </section>
 
       {/* 5. OUR MISSION SECTION */}
       <section className="w-full px-4 sm:px-8 lg:px-12">
