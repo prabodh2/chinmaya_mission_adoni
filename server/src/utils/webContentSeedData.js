@@ -20,8 +20,8 @@ export const DEFAULT_WEBSITE_PAGES = {
           order: 1,
           isEnabled: true,
           fields: [
-            { key: 'eyebrow', label: 'Eyebrow Tag', type: 'text', value: 'Chinmaya Mission, Adoni' },
-            { key: 'heading', label: 'Main Heading', type: 'text', value: 'Inner Transformation for a Better World' },
+            { key: 'eyebrow', label: 'Eyebrow Tag', type: 'text', value: 'Inner Transformation for a Better World' },
+            { key: 'heading', label: 'Main Heading', type: 'text', value: 'Chinmaya Mission, Adoni' },
             {
               key: 'description',
               label: 'Hero Description',

@@ -129,11 +129,18 @@ export function HomePage() {
     }
   };
 
-  const rawEyebrow = (f.hero?.eyebrow || 'Chinmaya Mission, Adoni').replace(/^[\s\-—–]+/, '').trim();
-  const heroEyebrow = /chinmaya\s*mission/i.test(rawEyebrow)
-    ? 'Chinmaya Mission, Adoni'
-    : rawEyebrow;
-  const heroHeading = f.hero?.heading || 'Inner Transformation for a Better World';
+  const rawEyebrow = (f.hero?.eyebrow || 'Inner Transformation for a Better World').replace(/^[\s\-—–]+/, '').trim();
+  const rawHeading = (f.hero?.heading || 'Chinmaya Mission, Adoni').trim();
+
+  let heroEyebrow = rawEyebrow || 'Inner Transformation for a Better World';
+  let heroHeading = rawHeading || 'Chinmaya Mission, Adoni';
+
+  if (/chinmaya\s*mission/i.test(heroEyebrow) && /inner\s*transformation/i.test(heroHeading)) {
+    heroEyebrow = 'Inner Transformation for a Better World';
+    heroHeading = 'Chinmaya Mission, Adoni';
+  } else if (/chinmaya\s*mission/i.test(heroEyebrow)) {
+    heroEyebrow = 'Inner Transformation for a Better World';
+  }
   const heroDesc = f.hero?.description || 'Through Vedanta, values and service, we strive to build a generation of conscious, compassionate and capable individuals.';
   const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
   const primaryBtnLink = f.hero?.primaryBtnLink || '#about';
@@ -284,7 +291,12 @@ export function HomePage() {
               {heroEyebrow}
             </p>
             <h1>
-              {heroHeading.toLowerCase().includes('inner transformation') && heroHeading.toLowerCase().includes('better world') ? (
+              {heroHeading.toLowerCase().includes('chinmaya mission') ? (
+                <>
+                  <span className="hero-heading-line">Chinmaya Mission,</span>
+                  <span className="hero-heading-line"><em>Adoni</em></span>
+                </>
+              ) : heroHeading.toLowerCase().includes('inner transformation') && heroHeading.toLowerCase().includes('better world') ? (
                 <>
                   <span className="hero-heading-line">Inner Transformation</span>
                   <span className="hero-heading-line"><em>for a Better World</em></span>
