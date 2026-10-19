@@ -163,6 +163,7 @@ export const userService = {
   getRegistrations: () => api.get('/users/registrations'),
   getServices: () => api.get('/users/services'),
   getConnections: () => api.get('/users/connections'),
+  getSevaBookings: () => api.get('/users/seva-bookings'),
 };
 
 export const communityService = {

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { formatPhoneInput, getCleanPhoneNumber } from '../utils/phoneUtils';
 import {
   User,
+  Mail,
   Calendar,
   Briefcase,
   Phone,
@@ -23,15 +24,16 @@ export const SignupPage = () => {
   const navigate = useNavigate();
   const { signup } = useAuth();
 
-  const redirectUrl = searchParams.get('redirect') || '/my-activity';
+  const redirectUrl = searchParams.get('redirect') || '/profile';
 
   const [formData, setFormData] = useState({
     fullName: '',
-    age: '',
-    profession: '',
+    email: '',
     phone: '',
     password: '',
     confirmPassword: '',
+    age: '',
+    profession: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -61,18 +63,23 @@ export const SignupPage = () => {
       newErrors.fullName = 'Full Name is required';
     }
 
-    const parsedAge = parseInt(formData.age, 10);
-    if (!formData.age || isNaN(parsedAge) || parsedAge < 5 || parsedAge > 120) {
-      newErrors.age = 'Age must be between 5 and 120 years';
-    }
-
-    if (!formData.profession.trim()) {
-      newErrors.profession = 'Profession / Occupation is required';
+    const cleanEmail = (formData.email || '').trim().toLowerCase();
+    if (!cleanEmail) {
+      newErrors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      newErrors.email = 'Please enter a valid email address';
     }
 
     const cleanPhone = getCleanPhoneNumber(formData.phone);
     if (!cleanPhone || cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
       newErrors.phone = 'Valid 10-digit mobile number starting with 6-9 required';
+    }
+
+    if (formData.age) {
+      const parsedAge = parseInt(formData.age, 10);
+      if (isNaN(parsedAge) || parsedAge < 5 || parsedAge > 120) {
+        newErrors.age = 'Age must be between 5 and 120 years';
+      }
     }
 
     if (!formData.password || formData.password.length < 6) {
@@ -98,11 +105,12 @@ export const SignupPage = () => {
       const cleanPhone = getCleanPhoneNumber(formData.phone);
       const res = await signup({
         fullName: formData.fullName.trim(),
-        age: parseInt(formData.age, 10),
-        profession: formData.profession.trim(),
+        email: formData.email.trim().toLowerCase(),
         phone: cleanPhone,
         password: formData.password,
         confirmPassword: formData.confirmPassword,
+        age: formData.age ? parseInt(formData.age, 10) : undefined,
+        profession: formData.profession?.trim() || undefined,
       });
 
       if (res.success) {
@@ -190,57 +198,28 @@ export const SignupPage = () => {
             {errors.fullName && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.fullName}</p>}
           </div>
 
-          {/* 2. Age & Profession Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Age */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
-                Age (in years) <span className="text-red-500">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
-                  <Calendar className="w-4 h-4 text-[var(--orange)]" />
-                </div>
-                <input
-                  type="number"
-                  name="age"
-                  min="5"
-                  max="120"
-                  value={formData.age}
-                  onChange={handleChange}
-                  placeholder="e.g. 24"
-                  required
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-[var(--text-primary)] font-semibold text-sm placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
-                    errors.age ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
-                  }`}
-                />
+          {/* 2. Email Address */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+              Email Address <span className="text-red-500">*</span>
+            </label>
+            <div className="relative flex items-center">
+              <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
+                <Mail className="w-4 h-4 text-[var(--orange)]" />
               </div>
-              {errors.age && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.age}</p>}
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="e.g. devotee@example.com"
+                required
+                className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-[var(--text-primary)] font-semibold text-sm placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
+                  errors.email ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
+                }`}
+              />
             </div>
-
-            {/* Profession */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
-                Profession <span className="text-red-500">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
-                  <Briefcase className="w-4 h-4 text-[var(--orange)]" />
-                </div>
-                <input
-                  type="text"
-                  name="profession"
-                  value={formData.profession}
-                  onChange={handleChange}
-                  placeholder="e.g. Student, Engineer"
-                  required
-                  className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-[var(--text-primary)] font-semibold text-sm placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
-                    errors.profession ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
-                  }`}
-                />
-              </div>
-              {errors.profession && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.profession}</p>}
-            </div>
+            {errors.email && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.email}</p>}
           </div>
 
           {/* 3. Phone Number */}
@@ -267,6 +246,54 @@ export const SignupPage = () => {
               />
             </div>
             {errors.phone && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.phone}</p>}
+          </div>
+
+          {/* 4. Age & Profession Grid (Optional) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Age */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                Age <span className="text-[10px] text-[var(--text-muted)] font-normal">(Optional)</span>
+              </label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
+                  <Calendar className="w-4 h-4 text-[var(--orange)]" />
+                </div>
+                <input
+                  type="number"
+                  name="age"
+                  min="5"
+                  max="120"
+                  value={formData.age}
+                  onChange={handleChange}
+                  placeholder="e.g. 24"
+                  className={`w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-[var(--text-primary)] font-semibold text-sm placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
+                    errors.age ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
+                  }`}
+                />
+              </div>
+              {errors.age && <p className="text-[11px] font-semibold text-red-500 pl-1">{errors.age}</p>}
+            </div>
+
+            {/* Profession */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                Profession <span className="text-[10px] text-[var(--text-muted)] font-normal">(Optional)</span>
+              </label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
+                  <Briefcase className="w-4 h-4 text-[var(--orange)]" />
+                </div>
+                <input
+                  type="text"
+                  name="profession"
+                  value={formData.profession}
+                  onChange={handleChange}
+                  placeholder="e.g. Student, Engineer"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--orange)] transition-all shadow-inner"
+                />
+              </div>
+            </div>
           </div>
 
           {/* 4. Password & Confirm Password */}

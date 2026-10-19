@@ -1,23 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LeftLogo } from './common/LogoGroup';
+import { useAuth } from '../context/AuthContext';
 import {
   Menu,
   X,
   ChevronDown,
+  User,
+  LogIn,
+  LogOut,
+  Calendar,
+  Award,
+  Shield,
 } from 'lucide-react';
 
 export const Navbar = () => {
+  const { normalUser, isUserAuthenticated, logoutUser } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopAboutOpen, setDesktopAboutOpen] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const [desktopTemplesOpen, setDesktopTemplesOpen] = useState(false);
   const [mobileTemplesOpen, setMobileTemplesOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const aboutTimeoutRef = useRef(null);
   const aboutDropdownRef = useRef(null);
   const templesTimeoutRef = useRef(null);
   const templesDropdownRef = useRef(null);
+  const userDropdownRef = useRef(null);
   const location = useLocation();
 
   // Close mobile drawer and dropdowns on route change
@@ -27,6 +37,7 @@ export const Navbar = () => {
     setMobileAboutOpen(false);
     setDesktopTemplesOpen(false);
     setMobileTemplesOpen(false);
+    setUserDropdownOpen(false);
   }, [location.pathname]);
 
   // Click outside listener for desktop dropdowns
@@ -37,6 +48,9 @@ export const Navbar = () => {
       }
       if (templesDropdownRef.current && !templesDropdownRef.current.contains(event.target)) {
         setDesktopTemplesOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -333,25 +347,130 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Mobile Menu Toggle Button */}
-          <div className="flex lg:hidden items-center">
-            <button
-              onClick={() => {
-                if (!mobileMenuOpen) {
-                  if (isAnyTempleActive) {
-                    setMobileTemplesOpen(true);
+          {/* RIGHT CORNER: Authentication Controls & Mobile Hamburger */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {!isUserAuthenticated ? (
+              <div className="hidden lg:flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[var(--text-primary)] hover:text-[var(--orange)] hover:bg-[var(--bg-tertiary)] transition-colors text-decoration-none flex items-center gap-1.5"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-[var(--orange)]" />
+                  <span>Sign In</span>
+                </Link>
+                <Link
+                  to="/signup"
+                  className="btn-primary py-1.5 px-3.5 text-xs font-bold rounded-xl shadow-sm hover:scale-[1.02] transition-transform text-decoration-none whitespace-nowrap"
+                >
+                  <span>Sign Up</span>
+                </Link>
+              </div>
+            ) : (
+              <div className="hidden lg:relative lg:block" ref={userDropdownRef}>
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--orange)] text-xs font-bold text-[var(--text-primary)] transition-all cursor-pointer shadow-sm"
+                  aria-expanded={userDropdownOpen}
+                >
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[var(--orange)] to-amber-500 text-white flex items-center justify-center font-black text-[11px] shadow-sm shrink-0">
+                    {normalUser?.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className="max-w-[110px] truncate">{normalUser?.fullName?.split(' ')[0] || 'My Account'}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-200 ${
+                      userDropdownOpen ? 'rotate-180 text-[var(--orange)]' : ''
+                    }`}
+                  />
+                </button>
+
+                {userDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-2xl py-2 z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-1">
+                    <div className="px-4 py-2.5 border-b border-[var(--border-color)]/60">
+                      <p className="text-xs font-extrabold text-[var(--text-primary)] truncate">
+                        {normalUser?.fullName || 'Devotee Account'}
+                      </p>
+                      <p className="text-[11px] text-[var(--text-muted)] font-medium truncate">
+                        +91 {normalUser?.phone}
+                      </p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] transition-colors text-decoration-none"
+                      >
+                        <User className="w-4 h-4 text-[var(--orange)]" />
+                        <span>My Profile</span>
+                      </Link>
+
+                      <Link
+                        to="/my-bookings"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] transition-colors text-decoration-none"
+                      >
+                        <Calendar className="w-4 h-4 text-[var(--orange)]" />
+                        <span>My Seva Bookings</span>
+                      </Link>
+
+                      <Link
+                        to="/my-activity"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--orange)] transition-colors text-decoration-none"
+                      >
+                        <Award className="w-4 h-4 text-[var(--orange)]" />
+                        <span>My Activity & Passes</span>
+                      </Link>
+
+                      {normalUser?.role === 'admin' && (
+                        <Link
+                          to="/admin/dashboard"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--bg-tertiary)] transition-colors text-decoration-none"
+                        >
+                          <Shield className="w-4 h-4" />
+                          <span>Admin Control Panel</span>
+                        </Link>
+                      )}
+                    </div>
+
+                    <div className="pt-1 border-t border-[var(--border-color)]/60">
+                      <button
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          logoutUser();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 transition-colors text-left cursor-pointer"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Mobile Menu Toggle Button */}
+            <div className="flex lg:hidden items-center">
+              <button
+                onClick={() => {
+                  if (!mobileMenuOpen) {
+                    if (isAnyTempleActive) {
+                      setMobileTemplesOpen(true);
+                    }
+                    if (isAboutActive) {
+                      setMobileAboutOpen(true);
+                    }
                   }
-                  if (isAboutActive) {
-                    setMobileAboutOpen(true);
-                  }
-                }
-                setMobileMenuOpen(!mobileMenuOpen);
-              }}
-              className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none cursor-pointer"
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+                  setMobileMenuOpen(!mobileMenuOpen);
+                }}
+                className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none cursor-pointer"
+                aria-label="Toggle Navigation Menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -478,6 +597,83 @@ export const Navbar = () => {
             })}
           </nav>
 
+          {/* Mobile Auth Drawer Section */}
+          <div className="pt-3 border-t border-[var(--border-color)]">
+            {!isUserAuthenticated ? (
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-xs font-bold text-[var(--text-primary)] text-decoration-none"
+                >
+                  <LogIn className="w-4 h-4 text-[var(--orange)]" />
+                  <span>Sign In</span>
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="btn-primary flex items-center justify-center py-2.5 px-3 rounded-xl text-xs font-bold text-decoration-none"
+                >
+                  <span>Sign Up</span>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)]">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[var(--orange)] to-amber-500 text-white flex items-center justify-center font-black text-sm shrink-0">
+                    {normalUser?.fullName ? normalUser.fullName.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-extrabold text-[var(--text-primary)] truncate">
+                      {normalUser?.fullName || 'Devotee Account'}
+                    </p>
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
+                      +91 {normalUser?.phone}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-center text-xs font-bold text-[var(--text-primary)] text-decoration-none"
+                  >
+                    <User className="w-3.5 h-3.5 text-[var(--orange)]" />
+                    <span>My Profile</span>
+                  </Link>
+                  <Link
+                    to="/my-bookings"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-center text-xs font-bold text-[var(--text-primary)] text-decoration-none"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-[var(--orange)]" />
+                    <span>Seva Bookings</span>
+                  </Link>
+                </div>
+
+                <Link
+                  to="/my-activity"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-center text-xs font-bold text-[var(--text-primary)] text-decoration-none"
+                >
+                  <Award className="w-3.5 h-3.5 text-[var(--orange)]" />
+                  <span>My Activity & Passes</span>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logoutUser();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-500/10 text-red-500 font-bold text-xs"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </header>

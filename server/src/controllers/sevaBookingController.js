@@ -1,4 +1,5 @@
 import SevaBooking from '../models/SevaBooking.js';
+import User from '../models/User.js';
 
 // Sanitize 10-digit Indian phone
 const sanitizePhone = (rawPhone) => {
@@ -115,6 +116,15 @@ export const submitSevaBooking = async (req, res) => {
     const prefix = bookingType === 'DEVOTEE_CONTRIBUTION' ? 'CMS' : (templeName?.includes('Sanjeevaraya') ? 'CST' : 'SMT');
     const finalBookingId = (bookingId || refId || generateFallbackRefId(prefix)).toUpperCase().trim();
 
+    // Link to registered user if authenticated or phone matches account
+    let linkedUserId = req.user?._id || (req.body.userId ? req.body.userId : null);
+    if (!linkedUserId && cleanPhone) {
+      try {
+        const matchedUser = await User.findOne({ phone: cleanPhone });
+        if (matchedUser) linkedUserId = matchedUser._id;
+      } catch (_) {}
+    }
+
     const booking = new SevaBooking({
       bookingId: finalBookingId,
       bookingType: bookingType === 'DEVOTEE_CONTRIBUTION' ? 'DEVOTEE_CONTRIBUTION' : 'SEVA_BOOKING',
@@ -134,7 +144,7 @@ export const submitSevaBooking = async (req, res) => {
       utrId: finalUtrId,
       screenshotName: (screenshotName || screenshot || '').trim(),
       status: 'Payment Proof Submitted (Verification Pending)',
-      userId: req.user?._id || null,
+      userId: linkedUserId,
     });
 
     await booking.save();

@@ -25,6 +25,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { sevaBookingService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { AuthModal } from './auth/AuthModal';
 import './TempleSevaSection.css';
 
 // Supabase Configuration from existing temple app
@@ -294,12 +296,13 @@ const NAKSHATRAS = [
 // Unified Seva Booking Modal (Exact Image 1 Theme)
 // ==========================================
 export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
+  const { normalUser } = useAuth();
   const [step, setStep] = useState('form'); // 'form' | 'review' | 'proof' | 'confirmed'
   const [selectedOption, setSelectedOption] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    phoneNumber: '',
-    email: '',
+    name: normalUser?.fullName || '',
+    phoneNumber: normalUser?.phone || '',
+    email: normalUser?.email || '',
     dob: '',
     gotram: '',
     nakshatra: '',
@@ -313,6 +316,18 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
   const [errors, setErrors] = useState({});
   const [bookingReceipt, setBookingReceipt] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Auto-populate / sync with authenticated devotee profile
+  useEffect(() => {
+    if (normalUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || normalUser.fullName || '',
+        phoneNumber: prev.phoneNumber || normalUser.phone || '',
+        email: prev.email || normalUser.email || '',
+      }));
+    }
+  }, [normalUser]);
 
   // Initialize selected option
   useEffect(() => {
@@ -485,6 +500,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
       screenshotName: formData.screenshot,
       createdAt: new Date().toISOString(),
       status: 'Payment Proof Submitted (Verification Pending)',
+      userId: normalUser?._id || undefined,
     };
 
     try {
@@ -1748,13 +1764,35 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
 // Devotee Bookings Drawer / Modal
 // ==========================================
 export function MyBookingsModal({ open, onClose }) {
+  const { isUserAuthenticated } = useAuth();
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      setBookings(getStoredBookings());
+    if (!open) return;
+    const local = getStoredBookings();
+    setBookings(local);
+
+    if (isUserAuthenticated) {
+      setLoading(true);
+      sevaBookingService
+        .getMyBookings()
+        .then((res) => {
+          if (res.data?.data && Array.isArray(res.data.data)) {
+            const serverBookings = res.data.data;
+            const combinedMap = new Map();
+            serverBookings.forEach((b) => combinedMap.set(b.bookingId || b.refId, b));
+            local.forEach((b) => {
+              const id = b.bookingId || b.refId;
+              if (id && !combinedMap.has(id)) combinedMap.set(id, b);
+            });
+            setBookings(Array.from(combinedMap.values()));
+          }
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
     }
-  }, [open]);
+  }, [open, isUserAuthenticated]);
 
   if (!open) return null;
 
@@ -1930,7 +1968,10 @@ export function MyBookingsModal({ open, onClose }) {
 // Main Exported Component: The Hours of Devotion & Seva
 // ==========================================
 export const TempleSevaSection = () => {
+  const { isUserAuthenticated } = useAuth();
   const [activeService, setActiveService] = useState(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [pendingService, setPendingService] = useState(null);
   const [bookingsCount, setBookingsCount] = useState(0);
   const [myBookingsOpen, setMyBookingsOpen] = useState(false);
 
@@ -1941,6 +1982,15 @@ export const TempleSevaSection = () => {
   useEffect(() => {
     refreshCount();
   }, []);
+
+  const handleBookClick = (p) => {
+    if (!isUserAuthenticated) {
+      setPendingService(p);
+      setAuthModalOpen(true);
+    } else {
+      setActiveService(p);
+    }
+  };
 
   return (
     <div className="temple-seva-wrapper">
@@ -2012,7 +2062,7 @@ export const TempleSevaSection = () => {
                   {/* Book Now Action */}
                   <button
                     className="seva-btn"
-                    onClick={() => setActiveService(p)}
+                    onClick={() => handleBookClick(p)}
                     aria-label={`Book ${p.name.replace('|', ' ')}`}
                   >
                     Book Now
@@ -2023,6 +2073,24 @@ export const TempleSevaSection = () => {
           </div>
         </div>
       </section>
+
+      {/* Devotee Authentication Gate Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => {
+          setAuthModalOpen(false);
+          setPendingService(null);
+        }}
+        onSuccess={(user) => {
+          setAuthModalOpen(false);
+          if (pendingService) {
+            setActiveService(pendingService);
+            setPendingService(null);
+          }
+        }}
+        title="Devotee Sign In Required"
+        subtitle="Please sign in or create an account to book your sacred seva and track your blessings."
+      />
 
       {/* Unified Booking Modal */}
       {activeService && (

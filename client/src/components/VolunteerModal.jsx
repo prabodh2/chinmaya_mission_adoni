@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { volunteerService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const INTEREST_SUGGESTIONS = [
   'Temple Seva',
@@ -25,13 +26,26 @@ const INTEREST_SUGGESTIONS = [
 ];
 
 export const VolunteerModal = ({ isOpen, onClose }) => {
+  const { normalUser } = useAuth();
   const [formData, setFormData] = useState({
-    fullName: '',
+    fullName: normalUser?.fullName || '',
     dob: '',
-    phone: '',
-    email: '',
+    phone: normalUser?.phone || '',
+    email: normalUser?.email || '',
     interest: '',
   });
+
+  // Sync devotee info when normalUser becomes available
+  React.useEffect(() => {
+    if (normalUser) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || normalUser.fullName || '',
+        phone: prev.phone || normalUser.phone || '',
+        email: prev.email || normalUser.email || '',
+      }));
+    }
+  }, [normalUser]);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

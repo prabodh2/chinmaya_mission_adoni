@@ -2,6 +2,8 @@ import Registration from '../models/Registration.js';
 import CommunityService from '../models/CommunityService.js';
 import ContactMessage from '../models/ContactMessage.js';
 import EventConfig from '../models/EventConfig.js';
+import SevaBooking from '../models/SevaBooking.js';
+import Volunteer from '../models/Volunteer.js';
 
 /**
  * Get unified user activity timeline and statistics
@@ -11,23 +13,38 @@ export const getUserActivities = async (req, res) => {
   try {
     const userId = req.user._id;
     const userPhone = req.user.phone;
+    const userEmail = req.user.email;
 
     // 1. Fetch Event & Marathon Registrations
     const registrations = await Registration.find({
       $or: [{ userId }, { contactNumber: userPhone }],
     }).sort({ createdAt: -1 });
 
-    // 2. Fetch User's Submitted Community Services
+    // 2. Fetch User's Temple Seva Bookings & Devotee Contributions
+    const sevaBookings = await SevaBooking.find({
+      $or: [{ userId }, { phone: userPhone }],
+    }).sort({ createdAt: -1 });
+
+    // 3. Fetch User's Volunteer Applications
+    const volunteerQueries = [{ phone: userPhone }];
+    if (userEmail) volunteerQueries.push({ email: userEmail });
+    const volunteerApps = await Volunteer.find({
+      $or: volunteerQueries,
+    }).sort({ createdAt: -1 });
+
+    // 4. Fetch User's Submitted Community Services
     const communityServices = await CommunityService.find({
       userId,
     }).sort({ createdAt: -1 });
 
-    // 3. Fetch User's Connection & Contact Inquiries
+    // 5. Fetch User's Connection & Contact Inquiries
+    const contactQueries = [{ userId }, { phone: userPhone }];
+    if (userEmail) contactQueries.push({ email: userEmail });
     const contactMessages = await ContactMessage.find({
-      $or: [{ userId }, { phone: userPhone }],
+      $or: contactQueries,
     }).sort({ createdAt: -1 });
 
-    // 4. Fetch Event Config for display metadata
+    // 6. Fetch Event Config for display metadata
     const eventConfig = await EventConfig.findOne().select(
       'programName slogan venue location eventDate eventTime registrationOpen'
     );
@@ -52,6 +69,38 @@ export const getUserActivities = async (req, res) => {
         },
         registrationRecord: r,
       })),
+      ...sevaBookings.map((b) => ({
+        id: b._id,
+        activityType: 'SEVA_BOOKING',
+        title: `${b.bookingType === 'DEVOTEE_CONTRIBUTION' ? 'Contribution' : 'Seva Booking'} — ${b.sevaName}`,
+        referenceNumber: b.bookingId,
+        date: b.createdAt,
+        status: b.status,
+        badgeText: b.status,
+        details: {
+          templeName: b.templeName,
+          sevaName: b.sevaName,
+          amount: b.amount,
+          devoteeName: b.devoteeName,
+          utrId: b.utrId,
+          date: b.date,
+        },
+        bookingRecord: b,
+      })),
+      ...volunteerApps.map((v) => ({
+        id: v._id,
+        activityType: 'VOLUNTEER_APPLICATION',
+        title: `Volunteer Seva Application — ${v.fullName}`,
+        referenceNumber: `VOL-${v._id.toString().slice(-6).toUpperCase()}`,
+        date: v.createdAt,
+        status: v.status,
+        badgeText: v.status,
+        details: {
+          fullName: v.fullName,
+          phone: v.phone,
+          areasOfService: v.areasOfService || [],
+        },
+      })),
       ...communityServices.map((s) => ({
         id: s._id,
         activityType: 'COMMUNITY_SERVICE',
@@ -72,13 +121,14 @@ export const getUserActivities = async (req, res) => {
       ...contactMessages.map((c) => ({
         id: c._id,
         activityType: 'CONNECTION_REQUEST',
-        title: `Inquiry: ${c.category || 'General Message'}`,
+        title: `Inquiry: ${c.category || c.subject || 'General Message'}`,
         referenceNumber: `INQ-${c._id.toString().slice(-6).toUpperCase()}`,
         date: c.createdAt,
         status: c.status,
         badgeText: c.status === 'NEW' ? 'Submitted' : c.status === 'READ' ? 'Under Review' : 'Responded',
         details: {
           category: c.category,
+          subject: c.subject,
           message: c.message,
         },
       })),
@@ -90,11 +140,15 @@ export const getUserActivities = async (req, res) => {
         summary: {
           totalRegistrations: registrations.length,
           confirmedPasses: registrations.filter((r) => r.status === 'CONFIRMED').length,
+          totalSevaBookings: sevaBookings.length,
+          volunteerApplications: volunteerApps.length,
           servicesOffered: communityServices.length,
           connectionInquiries: contactMessages.length,
         },
         activities,
         registrations,
+        sevaBookings,
+        volunteerApps,
         communityServices,
         contactMessages,
         eventConfig,
@@ -106,6 +160,25 @@ export const getUserActivities = async (req, res) => {
       success: false,
       message: err.message || 'Failed to fetch user activities',
     });
+  }
+};
+
+/**
+ * Get user's seva bookings only
+ * GET /api/users/seva-bookings
+ */
+export const getUserSevaBookings = async (req, res) => {
+  try {
+    const bookings = await SevaBooking.find({
+      $or: [{ userId: req.user._id }, { phone: req.user.phone }],
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: bookings,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 

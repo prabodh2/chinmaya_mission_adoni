@@ -19,7 +19,7 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const redirectUrl = searchParams.get('redirect') || '/my-activity';
+  const redirectUrl = searchParams.get('redirect') || '/profile';
 
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');

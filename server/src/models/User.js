@@ -11,22 +11,21 @@ const userSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      index: { unique: true, sparse: true },
+    },
     age: {
       type: Number,
-      required: true,
       min: 5,
       max: 120,
     },
     profession: {
       type: String,
-      required: true,
       trim: true,
       default: '',
-    },
-    email: {
-      type: String,
-      lowercase: true,
-      trim: true,
     },
     password: { type: String, required: true },
     role: {

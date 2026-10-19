@@ -28,7 +28,7 @@ const normalizePhone = (rawPhone) => {
  */
 export const signupUser = async (req, res) => {
   try {
-    const { fullName, age, profession, phone, password, confirmPassword } = req.body;
+    const { fullName, email, phone, password, confirmPassword, age, profession } = req.body;
 
     // 1. Validate required fields
     if (!fullName || !fullName.trim()) {
@@ -37,6 +37,19 @@ export const signupUser = async (req, res) => {
         message: 'Full name is required',
         errorCode: 'VALIDATION_ERROR',
       });
+    }
+
+    let cleanEmail = null;
+    if (email && typeof email === 'string' && email.trim()) {
+      cleanEmail = email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(cleanEmail)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please provide a valid email address',
+          errorCode: 'INVALID_EMAIL',
+        });
+      }
     }
 
     const cleanPhone = normalizePhone(phone);
@@ -48,21 +61,16 @@ export const signupUser = async (req, res) => {
       });
     }
 
-    const parsedAge = parseInt(age, 10);
-    if (isNaN(parsedAge) || parsedAge < 5 || parsedAge > 120) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please enter a valid age between 5 and 120 years',
-        errorCode: 'INVALID_AGE',
-      });
-    }
-
-    if (!profession || !profession.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Profession / Occupation is required',
-        errorCode: 'VALIDATION_ERROR',
-      });
+    let parsedAge = undefined;
+    if (age !== undefined && age !== null && age !== '') {
+      parsedAge = parseInt(age, 10);
+      if (isNaN(parsedAge) || parsedAge < 5 || parsedAge > 120) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please enter a valid age between 5 and 120 years',
+          errorCode: 'INVALID_AGE',
+        });
+      }
     }
 
     if (!password || password.length < 6) {
@@ -73,7 +81,7 @@ export const signupUser = async (req, res) => {
       });
     }
 
-    if (password !== confirmPassword) {
+    if (confirmPassword && password !== confirmPassword) {
       return res.status(400).json({
         success: false,
         message: 'Passwords do not match',
@@ -82,8 +90,8 @@ export const signupUser = async (req, res) => {
     }
 
     // 2. Check for duplicate account with normalized phone number
-    const existingUser = await User.findOne({ phone: cleanPhone });
-    if (existingUser) {
+    const existingPhone = await User.findOne({ phone: cleanPhone });
+    if (existingPhone) {
       return res.status(409).json({
         success: false,
         message: 'An account with this phone number already exists. Please log in instead.',
@@ -91,32 +99,56 @@ export const signupUser = async (req, res) => {
       });
     }
 
-    // 3. Create user
-    const newUser = new User({
+    // 3. Check for duplicate account with normalized email address
+    if (cleanEmail) {
+      const existingEmail = await User.findOne({ email: cleanEmail });
+      if (existingEmail) {
+        return res.status(409).json({
+          success: false,
+          message: 'An account with this email address already exists. Please log in instead.',
+          errorCode: 'EMAIL_ALREADY_REGISTERED',
+        });
+      }
+    }
+
+    // 4. Create user
+    const userDoc = {
       fullName: fullName.trim(),
       phone: cleanPhone,
-      age: parsedAge,
-      profession: profession.trim(),
       password,
       role: 'user',
-    });
+      profession: (profession || '').trim(),
+    };
+    if (cleanEmail) {
+      userDoc.email = cleanEmail;
+    }
+    if (parsedAge !== undefined) {
+      userDoc.age = parsedAge;
+    }
 
+    const newUser = new User(userDoc);
     await newUser.save();
 
-    // 4. Generate JWT Token
+    // 5. Generate JWT Token
     const token = generateToken(newUser._id, newUser.role);
+    const userPayload = {
+      _id: newUser._id,
+      fullName: newUser.fullName,
+      email: newUser.email,
+      phone: newUser.phone,
+      age: newUser.age,
+      profession: newUser.profession,
+      role: newUser.role,
+      createdAt: newUser.createdAt,
+    };
 
     return res.status(201).json({
       success: true,
       message: 'Account created successfully! Welcome to Chinmaya Mission, Adoni.',
+      token,
+      user: userPayload,
       data: {
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        profession: newUser.profession,
-        role: newUser.role,
-        createdAt: newUser.createdAt,
+        ...userPayload,
         token,
       },
     });
@@ -181,18 +213,24 @@ export const loginUser = async (req, res) => {
 
     const token = generateToken(user._id, user.role);
 
+    const userPayload = {
+      _id: user._id,
+      fullName: user.fullName,
+      phone: user.phone,
+      age: user.age,
+      profession: user.profession,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+    };
+
     return res.json({
       success: true,
       message: 'Logged in successfully',
+      token,
+      user: userPayload,
       data: {
-        _id: user._id,
-        fullName: user.fullName,
-        phone: user.phone,
-        age: user.age,
-        profession: user.profession,
-        email: user.email,
-        role: user.role,
-        createdAt: user.createdAt,
+        ...userPayload,
         token,
       },
     });
@@ -306,6 +344,7 @@ export const getProfile = async (req, res) => {
     }
     res.json({
       success: true,
+      user,
       data: user,
     });
   } catch (err) {
@@ -319,7 +358,7 @@ export const getProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   try {
-    const { fullName, age, profession, email } = req.body;
+    const { fullName, email, phone, age, profession } = req.body;
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({
@@ -328,33 +367,92 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    if (fullName && fullName.trim()) user.fullName = fullName.trim();
-    if (age) {
+    if (fullName && fullName.trim()) {
+      user.fullName = fullName.trim();
+    }
+
+    if (email !== undefined && email !== null) {
+      const cleanEmail = email.toLowerCase().trim();
+      if (cleanEmail) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(cleanEmail)) {
+          return res.status(400).json({
+            success: false,
+            message: 'Please provide a valid email address',
+            errorCode: 'INVALID_EMAIL',
+          });
+        }
+
+        const duplicateEmail = await User.findOne({
+          email: cleanEmail,
+          _id: { $ne: user._id },
+        });
+        if (duplicateEmail) {
+          return res.status(409).json({
+            success: false,
+            message: 'This email address is already in use by another account.',
+            errorCode: 'EMAIL_ALREADY_IN_USE',
+          });
+        }
+        user.email = cleanEmail;
+      }
+    }
+
+    if (phone !== undefined && phone !== null) {
+      const cleanPhone = normalizePhone(phone);
+      if (cleanPhone) {
+        if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
+          return res.status(400).json({
+            success: false,
+            message: 'Please provide a valid 10-digit Indian mobile number (starting with 6-9)',
+            errorCode: 'INVALID_PHONE',
+          });
+        }
+
+        const duplicatePhone = await User.findOne({
+          phone: cleanPhone,
+          _id: { $ne: user._id },
+        });
+        if (duplicatePhone) {
+          return res.status(409).json({
+            success: false,
+            message: 'This phone number is already in use by another account.',
+            errorCode: 'PHONE_ALREADY_IN_USE',
+          });
+        }
+        user.phone = cleanPhone;
+      }
+    }
+
+    if (age !== undefined) {
       const parsedAge = parseInt(age, 10);
       if (!isNaN(parsedAge) && parsedAge >= 5 && parsedAge <= 120) {
         user.age = parsedAge;
       }
     }
-    if (profession !== undefined) user.profession = profession.trim();
-    if (email !== undefined) {
-      user.email = email ? email.toLowerCase().trim() : null;
+
+    if (profession !== undefined) {
+      user.profession = profession.trim();
     }
 
     await user.save();
 
+    const userPayload = {
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      age: user.age,
+      profession: user.profession,
+      role: user.role,
+      createdAt: user.createdAt,
+    };
+
     res.json({
       success: true,
       message: 'Profile updated successfully',
-      data: {
-        _id: user._id,
-        fullName: user.fullName,
-        phone: user.phone,
-        age: user.age,
-        profession: user.profession,
-        email: user.email,
-        role: user.role,
-        createdAt: user.createdAt,
-      },
+      user: userPayload,
+      data: userPayload,
     });
   } catch (err) {
     res.status(500).json({
@@ -367,6 +465,7 @@ export const updateProfile = async (req, res) => {
 /**
  * Change Password
  * PUT /api/auth/change-password
+ * POST /api/auth/change-password
  */
 export const changePassword = async (req, res) => {
   try {
@@ -384,6 +483,14 @@ export const changePassword = async (req, res) => {
         success: false,
         message: 'New password must be at least 6 characters long',
         errorCode: 'WEAK_PASSWORD',
+      });
+    }
+
+    if (newPassword === currentPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be different from current password',
+        errorCode: 'PASSWORD_SAME_AS_CURRENT',
       });
     }
 

@@ -124,13 +124,76 @@ export function App() {
               <Route path="/image" element={<GalleryPage />} />
               <Route path="/sacred-gallery" element={<GalleryPage />} />
               
+              {/* Authentication & User Account Routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-account"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-bookings"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage initialTab="bookings" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-seva-bookings"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage initialTab="bookings" />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-activity"
+                element={
+                  <ProtectedRoute>
+                    <MyActivityPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-registrations"
+                element={
+                  <ProtectedRoute>
+                    <MyActivityPage />
+                  </ProtectedRoute>
+                }
+              />
+
               {/* Marathon portal redirects (marathon is hosted separately) */}
               <Route path="/register" element={<MarathonPortalRedirect path="/register" />} />
-              <Route path="/login" element={<MarathonPortalRedirect path="/login" />} />
-              <Route path="/signup" element={<MarathonPortalRedirect path="/signup" />} />
-              <Route path="/profile" element={<MarathonPortalRedirect path="/profile" />} />
-              <Route path="/my-activity" element={<MarathonPortalRedirect path="/my-activity" />} />
-              <Route path="/my-registrations" element={<MarathonPortalRedirect path="/my-activity" />} />
               <Route path="/your-thoughts" element={<MarathonPortalRedirect path="/your-thoughts" />} />
               <Route path="/story-board" element={<MarathonPortalRedirect path="/your-thoughts" />} />
               <Route path="/storyboard" element={<MarathonPortalRedirect path="/your-thoughts" />} />

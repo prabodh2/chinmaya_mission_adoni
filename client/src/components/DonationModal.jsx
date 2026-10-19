@@ -24,6 +24,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { sevaBookingService } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const AMOUNT_PRESETS = [501, 1001, 2501, 5001, 11000, 25000];
 
@@ -33,12 +34,13 @@ export const DonationModal = ({
   modalTitle = 'Explore Contribution Options',
   modalSubtitle = 'Pooja Sankalpa, Devotee Details & Contribution Record',
 }) => {
+  const { normalUser } = useAuth();
   const [step, setStep] = useState('form'); // 'form' | 'review' | 'proof' | 'confirmed'
   const [formData, setFormData] = useState({
     amount: '',
-    name: '',
-    phoneNumber: '',
-    email: '',
+    name: normalUser?.fullName || '',
+    phoneNumber: normalUser?.phone || '',
+    email: normalUser?.email || '',
     dob: '',
     address: '',
     // Step 3 verification proof fields
@@ -47,6 +49,18 @@ export const DonationModal = ({
     screenshotPreview: '',
     screenshotSize: '',
   });
+
+  // Sync devotee info when normalUser becomes available
+  useEffect(() => {
+    if (normalUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || normalUser.fullName || '',
+        phoneNumber: prev.phoneNumber || normalUser.phone || '',
+        email: prev.email || normalUser.email || '',
+      }));
+    }
+  }, [normalUser]);
 
   const [errors, setErrors] = useState({});
   const [submittedReceipt, setSubmittedReceipt] = useState(null);
@@ -221,6 +235,7 @@ export const DonationModal = ({
       screenshotName: formData.screenshot,
       submittedAt: new Date().toISOString(),
       status: 'Payment Proof Submitted (Verification Pending)',
+      userId: normalUser?._id || undefined,
     };
 
     try {

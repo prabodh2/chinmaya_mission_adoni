@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { webContentService } from '../services/api';
 import { UnifiedBookingModal, MyBookingsModal } from '../components/TempleSevaSection';
+import { useAuth } from '../context/AuthContext';
+import { AuthModal } from '../components/auth/AuthModal';
 import {
   Landmark,
   Flame,
@@ -13,7 +15,10 @@ import {
 } from 'lucide-react';
 
 export const ChinmayaSanjeevarayaTemplePage = () => {
+  const { isUserAuthenticated } = useAuth();
   const [selectedPujaService, setSelectedPujaService] = useState(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [pendingPuja, setPendingPuja] = useState(null);
   const [myBookingsOpen, setMyBookingsOpen] = useState(false);
   const [bookingsCount, setBookingsCount] = useState(() => {
     try {
@@ -33,7 +38,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
 
   const handleBookPuja = (puja) => {
     const numericPrice = parseInt(puja.price.replace(/[^\d]/g, ''), 10) || 150;
-    setSelectedPujaService({
+    const serviceObj = {
       name: puja.title,
       desc: puja.desc,
       descriptionText: puja.desc,
@@ -41,7 +46,14 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       pujaType: puja.title.toLowerCase().replace(/[^a-z0-9]/g, '_'),
       refIdPrefix: 'CST',
       templeName: 'Chinmaya Sanjeevaraya Temple',
-    });
+    };
+
+    if (!isUserAuthenticated) {
+      setPendingPuja(serviceObj);
+      setAuthModalOpen(true);
+    } else {
+      setSelectedPujaService(serviceObj);
+    }
   };
 
   const [pageData, setPageData] = useState(() => {
@@ -428,6 +440,24 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Devotee Authentication Gate Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => {
+          setAuthModalOpen(false);
+          setPendingPuja(null);
+        }}
+        onSuccess={(user) => {
+          setAuthModalOpen(false);
+          if (pendingPuja) {
+            setSelectedPujaService(pendingPuja);
+            setPendingPuja(null);
+          }
+        }}
+        title="Devotee Sign In Required"
+        subtitle="Please sign in or create an account to book your sacred seva and receive divine blessings."
+      />
 
       {/* Unified Seva Booking Modal */}
       {selectedPujaService && (
