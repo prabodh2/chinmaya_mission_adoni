@@ -94,7 +94,7 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Production Health & Load Balancer Readiness Check
-app.get('/api/health', (req, res) => {
+const healthHandler = (req, res) => {
   const dbStatus = isDBConnected();
   const statusCode = dbStatus ? 200 : 503;
 
@@ -107,26 +107,35 @@ app.get('/api/health', (req, res) => {
     memoryUsageMB: Math.round(process.memoryUsage().rss / 1024 / 1024),
     timestamp: new Date().toISOString(),
   });
-});
+};
 
-// Mount API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/community-services', communityServiceRoutes);
-app.use('/api/registrations', registrationRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/banners', bannerRoutes);
-app.use('/api/activities', activityRoutes);
-app.use('/api/faqs', faqRoutes);
-app.use('/api/content', contentRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/homepage', homepageRoutes);
-app.use('/api/footer', footerRoutes);
-app.use('/api/media', mediaRoutes);
-app.use('/api/thoughts', thoughtRoutes);
-app.use('/api/admin/content', webContentRoutes);
-app.use('/api/volunteers', volunteerRoutes);
+app.get(['/api/health', '/health', '/'], healthHandler);
+
+// Mount API Routes (supports both /api/* and root /* for seamless deployment compatibility)
+const routes = [
+  { path: 'auth', router: authRoutes },
+  { path: 'users', router: userRoutes },
+  { path: 'community-services', router: communityServiceRoutes },
+  { path: 'registrations', router: registrationRoutes },
+  { path: 'events', router: eventRoutes },
+  { path: 'banners', router: bannerRoutes },
+  { path: 'activities', router: activityRoutes },
+  { path: 'faqs', router: faqRoutes },
+  { path: 'content', router: contentRoutes },
+  { path: 'admin', router: adminRoutes },
+  { path: 'contact', router: contactRoutes },
+  { path: 'homepage', router: homepageRoutes },
+  { path: 'footer', router: footerRoutes },
+  { path: 'media', router: mediaRoutes },
+  { path: 'thoughts', router: thoughtRoutes },
+  { path: 'admin/content', router: webContentRoutes },
+  { path: 'volunteers', router: volunteerRoutes },
+];
+
+routes.forEach(({ path, router }) => {
+  app.use(`/api/${path}`, router);
+  app.use(`/${path}`, router);
+});
 
 
 // Global 404 Route

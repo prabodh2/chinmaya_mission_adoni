@@ -1,9 +1,18 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  import.meta.env.VITE_API_BASE_URL ||
-  'http://localhost:5000/api';
+const normalizeApiBaseUrl = (rawUrl) => {
+  let url = (rawUrl || '').trim();
+  if (!url) return 'http://localhost:5000/api';
+  url = url.replace(/\/+$/, '');
+  if (!url.endsWith('/api')) {
+    url = `${url}/api`;
+  }
+  return url;
+};
+
+const API_BASE_URL = normalizeApiBaseUrl(
+  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL
+);
 
 export const ADMIN_AUTH_KEYS = {
   TOKEN: 'cma_admin_auth_token',
