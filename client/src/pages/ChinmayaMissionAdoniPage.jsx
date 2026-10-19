@@ -608,11 +608,6 @@ export const ChinmayaMissionAdoniPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Title & Intro */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30 shadow-sm">
-              <Flame className="w-4 h-4 text-[var(--orange)] animate-pulse" />
-              <span>CHINMAYA MISSION ADONI • EST. 2001</span>
-            </div>
-
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
               {(() => {
                 const rawTitle = (data.hero?.title || 'CHINMAYA MISSION ADONI')
@@ -636,9 +631,6 @@ export const ChinmayaMissionAdoniPage = () => {
                 <span>EXPLORE OUR MILESTONES</span>
                 <ChevronRight className="w-4 h-4" />
               </a>
-              <Link to="/activities" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
-                <span>OUR ACTIVITIES</span>
-              </Link>
             </div>
           </div>
 
