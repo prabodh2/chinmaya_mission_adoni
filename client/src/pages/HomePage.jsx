@@ -161,7 +161,10 @@ export function HomePage() {
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
 
   const aboutEyebrow = f.about_purpose?.eyebrow || 'OUR PURPOSE';
-  const aboutHeading = (f.about_purpose?.heading || 'About Chinmaya Mission').replace(/,\s*Adoni/gi, '').trim();
+  let aboutHeading = f.about_purpose?.heading || 'About Chinmaya Mission, Adoni';
+  if (!/adoni/i.test(aboutHeading)) {
+    aboutHeading = 'About Chinmaya Mission, Adoni';
+  }
   const rawAboutDesc = f.about_purpose?.description || 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy.\n\nWe believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.';
   const aboutDesc = rawAboutDesc
     .replace(/Swami Shyamananda/g, 'Swamini Shyamananda')
