@@ -339,4 +339,13 @@ export const webContentService = {
   getPublicPage: (website, pageSlug) => api.get(`/content/website/${website}/page/${pageSlug}`),
 };
 
+export const sevaBookingService = {
+  submitBooking: (data) => api.post('/seva-bookings', data),
+  getMyBookings: () => api.get('/seva-bookings/my-bookings'),
+  verifyBooking: (refId) => api.get(`/seva-bookings/verify/${refId}`),
+  getAllAdmin: (params) => api.get('/seva-bookings/admin/all', { params }),
+  updateStatus: (id, status) => api.patch(`/seva-bookings/admin/${id}/status`, { status }),
+  deleteBooking: (id) => api.delete(`/seva-bookings/admin/${id}`),
+};
+
 export default api;

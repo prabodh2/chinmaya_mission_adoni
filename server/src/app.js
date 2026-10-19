@@ -19,6 +19,7 @@ import communityServiceRoutes from './routes/communityServiceRoutes.js';
 import thoughtRoutes from './routes/thoughtRoutes.js';
 import webContentRoutes from './routes/webContentRoutes.js';
 import volunteerRoutes from './routes/volunteerRoutes.js';
+import sevaBookingRoutes from './routes/sevaBookingRoutes.js';
 
 const app = express();
 
@@ -130,6 +131,7 @@ const routes = [
   { path: 'thoughts', router: thoughtRoutes },
   { path: 'admin/content', router: webContentRoutes },
   { path: 'volunteers', router: volunteerRoutes },
+  { path: 'seva-bookings', router: sevaBookingRoutes },
 ];
 
 routes.forEach(({ path, router }) => {

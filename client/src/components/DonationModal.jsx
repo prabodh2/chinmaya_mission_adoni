@@ -21,7 +21,9 @@ import {
   Trash2,
   Check,
   Smartphone,
+  AlertTriangle,
 } from 'lucide-react';
+import { sevaBookingService } from '../services/api';
 
 const AMOUNT_PRESETS = [501, 1001, 2501, 5001, 11000, 25000];
 
@@ -187,12 +189,13 @@ export const DonationModal = ({
     }));
   };
 
-  // Final Submission Handler
-  const handleSubmitProof = (e) => {
+  // Final Submission Handler with MongoDB Database Persistence
+  const handleSubmitProof = async (e) => {
     e.preventDefault();
     if (!validateStep3()) return;
 
     setIsSubmitting(true);
+    setStep3Errors((prev) => ({ ...prev, general: '' }));
 
     const refId = `CMS-${Date.now().toString(36).toUpperCase()}-${Math.random()
       .toString(36)
@@ -201,12 +204,19 @@ export const DonationModal = ({
 
     const record = {
       refId,
-      amount: formData.amount,
+      bookingType: 'DEVOTEE_CONTRIBUTION',
+      templeName: 'Chinmaya Mission, Adoni',
+      sevaName: 'Devotee Mission Contribution & Vedic Seva',
+      amount: Number(formData.amount),
       name: formData.name.trim(),
+      devoteeName: formData.name.trim(),
       phoneNumber: formData.phoneNumber.trim(),
+      phone: formData.phoneNumber.trim(),
       email: formData.email.trim(),
       dob: formData.dob,
+      date: formData.dob,
       address: formData.address.trim(),
+      panNumber: (formData.panNumber || '').trim(),
       utrId: formData.utrId.trim(),
       screenshotName: formData.screenshot,
       submittedAt: new Date().toISOString(),
@@ -214,16 +224,33 @@ export const DonationModal = ({
     };
 
     try {
-      const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
-      existing.unshift(record);
-      localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
-    } catch (_) {}
+      // 1. Persist to MongoDB Atlas Database
+      const apiRes = await sevaBookingService.submitBooking(record);
+      const savedDoc = apiRes.data?.data || record;
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmittedReceipt(record);
+      // 2. Persist to localStorage for offline cache
+      try {
+        const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
+        existing.unshift(savedDoc);
+        localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
+      } catch (_) {}
+
+      // 3. Set confirmed receipt and progress step
+      setSubmittedReceipt(savedDoc);
       setStep('confirmed');
-    }, 450);
+    } catch (err) {
+      console.error('Failed to persist donation record to database:', err);
+      const errMsg =
+        err.response?.data?.message ||
+        'Unable to save your contribution record to the database. Please check your network and try again.';
+      setStep3Errors((prev) => ({
+        ...prev,
+        general: errMsg,
+        utrId: errMsg.toLowerCase().includes('utr') ? errMsg : prev.utrId,
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handlePrint = () => {
@@ -1136,6 +1163,13 @@ export const DonationModal = ({
           {/* ========================================================= */}
           {step === 'proof' && (
             <form onSubmit={handleSubmitProof} className="space-y-5">
+              {step3Errors.general && (
+                <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm font-bold flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+                  <span>{step3Errors.general}</span>
+                </div>
+              )}
+
               {/* Info Banner */}
               <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] text-xs sm:text-sm text-[#4A5568] leading-relaxed shadow-sm">
                 <p className="flex items-start gap-2">

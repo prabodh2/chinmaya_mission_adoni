@@ -17,7 +17,14 @@ import {
   QrCode,
   Printer,
   ShieldCheck,
+  UploadCloud,
+  FileCheck,
+  Trash2,
+  Check,
+  Smartphone,
+  AlertTriangle,
 } from 'lucide-react';
+import { sevaBookingService } from '../services/api';
 import './TempleSevaSection.css';
 
 // Supabase Configuration from existing temple app
@@ -287,7 +294,7 @@ const NAKSHATRAS = [
 // Unified Seva Booking Modal (Exact Image 1 Theme)
 // ==========================================
 export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
-  const [step, setStep] = useState('form'); // 'form' | 'review' | 'confirmed'
+  const [step, setStep] = useState('form'); // 'form' | 'review' | 'proof' | 'confirmed'
   const [selectedOption, setSelectedOption] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -297,6 +304,11 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
     gotram: '',
     nakshatra: '',
     address: '',
+    // Payment proof fields
+    utrId: '',
+    screenshot: '',
+    screenshotPreview: '',
+    screenshotSize: '',
   });
   const [errors, setErrors] = useState({});
   const [bookingReceipt, setBookingReceipt] = useState(null);
@@ -374,56 +386,148 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
     window.print();
   };
 
-  // Confirm Seva Booking
-  const handleConfirmBooking = async () => {
+  // "Done / I Have Paid" → go to proof step
+  const handleDonePaymentClick = () => {
+    setStep('proof');
+  };
+
+  // File Upload Handler with FileReader preview
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      setErrors((prev) => ({
+        ...prev,
+        screenshot: 'Please upload an image (PNG, JPG, JPEG) or PDF receipt',
+      }));
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        screenshot: 'File size should be less than 5MB',
+      }));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({
+        ...prev,
+        screenshot: file.name,
+        screenshotPreview: reader.result,
+        screenshotSize: (file.size / 1024).toFixed(1) + ' KB',
+      }));
+      setErrors((prev) => ({ ...prev, screenshot: '' }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveScreenshot = () => {
+    setFormData((prev) => ({
+      ...prev,
+      screenshot: '',
+      screenshotPreview: '',
+      screenshotSize: '',
+    }));
+  };
+
+  // Step 3 (proof) Validation
+  const validateProof = () => {
+    const newErrors = {};
+
+    if (!formData.utrId.trim()) {
+      newErrors.utrId = 'Please enter the UTR ID / UPI Transaction Reference Number';
+    } else if (formData.utrId.trim().length < 6) {
+      newErrors.utrId = 'Please enter a valid transaction reference number';
+    }
+
+    if (!formData.screenshot) {
+      newErrors.screenshot = 'Please upload a screenshot of your payment as transaction proof';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Final submission with proof and MongoDB persistence
+  const handleSubmitProof = async (e) => {
+    e.preventDefault();
+    if (!validateProof()) return;
+
     setIsSubmitting(true);
+    setErrors((prev) => ({ ...prev, general: '' }));
+
     const prefix = service.refIdPrefix || 'SMT';
     const refId = genRefId(prefix);
     const bookingData = {
       refId,
+      bookingType: 'SEVA_BOOKING',
       pujaName: selectedOption ? selectedOption.name : serviceDisplayName,
+      sevaName: selectedOption ? selectedOption.name : serviceDisplayName,
       serviceCategory: serviceDisplayName,
       pujaType: service.pujaType || 'seva',
       templeName: service.templeName || 'Shri Shantamalleshwara Swami Temple',
       amount: currentAmount,
       name: formData.name.trim(),
+      devoteeName: formData.name.trim(),
       gotra: formData.gotram.trim(),
+      gotram: formData.gotram.trim(),
       nakshetra: formData.nakshatra.trim(),
+      nakshatra: formData.nakshatra.trim(),
       phone: formData.phoneNumber.trim(),
       email: formData.email.trim(),
       date: formData.dob || todayStr(),
       address: formData.address.trim(),
+      utrId: formData.utrId.trim(),
+      screenshotName: formData.screenshot,
       createdAt: new Date().toISOString(),
-      status: 'Confirmed (Priest Sankalpa Scheduled)',
+      status: 'Payment Proof Submitted (Verification Pending)',
     };
 
-    // 1. Save to temple_seva_bookings
-    storeBooking(bookingData);
-
-    // 2. Also save to devotee_donations_history for unified records
     try {
-      const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
-      existing.unshift({
-        ...formData,
-        sevaName: bookingData.pujaName,
-        templeName: bookingData.templeName,
-        amount: currentAmount,
-        refId,
-        submittedAt: new Date().toISOString(),
-      });
-      localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
-    } catch (_) {}
+      // 1. Persist to MongoDB Atlas Database
+      const apiRes = await sevaBookingService.submitBooking(bookingData);
+      const savedDoc = apiRes.data?.data || bookingData;
 
-    // 3. Sync to Supabase in background
-    savePujaToSupabase(bookingData).catch((err) => console.warn('Supabase sync:', err));
+      // 2. Save to local storage for offline fast access & unified records
+      storeBooking(savedDoc);
+      try {
+        const existing = JSON.parse(localStorage.getItem('devotee_donations_history') || '[]');
+        existing.unshift({
+          ...formData,
+          sevaName: savedDoc.pujaName || savedDoc.sevaName,
+          templeName: savedDoc.templeName,
+          amount: currentAmount,
+          refId: savedDoc.bookingId || refId,
+          utrId: formData.utrId.trim(),
+          submittedAt: new Date().toISOString(),
+        });
+        localStorage.setItem('devotee_donations_history', JSON.stringify(existing.slice(0, 50)));
+      } catch (_) {}
 
-    // 4. Update UI to Confirmed Step
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setBookingReceipt(bookingData);
+      // 3. Sync to Supabase in background
+      savePujaToSupabase(bookingData).catch((err) => console.warn('Supabase sync:', err));
+
+      // 4. Update UI to Confirmed Step
+      setBookingReceipt(savedDoc);
       setStep('confirmed');
       if (onBookingSuccess) onBookingSuccess();
-    }, 450);
+    } catch (err) {
+      console.error('Failed to persist seva booking:', err);
+      const errMsg =
+        err.response?.data?.message ||
+        'Failed to save booking to the database. Please check your network and try again.';
+      setErrors((prev) => ({
+        ...prev,
+        general: errMsg,
+        utrId: errMsg.toLowerCase().includes('utr') ? errMsg : prev.utrId,
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Dynamic values for single-page print receipt
@@ -867,6 +971,8 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-white tracking-wide">
                   {step === 'review'
                     ? 'Review Details & Contribution'
+                    : step === 'proof'
+                    ? 'Submit Payment Verification'
                     : step === 'confirmed'
                     ? 'Sankalpa Registered'
                     : 'EXPLORE CONTRIBUTION OPTIONS'}
@@ -874,6 +980,8 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80">
                   {step === 'review'
                     ? 'Verify your sacred details before offering seva'
+                    : step === 'proof'
+                    ? 'Enter your UTR ID and upload the payment screenshot'
                     : step === 'confirmed'
                     ? 'May the presiding deity bless you and your family'
                     : 'Pooja Sankalpa, Devotee Details & Contribution Record'}
@@ -896,32 +1004,55 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
             <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-semibold">
               <span className="flex items-center gap-1.5 text-[#E6BF70]">
                 <span className="w-5 h-5 rounded-full bg-[#C89B59] text-[#0C1A30] font-bold flex items-center justify-center text-[11px]">
-                  1
+                  {step === 'review' || step === 'proof' ? '✓' : '1'}
                 </span>
-                <span>Devotee Details</span>
+                <span>Details</span>
               </span>
-              <div className="h-0.5 flex-1 mx-3 bg-white/20">
+              <div className="h-0.5 flex-1 mx-2 bg-white/20">
                 <div
                   className={`h-full bg-[#C89B59] transition-all duration-300 ${
-                    step === 'review' ? 'w-full' : 'w-0'
+                    step === 'review' || step === 'proof' ? 'w-full' : 'w-0'
                   }`}
                 />
               </div>
               <span
                 className={`flex items-center gap-1.5 ${
-                  step === 'review' ? 'text-[#E6BF70]' : 'text-slate-400'
+                  step === 'review' || step === 'proof' ? 'text-[#E6BF70]' : 'text-slate-400'
                 }`}
               >
                 <span
                   className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
-                    step === 'review'
+                    step === 'review' || step === 'proof'
                       ? 'bg-[#C89B59] text-[#0C1A30]'
                       : 'bg-white/20 text-slate-300'
                   }`}
                 >
-                  2
+                  {step === 'proof' ? '✓' : '2'}
                 </span>
                 <span>Review & QR</span>
+              </span>
+              <div className="h-0.5 flex-1 mx-2 bg-white/20">
+                <div
+                  className={`h-full bg-[#C89B59] transition-all duration-300 ${
+                    step === 'proof' ? 'w-full' : 'w-0'
+                  }`}
+                />
+              </div>
+              <span
+                className={`flex items-center gap-1.5 ${
+                  step === 'proof' ? 'text-[#E6BF70]' : 'text-slate-400'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full font-bold flex items-center justify-center text-[11px] ${
+                    step === 'proof'
+                      ? 'bg-[#C89B59] text-[#0C1A30]'
+                      : 'bg-white/20 text-slate-300'
+                  }`}
+                >
+                  3
+                </span>
+                <span>Payment Proof</span>
               </span>
             </div>
           )}
@@ -1323,14 +1454,15 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                     <span>Print</span>
                   </button>
 
+                  {/* "Done / I Have Paid" → go to proof step */}
                   <button
                     type="button"
-                    onClick={handleConfirmBooking}
-                    disabled={isSubmitting}
+                    onClick={handleDonePaymentClick}
                     className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
                   >
                     <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
-                    <span>{isSubmitting ? 'Registering...' : 'Confirm & Finish'}</span>
+                    <span>Done / I Have Paid</span>
+                    <ArrowRight className="w-4 h-4 text-[#0A192F]" />
                   </button>
                 </div>
               </div>
@@ -1338,7 +1470,201 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
           )}
 
           {/* ========================================================= */}
-          {/* STEP 3: CONFIRMED VIEW                                    */}
+          {/* STEP 3: PAYMENT PROOF SUBMISSION FORM                     */}
+          {/* ========================================================= */}
+          {step === 'proof' && (
+            <form onSubmit={handleSubmitProof} className="space-y-5">
+              {errors.general && (
+                <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm font-bold flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+                  <span>{errors.general}</span>
+                </div>
+              )}
+
+              {/* Info Banner */}
+              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] text-xs sm:text-sm text-[#4A5568] leading-relaxed shadow-sm">
+                <p className="flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
+                  <span>
+                    Thank you for your payment! Please submit your <strong>UTR Reference ID</strong>{' '}
+                    and upload the <strong>payment screenshot</strong> below for verification and
+                    formal seva receipt issuance.
+                  </span>
+                </p>
+              </div>
+
+              {/* Pre-filled Devotee Details Summary Card */}
+              <div className="bg-white rounded-2xl border border-[#EAE0CE] p-4 sm:p-5 shadow-sm space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#FAF5EA]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Seva Booking Details
+                  </span>
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                    <Check className="w-3 h-3" /> Details Pre-filled
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs sm:text-sm">
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Amount
+                    </span>
+                    <span className="font-extrabold text-[#B8860B] text-base sm:text-lg">
+                      ₹{Number(currentAmount).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Devotee Name
+                    </span>
+                    <span className="font-bold text-[#0C1A30] truncate block">
+                      {formData.name || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Phone Number
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {formData.phoneNumber || '—'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-slate-400 block text-[11px] font-semibold uppercase">
+                      Seva Offering
+                    </span>
+                    <span className="font-semibold text-slate-800 truncate block">
+                      {selectedOption ? selectedOption.name : serviceDisplayName}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* UTR ID Input */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                  UTR ID / UPI Reference Number <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    name="utrId"
+                    value={formData.utrId}
+                    onChange={handleChange}
+                    placeholder="e.g., 429812345678 (12-digit UTR from PhonePe / UPI receipt)"
+                    maxLength={24}
+                    className={`w-full pl-10 pr-3.5 py-2.5 bg-white rounded-xl border text-sm text-[#0C1A30] font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C89B59] transition-all ${
+                      errors.utrId ? 'border-red-400 bg-red-50/20' : 'border-[#D9CEBA]'
+                    }`}
+                    required
+                  />
+                </div>
+                {errors.utrId ? (
+                  <p className="text-xs text-red-500 font-medium">{errors.utrId}</p>
+                ) : (
+                  <p className="text-[11px] text-slate-500">
+                    Find this 12-digit UTR in your PhonePe / banking transaction details
+                  </p>
+                )}
+              </div>
+
+              {/* Upload Screenshot of Payment */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
+                  Upload Screenshot of Payment <span className="text-red-500">*</span>
+                </label>
+
+                {!formData.screenshot ? (
+                  <label
+                    className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl bg-white hover:bg-slate-50 transition-all cursor-pointer ${
+                      errors.screenshot ? 'border-red-400 bg-red-50/10' : 'border-[#D9CEBA]'
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#FAF5EA] border border-[#C89B59]/30 flex items-center justify-center text-[#B8860B] mb-2">
+                      <UploadCloud className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-[#0C1A30]">
+                      Click to upload payment screenshot
+                    </span>
+                    <span className="text-[11px] text-slate-500 mt-1">
+                      PNG, JPG, JPEG or PDF (Max 5MB)
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*,application/pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                ) : (
+                  <div className="bg-white rounded-2xl border-2 border-[#C89B59]/40 p-4 shadow-sm flex items-center justify-between">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      {formData.screenshotPreview ? (
+                        <img
+                          src={formData.screenshotPreview}
+                          alt="Payment Proof Preview"
+                          className="w-14 h-14 rounded-lg object-cover border border-[#EAE0CE] shrink-0"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
+                          <FileCheck className="w-7 h-7" />
+                        </div>
+                      )}
+                      <div className="truncate">
+                        <span className="text-xs font-bold text-[#0C1A30] block truncate">
+                          {formData.screenshot}
+                        </span>
+                        <span className="text-[11px] text-emerald-600 font-semibold block">
+                          ✓ File ready to upload ({formData.screenshotSize})
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleRemoveScreenshot}
+                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                      title="Remove screenshot"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+
+                {errors.screenshot && (
+                  <p className="text-xs text-red-500 font-medium">{errors.screenshot}</p>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('review')}
+                  className="px-4 py-2.5 rounded-xl border border-[#C89B59] text-[#0C1A30] hover:bg-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back to QR Code</span>
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
+                  <span>{isSubmitting ? 'Submitting...' : 'Submit Payment Proof'}</span>
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* ========================================================= */}
+          {/* STEP 4: CONFIRMED VIEW                                    */}
           {/* ========================================================= */}
           {step === 'confirmed' && (
             <div className="text-center py-6 sm:py-8 space-y-5">
@@ -1348,17 +1674,17 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
 
               <div className="space-y-2 max-w-md mx-auto">
                 <h4 className="text-xl sm:text-2xl font-bold font-spiritual-heading text-[#0C1A30]">
-                  Sankalpa Registered With Gratitude!
+                  Seva Booking &amp; Payment Proof Submitted!
                 </h4>
                 <p className="text-sm text-[#4A5568] leading-relaxed">
                   Hari Om, <strong>{formData.name}</strong>. Thank you for booking{' '}
                   <strong className="text-[#0C1A30]">{bookingReceipt?.pujaName}</strong> at{' '}
-                  <strong>{bookingReceipt?.templeName}</strong>. Your sacred details have been recorded for Vedic archana and priest sankalpa.
+                  <strong>{bookingReceipt?.templeName}</strong>. Your sacred details and payment proof have been recorded.
                 </p>
               </div>
 
               {bookingReceipt && (
-                <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-700 space-y-2 shadow-sm text-left">
+                <div className="bg-white p-5 rounded-2xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-700 space-y-2.5 shadow-sm text-left">
                   <div className="flex justify-between border-b border-slate-100 pb-2">
                     <span className="text-slate-500 font-semibold uppercase tracking-wider text-[11px]">Booking Reference</span>
                     <span className="font-mono font-bold text-[#B8860B] text-xs">{bookingReceipt.refId}</span>
@@ -1366,6 +1692,14 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Seva Offering:</span>
                     <span className="font-bold text-[#0C1A30]">{bookingReceipt.pujaName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">Amount:</span>
+                    <span className="font-extrabold text-[#0C1A30] text-sm">₹{Number(bookingReceipt.amount).toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-medium">UTR / Transaction ID:</span>
+                    <span className="font-mono font-bold text-slate-800">{bookingReceipt.utrId}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Devotee Name:</span>
@@ -1379,17 +1713,10 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                   )}
                   <div className="flex justify-between pt-1 border-t border-slate-100">
                     <span className="text-slate-500 font-medium">Status:</span>
-                    <span className="font-bold text-emerald-600">✓ Confirmed with Priest</span>
+                    <span className="font-bold text-emerald-600">✓ Payment Proof Submitted</span>
                   </div>
                 </div>
               )}
-
-              {/* Receipt / QR notice */}
-              <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-600 leading-relaxed shadow-sm">
-                <p>
-                  Official receipt and tax exemption acknowledgement will be shared on <strong>{formData.email}</strong> once your donation is received via the upcoming QR code or bank transfer.
-                </p>
-              </div>
 
               <div className="pt-2 flex items-center justify-center gap-3">
                 <button

@@ -323,4 +323,10 @@ export const webContentService = {
   getPublicPage: (website, pageSlug) => api.get(`/content/website/${website}/page/${pageSlug}`),
 };
 
+export const sevaBookingService = {
+  submitBooking: (data) => api.post('/seva-bookings', data),
+  getMyBookings: () => api.get('/seva-bookings/my-bookings'),
+  verifyBooking: (refId) => api.get(`/seva-bookings/verify/${refId}`),
+};
+
 export default api;

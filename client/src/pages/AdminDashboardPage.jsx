@@ -19,12 +19,14 @@ import { UserManager } from './admin/UserManager';
 import { AdminProfileManager } from './admin/AdminProfileManager';
 import { StoryBoardManager } from './admin/StoryBoardManager';
 import { UpdateContentManager } from './admin/UpdateContentManager';
+import { SevaBookingsManager } from './admin/SevaBookingsManager';
 import { RegistrationSummaryCards } from '../components/admin/RegistrationSummaryCards';
 import { TshirtSummary } from '../components/admin/TshirtSummary';
 import { ClassSummary } from '../components/admin/ClassSummary';
 import { RegistrationDetailsModal } from '../components/admin/RegistrationDetailsModal';
 import { RegistrationEditModal } from '../components/admin/RegistrationEditModal';
 import {
+  Landmark,
   Shield,
   Globe,
   MessageSquareQuote,
@@ -513,6 +515,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           { id: 'UPDATE_CONTENT', label: 'Update Content', icon: Globe },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
           { id: 'VOLUNTEERING', label: 'Volunteering', icon: HeartHandshake },
+          { id: 'SEVA_BOOKINGS', label: 'Sevas & Contributions', icon: Landmark },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
           { id: 'FOOTER_CMS', label: 'Footer CMS', icon: Settings },
@@ -540,6 +543,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           );
         })}
       </div>
+
+      {/* TAB: SEVAS & DEVOTEE CONTRIBUTIONS */}
+      {activeTab === 'SEVA_BOOKINGS' && <SevaBookingsManager />}
 
       {/* TAB: MULTI-WEBSITE UPDATE CONTENT CMS */}
       {activeTab === 'UPDATE_CONTENT' && <UpdateContentManager />}
@@ -1380,20 +1386,62 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             CHANGE ADMIN PASSWORD
           </h3>
 
+          {pwdStatus.success && (
+            <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 font-bold text-xs flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 shrink-0" />
+              <span>{pwdStatus.message || 'Admin password updated successfully in the database!'}</span>
+            </div>
+          )}
+
+          {pwdStatus.error && (
+            <div className="p-4 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-600 font-bold text-xs flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{pwdStatus.error}</span>
+            </div>
+          )}
+
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              if (pwdForm.newPassword !== pwdForm.confirmPassword) {
-                alert('New passwords do not match!');
+              setPwdStatus({ success: false, error: null, message: '' });
+
+              if (pwdForm.newPassword.length < 6) {
+                setPwdStatus({ success: false, error: 'New password must be at least 6 characters long!' });
                 return;
               }
-              // API call
-              alert('Admin password change submitted.');
+              if (pwdForm.newPassword !== pwdForm.confirmPassword) {
+                setPwdStatus({ success: false, error: 'New passwords do not match!' });
+                return;
+              }
+
+              setPwdSaving(true);
+              try {
+                const res = await adminService.changePassword({
+                  currentPassword: pwdForm.currentPassword,
+                  newPassword: pwdForm.newPassword,
+                  confirmNewPassword: pwdForm.confirmPassword,
+                });
+                if (res.data?.success) {
+                  setPwdStatus({
+                    success: true,
+                    error: null,
+                    message: 'Admin password changed successfully in the database!',
+                  });
+                  setPwdForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                }
+              } catch (err) {
+                setPwdStatus({
+                  success: false,
+                  error: err.response?.data?.message || 'Failed to update admin password. Check your current password.',
+                });
+              } finally {
+                setPwdSaving(false);
+              }
             }}
             className="space-y-4 text-xs"
           >
             <div>
-              <label className="block font-bold mb-1 text-[var(--text-primary)]">Current Password</label>
+              <label className="block font-bold mb-1 text-[var(--text-primary)]">Current Password *</label>
               <input
                 type="password"
                 required
@@ -1404,10 +1452,11 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[var(--text-primary)]">New Password</label>
+              <label className="block font-bold mb-1 text-[var(--text-primary)]">New Password (min 6 chars) *</label>
               <input
                 type="password"
                 required
+                minLength={6}
                 value={pwdForm.newPassword}
                 onChange={(e) => setPwdForm({ ...pwdForm, newPassword: e.target.value })}
                 className="w-full py-3 px-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)]"
@@ -1415,18 +1464,23 @@ export const AdminDashboardPage = ({ defaultTab }) => {
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[var(--text-primary)]">Confirm New Password</label>
+              <label className="block font-bold mb-1 text-[var(--text-primary)]">Confirm New Password *</label>
               <input
                 type="password"
                 required
+                minLength={6}
                 value={pwdForm.confirmPassword}
                 onChange={(e) => setPwdForm({ ...pwdForm, confirmPassword: e.target.value })}
                 className="w-full py-3 px-4 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)]"
               />
             </div>
 
-            <button type="submit" className="btn-primary w-full justify-center py-3.5 text-xs">
-              <span>UPDATE ADMIN PASSWORD</span>
+            <button
+              type="submit"
+              disabled={pwdSaving}
+              className="btn-primary w-full justify-center py-3.5 text-xs font-bold disabled:opacity-50"
+            >
+              <span>{pwdSaving ? 'UPDATING PASSWORD...' : 'UPDATE ADMIN PASSWORD'}</span>
             </button>
           </form>
         </div>

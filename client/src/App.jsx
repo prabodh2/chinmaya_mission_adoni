@@ -261,6 +261,22 @@ export function App() {
               }
             />
             <Route
+              path="/admin/seva-bookings"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="SEVA_BOOKINGS" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/donations"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="SEVA_BOOKINGS" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/footer"
               element={
                 <ProtectedRoute requireAdmin={true}>
