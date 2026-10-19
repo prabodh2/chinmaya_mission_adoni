@@ -607,22 +607,8 @@ export const ActivitiesPage = () => {
         </div>
       </section>
 
-      {/* 2. MORE PROGRAMMES & SACRED INITIATIVES SECTION */}
-      <section className="space-y-8 w-full pt-4">
-        <header className="text-center space-y-2 max-w-4xl mx-auto">
-          <div className="flex justify-center mb-1">
-            <span className="px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[var(--orange)]/10 text-[var(--orange)] border border-[var(--orange)]/20">
-              WEEKLY CLASSES & SPIRITUAL SANCTUARIES
-            </span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
-            More Programmes &amp; Sacred Initiatives
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-            Traditional Indian arts, Vedic chanting, scriptural study, and community worship centres.
-          </p>
-        </header>
-
+      {/* 2. PROGRAMMES & SACRED INITIATIVES SECTION */}
+      <section className="w-full">
         {/* Structured Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
           {additionalActivities.map((act) => (
