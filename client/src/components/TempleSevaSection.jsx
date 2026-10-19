@@ -296,8 +296,9 @@ const NAKSHATRAS = [
 // Unified Seva Booking Modal (Exact Image 1 Theme)
 // ==========================================
 export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
-  const { normalUser } = useAuth();
+  const { normalUser, isUserAuthenticated } = useAuth();
   const [step, setStep] = useState('form'); // 'form' | 'review' | 'proof' | 'confirmed'
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [formData, setFormData] = useState({
     name: normalUser?.fullName || '',
@@ -333,7 +334,15 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
   useEffect(() => {
     if (!service) return;
     if (service.options && service.options.length > 0) {
-      setSelectedOption(service.options[0]);
+      const targetName = (service.selectedOptionName || service.name || service.title || '')
+        .replace('|', ' ')
+        .trim()
+        .toLowerCase();
+      const match = service.options.find((opt) => {
+        const optClean = (opt.name || '').trim().toLowerCase();
+        return optClean === targetName || optClean.includes(targetName) || targetName.includes(optClean);
+      });
+      setSelectedOption(match || service.options[0]);
     } else {
       setSelectedOption({
         name: (service.name || service.title || 'Sacred Seva').replace('|', ' '),
@@ -393,6 +402,10 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
   const handleReviewClick = (e) => {
     e.preventDefault();
     if (validate()) {
+      if (!isUserAuthenticated) {
+        setAuthModalOpen(true);
+        return;
+      }
       setStep('review');
     }
   };
@@ -1092,59 +1105,102 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 </p>
               </div>
 
-              {/* Seva Offering Selection / Summary */}
-              {service.options && service.options.length > 1 ? (
-                <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
-                      Select Seva Package <span className="text-[#C89B59]">({serviceDisplayName})</span>
-                    </label>
-                    <span className="text-sm font-black text-[#B8860B]">
-                      ₹{currentAmount.toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                  <div className="relative">
-                    <select
-                      value={selectedOption?.name}
-                      onChange={(e) => {
-                        const opt = service.options.find((o) => o.name === e.target.value);
-                        if (opt) setSelectedOption(opt);
-                      }}
-                      className="w-full px-3.5 py-2.5 bg-[#FAF7F2] rounded-xl border border-[#D9CEBA] text-xs sm:text-sm text-[#0C1A30] font-medium focus:outline-none focus:ring-2 focus:ring-[#C89B59] cursor-pointer"
-                    >
-                      {service.options.map((opt) => (
-                        <option key={opt.name} value={opt.name}>
-                          {opt.name} — ₹{opt.price.toLocaleString('en-IN')}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-[#EAE0CE] shadow-sm flex items-center justify-between">
+              {/* Seva Offering Overview & Available Poojas Selection */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EAE0CE] shadow-sm space-y-3.5">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-3 border-b border-[#FAF5EA]">
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                      Selected Seva Offering
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#C89B59] block">
+                      {service.templeName || 'Chinmaya Mission Sacred Seva'}
                     </span>
-                    <span className="text-sm sm:text-base font-bold text-[#0C1A30]">
-                      {selectedOption?.name || serviceDisplayName}
-                    </span>
-                    {service.templeName && (
-                      <span className="text-xs text-[#C89B59] font-medium block">
-                        {service.templeName}
-                      </span>
+                    <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-[#0C1A30]">
+                      {serviceDisplayName}
+                    </h3>
+                    {(service.desc || service.descriptionText) && (
+                      <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                        {service.desc || service.descriptionText}
+                      </p>
                     )}
                   </div>
-                  <div className="text-right">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                      Seva Price
+                  <div className="shrink-0 bg-[#FAF7F2] p-3 rounded-xl border border-[#EAE0CE] text-right sm:min-w-[130px]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                      Offering Dakshina
                     </span>
-                    <span className="text-base sm:text-lg font-black text-[#B8860B]">
-                      ₹{currentAmount.toLocaleString('en-IN')}
+                    <span className="text-base sm:text-xl font-black text-[#B8860B]">
+                      ₹{Number(currentAmount).toLocaleString('en-IN')}
                     </span>
                   </div>
                 </div>
-              )}
+
+                {/* Seva Offering Selection if multiple poojas/options exist */}
+                {service.options && service.options.length > 1 ? (
+                  <div className="space-y-2.5 pt-1">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#0C1A30] flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#C89B59]" />
+                        <span>Available Poojas &amp; Sevas ({service.options.length} options)</span>
+                      </label>
+                      <span className="text-[11px] font-semibold text-[#8B6508]">
+                        Select your preferred pooja
+                      </span>
+                    </div>
+
+                    {/* Scrollable interactive list of available poojas */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+                      {service.options.map((opt) => {
+                        const isSelected = selectedOption?.name === opt.name;
+                        return (
+                          <button
+                            key={opt.name}
+                            type="button"
+                            onClick={() => setSelectedOption(opt)}
+                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                              isSelected
+                                ? 'bg-amber-50/80 border-[#C89B59] ring-2 ring-[#C89B59]/30 shadow-sm'
+                                : 'bg-[#FAF7F2] border-[#EAE0CE] hover:border-[#C89B59]/60 hover:bg-white'
+                            }`}
+                          >
+                            <div className="min-w-0 pr-2">
+                              <span className="text-xs sm:text-[13px] font-bold text-[#0C1A30] block leading-snug">
+                                {opt.name}
+                              </span>
+                            </div>
+                            <span className="text-xs sm:text-sm font-black text-[#B8860B] shrink-0">
+                              ₹{Number(opt.price).toLocaleString('en-IN')}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Dropdown for quick alternative selection */}
+                    <div className="pt-1">
+                      <select
+                        value={selectedOption?.name}
+                        onChange={(e) => {
+                          const opt = service.options.find((o) => o.name === e.target.value);
+                          if (opt) setSelectedOption(opt);
+                        }}
+                        className="w-full px-3.5 py-2 bg-[#FAF7F2] rounded-xl border border-[#D9CEBA] text-xs text-[#0C1A30] font-medium focus:outline-none focus:ring-2 focus:ring-[#C89B59] cursor-pointer"
+                      >
+                        {service.options.map((opt) => (
+                          <option key={opt.name} value={opt.name}>
+                            {opt.name} — ₹{opt.price.toLocaleString('en-IN')}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-slate-700 bg-[#FAF7F2] p-3 rounded-xl border border-[#EAE0CE]">
+                    <span className="font-semibold">
+                      Selected Seva: <strong className="text-[#0C1A30]">{selectedOption?.name || serviceDisplayName}</strong>
+                    </span>
+                    <span className="font-black text-[#B8860B]">
+                      ₹{Number(currentAmount).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                )}
+              </div>
 
               {/* Devotee Sacred Form Fields (Matching Image 1) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1308,7 +1364,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                   type="submit"
                   className="btn-seva-register px-6 py-2.5 text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>Review Details</span>
+                  <span>Book Now</span>
                   <ArrowRight className="w-4 h-4 text-[#0A192F]" />
                 </button>
               </div>
@@ -1756,6 +1812,26 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
         </div>
       </div>
     </div>
+
+    {/* Devotee Authentication Gate Modal */}
+    <AuthModal
+      isOpen={authModalOpen}
+      onClose={() => setAuthModalOpen(false)}
+      onSuccess={(user) => {
+        setAuthModalOpen(false);
+        if (user) {
+          setFormData((prev) => ({
+            ...prev,
+            name: prev.name || user.fullName || '',
+            phoneNumber: prev.phoneNumber || user.phone || '',
+            email: prev.email || user.email || '',
+          }));
+        }
+        setStep('review');
+      }}
+      title="Devotee Sign In Required"
+      subtitle="Please sign in or create an account to book your sacred seva and confirm your blessings."
+    />
     </>
   );
 }
@@ -1968,10 +2044,7 @@ export function MyBookingsModal({ open, onClose }) {
 // Main Exported Component: The Hours of Devotion & Seva
 // ==========================================
 export const TempleSevaSection = () => {
-  const { isUserAuthenticated } = useAuth();
   const [activeService, setActiveService] = useState(null);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [pendingService, setPendingService] = useState(null);
   const [bookingsCount, setBookingsCount] = useState(0);
   const [myBookingsOpen, setMyBookingsOpen] = useState(false);
 
@@ -1984,12 +2057,7 @@ export const TempleSevaSection = () => {
   }, []);
 
   const handleBookClick = (p) => {
-    if (!isUserAuthenticated) {
-      setPendingService(p);
-      setAuthModalOpen(true);
-    } else {
-      setActiveService(p);
-    }
+    setActiveService(p);
   };
 
   return (
@@ -2073,24 +2141,6 @@ export const TempleSevaSection = () => {
           </div>
         </div>
       </section>
-
-      {/* Devotee Authentication Gate Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => {
-          setAuthModalOpen(false);
-          setPendingService(null);
-        }}
-        onSuccess={(user) => {
-          setAuthModalOpen(false);
-          if (pendingService) {
-            setActiveService(pendingService);
-            setPendingService(null);
-          }
-        }}
-        title="Devotee Sign In Required"
-        subtitle="Please sign in or create an account to book your sacred seva and track your blessings."
-      />
 
       {/* Unified Booking Modal */}
       {activeService && (

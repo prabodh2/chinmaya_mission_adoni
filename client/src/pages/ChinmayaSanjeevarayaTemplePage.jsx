@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { webContentService } from '../services/api';
 import { UnifiedBookingModal, MyBookingsModal } from '../components/TempleSevaSection';
-import { useAuth } from '../context/AuthContext';
-import { AuthModal } from '../components/auth/AuthModal';
 import {
   Landmark,
   Flame,
@@ -14,11 +12,30 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
+const PUJA_SERVICES = [
+  {
+    number: '01',
+    title: 'Panchamrutha Abhishekam',
+    desc: 'A sacred ritual in which the deity is ceremonially bathed with Panchamrutham, a mixture of five traditional ingredients. It symbolizes purification, devotion, and prayers for health, prosperity, and divine blessings.',
+    price: '₹151',
+  },
+  {
+    number: '02',
+    title: 'Vahana Puja',
+    desc: 'A traditional ritual performed to seek divine blessings for a vehicle. Devotees pray for safe journeys, protection from harm, and the well-being of everyone travelling in it.',
+    price: '₹150',
+  },
+  {
+    number: '03',
+    title: 'Sri Satyanarayana Swamy Puja',
+    frequency: 'Every Pournami',
+    desc: 'A devotional ritual dedicated to Lord Sri Satyanarayana Swamy to seek blessings for peace, prosperity, happiness, and family well-being. It is traditionally observed on Pournami (the full moon day).',
+    price: '₹150',
+  },
+];
+
 export const ChinmayaSanjeevarayaTemplePage = () => {
-  const { isUserAuthenticated } = useAuth();
   const [selectedPujaService, setSelectedPujaService] = useState(null);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [pendingPuja, setPendingPuja] = useState(null);
   const [myBookingsOpen, setMyBookingsOpen] = useState(false);
   const [bookingsCount, setBookingsCount] = useState(() => {
     try {
@@ -46,14 +63,14 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
       pujaType: puja.title.toLowerCase().replace(/[^a-z0-9]/g, '_'),
       refIdPrefix: 'CST',
       templeName: 'Chinmaya Sanjeevaraya Temple',
+      options: PUJA_SERVICES.map((p) => ({
+        name: p.title,
+        price: parseInt(p.price.replace(/[^\d]/g, ''), 10) || 150,
+        desc: p.desc,
+      })),
     };
 
-    if (!isUserAuthenticated) {
-      setPendingPuja(serviceObj);
-      setAuthModalOpen(true);
-    } else {
-      setSelectedPujaService(serviceObj);
-    }
+    setSelectedPujaService(serviceObj);
   };
 
   const [pageData, setPageData] = useState(() => {
@@ -132,27 +149,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
     },
   ];
 
-  const pujaServices = [
-    {
-      number: '01',
-      title: 'Panchamrutha Abhishekam',
-      desc: 'A sacred ritual in which the deity is ceremonially bathed with Panchamrutham, a mixture of five traditional ingredients. It symbolizes purification, devotion, and prayers for health, prosperity, and divine blessings.',
-      price: '₹151',
-    },
-    {
-      number: '02',
-      title: 'Vahana Puja',
-      desc: 'A traditional ritual performed to seek divine blessings for a vehicle. Devotees pray for safe journeys, protection from harm, and the well-being of everyone travelling in it.',
-      price: '₹150',
-    },
-    {
-      number: '03',
-      title: 'Sri Satyanarayana Swamy Puja',
-      frequency: 'Every Pournami',
-      desc: 'A devotional ritual dedicated to Lord Sri Satyanarayana Swamy to seek blessings for peace, prosperity, happiness, and family well-being. It is traditionally observed on Pournami (the full moon day).',
-      price: '₹150',
-    },
-  ];
+
 
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-[var(--text-primary)] transition-colors duration-300">
@@ -352,7 +349,7 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pujaServices.map((puja, idx) => (
+            {PUJA_SERVICES.map((puja, idx) => (
               <div
                 key={idx}
                 className="bg-[#151515] border border-[#403326] rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-lg shadow-black/40 hover:-translate-y-1.5 hover:border-[var(--orange)]/80 hover:shadow-2xl transition-all duration-300 text-left group"
@@ -440,24 +437,6 @@ export const ChinmayaSanjeevarayaTemplePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Devotee Authentication Gate Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => {
-          setAuthModalOpen(false);
-          setPendingPuja(null);
-        }}
-        onSuccess={(user) => {
-          setAuthModalOpen(false);
-          if (pendingPuja) {
-            setSelectedPujaService(pendingPuja);
-            setPendingPuja(null);
-          }
-        }}
-        title="Devotee Sign In Required"
-        subtitle="Please sign in or create an account to book your sacred seva and receive divine blessings."
-      />
 
       {/* Unified Seva Booking Modal */}
       {selectedPujaService && (
