@@ -74,7 +74,7 @@ const events = [
   {
     title: 'Magamasam Poojallu',
     subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
-    date: 'Every Amavasya',
+    date: 'FEB 07 To March 08',
     kind: 'devotion',
     image: '/assets/magamasam-poojallu.jpg',
     icon: '🔥',
@@ -202,7 +202,7 @@ export function HomePage() {
   const magamasamCard = {
     title: 'Magamasam Poojallu',
     subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
-    date: 'Every Amavasya',
+    date: 'FEB 07 To March 08',
     kind: 'devotion',
     image: '/assets/magamasam-poojallu.jpg',
     icon: '🔥',
@@ -247,10 +247,16 @@ export function HomePage() {
         })
       : events;
 
-  // Always include Magamasam Poojallu if not already present
-  const dynamicEvents = baseEvents.some((e) => e.title === 'Magamasam Poojallu')
+  // Always include Magamasam Poojallu if not already present, ensuring updated date
+  const dynamicEvents = (baseEvents.some((e) => e.title === 'Magamasam Poojallu')
     ? baseEvents
-    : [...baseEvents, magamasamCard];
+    : [...baseEvents, magamasamCard]
+  ).map((e) => {
+    if (e.title === 'Magamasam Poojallu') {
+      return { ...e, date: 'FEB 07 To March 08' };
+    }
+    return e;
+  });
 
   return (
     <div className="site-shell">
