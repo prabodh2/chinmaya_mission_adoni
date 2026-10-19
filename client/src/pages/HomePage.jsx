@@ -42,6 +42,16 @@ const corePillars = [
 
 const events = [
   {
+    title: 'Magamasam Poojallu',
+    subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
+    date: 'FEB 07 To March 08',
+    kind: 'devotion',
+    image: '/assets/magamasam-poojallu.jpg',
+    icon: '🔥',
+    url: '/events',
+    isExternal: false,
+  },
+  {
     title: 'Rama Navami',
     subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
     date: 'April 15th, 2027',
@@ -68,16 +78,6 @@ const events = [
     kind: 'meditation',
     image: '/assets/krishna-janmashtami.jpg',
     icon: '☼',
-    url: '/events',
-    isExternal: false,
-  },
-  {
-    title: 'Magamasam Poojallu',
-    subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
-    date: 'FEB 07 To March 08',
-    kind: 'devotion',
-    image: '/assets/magamasam-poojallu.jpg',
-    icon: '🔥',
     url: '/events',
     isExternal: false,
   },
@@ -259,16 +259,17 @@ export function HomePage() {
         })
       : events;
 
-  // Always include Magamasam Poojallu if not already present, ensuring updated date
-  const dynamicEvents = (baseEvents.some((e) => e.title === 'Magamasam Poojallu')
-    ? baseEvents
-    : [...baseEvents, magamasamCard]
-  ).map((e) => {
-    if (e.title === 'Magamasam Poojallu') {
-      return { ...e, date: 'FEB 07 To March 08' };
-    }
-    return e;
-  });
+  // Always bring Magamasam Poojallu to 1st place
+  const otherEvents = baseEvents.filter((e) => !e.title?.toLowerCase().includes('magamasam'));
+  const foundMagamasam = baseEvents.find((e) => e.title?.toLowerCase().includes('magamasam'));
+  const magamasamCardFinal = {
+    ...(foundMagamasam || magamasamCard),
+    title: 'Magamasam Poojallu',
+    date: 'FEB 07 To March 08',
+    image: foundMagamasam?.image || '/assets/magamasam-poojallu.jpg',
+  };
+
+  const dynamicEvents = [magamasamCardFinal, ...otherEvents];
 
   return (
     <div className="site-shell">

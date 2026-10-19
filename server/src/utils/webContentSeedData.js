@@ -131,13 +131,22 @@ export const DEFAULT_WEBSITE_PAGES = {
           ],
           items: [
             {
+              itemId: 'event-magamasam-poojallu',
+              title: 'Magamasam Poojallu',
+              subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
+              dateOrYear: 'FEB 07 To March 08',
+              imageUrl: '/assets/magamasam-poojallu.jpg',
+              linkUrl: '/events',
+              order: 1,
+            },
+            {
               itemId: 'event-rama-navami',
               title: 'Rama Navami',
               subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
               dateOrYear: 'April 15th, 2027',
               imageUrl: '/assets/rama-navami.jpg',
               linkUrl: '/events',
-              order: 1,
+              order: 2,
             },
             {
               itemId: 'event-hanuman-jayanthi',
@@ -146,7 +155,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               dateOrYear: 'April 20th, 2027',
               imageUrl: '/assets/hanuman-jayanthi.png',
               linkUrl: '/events',
-              order: 2,
+              order: 3,
             },
             {
               itemId: 'event-krishna-janmashtami',
@@ -155,7 +164,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               dateOrYear: 'August 25th, 2027',
               imageUrl: '/assets/krishna-janmashtami.jpg',
               linkUrl: '/events',
-              order: 3,
+              order: 4,
             },
           ],
         },
