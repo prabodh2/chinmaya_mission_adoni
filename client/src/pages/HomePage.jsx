@@ -135,10 +135,12 @@ export function HomePage() {
   let heroEyebrow = rawEyebrow || 'Inner Transformation for a Better World';
   let heroHeading = rawHeading || 'Chinmaya Mission, Adoni';
 
-  if (/chinmaya\s*mission/i.test(heroEyebrow) && /inner\s*transformation/i.test(heroHeading)) {
-    heroEyebrow = 'Inner Transformation for a Better World';
+  // Normalize so Chinmaya Mission, Adoni is the heading (above) and Inner Transformation for a Better World is the tagline
+  if (/inner\s*transformation/i.test(heroHeading) && /chinmaya\s*mission/i.test(heroEyebrow)) {
     heroHeading = 'Chinmaya Mission, Adoni';
-  } else if (/chinmaya\s*mission/i.test(heroEyebrow)) {
+    heroEyebrow = 'Inner Transformation for a Better World';
+  } else if (!/chinmaya\s*mission/i.test(heroHeading) && /chinmaya\s*mission/i.test(heroEyebrow)) {
+    heroHeading = 'Chinmaya Mission, Adoni';
     heroEyebrow = 'Inner Transformation for a Better World';
   }
   const heroDesc = f.hero?.description || 'Through Vedanta, values and service, we strive to build a generation of conscious, compassionate and capable individuals.';
@@ -287,24 +289,18 @@ export function HomePage() {
 
           <div className="hero-glow" />
           <div className="hero-content">
-            <p className="eyebrow hero-eyebrow">
-              {heroEyebrow}
-            </p>
-            <h1>
+            <h1 className="hero-main-heading">
               {heroHeading.toLowerCase().includes('chinmaya mission') ? (
-                <>
-                  <span className="hero-heading-line">Chinmaya Mission,</span>
-                  <span className="hero-heading-line"><em>Adoni</em></span>
-                </>
+                <>Chinmaya Mission, <em>Adoni</em></>
               ) : heroHeading.toLowerCase().includes('inner transformation') && heroHeading.toLowerCase().includes('better world') ? (
-                <>
-                  <span className="hero-heading-line">Inner Transformation</span>
-                  <span className="hero-heading-line"><em>for a Better World</em></span>
-                </>
+                <>Inner Transformation <em>for a Better World</em></>
               ) : (
                 heroHeading
               )}
             </h1>
+            <p className="hero-tagline">
+              {heroEyebrow}
+            </p>
             <p className="hero-description whitespace-pre-line">
               {heroDesc}
             </p>
