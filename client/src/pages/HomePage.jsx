@@ -11,6 +11,8 @@ import {
   Sun,
   Compass,
   Flame,
+  Maximize2,
+  X,
 } from 'lucide-react';
 import '../styles/homepage.css';
 
@@ -76,6 +78,7 @@ const events = [
 
 export function HomePage() {
   const [active, setActive] = useState('Home');
+  const [previewEvent, setPreviewEvent] = useState(null);
   const navigate = useNavigate();
 
   const [pageData, setPageData] = useState(() => {
@@ -353,9 +356,42 @@ export function HomePage() {
                     }
                   }}
                 >
-                  <div className={'event-art ' + (event.kind || 'journey')}>
+                  <div
+                    className={'event-art ' + (event.kind || 'journey')}
+                    onClick={(e) => {
+                      if (event.image) {
+                        e.stopPropagation();
+                        setPreviewEvent(event);
+                      }
+                    }}
+                    title={event.image ? 'Click to view full image' : undefined}
+                  >
                     {event.image ? (
-                      <img src={event.image} alt={event.title} className="event-art-img" />
+                      <>
+                        <img
+                          src={event.image}
+                          alt=""
+                          className="event-art-blur-bg"
+                          aria-hidden="true"
+                        />
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                          className="event-art-img"
+                        />
+                        <button
+                          type="button"
+                          className="event-art-enlarge-btn"
+                          title="Enlarge image"
+                          aria-label={`Enlarge image for ${event.title}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPreviewEvent(event);
+                          }}
+                        >
+                          <Maximize2 size={13} />
+                        </button>
+                      </>
                     ) : event.kind === 'wisdom' ? (
                       <div className="wisdom-symbol">ॐ</div>
                     ) : event.kind === 'youth' ? (
@@ -423,6 +459,49 @@ export function HomePage() {
           </div>
         </section>
       </main>
+
+      {/* Full-view Festival Image Modal */}
+      {previewEvent && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fade-in"
+          onClick={() => setPreviewEvent(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="relative max-w-4xl w-full max-h-[92vh] bg-slate-950 border border-white/15 rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col items-center overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setPreviewEvent(null)}
+              className="absolute top-3 right-3 p-2 rounded-full bg-white/20 hover:bg-[var(--orange)] text-white transition-all cursor-pointer z-30"
+              aria-label="Close image modal"
+            >
+              <X size={18} />
+            </button>
+            <div className="w-full flex-1 flex items-center justify-center overflow-auto max-h-[76vh] py-1">
+              <img
+                src={previewEvent.image}
+                alt={previewEvent.title}
+                className="max-w-full max-h-[75vh] w-auto h-auto object-contain rounded-xl shadow-2xl border border-white/10"
+              />
+            </div>
+            <div className="w-full pt-3 px-2 flex flex-col sm:flex-row items-start sm:items-center justify-between text-white border-t border-white/10 mt-2 gap-1.5">
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
+                  {previewEvent.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300">
+                  {previewEvent.subtitle}
+                </p>
+              </div>
+              <div className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[var(--orange)]/20 text-[var(--orange)] border border-[var(--orange)]/30 shrink-0">
+                {previewEvent.date}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
