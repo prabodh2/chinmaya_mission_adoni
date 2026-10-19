@@ -136,7 +136,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
               dateOrYear: 'FEB 07 To March 08',
               imageUrl: '/assets/magamasam-poojallu.jpg',
-              linkUrl: '/events',
+              linkUrl: '/activities',
               order: 1,
             },
             {
@@ -145,7 +145,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
               dateOrYear: 'April 15th, 2027',
               imageUrl: '/assets/rama-navami.jpg',
-              linkUrl: '/events',
+              linkUrl: '/activities',
               order: 2,
             },
             {
@@ -154,7 +154,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               subtitle: 'Special Pooja & Hanuman Chalisa Parayanam',
               dateOrYear: 'April 20th, 2027',
               imageUrl: '/assets/hanuman-jayanthi.png',
-              linkUrl: '/events',
+              linkUrl: '/activities',
               order: 3,
             },
             {
@@ -163,7 +163,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               subtitle: 'Lord Krishna Birth Celebrations & Utsavam',
               dateOrYear: 'August 25th, 2027',
               imageUrl: '/assets/krishna-janmashtami.jpg',
-              linkUrl: '/events',
+              linkUrl: '/activities',
               order: 4,
             },
           ],

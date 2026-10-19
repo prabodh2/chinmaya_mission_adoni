@@ -666,7 +666,7 @@ export const ActivitiesPage = () => {
   };
 
   useEffect(() => {
-    document.title = 'Events | Chinmaya Mission';
+    document.title = 'Activities | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     loadActivities();
 
@@ -696,7 +696,7 @@ export const ActivitiesPage = () => {
 
   return (
     <div className="min-h-screen pt-1 sm:pt-2 pb-16 px-4 sm:px-8 lg:px-12 w-full space-y-12 sm:space-y-16">
-      {/* 1. OUR EVENTS OVERVIEW */}
+      {/* 1. OUR ACTIVITIES OVERVIEW */}
       <section className="space-y-8 w-full">
         <header className="text-center space-y-2 max-w-4xl mx-auto">
           {heroContent?.badge && (
@@ -707,10 +707,10 @@ export const ActivitiesPage = () => {
             </div>
           )}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
-            {(!heroContent?.heading || heroContent?.heading.toLowerCase().includes('activities')) ? 'Our Events' : heroContent.heading}
+            {(!heroContent?.heading || heroContent?.heading.toLowerCase().includes('events')) ? 'Our Activities' : heroContent.heading}
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] font-medium max-w-3xl mx-auto">
-            {(!heroContent?.subtitle || heroContent?.subtitle.toLowerCase().includes('activities'))
+            {(!heroContent?.subtitle || heroContent?.subtitle.toLowerCase().includes('events'))
               ? 'Festivals, cultural celebrations, learning, and youth gatherings for all ages.'
               : heroContent.subtitle.replace(/,\s*Adoni/gi, '').replace(/\bin\s+Adoni\b/gi, '').replace(/\bAdoni\b/gi, '').trim()}
           </p>

@@ -376,10 +376,10 @@ export const WhoAreWePage = () => {
           </div>
           <div className="flex items-center gap-3">
             <Link
-              to="/events"
+              to="/activities"
               className="text-[#143224] hover:text-[#A26E33] font-bold text-decoration-none transition-colors"
             >
-              ← Explore Events
+              ← Explore Activities
             </Link>
             <span className="text-slate-300">•</span>
             <Link

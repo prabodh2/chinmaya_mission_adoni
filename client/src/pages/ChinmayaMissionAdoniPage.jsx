@@ -240,8 +240,8 @@ export const ChinmayaMissionAdoniPage = () => {
       title: 'Timeless Wisdom.\nInspired Youth.\nMeaningful Service.',
       subtext:
         'We are a community united by knowledge, strengthened by values and inspired by selfless service — working towards a more enlightened and compassionate society.',
-      btn1Text: 'EXPLORE OUR EVENTS',
-      btn1Link: '/events',
+      btn1Text: 'EXPLORE OUR ACTIVITIES',
+      btn1Link: '/activities',
       btn2Text: "LET'S CONNECT",
       btn2Link: '/lets-connect',
     },
@@ -636,8 +636,8 @@ export const ChinmayaMissionAdoniPage = () => {
                 <span>EXPLORE OUR MILESTONES</span>
                 <ChevronRight className="w-4 h-4" />
               </a>
-              <Link to="/events" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
-                <span>OUR EVENTS</span>
+              <Link to="/activities" className="btn-secondary py-3.5 px-7 text-sm font-extrabold text-decoration-none">
+                <span>OUR ACTIVITIES</span>
               </Link>
             </div>
           </div>

@@ -48,7 +48,7 @@ const events = [
     kind: 'devotion',
     image: '/assets/magamasam-poojallu.jpg',
     icon: '🔥',
-    url: '/events',
+    url: '/activities',
     isExternal: false,
   },
   {
@@ -58,7 +58,7 @@ const events = [
     kind: 'journey',
     image: '/assets/rama-navami.jpg',
     icon: '✦',
-    url: '/events',
+    url: '/activities',
     isExternal: false,
   },
   {
@@ -68,7 +68,7 @@ const events = [
     kind: 'wisdom',
     image: '/assets/hanuman-jayanthi.png',
     icon: 'ॐ',
-    url: '/events',
+    url: '/activities',
     isExternal: false,
   },
   {
@@ -78,7 +78,7 @@ const events = [
     kind: 'meditation',
     image: '/assets/krishna-janmashtami.jpg',
     icon: '☼',
-    url: '/events',
+    url: '/activities',
     isExternal: false,
   },
 ];
@@ -202,7 +202,7 @@ export function HomePage() {
   const eventsEyebrow = f.upcoming_events?.eyebrow || 'COME BE A PART';
   const eventsHeading = f.upcoming_events?.heading || 'Upcoming Events';
   const eventsLinkText = f.upcoming_events?.linkText || 'View All';
-  const eventsLinkUrl = f.upcoming_events?.linkUrl || '/events';
+  const eventsLinkUrl = f.upcoming_events?.linkUrl || '/activities';
 
   const rawEventItems = (f.upcoming_events?.items || []).filter(
     (it) =>
@@ -218,7 +218,7 @@ export function HomePage() {
     kind: 'devotion',
     image: '/assets/magamasam-poojallu.jpg',
     icon: '🔥',
-    url: '/events',
+    url: '/activities',
     isExternal: false,
   };
 
@@ -231,7 +231,7 @@ export function HomePage() {
         it.title?.includes('Bala Vihar')
     )
       ? rawEventItems.map((it, idx) => {
-          const targetUrl = it.linkUrl || '/events';
+          const targetUrl = it.linkUrl || '/activities';
           const titleLower = (it.title || '').toLowerCase();
           const isRamaNavami = titleLower.includes('rama navami');
           const isHanuman = titleLower.includes('hanuman');

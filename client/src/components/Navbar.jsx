@@ -140,7 +140,7 @@ export const Navbar = () => {
         },
       ],
     },
-    { name: 'Events', shortName: 'Events', path: '/events' },
+    { name: 'Activities', shortName: 'Activities', path: '/activities' },
     {
       name: 'Temples',
       shortName: 'Temples',
@@ -176,8 +176,8 @@ export const Navbar = () => {
     if (path === '/who-are-we' || path === '/who-we-are') {
       return isWhoAreWeActive;
     }
-    if (path === '/events') {
-      return location.pathname === '/events' || location.pathname === '/activities';
+    if (path === '/activities' || path === '/events') {
+      return location.pathname === '/activities' || location.pathname === '/events';
     }
     if (path === '/support-our-mission') {
       return (
