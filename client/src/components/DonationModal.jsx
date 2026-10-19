@@ -399,7 +399,7 @@ export const DonationModal = ({
                     textTransform: 'uppercase',
                   }}
                 >
-                  Tax Exemption & Seva Receipt
+                  Seva & Contribution Receipt
                 </div>
               </div>
 
@@ -521,7 +521,7 @@ export const DonationModal = ({
                       ₹{Number(printAmount).toLocaleString('en-IN')}
                     </div>
                     <div style={{ fontSize: '10px', color: '#16a34a', fontWeight: '700' }}>
-                      Eligible for 80G Tax Exemption
+                      Official Devotee Contribution Receipt
                     </div>
                   </div>
                 </div>
@@ -1030,7 +1030,7 @@ export const DonationModal = ({
                     </span>
                   </div>
                   <div className="text-right text-xs text-[#F4E8D3]/80">
-                    <span>Tax Exemption 80G Eligible</span>
+                    <span>Devotee Seva Contribution</span>
                   </div>
                 </div>
 
@@ -1196,8 +1196,7 @@ export const DonationModal = ({
                   <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
                   <span>
                     Thank you for your payment! Please submit your <strong>UTR Reference ID</strong>{' '}
-                    and upload the <strong>payment screenshot</strong> below for verification and
-                    formal 80G tax receipt issuance.
+                    and share the payment details below for the WhatsApp Number / Email Id.
                   </span>
                 </p>
               </div>
@@ -1481,11 +1480,11 @@ export const DonationModal = ({
                 </div>
               )}
 
-              {/* Tax Exemption Note */}
+              {/* Contribution Acknowledgement Note */}
               <div className="bg-white p-4 rounded-xl border border-[#EAE0CE] max-w-md mx-auto text-xs text-slate-600 leading-relaxed shadow-sm">
                 <p>
-                  Official 80G tax exemption receipt and formal acknowledgement will be emailed to{' '}
-                  <strong>{formData.email}</strong> once your UTR number is verified by our accounts
+                  Official receipt and formal acknowledgement will be emailed to{' '}
+                  <strong>{formData.email}</strong> once your details are verified by our accounts
                   department.
                 </p>
               </div>

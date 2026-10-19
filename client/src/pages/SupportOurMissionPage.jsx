@@ -216,23 +216,32 @@ export const SupportOurMissionPage = () => {
 
                 <div className="space-y-3.5 text-[#3D4752] text-sm sm:text-base leading-relaxed">
                   <p>
-                    Your contribution can help sustain the activities of Chinmaya
-                    Mission, support educational and community initiatives, and
-                    preserve our cherished spiritual and cultural heritage.
+                    Chinmaya Mission, Adoni is dedicated to sharing spiritual wisdom,
+                    preserving cultural heritage, and serving society through meaningful
+                    educational, spiritual, and community initiatives.
                   </p>
                   <p>
-                    By supporting the Mission, you become part of a collective
-                    effort to make spiritual wisdom accessible, strengthen
-                    communities, and create opportunities for learning and growth.
+                    The Mission is also associated with two sacred temples — Chinmaya
+                    Sanjeevaraya Temple (Sri Hanuman) and Shri Shantamalleshwara Swami
+                    Temple (Lord Shiva) — which hold an important place in the spiritual
+                    and cultural life of the community.
                   </p>
                   <p>
-                    You may choose to support the Mission's broader activities or
-                    contribute towards specific initiatives, including temple
-                    development and maintenance.
+                    Sustaining these initiatives involves nurturing opportunities for
+                    spiritual learning, supporting community activities, and ensuring the
+                    continued development and maintenance of these sacred temples.
+                  </p>
+                  <p>
+                    Those who wish to support the Mission can contribute towards its
+                    various activities and initiatives, including temple development and
+                    upkeep. Each contribution helps sustain this work, preserve our
+                    cultural and spiritual heritage, and create opportunities for future
+                    generations to remain connected to these timeless values.
                   </p>
                   <p className="font-medium text-[#0C1A30]">
-                    Every contribution is an opportunity to support a meaningful
-                    cause and help the Mission's vision continue to flourish.
+                    Through collective participation and continued support, we can help
+                    the Mission's vision of wisdom, devotion, and selfless service reach
+                    more people and benefit the community for years to come.
                   </p>
                 </div>
               </div>

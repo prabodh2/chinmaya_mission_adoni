@@ -1562,8 +1562,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                   <Sparkles className="w-4 h-4 text-[#C89B59] shrink-0 mt-0.5" />
                   <span>
                     Thank you for your payment! Please submit your <strong>UTR Reference ID</strong>{' '}
-                    and upload the <strong>payment screenshot</strong> below for verification and
-                    formal seva receipt issuance.
+                    and share the payment details below for the WhatsApp Number / Email Id.
                   </span>
                 </p>
               </div>
