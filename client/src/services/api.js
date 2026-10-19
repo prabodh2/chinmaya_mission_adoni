@@ -251,6 +251,13 @@ export const contactService = {
   deleteMessage: (id) => api.delete(`/contact/admin/${id}`),
 };
 
+export const volunteerService = {
+  submitVolunteer: (data) => api.post('/volunteers', data),
+  getVolunteersAdmin: (params) => api.get('/volunteers/admin/all', { params }),
+  updateStatus: (id, status, notes) => api.patch(`/volunteers/admin/${id}/status`, { status, notes }),
+  deleteVolunteer: (id) => api.delete(`/volunteers/admin/${id}`),
+};
+
 export const contentService = {
   getContent: (sectionKey) => api.get(`/content/${sectionKey}`),
   updateContent: (sectionKey, content) => api.put(`/content/${sectionKey}`, { content }),

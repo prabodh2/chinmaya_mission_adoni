@@ -19,6 +19,9 @@ import {
   ChevronRight,
   CheckCircle,
   Activity as ActivityIcon,
+  X,
+  MapPin,
+  Clock,
 } from 'lucide-react';
 
 export const ChinmayaMissionAdoniPage = () => {
@@ -86,26 +89,8 @@ export const ChinmayaMissionAdoniPage = () => {
     ourActivities: {
       heading: 'OUR ACTIVITIES',
       intro:
-        'At Chinmaya Mission, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
+        'At Chinmaya Mission, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our dedicated wings and initiatives, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
       cards: [
-        {
-          id: 'act-1',
-          title: 'CHINMAYA SANJEEVARAYA TEMPLE',
-          content:
-            'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-          imageUrl: '/assets/images/chinmaya-sanjeevaraya-temple.png',
-          badge: 'SPIRITUAL TEMPLE',
-          iconName: 'Landmark',
-        },
-        {
-          id: 'act-2',
-          title: 'SHRI SHANTAMALLESHWARA SWAMI TEMPLE',
-          content:
-            'Shri Shantamalleshwara Swami Temple is an important centre of worship and devotion associated with Chinmaya Mission. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
-          imageUrl: '/assets/images/activity-shantamalleshwara.webp',
-          badge: 'SACRED CENTRE',
-          iconName: 'Flame',
-        },
         {
           id: 'act-3',
           title: 'DEVI GROUP',
@@ -114,16 +99,81 @@ export const ChinmayaMissionAdoniPage = () => {
           imageUrl: '/assets/images/activity-devigroup.jpg',
           badge: 'DEVOTIONAL WING',
           iconName: 'Heart',
+          detailedInfo: {
+            title: 'Devi Group • Women’s Devotional Wing',
+            subtitle: 'Devotion, Cultural Preservation & Family Values',
+            location: 'Chinmaya Cultural Complex, Adoni',
+            schedule: 'Weekly Gatherings & Special Festive Observances',
+            sections: [
+              {
+                heading: 'Spiritual Devotion & Scriptural Learning',
+                paragraphs: [
+                  'The Devi Group is dedicated to nurturing devotion, spiritual understanding, and the preservation of cultural values across families and communities.',
+                  'Through scriptural study, devotional singing, collective poojas, and participation in Chinmaya Mission festivals, members deepen their spiritual connection and foster dharmic values within the household.',
+                ],
+              },
+              {
+                heading: 'Key Activities & Sacred Chanting',
+                paragraphs: [
+                  'Study and chanting of sacred stotrams including Sri Lalita Sahasranamam, Sri Vishnu Sahasranamam, and Bhagavad Gita.',
+                  'Special poojas during Navaratri, Varalakshmi Vratham, Karthika Masam, and auspicious festive occasions throughout the year.',
+                  'Devotional singing (Bhajans), spiritual discussions, and sharing practical insights for harmonizing family life with spiritual principles.',
+                  'Active participation in community service, Annadanam (food offering), and organizing Mission cultural programmes.',
+                ],
+              },
+              {
+                heading: 'Nurturing the Family & Society',
+                paragraphs: [
+                  'Pujya Gurudev Swami Chinmayananda emphasized that mothers and women are the spiritual backbone of the home. The Devi Group provides a supportive fellowship where women inspire one another to lead lives rooted in devotion, moral clarity, and cultural heritage.',
+                ],
+              },
+            ],
+          },
         },
         {
-          id: 'act-4',
-          title: 'CHINMAYA YUVA KENDRA (CHYK)',
+          id: 'act-balvihar',
+          title: 'BALVIHAR CLASSES',
           content:
-            'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
-          imageUrl: '/assets/images/activity-chyk.jpg',
-          badge: 'YOUTH WING • FEATURED',
+            'Chinmaya Balvihar classes provide structured value-based spiritual education for children. Through interactive storytelling, shlokas, bhajans, Indian cultural traditions, moral games, and creative activities, Balvihar helps young minds grow with noble ideals, love for heritage, character, and self-confidence inspired by Pujya Gurudev Swami Chinmayananda’s vision.',
+          imageUrl: '/assets/images/activity-balvihar.jpg',
+          badge: 'CHILDREN’S WING • VALUE EDUCATION',
           featured: true,
-          iconName: 'Zap',
+          iconName: 'Users',
+          detailedInfo: {
+            title: 'Chinmaya Balvihar Classes',
+            subtitle: 'Value-Based Cultural & Spiritual Education for Children',
+            location: 'Chinmaya Cultural Complex, Adoni',
+            schedule: 'Sunday Classes for Children of All Age Groups',
+            sections: [
+              {
+                heading: 'Vision & Purpose of Balvihar',
+                paragraphs: [
+                  'Balvihar is a global initiative started by Pujya Gurudev Swami Chinmayananda with the vision: "Children are not vessels to be filled, but lamps to be lit."',
+                  'It aims to inculcate reverence for India’s timeless cultural heritage, foster moral integrity, instill universal human values, and build strong character in children in an enjoyable, engaging atmosphere.',
+                ],
+              },
+              {
+                heading: 'Curriculum & What Children Learn',
+                paragraphs: [
+                  '- Sanskrit Shlokas & Chanting: Learning authentic pronunciation and meanings of foundational Sanskrit shlokas and daily prayers.\n- Epics & Stories: Inspiring values from the Ramayana, Mahabharata, Bhagavata, and lives of great spiritual masters.\n- Bhajans & Devotional Music: Melodious singing that awakens joy, devotion, and inner peace.\n- Cultural Values & Life Skills: Respect for elders, truthfulness, sharing, environmental mindfulness, and discipline.\n- Interactive Learning: Arts, crafts, moral skits, Vedic quizzes, games, and festival celebrations.',
+                ],
+              },
+              {
+                heading: 'Annual Highlights & Events',
+                paragraphs: [
+                  'Annual Geeta Chanting Competition: Encouraging hundreds of children across Adoni schools to memorize and chant the holy Bhagavad Gita.',
+                  'Festive Celebrations: Krishna Janmashtami celebrations, Balvihar Utsav, and Guru Paduka Pooja.',
+                  'Summer & Winter Camps: High-energy character-building workshops packed with fun and spiritual wisdom.',
+                ],
+              },
+              {
+                heading: 'Who Can Join & How to Enroll',
+                paragraphs: [
+                  'Balvihar classes are open to all children from Kindergarten through 10th Standard. Dedicated and affectionate sevaks and sevikas guide each age group with interactive pedagogy designed for modern children.',
+                ],
+              },
+            ],
+          },
         },
       ],
     },
@@ -131,7 +181,7 @@ export const ChinmayaMissionAdoniPage = () => {
       heading: 'CONTINUING THE LEGACY',
       content:
         'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
-      highlights: ['1992', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
+      highlights: ['Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'],
     },
     conclusion: {
       heading: 'Conclusion',
@@ -198,6 +248,75 @@ export const ChinmayaMissionAdoniPage = () => {
     },
   };
 
+  const normalizeActivities = (cards) => {
+    const filtered = (cards || []).filter(
+      (c) =>
+        c.id !== 'act-1' &&
+        c.id !== 'act-2' &&
+        !c.title?.toLowerCase().includes('sanjeevaraya') &&
+        !c.title?.toLowerCase().includes('malleshwara')
+    );
+
+    const deviCard = filtered.find(
+      (c) => c.title?.toLowerCase().includes('devi') || c.id === 'act-3'
+    );
+    const balviharCard = filtered.find(
+      (c) =>
+        c.title?.toLowerCase().includes('balvihar') ||
+        c.title?.toLowerCase().includes('bhal') ||
+        c.title?.toLowerCase().includes('balavihar') ||
+        c.title?.toLowerCase().includes('chyk') ||
+        c.title?.toLowerCase().includes('yuva') ||
+        c.id === 'act-4' ||
+        c.id === 'act-balvihar'
+    );
+
+    return [
+      {
+        ...defaultContent.ourActivities.cards[0],
+        ...(deviCard || {}),
+        id: 'act-3',
+        title: 'DEVI GROUP',
+        badge: 'DEVOTIONAL WING',
+        iconName: 'Heart',
+        imageUrl: '/assets/images/activity-devigroup.jpg',
+        detailedInfo: defaultContent.ourActivities.cards[0].detailedInfo,
+      },
+      {
+        ...defaultContent.ourActivities.cards[1],
+        ...(balviharCard || {}),
+        id: 'act-balvihar',
+        title: 'BALVIHAR CLASSES',
+        badge: 'CHILDREN’S WING • VALUE EDUCATION',
+        featured: true,
+        iconName: 'Users',
+        imageUrl: '/assets/images/activity-balvihar.jpg',
+        content: defaultContent.ourActivities.cards[1].content,
+        detailedInfo: defaultContent.ourActivities.cards[1].detailedInfo,
+      },
+    ];
+  };
+
+  const [selectedActivity, setSelectedActivity] = useState(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedActivity(null);
+      }
+    };
+    if (selectedActivity) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedActivity]);
+
   const [content, setContent] = useState(() => {
     try {
       const cached = localStorage.getItem('cms_about_content');
@@ -215,24 +334,20 @@ export const ChinmayaMissionAdoniPage = () => {
         if (!parsed?.conclusion?.paragraph3 || parsed?.conclusion?.paragraph1?.includes('an important centre for spiritual development')) {
           parsed.conclusion = { ...defaultContent.conclusion };
         }
-        if (!parsed?.continuingLegacy?.highlights?.includes('1992')) {
-          parsed.continuingLegacy = { ...defaultContent.continuingLegacy };
+        if (parsed?.continuingLegacy?.highlights) {
+          parsed.continuingLegacy.highlights = parsed.continuingLegacy.highlights.filter(
+            (h) => h !== '1992'
+          );
         }
         if (!parsed?.chykSection?.imageUrl || parsed?.chykSection?.imageUrl?.includes('photo-1529156069898-49953e39b3ac')) {
           parsed.chykSection = { ...parsed.chykSection, imageUrl: '/assets/images/chyk-youth-team.jpg' };
         }
-        if (parsed?.ourActivities?.cards) {
-          parsed.ourActivities.cards.forEach((c, idx) => {
-            const def = defaultContent.ourActivities.cards[idx];
-            if (!c.imageUrl || c.imageUrl === 'undefined' || typeof c.imageUrl !== 'string' || c.imageUrl.trim() === '') {
-              c.imageUrl = def?.imageUrl;
-            } else if (c.imageUrl.includes('activity-sanjeevaraya.png')) {
-              c.imageUrl = '/assets/images/chinmaya-sanjeevaraya-temple.png';
-            } else if (c.imageUrl.includes('devi_group_wing') || c.imageUrl.includes('photo-1511632765486')) {
-              c.imageUrl = '/assets/images/activity-devigroup.jpg';
-            }
-          });
+        if (parsed?.ourActivities) {
+          parsed.ourActivities.cards = normalizeActivities(parsed.ourActivities.cards);
         }
+        try {
+          localStorage.setItem('cms_about_content', JSON.stringify(parsed));
+        } catch (_) {}
         return parsed;
       }
     } catch (_) {}
@@ -350,6 +465,15 @@ export const ChinmayaMissionAdoniPage = () => {
             };
           }
 
+          if (merged?.ourActivities) {
+            merged.ourActivities.cards = normalizeActivities(merged.ourActivities?.cards);
+          }
+          if (merged?.continuingLegacy?.highlights) {
+            merged.continuingLegacy.highlights = merged.continuingLegacy.highlights.filter(
+              (h) => h !== '1992'
+            );
+          }
+
           setContent(merged);
           try {
             localStorage.setItem('cms_about_content', JSON.stringify(merged));
@@ -366,6 +490,14 @@ export const ChinmayaMissionAdoniPage = () => {
             if (res.data?.success && res.data?.data) {
               const apiData = res.data.data;
               const merged = { ...defaultContent, ...apiData };
+              if (merged?.ourActivities) {
+                merged.ourActivities.cards = normalizeActivities(merged.ourActivities?.cards);
+              }
+              if (merged?.continuingLegacy?.highlights) {
+                merged.continuingLegacy.highlights = merged.continuingLegacy.highlights.filter(
+                  (h) => h !== '1992'
+                );
+              }
               setContent(merged);
               try {
                 localStorage.setItem('cms_about_content', JSON.stringify(merged));
@@ -429,6 +561,12 @@ export const ChinmayaMissionAdoniPage = () => {
         return <Heart className="w-6 h-6" />;
       case 'Zap':
         return <Zap className="w-6 h-6" />;
+      case 'Users':
+        return <Users className="w-6 h-6" />;
+      case 'BookOpen':
+        return <BookOpen className="w-6 h-6" />;
+      case 'Sparkles':
+        return <Sparkles className="w-6 h-6" />;
       default:
         return <ActivityIcon className="w-6 h-6" />;
     }
@@ -599,10 +737,6 @@ export const ChinmayaMissionAdoniPage = () => {
                   {getMissionIcon(item.iconName)}
                 </div>
 
-                <span className="text-[10px] sm:text-[11px] font-bold text-[var(--orange)] tracking-wider uppercase mb-1.5 block">
-                  PILLAR 0{index + 1}
-                </span>
-
                 <h3 className="text-sm sm:text-base font-extrabold text-[var(--text-primary)] font-heading mb-2 group-hover:text-[var(--orange)] transition-colors leading-snug uppercase tracking-tight">
                   {item.title}
                 </h3>
@@ -616,7 +750,109 @@ export const ChinmayaMissionAdoniPage = () => {
         </div>
       </section>
 
-      {/* 6. CHINMAYA YUVA KENDRA (CHYK) SECTION */}
+      {/* 6. OUR ACTIVITIES SECTION */}
+      <section className="w-full px-4 sm:px-8 lg:px-12">
+        <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-12 space-y-3">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
+            {data.ourActivities.heading}
+          </h2>
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            {data.ourActivities.intro}
+          </p>
+        </div>
+
+        {/* Activity Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 w-full items-stretch">
+          {(data.ourActivities?.cards || [])
+            .filter(
+              (card) =>
+                card.id !== 'act-1' &&
+                card.id !== 'act-2' &&
+                !card.title?.toLowerCase().includes('sanjeevaraya') &&
+                !card.title?.toLowerCase().includes('malleshwara')
+            )
+            .map((card) => {
+              const isDevi = card.id === 'act-3' || card.title?.toLowerCase().includes('devi');
+              const fallbackImg = isDevi
+                ? '/assets/images/activity-devigroup.jpg'
+                : '/assets/images/activity-balvihar.jpg';
+              const cardImgSrc = isDevi
+                ? '/assets/images/activity-devigroup.jpg'
+                : (card.imageUrl && !card.imageUrl.includes('activity-chyk') ? card.imageUrl : '/assets/images/activity-balvihar.jpg');
+
+              return (
+                <article
+                  key={card.id || card.title}
+                  className={`bg-white rounded-3xl border transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full overflow-hidden group w-full ${
+                    card.featured
+                      ? 'border-[var(--orange)]/70 ring-1 ring-[var(--orange)]/20'
+                      : 'border-slate-200/90 hover:border-[var(--orange)]/50'
+                  }`}
+                >
+                  {/* Full-width Top Image Area with full visibility & crystal clear presentation */}
+                  <div className="relative h-64 sm:h-72 md:h-80 w-full shrink-0 overflow-hidden bg-slate-950 flex items-center justify-center p-2.5 sm:p-3 border-b border-slate-100/10 block">
+                    <img
+                      src={cardImgSrc}
+                      alt={card.title}
+                      onError={(e) => {
+                        e.currentTarget.src = fallbackImg;
+                      }}
+                      className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-sm transition-transform duration-500 ease-out group-hover:scale-[1.02] block"
+                      loading="eager"
+                    />
+
+                    {card.badge && (
+                      <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider border border-white/20 shadow-md z-20">
+                        {card.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Card Body with Consistent Padding & Structured Flow */}
+                  <div className="p-6 sm:p-8 flex flex-col flex-1 text-left">
+                    <div className="flex items-center gap-3.5 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
+                        {getActivityIcon(card.iconName)}
+                      </div>
+                      <h3 className="text-base sm:text-lg md:text-xl font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug uppercase tracking-wide">
+                        {card.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3 mb-6 font-normal">
+                      {card.content}
+                    </p>
+
+                    {/* Bottom Action Button: Know More */}
+                    <div className="mt-auto pt-4 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const isDevi = card.id === 'act-3' || card.title?.toLowerCase().includes('devi');
+                          const fallbackDef = isDevi
+                            ? defaultContent.ourActivities.cards[0]
+                            : defaultContent.ourActivities.cards[1];
+                          setSelectedActivity({
+                            ...fallbackDef,
+                            ...card,
+                            imageUrl: cardImgSrc,
+                            detailedInfo: card.detailedInfo || fallbackDef.detailedInfo,
+                          });
+                        }}
+                        className="btn-secondary w-full justify-center text-sm py-3 px-4 font-bold shadow-sm rounded-xl flex items-center gap-2 cursor-pointer transition-all duration-200 hover:scale-[1.01]"
+                      >
+                        <span>Know More</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+        </div>
+      </section>
+
+      {/* 7. CHINMAYA YUVA KENDRA (CHYK) SECTION */}
       <section className="w-full px-4 sm:px-8 lg:px-12">
         <div className="p-8 sm:p-14 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-10 relative overflow-hidden">
           {/* Accent Glow */}
@@ -679,99 +915,6 @@ export const ChinmayaMissionAdoniPage = () => {
         </div>
       </section>
 
-      {/* 8. OUR ACTIVITIES SECTION */}
-      <section className="w-full px-4 sm:px-8 lg:px-12">
-        <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-12 space-y-3">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
-            {data.ourActivities.heading}
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
-            {data.ourActivities.intro}
-          </p>
-        </div>
-
-        {/* 2 Wide Activity & Temple Cards fulfilling full screen width */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 w-full items-stretch">
-          {data.ourActivities.cards.map((card) => (
-            <article
-              key={card.id || card.title}
-              className={`bg-white rounded-3xl border transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full overflow-hidden group w-full ${
-                card.featured
-                  ? 'border-[var(--orange)]/70 ring-1 ring-[var(--orange)]/20'
-                  : 'border-slate-200/90 hover:border-[var(--orange)]/50'
-              }`}
-            >
-              {/* Full-width Top Image Area with full visibility & crystal clear presentation */}
-              {(() => {
-                const isSanjeevaraya =
-                  card.id === 'act-1' ||
-                  card.id === 'chinmaya-sanjeevaraya-temple' ||
-                  card.title?.toLowerCase().includes('sanjeevaraya');
-                const cardImgSrc = isSanjeevaraya
-                  ? '/assets/images/chinmaya-sanjeevaraya-temple.png'
-                  : (card.imageUrl || '/assets/images/chinmaya-sanjeevaraya-temple.png');
-
-                return (
-                  <div className="relative h-64 sm:h-72 md:h-80 w-full shrink-0 overflow-hidden bg-slate-950 flex items-center justify-center p-2.5 sm:p-3 border-b border-slate-100/10 block">
-                    {/* Full uncropped image visible completely - 100% visible, crystal clear, no heads or temples cropped */}
-                    <img
-                      src={cardImgSrc}
-                      alt={card.title}
-                      onError={(e) => {
-                        if (isSanjeevaraya) {
-                          e.currentTarget.src = '/assets/images/chinmaya-sanjeevaraya-temple.png';
-                        } else if (card.id === 'act-2' || card.title?.toLowerCase().includes('malleshwara')) {
-                          e.currentTarget.src = '/assets/images/activity-shantamalleshwara.webp';
-                        } else if (card.id === 'act-3' || card.title?.toLowerCase().includes('devi')) {
-                          e.currentTarget.src = '/assets/images/activity-devigroup.jpg';
-                        } else if (card.id === 'act-4' || card.title?.toLowerCase().includes('chyk')) {
-                          e.currentTarget.src = '/assets/images/activity-chyk.jpg';
-                        }
-                      }}
-                      className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-sm transition-transform duration-500 ease-out group-hover:scale-[1.02] block"
-                      loading="eager"
-                    />
-                    
-                    {card.badge && (
-                      <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider border border-white/20 shadow-md z-20">
-                        {card.badge}
-                      </span>
-                    )}
-                  </div>
-                );
-              })()}
-
-              {/* Card Body with Consistent Padding & Structured Flow */}
-              <div className="p-6 sm:p-8 flex flex-col flex-1 text-left">
-                <div className="flex items-center gap-3.5 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 group-hover:bg-[var(--orange)] group-hover:text-white transition-colors duration-300">
-                    {getActivityIcon(card.iconName)}
-                  </div>
-                  <h3 className="text-base sm:text-lg md:text-xl font-extrabold font-heading text-[var(--text-primary)] group-hover:text-[var(--orange)] transition-colors leading-snug uppercase tracking-wide">
-                    {card.title}
-                  </h3>
-                </div>
-
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3 mb-6 font-normal">
-                  {card.content}
-                </p>
-
-                {/* Bottom Action Button Aligned Across Rows */}
-                <div className="mt-auto pt-4 border-t border-slate-100">
-                  <Link
-                    to="/events"
-                    className="btn-secondary w-full justify-center text-sm py-3 px-4 text-decoration-none font-bold shadow-sm rounded-xl flex items-center gap-2"
-                  >
-                    <span>EXPLORE EVENT DETAILS</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       {/* 9. CONTINUING THE LEGACY SECTION */}
       <section className="w-full px-4 sm:px-8 lg:px-12">
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-8">
@@ -785,18 +928,20 @@ export const ChinmayaMissionAdoniPage = () => {
           </div>
 
           {/* Key Values Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-4">
-            {data.continuingLegacy.highlights.map((item, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm text-center space-y-1 hover:border-[var(--orange)] transition-colors"
-              >
-                <CheckCircle className="w-5 h-5 text-[var(--orange)] mx-auto mb-1" />
-                <span className="text-xs font-extrabold text-[var(--text-primary)] font-heading block truncate">
-                  {item}
-                </span>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pt-4">
+            {(data.continuingLegacy?.highlights || [])
+              .filter((item) => item !== '1992')
+              .map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm text-center space-y-1 hover:border-[var(--orange)] transition-colors"
+                >
+                  <CheckCircle className="w-5 h-5 text-[var(--orange)] mx-auto mb-1" />
+                  <span className="text-xs font-extrabold text-[var(--text-primary)] font-heading block truncate">
+                    {item}
+                  </span>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -815,6 +960,163 @@ export const ChinmayaMissionAdoniPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Activity Details Modal Popup */}
+      {selectedActivity && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in overflow-y-auto"
+          onClick={() => setSelectedActivity(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="bg-white border border-slate-200 rounded-3xl max-w-2xl sm:max-w-3xl w-full max-h-[92vh] overflow-hidden shadow-2xl relative my-auto flex flex-col animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Image Area: Full uncropped presentation */}
+            <div className="relative w-full h-56 sm:h-72 md:h-80 bg-slate-950 shrink-0 overflow-hidden flex items-center justify-center p-3 sm:p-4 border-b border-slate-100">
+              <img
+                src={
+                  selectedActivity.title?.toLowerCase().includes('devi')
+                    ? '/assets/images/activity-devigroup.jpg'
+                    : '/assets/images/activity-balvihar.jpg'
+                }
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
+              />
+
+              <img
+                src={
+                  selectedActivity.title?.toLowerCase().includes('devi')
+                    ? '/assets/images/activity-devigroup.jpg'
+                    : '/assets/images/activity-balvihar.jpg'
+                }
+                alt={selectedActivity.title}
+                className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-md block"
+              />
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedActivity(null)}
+                className="absolute top-3.5 right-3.5 p-2 rounded-full bg-black/75 hover:bg-black text-white transition-colors z-30 backdrop-blur-md cursor-pointer shadow-lg border border-white/20"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Floating Badges */}
+              <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 right-3 sm:right-4 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-none">
+                {selectedActivity.badge && (
+                  <span className="px-3.5 py-1.5 rounded-full bg-[var(--orange)] text-white text-xs font-extrabold uppercase tracking-wider shadow-lg">
+                    {selectedActivity.badge}
+                  </span>
+                )}
+                {selectedActivity.detailedInfo?.location && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md text-white text-xs font-semibold shadow-lg border border-white/15">
+                    <MapPin className="w-3.5 h-3.5 text-[var(--orange)]" />
+                    <span>{selectedActivity.detailedInfo.location}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Scrollable Modal Content */}
+            {(() => {
+              const isDevi = selectedActivity.title?.toLowerCase().includes('devi');
+              const fallbackDef = isDevi
+                ? defaultContent.ourActivities.cards[0]
+                : defaultContent.ourActivities.cards[1];
+              const details = selectedActivity.detailedInfo || fallbackDef.detailedInfo;
+
+              return (
+                <div className="p-6 sm:p-8 space-y-6 text-left overflow-y-auto max-h-[calc(92vh-220px)]">
+                  {/* Header Title */}
+                  <div className="border-b border-slate-100 pb-4">
+                    <div className="flex items-center gap-3 mb-1.5">
+                      <div className="w-9 h-9 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0">
+                        {getActivityIcon(selectedActivity.iconName || fallbackDef.iconName)}
+                      </div>
+                      <h2 className="text-xl sm:text-2xl font-black font-heading text-[var(--text-primary)] uppercase tracking-tight m-0">
+                        {details?.title || selectedActivity.title}
+                      </h2>
+                    </div>
+                    {details?.subtitle && (
+                      <p className="text-xs sm:text-sm font-semibold text-[var(--orange)] tracking-wide uppercase mt-1">
+                        {details.subtitle}
+                      </p>
+                    )}
+                    {details?.schedule && (
+                      <p className="text-xs text-slate-500 font-medium mt-1.5 flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{details.schedule}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Summary Box */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/70 text-slate-700 text-sm sm:text-base leading-relaxed">
+                    {selectedActivity.content || fallbackDef.content}
+                  </div>
+
+                  {/* Detailed Sections */}
+                  {details?.sections?.map((section, sIdx) => (
+                    <div key={sIdx} className="space-y-3">
+                      <div className="flex items-center gap-2.5 pb-1 border-b border-slate-100">
+                        <div className="w-2 h-2 rounded-full bg-[var(--orange)] shrink-0" />
+                        <h3 className="text-base sm:text-lg font-extrabold font-heading text-[var(--text-primary)] m-0">
+                          {section.heading}
+                        </h3>
+                      </div>
+                      <div className="space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        {section.paragraphs.map((p, pIdx) => {
+                          if (p.startsWith('- ')) {
+                            const items = p.split('\n');
+                            return (
+                              <ul key={pIdx} className="list-disc pl-5 space-y-1.5 my-2">
+                                {items.map((line, lIdx) => {
+                                  const cleanLine = line.replace(/^[-\s*]+/, '');
+                                  const parts = cleanLine.split(': ');
+                                  return (
+                                    <li key={lIdx} className="text-slate-700">
+                                      {parts.length > 1 ? (
+                                        <>
+                                          <strong className="text-[var(--text-primary)] font-bold">{parts[0]}:</strong>{' '}
+                                          {parts.slice(1).join(': ')}
+                                        </>
+                                      ) : (
+                                        cleanLine
+                                      )}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            );
+                          }
+                          return <p key={pIdx}>{p}</p>;
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
+            {/* Modal Footer without Join / Enquire */}
+            <div className="px-6 sm:px-8 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-medium text-slate-500 shrink-0">
+              <span className="truncate">Chinmaya Mission, Adoni</span>
+              <button
+                type="button"
+                onClick={() => setSelectedActivity(null)}
+                className="px-5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold transition-colors cursor-pointer shadow-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

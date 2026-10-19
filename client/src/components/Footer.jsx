@@ -558,6 +558,19 @@ export const Footer = ({ overrideData = null }) => {
                 );
               })}
             </div>
+
+            {/* An Initiative By */}
+            <div className="pt-2">
+              <span
+                style={headingStyle}
+                className="text-[11px] sm:text-xs font-extrabold tracking-wider uppercase font-heading block"
+              >
+                An Initiative By
+              </span>
+              <p className="text-white font-extrabold text-xs sm:text-sm leading-snug m-0 mt-0.5">
+                Chinmaya Yuva Kendra, Adoni
+              </p>
+            </div>
           </div>
 
         </div>

@@ -10,6 +10,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { DonationModal } from '../components/DonationModal';
+import { VolunteerModal } from '../components/VolunteerModal';
 import '../styles/support-our-mission.css';
 
 // Spiritual Lotus SVG Component
@@ -95,6 +96,7 @@ const sevaCategories = [
 
 export const SupportOurMissionPage = () => {
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('Devotee Donation Details');
   const [modalSubtitle, setModalSubtitle] = useState('Pooja Sankalpa & Contribution Record');
 
@@ -306,13 +308,14 @@ export const SupportOurMissionPage = () => {
               </div>
 
               <div className="pt-2">
-                <Link
-                  to="/lets-connect"
-                  className="btn-spiritual-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide"
+                <button
+                  type="button"
+                  onClick={() => setIsVolunteerModalOpen(true)}
+                  className="btn-spiritual-primary inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wide cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform"
                 >
                   <span>Connect for Volunteering</span>
                   <ArrowRight className="w-4 h-4 text-[#C89B59]" />
-                </Link>
+                </button>
               </div>
             </div>
           </article>
@@ -398,6 +401,12 @@ export const SupportOurMissionPage = () => {
         onClose={() => setIsDonationModalOpen(false)}
         modalTitle={modalTitle}
         modalSubtitle={modalSubtitle}
+      />
+
+      {/* Volunteer Seva Application Modal */}
+      <VolunteerModal
+        isOpen={isVolunteerModalOpen}
+        onClose={() => setIsVolunteerModalOpen(false)}
       />
     </div>
   );

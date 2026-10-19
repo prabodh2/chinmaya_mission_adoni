@@ -18,6 +18,7 @@ import userRoutes from './routes/userRoutes.js';
 import communityServiceRoutes from './routes/communityServiceRoutes.js';
 import thoughtRoutes from './routes/thoughtRoutes.js';
 import webContentRoutes from './routes/webContentRoutes.js';
+import volunteerRoutes from './routes/volunteerRoutes.js';
 
 const app = express();
 
@@ -125,6 +126,7 @@ app.use('/api/footer', footerRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/thoughts', thoughtRoutes);
 app.use('/api/admin/content', webContentRoutes);
+app.use('/api/volunteers', volunteerRoutes);
 
 
 // Global 404 Route

@@ -122,7 +122,10 @@ export function HomePage() {
     }
   };
 
-  const heroEyebrow = (f.hero?.eyebrow || 'CHINMAYA MISSION').replace(/[·,]\s*ADONI/gi, '').trim();
+  const rawEyebrow = (f.hero?.eyebrow || 'Chinmaya Mission, Adoni').replace(/^[\s\-—–]+/, '').trim();
+  const heroEyebrow = /chinmaya\s*mission/i.test(rawEyebrow)
+    ? 'Chinmaya Mission, Adoni'
+    : rawEyebrow;
   const heroHeading = f.hero?.heading || 'Inner Transformation for a Better World';
   const heroDesc = f.hero?.description || 'Through Vedanta, values and service, we strive to build a generation of conscious, compassionate and capable individuals.';
   const primaryBtnText = f.hero?.primaryBtnText || 'Explore Our Mission';
@@ -248,14 +251,14 @@ export function HomePage() {
 
           <div className="hero-glow" />
           <div className="hero-content">
-            <p className="eyebrow">
-              <span className="eyebrow-line" /> {heroEyebrow}
+            <p className="eyebrow hero-eyebrow">
+              {heroEyebrow}
             </p>
             <h1>
-              {heroHeading.includes('for a Better World') ? (
+              {heroHeading.toLowerCase().includes('inner transformation') && heroHeading.toLowerCase().includes('better world') ? (
                 <>
-                  Inner Transformation<br />
-                  <em>for a Better World</em>
+                  <span className="hero-heading-line">Inner Transformation</span>
+                  <span className="hero-heading-line"><em>for a Better World</em></span>
                 </>
               ) : (
                 heroHeading

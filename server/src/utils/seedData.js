@@ -294,22 +294,8 @@ export const seedInitialData = async () => {
           },
           ourActivities: {
             heading: 'OUR ACTIVITIES',
-            intro: 'At Chinmaya Mission, Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our temples and dedicated groups, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
+            intro: 'At Chinmaya Mission, Adoni, our activities bring together spirituality, devotion, cultural values, youth development and selfless service. Through our dedicated wings and initiatives, we strive to nurture spiritual awareness, strengthen community bonds and inspire individuals of all ages to live by timeless values.',
             cards: [
-              {
-                id: 'act-1',
-                title: 'CHINMAYA SANJEEVARAYA TEMPLE',
-                content: 'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions. Through devotional activities and spiritual gatherings, the temple seeks to nurture faith, preserve cultural heritage and bring the community together.',
-                imageUrl: '/assets/images/activity-sanjeevaraya.png',
-                badge: 'SPIRITUAL TEMPLE'
-              },
-              {
-                id: 'act-2',
-                title: 'SHANTA MALLESHWARA TEMPLE',
-                content: 'Shanta Malleshwara Temple is an important centre of worship and devotion associated with Chinmaya Mission, Adoni. The temple provides a space for devotees to participate in religious observances, festivals and spiritual activities, fostering a sense of unity, devotion and community service.',
-                imageUrl: '/assets/images/activity-shantamalleshwara.webp',
-                badge: 'SACRED CENTRE'
-              },
               {
                 id: 'act-3',
                 title: 'DEVI GROUP',
@@ -319,10 +305,10 @@ export const seedInitialData = async () => {
               },
               {
                 id: 'act-4',
-                title: 'CHINMAYA YUVA KENDRA (CHYK)',
-                content: 'Chinmaya Yuva Kendra (CHYK) is the youth wing of Chinmaya Mission, providing a platform for young people to grow spiritually, develop leadership skills and engage in meaningful community initiatives. CHYK, Adoni encourages young minds to discover their potential and apply the wisdom of Indian philosophy to modern-day life. Through youth programmes, cultural activities, interactive initiatives and social service, CHYK inspires young people to become responsible leaders guided by knowledge, discipline, confidence and compassion.',
-                imageUrl: '/assets/images/activity-chyk.jpg',
-                badge: 'YOUTH WING',
+                title: 'BALVIHAR CLASSES',
+                content: 'Chinmaya Balvihar classes provide structured value-based spiritual education for children. Through interactive storytelling, shlokas, bhajans, Indian cultural traditions, moral games, and creative activities, Balvihar helps young minds grow with noble ideals, love for heritage, character, and self-confidence inspired by Pujya Gurudev Swami Chinmayananda’s vision.',
+                imageUrl: '/assets/images/activity-balvihar.jpg',
+                badge: 'CHILDREN’S WING • VALUE EDUCATION',
                 featured: true
               }
             ]
@@ -330,7 +316,7 @@ export const seedInitialData = async () => {
           continuingLegacy: {
             heading: 'CONTINUING THE LEGACY',
             content: 'Guided by the principles of knowledge, devotion and selfless service, Chinmaya Mission, Adoni continues to share the vision and teachings of Pujya Gurudev Swami Chinmayananda, inspiring individuals, empowering youth and contributing to the spiritual and cultural enrichment of society.',
-            highlights: ['1992', 'Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community']
+            highlights: ['Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community']
           },
           conclusion: {
             heading: 'Conclusion',

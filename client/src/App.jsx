@@ -253,6 +253,14 @@ export function App() {
               }
             />
             <Route
+              path="/admin/volunteering"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="VOLUNTEERING" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/footer"
               element={
                 <ProtectedRoute requireAdmin={true}>

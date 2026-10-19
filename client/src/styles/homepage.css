@@ -108,22 +108,36 @@
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 }
 
+.hero-eyebrow {
+  font-size: clamp(18px, 1.4vw, 22px);
+  letter-spacing: 0.6px;
+  font-weight: 700;
+  text-transform: none;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 .eyebrow-line {
-  height: 2px;
-  width: 26px;
+  height: 2.5px;
+  width: 28px;
   background: #FFA14A;
   box-shadow: 0 0 8px rgba(255, 161, 74, 0.7);
+  flex-shrink: 0;
 }
 
 .hero h1 {
   font-family: 'Playfair Display', serif;
   font-weight: 600;
-  font-size: clamp(40px, 4.6vw, 68px);
-  line-height: 1.12;
-  letter-spacing: -1.8px;
-  margin: 0 0 22px;
+  font-size: clamp(30px, 3.4vw, 50px);
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+  margin: 0 0 20px;
   color: #FFFFFF;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+}
+
+.hero-heading-line {
+  display: block;
 }
 
 .hero h1 em {
@@ -907,8 +921,12 @@
     z-index: 3;
   }
   .hero h1 {
-    font-size: clamp(34px, 9vw, 46px);
-    letter-spacing: -1.2px;
+    font-size: clamp(26px, 7vw, 38px);
+    letter-spacing: -0.8px;
+  }
+  .hero-eyebrow {
+    font-size: 18px;
+    white-space: nowrap;
   }
   .hero-description {
     font-size: 13.5px;

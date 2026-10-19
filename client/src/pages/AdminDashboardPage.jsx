@@ -14,6 +14,7 @@ import { HomePageManager } from './admin/HomePageManager';
 import { FooterManager } from './admin/FooterManager';
 import { AdminImagesPage } from './admin/AdminImagesPage';
 import { LetsConnectManager } from './admin/LetsConnectManager';
+import { VolunteeringManager } from './admin/VolunteeringManager';
 import { UserManager } from './admin/UserManager';
 import { AdminProfileManager } from './admin/AdminProfileManager';
 import { StoryBoardManager } from './admin/StoryBoardManager';
@@ -52,6 +53,7 @@ import {
   GraduationCap,
   MessageSquare,
   UserCheck,
+  HeartHandshake,
 } from 'lucide-react';
 
 export const AdminDashboardPage = ({ defaultTab }) => {
@@ -69,6 +71,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     if (path.includes('/admin/about')) return 'ABOUT_CMS';
     if (path.includes('/admin/change-password')) return 'PASSWORD';
     if (path.includes('/admin/lets-connect')) return 'LETS_CONNECT';
+    if (path.includes('/admin/volunteering')) return 'VOLUNTEERING';
     if (path.includes('/admin/images')) return 'IMAGES';
     if (path.includes('/admin/update-content') || path.includes('/admin/content')) return 'UPDATE_CONTENT';
     if (path.includes('/admin/footer')) return 'FOOTER_CMS';
@@ -509,6 +512,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           { id: 'ADMIN_PROFILE', label: 'Admin Profile', icon: Shield },
           { id: 'UPDATE_CONTENT', label: 'Update Content', icon: Globe },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
+          { id: 'VOLUNTEERING', label: 'Volunteering', icon: HeartHandshake },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
           { id: 'FOOTER_CMS', label: 'Footer CMS', icon: Settings },
@@ -551,6 +555,9 @@ export const AdminDashboardPage = ({ defaultTab }) => {
 
       {/* TAB: LET'S CONNECT INBOX */}
       {activeTab === 'LETS_CONNECT' && <LetsConnectManager />}
+
+      {/* TAB: VOLUNTEERING APPLICATIONS */}
+      {activeTab === 'VOLUNTEERING' && <VolunteeringManager />}
 
       {/* TAB: IMAGES & MEDIA LIBRARY */}
       {activeTab === 'IMAGES' && <AdminImagesPage />}
