@@ -89,7 +89,8 @@ export function HomePage() {
       localStorage.removeItem('cached_cms_chinmaya_home_v4');
       localStorage.removeItem('cached_cms_chinmaya_home_v5');
       localStorage.removeItem('cached_cms_chinmaya_home_v6');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v7');
+      localStorage.removeItem('cached_cms_chinmaya_home_v7');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v8');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -103,7 +104,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v7', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v8', JSON.stringify(res.data.data));
           } catch {}
         }
       })

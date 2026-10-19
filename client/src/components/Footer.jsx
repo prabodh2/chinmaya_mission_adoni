@@ -150,7 +150,7 @@ function sanitizeMainSiteFooter(rawData) {
       if (lower.includes('what we do') || url === '/what-we-do') return false;
       if (lower.includes('marathon registration') || url === '/register') return false;
       if (lower.includes('sacred image gallery') || lower === 'gallery' || url.includes('/gallery')) return false;
-      if (lower.includes('who are we') || lower.includes('who we are') || url.includes('/who-are-we')) return false;
+      if (lower.includes('who are we') || lower.includes('who we are') || url.includes('/who-are-we') || url.includes('/who-we-are')) return false;
       if (lower.includes("let's connect") || lower.includes('lets connect') || url.includes('/lets-connect')) return false;
       if (lower.includes('marathon') || url.includes('marathon')) return false;
       return true;

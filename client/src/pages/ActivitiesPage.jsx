@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { activityService, contentService, webContentService } from '../services/api';
+import { contentService, webContentService } from '../services/api';
 import {
   Flame,
   Sparkles,
@@ -503,8 +503,6 @@ export const ActivitiesPage = () => {
     },
   ];
 
-  const defaultMovementActivities = [];
-
   const getCached = (key, fallback) => {
     try {
       const item = localStorage.getItem(key);
@@ -573,28 +571,10 @@ export const ActivitiesPage = () => {
     }
     return initialActivities;
   });
-  const [movementActivities, setMovementActivities] = useState(() => {
-    const cached = getCached('cms_movement_activities', null);
-    if (Array.isArray(cached) && cached.length > 0) {
-      return cached
-        .filter((a) => !/School Anti-Drug Oath|Youth Marathon Prep|Mind & Body Wellness|Torch Relay/i.test(a.title || ''))
-        .map((a) =>
-          a.description?.includes('helps youth build confidence')
-            ? {
-                ...a,
-                description: a.description.replace(
-                  'helps youth build confidence',
-                  'helps youth to build confidence'
-                ),
-              }
-            : a
-        );
-    }
-    return defaultMovementActivities;
-  });
 
   const [heroContent, setHeroContent] = useState(() => {
     try {
+      localStorage.removeItem('cms_movement_activities');
       const cached = localStorage.getItem('cached_cms_chinmaya_activities');
       if (cached) return JSON.parse(cached)?.fieldsMap?.activities_hero || null;
     } catch (_) {}
@@ -602,6 +582,10 @@ export const ActivitiesPage = () => {
   });
 
   const loadActivities = () => {
+    try {
+      localStorage.removeItem('cms_movement_activities');
+    } catch (_) {}
+
     webContentService
       .getPublicPage('chinmaya', 'activities')
       .then((res) => {
@@ -610,33 +594,6 @@ export const ActivitiesPage = () => {
             localStorage.setItem('cached_cms_chinmaya_activities', JSON.stringify(res.data.data));
           } catch (_) {}
           setHeroContent(res.data.data.fieldsMap?.activities_hero || null);
-        }
-      })
-      .catch(() => {});
-    // 1. Fetch community & movement activities from API
-    activityService
-      .getActivities()
-      .then((res) => {
-        if (res.data?.success && Array.isArray(res.data.data)) {
-          const list = res.data.data
-            .filter((act) => act.active !== false && !/School Anti-Drug Oath|Youth Marathon Prep|Mind & Body Wellness|Torch Relay/i.test(act.title || ''))
-            .map((act) => ({
-              id: act._id || act.title,
-              title: act.title,
-              section: 'COMMUNITY & MOVEMENT INITIATIVES',
-              category: act.category || 'Activity',
-              description: act.description,
-              imageUrl: act.imageUrl,
-              imageAlt: act.title,
-              icon: <Sparkles className="w-5 h-5 text-[var(--orange)]" />,
-            }));
-          setMovementActivities(list);
-          try {
-            localStorage.setItem(
-              'cms_movement_activities',
-              JSON.stringify(list.map((x) => ({ ...x, icon: undefined })))
-            );
-          } catch (_) {}
         }
       })
       .catch(() => {});
@@ -794,21 +751,6 @@ export const ActivitiesPage = () => {
           />
         )}
       </section>
-
-      {/* 5. SECTION 4: COMMUNITY & MOVEMENT INITIATIVES */}
-      {movementActivities.length > 0 && (
-        <section className="space-y-8 w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full items-stretch">
-            {movementActivities.map((act) => (
-              <ActivityCard
-                key={act.id || act._id || act.title}
-                activity={act}
-                onSelect={handleSelectActivity}
-              />
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Detail & History Modal for Activity */}
       {selectedActivity && (

@@ -25,14 +25,14 @@ export const ChinmayaMissionAdoniPage = () => {
   // Fallback default content matching exact prompt specification
   const defaultContent = {
     hero: {
-      title: 'CHINMAYA MISSION',
+      title: 'CHINMAYA MISSION ADONI',
       subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
       intro:
-        'Chinmaya Mission is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
+        'Chinmaya Mission, Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
       imageUrl: '/assets/images/about-ashram-hero.jpg',
     },
     whoWeAre: {
-      heading: 'WHO ARE WE?',
+      heading: 'WHO WE ARE',
       p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
     },
@@ -268,7 +268,7 @@ export const ChinmayaMissionAdoniPage = () => {
             const rawP1 = f.who_we_are.p1 || merged.whoWeAre.p1;
             merged.whoWeAre = {
               ...merged.whoWeAre,
-              heading: f.who_we_are.heading || merged.whoWeAre.heading,
+              heading: (f.who_we_are.heading || merged.whoWeAre.heading).replace(/WHO ARE WE\??/i, 'WHO WE ARE'),
               p1: rawP1.replace(/Swami Shyamananda/g, 'Swamini Shyamananda').replace(/Swami Sharadapriyananda/g, 'Swamini Sharadapriyananda'),
               p2: f.who_we_are.p2 || merged.whoWeAre.p2,
             };
@@ -446,11 +446,17 @@ export const ChinmayaMissionAdoniPage = () => {
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--orange)]/15 text-[var(--orange)] font-extrabold text-xs tracking-widest uppercase border border-[var(--orange)]/30 shadow-sm">
               <Flame className="w-4 h-4 text-[var(--orange)] animate-pulse" />
-              <span>CHINMAYA MISSION • EST. 2001</span>
+              <span>CHINMAYA MISSION ADONI • EST. 2001</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
-              {(data.hero?.title || 'CHINMAYA MISSION').replace(/^ABOUT\s+/i, '').replace(/,\s*Adoni/gi, '').trim()}
+              {(() => {
+                const rawTitle = (data.hero?.title || 'CHINMAYA MISSION ADONI')
+                  .replace(/^ABOUT\s+/i, '')
+                  .replace(/,\s*Adoni/gi, ' ADONI')
+                  .trim();
+                return /adoni/i.test(rawTitle) ? rawTitle : `${rawTitle} ADONI`;
+              })()}
             </h1>
 
             <p className="text-xl sm:text-2xl font-bold font-heading bg-gradient-to-r from-[var(--orange)] via-[var(--yellow)] to-[var(--orange)] bg-clip-text text-transparent">
@@ -491,7 +497,7 @@ export const ChinmayaMissionAdoniPage = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-                {data.whoWeAre.heading}
+                {(data.whoWeAre.heading || 'WHO WE ARE').replace(/WHO ARE WE\??/i, 'WHO WE ARE')}
               </h2>
             </div>
           </div>

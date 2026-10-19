@@ -78,7 +78,7 @@ export const WhoAreWePage = () => {
 
   // Set document title
   useEffect(() => {
-    document.title = 'Who Are We | Chinmaya Mission';
+    document.title = 'Who We Are | Chinmaya Mission';
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
     webContentService
@@ -146,7 +146,7 @@ export const WhoAreWePage = () => {
             {(f.leadership_hero?.subtitle || 'CHINMAYA MISSION').replace(/[·,]\s*ADONI/gi, '').trim()}
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1B362A] tracking-tight font-heading">
-            {f.leadership_hero?.title || 'Who We Are'}
+            {f.leadership_hero?.title ? f.leadership_hero.title.replace(/Who Are We/i, 'Who We Are') : 'Who We Are'}
           </h1>
           <p className="text-sm sm:text-base text-[#526558] font-medium max-w-xl mx-auto">
             {f.leadership_hero?.overview || 'A legacy of wisdom, service and spiritual growth'}

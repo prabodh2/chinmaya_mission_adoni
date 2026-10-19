@@ -126,8 +126,8 @@ export const Navbar = () => {
           path: '/chinmaya-mission-adoni',
         },
         {
-          name: 'Who are we',
-          path: '/who-are-we',
+          name: 'Who We Are',
+          path: '/who-we-are',
         },
       ],
     },
@@ -164,7 +164,7 @@ export const Navbar = () => {
     if (path === '/chinmaya-mission-adoni' || path === '/about') {
       return isChinmayaMissionAdoniActive;
     }
-    if (path === '/who-are-we') {
+    if (path === '/who-are-we' || path === '/who-we-are') {
       return isWhoAreWeActive;
     }
     if (path === '/events') {

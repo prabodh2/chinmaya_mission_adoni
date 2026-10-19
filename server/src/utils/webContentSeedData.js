@@ -181,7 +181,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           order: 1,
           isEnabled: true,
           fields: [
-            { key: 'title', label: 'Page Title', type: 'text', value: 'CHINMAYA MISSION, ADONI' },
+            { key: 'title', label: 'Page Title', type: 'text', value: 'CHINMAYA MISSION ADONI' },
             { key: 'subtitle', label: 'Subtitle Tagline', type: 'text', value: 'Timeless Wisdom. Inspired Youth. Meaningful Service.' },
             {
               key: 'intro',
@@ -195,12 +195,12 @@ export const DEFAULT_WEBSITE_PAGES = {
         },
         {
           sectionId: 'who_we_are',
-          name: 'Who Are We Section',
+          name: 'Who We Are Section',
           description: 'Comprehensive description of our purpose and lineage.',
           order: 2,
           isEnabled: true,
           fields: [
-            { key: 'heading', label: 'Section Heading', type: 'text', value: 'WHO ARE WE?' },
+            { key: 'heading', label: 'Section Heading', type: 'text', value: 'WHO WE ARE' },
             {
               key: 'p1',
               label: 'First Paragraph',
@@ -386,14 +386,14 @@ export const DEFAULT_WEBSITE_PAGES = {
     {
       website: 'chinmaya',
       pageSlug: 'who-are-we',
-      pageTitle: 'Who Are We',
-      route: '/who-are-we',
+      pageTitle: 'Who We Are',
+      route: '/who-we-are',
       isSystemPage: true,
       status: 'PUBLISHED',
       seo: {
-        metaTitle: 'Who Are We | Leadership & Lineage | Chinmaya Mission Adoni',
+        metaTitle: 'Who We Are | Leadership & Lineage | Chinmaya Mission Adoni',
         metaDescription: 'Meet the spiritual lineage, Acharyas, Swami Chinmayananda, Swami Tejomayananda, and resident Brahmachari Narayana Chaitanya.',
-        keywords: 'Who Are We, Gurudev, Acharyas, Chinmaya Lineage, Adoni',
+        keywords: 'Who We Are, Gurudev, Acharyas, Chinmaya Lineage, Adoni',
       },
       sections: [
         {
@@ -403,7 +403,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           order: 1,
           isEnabled: true,
           fields: [
-            { key: 'title', label: 'Page Title', type: 'text', value: 'Who Are We — Chinmaya Mission, Adoni' },
+            { key: 'title', label: 'Page Title', type: 'text', value: 'Who We Are — Chinmaya Mission, Adoni' },
             { key: 'subtitle', label: 'Tagline', type: 'text', value: 'Guiding souls through Vedanta, selfless service, and character-building.' },
             {
               key: 'overview',
