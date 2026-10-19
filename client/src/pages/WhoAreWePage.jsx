@@ -137,6 +137,33 @@ export const WhoAreWePage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedMember]);
 
+  const formatOverview = (text) => {
+    if (!text) return 'Carrying forward the vision of Pujya Gurudev Swami Chinmayananda\nwith the guidance of the worldwide head and dedicated local leadership in Adoni.';
+    const trimmed = text.trim();
+    if (trimmed.includes('\n')) {
+      const lines = trimmed.split('\n').map(l => l.trim()).filter(Boolean);
+      return (
+        <>
+          {lines.map((line, i) => (
+            <span key={i} className="block">{line}</span>
+          ))}
+        </>
+      );
+    }
+    if (trimmed.includes('Chinmayananda') && /with the guidance/i.test(trimmed)) {
+      const parts = trimmed.split(/(with the guidance of)/i);
+      if (parts.length >= 3) {
+        return (
+          <>
+            <span className="block">{parts[0].trim()}</span>
+            <span className="block">{parts[1].trim()} {parts.slice(2).join('').trim()}</span>
+          </>
+        );
+      }
+    }
+    return trimmed;
+  };
+
   return (
     <div className="min-h-screen bg-[#F8F3E8] pt-2 sm:pt-4 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-4xl mx-auto space-y-8 sm:space-y-10">
@@ -148,8 +175,8 @@ export const WhoAreWePage = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1B362A] tracking-tight font-heading">
             {f.leadership_hero?.title ? f.leadership_hero.title.replace(/Who Are We/i, 'Who We Are') : 'Who We Are'}
           </h1>
-          <p className="text-sm sm:text-base text-[#526558] font-medium max-w-xl mx-auto">
-            {f.leadership_hero?.overview || 'A legacy of wisdom, service and spiritual growth'}
+          <p className="text-sm sm:text-base text-[#526558] font-medium max-w-3xl mx-auto leading-relaxed">
+            {formatOverview(f.leadership_hero?.overview)}
           </p>
           {/* Decorative golden-ochre accent underline */}
           <div className="w-14 sm:w-16 h-1 bg-[#C89B59] rounded-full mx-auto mt-2" />

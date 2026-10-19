@@ -409,7 +409,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               key: 'overview',
               label: 'Lineage Overview',
               type: 'textarea',
-              value: 'Carrying forward the vision of Pujya Gurudev Swami Chinmayananda with the guidance of the worldwide head and dedicated local leadership in Adoni.',
+              value: 'Carrying forward the vision of Pujya Gurudev Swami Chinmayananda\nwith the guidance of the worldwide head and dedicated local leadership in Adoni.',
             },
           ],
           items: [
