@@ -259,7 +259,7 @@ export const DEFAULT_WEBSITE_PAGES = {
               type: 'textarea',
               value: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation through workshops and camps.",
             },
-            { key: 'imageUrl', label: 'Youth Featured Photo', type: 'image', value: '/assets/images/chyk-youth-team.jpg' },
+            { key: 'imageUrl', label: 'Youth Featured Photo', type: 'image', value: '/assets/chyk-group.jpg' },
           ],
           items: [],
         },

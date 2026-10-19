@@ -72,11 +72,11 @@ export const ChinmayaMissionAdoniPage = () => {
       ],
     },
     chykSection: {
-      heading: 'CHINMAYA YUVA KENDRA (CHYK)',
+      heading: 'CHINMAYA YUVA KENDRA (CHYK), ADONI',
       p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
-      p2: "CHYK aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation. Through youth-led programmes, interactive activities, cultural initiatives and service-oriented projects, it encourages young people to become responsible leaders who combine knowledge with action and personal growth with social responsibility.",
+      p2: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation through workshops and camps.",
       keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
-      imageUrl: '/assets/images/chyk-youth-team.jpg',
+      imageUrl: '/assets/chyk-group.jpg',
     },
     spiritualityInAction: {
       heading: 'SPIRITUALITY IN ACTION',
@@ -348,8 +348,21 @@ export const ChinmayaMissionAdoniPage = () => {
         if (parsed?.continuingLegacy?.highlights) {
           parsed.continuingLegacy.highlights = filterLegacyHighlights(parsed.continuingLegacy.highlights);
         }
-        if (!parsed?.chykSection?.imageUrl || parsed?.chykSection?.imageUrl?.includes('photo-1529156069898-49953e39b3ac')) {
-          parsed.chykSection = { ...parsed.chykSection, imageUrl: '/assets/images/chyk-youth-team.jpg' };
+        if (
+          !parsed?.chykSection?.imageUrl ||
+          parsed?.chykSection?.imageUrl?.includes('photo-1529156069898-49953e39b3ac') ||
+          parsed?.chykSection?.imageUrl?.includes('youth-runners') ||
+          parsed?.chykSection?.imageUrl?.includes('chyk-youth-team') ||
+          parsed?.chykSection?.imageUrl !== '/assets/chyk-group.jpg'
+        ) {
+          parsed.chykSection = {
+            ...parsed?.chykSection,
+            heading: 'CHINMAYA YUVA KENDRA (CHYK), ADONI',
+            p1: 'Chinmaya Yuva Kendra (CHYK), the youth wing of Chinmaya Mission, provides a platform for young people to explore spiritual knowledge, cultivate leadership qualities and participate in meaningful community initiatives.',
+            p2: "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation through workshops and camps.",
+            keywords: ['KNOWLEDGE', 'LEADERSHIP', 'DISCIPLINE', 'CONFIDENCE', 'SERVICE'],
+            imageUrl: '/assets/chyk-group.jpg',
+          };
         }
         if (parsed?.ourActivities) {
           parsed.ourActivities.cards = normalizeActivities(parsed.ourActivities.cards);
@@ -414,15 +427,15 @@ export const ChinmayaMissionAdoniPage = () => {
           }
           if (f.chyk_section) {
             const rawChykImg = f.chyk_section.imageUrl;
-            const chykImg = (!rawChykImg || rawChykImg.includes('photo-1529156069898-49953e39b3ac'))
-              ? '/assets/images/chyk-youth-team.jpg'
+            const chykImg = (!rawChykImg || rawChykImg.includes('photo-1529156069898-49953e39b3ac') || rawChykImg.includes('youth-runners') || rawChykImg.includes('chyk-youth-team'))
+              ? '/assets/chyk-group.jpg'
               : rawChykImg;
 
             merged.chykSection = {
               ...merged.chykSection,
-              heading: f.chyk_section.heading || merged.chykSection.heading,
+              heading: f.chyk_section.heading || 'CHINMAYA YUVA KENDRA (CHYK), ADONI',
               p1: f.chyk_section.p1 || merged.chykSection.p1,
-              p2: f.chyk_section.p2 || merged.chykSection.p2,
+              p2: f.chyk_section.p2 || "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation through workshops and camps.",
               imageUrl: chykImg,
             };
           }
@@ -488,15 +501,20 @@ export const ChinmayaMissionAdoniPage = () => {
           setLoading(false);
           return;
         }
+        throw new Error('No page data returned');
       })
-      .catch(() => {})
-      .finally(() => {
+      .catch(() => {
         contentService
           .getContent('about_page')
           .then((res) => {
             if (res.data?.success && res.data?.data) {
               const apiData = res.data.data;
               const merged = { ...defaultContent, ...apiData };
+              if (merged?.chykSection) {
+                merged.chykSection.imageUrl = '/assets/chyk-group.jpg';
+                merged.chykSection.heading = 'CHINMAYA YUVA KENDRA (CHYK), ADONI';
+                merged.chykSection.p2 = "CHYK, Adoni aims to connect the timeless teachings of Indian philosophy with the aspirations and challenges of today's generation through workshops and camps.";
+              }
               if (merged?.ourActivities) {
                 merged.ourActivities.cards = normalizeActivities(merged.ourActivities?.cards);
               }
@@ -900,16 +918,22 @@ export const ChinmayaMissionAdoniPage = () => {
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden border-2 border-[var(--orange)] shadow-2xl group bg-slate-900 flex items-center justify-center h-80 sm:h-[400px]">
                 <img
-                  src={data.chykSection.imageUrl}
+                  src={data.chykSection?.imageUrl || '/assets/chyk-group.jpg'}
                   alt=""
                   aria-hidden="true"
                   className="absolute inset-0 w-full h-full object-cover blur-xl opacity-45 scale-110 pointer-events-none"
+                  onError={(e) => {
+                    e.currentTarget.src = '/assets/chyk-group.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 pointer-events-none" />
                 <img
-                  src={data.chykSection.imageUrl}
+                  src={data.chykSection?.imageUrl || '/assets/chyk-group.jpg'}
                   alt="CHYK Youth Power"
                   className="relative z-10 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.src = '/assets/chyk-group.jpg';
+                  }}
                 />
                 <div className="absolute top-4 right-4 px-4 py-1.5 rounded-full bg-black/80 text-[var(--yellow)] font-extrabold text-xs backdrop-blur-md border border-white/20 z-20">
                   YOUTH IN ACTION
