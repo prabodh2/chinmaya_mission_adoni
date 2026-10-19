@@ -47,7 +47,7 @@ const events = [
     subtitle: 'Sri Sita Rama Kalyanam & Divine Celebrations',
     date: 'April 15th, 2027',
     kind: 'journey',
-    image: '/assets/rama-navami-procession.jpg',
+    image: '/assets/rama-navami.jpg',
     icon: '✦',
     url: '/events',
     isExternal: false,
@@ -57,6 +57,7 @@ const events = [
     subtitle: 'Special Pooja & Hanuman Chalisa Parayanam',
     date: 'April 20th, 2027',
     kind: 'wisdom',
+    image: '/assets/hanuman-jayanthi.png',
     icon: 'ॐ',
     url: '/events',
     isExternal: false,
@@ -66,6 +67,7 @@ const events = [
     subtitle: 'Lord Krishna Birth Celebrations & Utsavam',
     date: 'August 25th, 2027',
     kind: 'meditation',
+    image: '/assets/krishna-janmashtami.jpg',
     icon: '☼',
     url: '/events',
     isExternal: false,
@@ -83,7 +85,8 @@ export function HomePage() {
       localStorage.removeItem('cached_cms_chinmaya_home_v3');
       localStorage.removeItem('cached_cms_chinmaya_home_v4');
       localStorage.removeItem('cached_cms_chinmaya_home_v5');
-      const cached = localStorage.getItem('cached_cms_chinmaya_home_v6');
+      localStorage.removeItem('cached_cms_chinmaya_home_v6');
+      const cached = localStorage.getItem('cached_cms_chinmaya_home_v7');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -97,7 +100,7 @@ export function HomePage() {
         if (res.data?.success && res.data?.data) {
           setPageData(res.data.data);
           try {
-            localStorage.setItem('cached_cms_chinmaya_home_v6', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_cms_chinmaya_home_v7', JSON.stringify(res.data.data));
           } catch {}
         }
       })
@@ -192,8 +195,21 @@ export function HomePage() {
     )
       ? rawEventItems.map((it, idx) => {
           const targetUrl = it.linkUrl || '/events';
-          const isRamaNavami = it.title?.toLowerCase().includes('rama navami');
-          const eventImage = it.imageUrl || (isRamaNavami ? '/assets/rama-navami-procession.jpg' : '');
+          const titleLower = (it.title || '').toLowerCase();
+          const isRamaNavami = titleLower.includes('rama navami');
+          const isHanuman = titleLower.includes('hanuman');
+          const isKrishna = titleLower.includes('krishna');
+
+          let defaultImg = '';
+          if (isRamaNavami) defaultImg = '/assets/rama-navami.jpg';
+          else if (isHanuman) defaultImg = '/assets/hanuman-jayanthi.png';
+          else if (isKrishna) defaultImg = '/assets/krishna-janmashtami.jpg';
+
+          const eventImage =
+            it.imageUrl && !it.imageUrl.includes('rama-navami-procession')
+              ? it.imageUrl
+              : defaultImg;
+
           return {
             title: it.title,
             subtitle: it.subtitle || '',

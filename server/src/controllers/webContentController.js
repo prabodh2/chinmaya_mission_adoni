@@ -44,15 +44,34 @@ export const buildFieldsMap = (sections = []) => {
   sections.forEach((sec) => {
     if (!sec || !sec.sectionId) return;
 
-    // Automatically exclude marathon items from upcoming_events
+    // Automatically exclude marathon items from upcoming_events and ensure festival images
     const rawItems = sec.items || [];
     const filteredItems = sec.sectionId === 'upcoming_events'
-      ? rawItems.filter(
-          (item) =>
-            item &&
-            item.itemId !== 'event-marathon' &&
-            !item.title?.toLowerCase().includes('marathon')
-        )
+      ? rawItems
+          .filter(
+            (item) =>
+              item &&
+              item.itemId !== 'event-marathon' &&
+              !item.title?.toLowerCase().includes('marathon')
+          )
+          .map((item) => {
+            const copy = typeof item?.toObject === 'function' ? item.toObject() : { ...(item || {}) };
+            const titleLower = (copy.title || '').toLowerCase();
+            if (titleLower.includes('rama navami')) {
+              if (!copy.imageUrl || copy.imageUrl.includes('rama-navami-procession')) {
+                copy.imageUrl = '/assets/rama-navami.jpg';
+              }
+            } else if (titleLower.includes('hanuman')) {
+              if (!copy.imageUrl) {
+                copy.imageUrl = '/assets/hanuman-jayanthi.png';
+              }
+            } else if (titleLower.includes('krishna')) {
+              if (!copy.imageUrl) {
+                copy.imageUrl = '/assets/krishna-janmashtami.jpg';
+              }
+            }
+            return copy;
+          })
       : rawItems;
 
     map[sec.sectionId] = {
