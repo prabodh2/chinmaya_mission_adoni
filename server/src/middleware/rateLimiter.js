@@ -19,13 +19,17 @@ export const createRateLimiter = (options = {}) => {
   const windowMs = options.windowMs || 15 * 60 * 1000; // 15 minutes default
   const maxRequests = options.maxRequests || 100;       // Max requests per window
   const message = options.message || 'Too many requests from this IP, please try again later.';
-
   return (req, res, next) => {
-    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+    const forwarded = req.headers['x-forwarded-for'];
+    const ip = typeof forwarded === 'string'
+      ? forwarded.split(',')[0].trim()
+      : (req.ip || req.socket?.remoteAddress || 'unknown');
+
     const isLocalhost =
       ip === '127.0.0.1' ||
       ip === '::1' ||
       ip === '::ffff:127.0.0.1' ||
+      ip === 'localhost' ||
       process.env.NODE_ENV === 'test';
 
     // Allow unlimited testing from localhost/test environment
@@ -70,4 +74,16 @@ export const registrationLimiter = createRateLimiter({
   windowMs: 5 * 60 * 1000,  // 5 mins
   maxRequests: 15,           // Max 15 registrations per IP per 5 min
   message: 'Registration rate limit reached. Please wait a few minutes before submitting again.',
+});
+
+export const formSubmissionLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 mins
+  maxRequests: 30,          // Max 30 form submissions per IP per 15 min
+  message: 'Form submission limit reached. Please wait a few minutes before submitting again.',
+});
+
+export const apiGeneralLimiter = createRateLimiter({
+  windowMs: 1 * 60 * 1000,  // 1 min
+  maxRequests: 300,         // Max 300 requests per minute per IP
+  message: 'Too many requests. Please slow down.',
 });

@@ -8,10 +8,11 @@ import {
 } from '../controllers/contactController.js';
 import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
+import { formSubmissionLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-router.post('/', optionalAuth, submitContactMessage);
+router.post('/', formSubmissionLimiter, optionalAuth, submitContactMessage);
 router.get('/my-messages', protect, getUserContactMessages);
 router.get('/admin/all', protect, requireAdmin, getContactMessagesAdmin);
 router.patch('/admin/:id/status', protect, requireAdmin, updateContactStatus);

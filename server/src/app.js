@@ -23,6 +23,8 @@ import sevaBookingRoutes from './routes/sevaBookingRoutes.js';
 
 const app = express();
 
+// Trust reverse proxies (Vercel, Render, Hostinger Nginx / LiteSpeed)
+app.set('trust proxy', 1);
 
 // Security Headers & CORS
 app.use(helmet({ crossOriginResourcePolicy: false }));

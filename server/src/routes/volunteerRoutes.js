@@ -7,11 +7,12 @@ import {
 } from '../controllers/volunteerController.js';
 import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
+import { formSubmissionLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // Public: Submit volunteering application (can be anonymous or authenticated)
-router.post('/', optionalAuth, submitVolunteer);
+router.post('/', formSubmissionLimiter, optionalAuth, submitVolunteer);
 
 // Admin: Manage volunteer applications
 router.get('/admin/all', protect, requireAdmin, getVolunteersAdmin);

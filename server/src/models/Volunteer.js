@@ -19,4 +19,7 @@ const volunteerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+volunteerSchema.index({ status: 1, createdAt: -1 });
+volunteerSchema.index({ createdAt: -1 });
+
 export default mongoose.model('Volunteer', volunteerSchema);

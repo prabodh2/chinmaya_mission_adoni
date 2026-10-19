@@ -24,4 +24,6 @@ const activitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+activitySchema.index({ active: 1, order: 1 });
+
 export default mongoose.model('Activity', activitySchema);

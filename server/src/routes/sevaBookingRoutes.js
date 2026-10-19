@@ -9,11 +9,12 @@ import {
 } from '../controllers/sevaBookingController.js';
 import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 import { requireAdmin } from '../middleware/adminMiddleware.js';
+import { formSubmissionLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // Public / Semi-authenticated Submission
-router.post('/', optionalAuth, submitSevaBooking);
+router.post('/', formSubmissionLimiter, optionalAuth, submitSevaBooking);
 
 // Public Receipt Verification
 router.get('/verify/:refId', getSevaBookingByRefId);
