@@ -248,33 +248,38 @@ export const MythsVsFactsSection = ({ content }) => {
               }`}
             >
               {currentCard.type === 'intro' ? (
-                /* Card 1 — Introductory Card */
-                <div className="mvf-intro-card">
-                  <div className="mvf-intro-glow" />
-                  
-                  <div className="mvf-intro-badge-top">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#FFD12D]" />
-                    <span>Anti-Drug Movement Campaign</span>
+                /* Card 1 — Introductory Card (Myth Busters Cover Image) */
+                <div
+                  className="mvf-intro-card mvf-intro-card-image group"
+                  onClick={handleNext}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Myth Busters Campaign. Click to start exploring myths and facts."
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleNext();
+                    }
+                  }}
+                >
+                  <img
+                    src="/assets/images/myth-busters-cover.jpg"
+                    alt="Myth Busters - Anti-Drug Awareness Campaign"
+                    className="mvf-intro-cover-img"
+                  />
+                  <div className="mvf-intro-image-overlay">
+                    <button
+                      type="button"
+                      className="mvf-intro-action-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNext();
+                      }}
+                    >
+                      <span>START EXPLORING</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
-
-                  <div className="mvf-intro-typography">
-                    <div className="mvf-intro-myths">MYTH'S</div>
-                    <div className="mvf-intro-vs-badge">VS</div>
-                    <div className="mvf-intro-facts">FACT'S</div>
-                  </div>
-
-                  <p className="mvf-intro-tagline">
-                    Separate harmful misconceptions from medical and psychological realities. Break the cycle of misinformation.
-                  </p>
-
-                  <button
-                    type="button"
-                    className="mvf-intro-action-btn"
-                    onClick={handleNext}
-                  >
-                    <span>START EXPLORING</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
               ) : (
                 /* Cards 2-16 — Myth & Fact Content Cards */

@@ -74,6 +74,16 @@ const events = [
     url: '/events',
     isExternal: false,
   },
+  {
+    title: 'Magamasam Poojallu',
+    subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
+    date: 'Every Amavasya',
+    kind: 'devotion',
+    image: '/assets/magamasam-poojallu.jpg',
+    icon: '🔥',
+    url: '/events',
+    isExternal: false,
+  },
 ];
 
 export function HomePage() {
@@ -192,7 +202,18 @@ export function HomePage() {
       !it.title?.toLowerCase().includes('marathon')
   );
 
-  const dynamicEvents =
+  const magamasamCard = {
+    title: 'Magamasam Poojallu',
+    subtitle: 'Rudra Abhishekam, Rudra Homam, Siva Parvathi Kalyanam & Amavasya Poojalu',
+    date: 'Every Amavasya',
+    kind: 'devotion',
+    image: '/assets/magamasam-poojallu.jpg',
+    icon: '🔥',
+    url: '/events',
+    isExternal: false,
+  };
+
+  const baseEvents =
     rawEventItems.length > 0 &&
     !rawEventItems.some(
       (it) =>
@@ -228,6 +249,11 @@ export function HomePage() {
           };
         })
       : events;
+
+  // Always include Magamasam Poojallu if not already present
+  const dynamicEvents = baseEvents.some((e) => e.title === 'Magamasam Poojallu')
+    ? baseEvents
+    : [...baseEvents, magamasamCard];
 
   return (
     <div className="site-shell">
@@ -344,31 +370,15 @@ export function HomePage() {
           </div>
           <div className="events-grid">
             {dynamicEvents.map((event) => {
-              const targetUrl = event.url;
-              const hasLink = Boolean(targetUrl);
-
               return (
                 <article
-                  className={`event-card group ${hasLink ? 'cursor-pointer' : 'cursor-default'}`}
+                  className="event-card group cursor-pointer"
                   key={event.title}
-                  onClick={() => {
-                    if (!hasLink) return;
-                    if (event.isExternal || targetUrl.startsWith('http')) {
-                      window.open(targetUrl, '_blank', 'noopener,noreferrer');
-                    } else {
-                      navigate(targetUrl);
-                    }
-                  }}
+                  onClick={() => setPreviewEvent(event)}
                 >
                   <div
                     className={'event-art ' + (event.kind || 'journey')}
-                    onClick={(e) => {
-                      if (event.image) {
-                        e.stopPropagation();
-                        setPreviewEvent(event);
-                      }
-                    }}
-                    title={event.image ? 'Click to view full image' : undefined}
+                    title="Click to view details"
                   >
                     {event.image ? (
                       <>
@@ -409,9 +419,6 @@ export function HomePage() {
                   <div className="event-info">
                     <div className="flex items-start justify-between gap-1">
                       <h3>{event.title}</h3>
-                      {event.isExternal && (
-                        <ExternalLink size={13} className="text-[var(--orange)] shrink-0 mt-0.5 opacity-70 group-hover:opacity-100" />
-                      )}
                     </div>
                     <p>{event.subtitle}</p>
                     <div className="event-date">
