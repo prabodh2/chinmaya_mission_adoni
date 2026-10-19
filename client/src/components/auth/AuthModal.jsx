@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
 import { formatPhoneInput, getCleanPhoneNumber } from '../../utils/phoneUtils';
 import {
@@ -13,7 +14,6 @@ import {
   UserPlus,
   AlertCircle,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react';
 
 export const AuthModal = ({
@@ -44,6 +44,23 @@ export const AuthModal = ({
     confirmPassword: '',
   });
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+
+  // Escape key & body scroll lock
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -135,37 +152,67 @@ export const AuthModal = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[32px] max-w-md w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden text-[var(--text-primary)]">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose?.();
+        }
+      }}
+    >
+      <div
+        className="bg-white border border-[#EBD6A2] rounded-[32px] max-w-md w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden text-[#07162D]"
+        onClick={(e) => e.stopPropagation()}
+        style={{ color: '#07162D' }}
+      >
         {/* Glow Accents */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[var(--orange)]/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--cyan)]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-44 h-44 bg-[#F0441D]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-44 h-44 bg-[#FFD12D]/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
         <button
-          onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-muted)] hover:text-red-500 hover:border-red-500/30 transition-all cursor-pointer z-10"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onClose) onClose();
+          }}
+          className="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-red-600 border border-slate-200 flex items-center justify-center transition-all cursor-pointer z-50 shadow-sm"
           aria-label="Close"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 pointer-events-none stroke-[2.2]" />
         </button>
 
         {/* Header */}
-        <div className="text-center space-y-1.5 mb-6 relative z-10">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[var(--orange)]/15 text-[var(--orange)] mb-1 shadow-inner">
+        <div className="text-center space-y-1.5 mb-6 relative z-10 pt-1 px-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#F0441D]/15 text-[#F0441D] mb-1 shadow-inner">
             {activeTab === 'LOGIN' ? <LogIn className="w-6 h-6" /> : <UserPlus className="w-6 h-6" />}
           </div>
-          <h2 className="text-xl sm:text-2xl font-black font-heading tracking-tight">
+          <h2
+            className="text-xl sm:text-2xl font-black font-heading tracking-tight"
+            style={{
+              color: '#07162D',
+              fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
+              fontSize: '22px',
+              lineHeight: '1.25',
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
+              margin: '6px 0 4px',
+            }}
+          >
             {title}
           </h2>
-          <p className="text-xs text-[var(--text-muted)] font-medium leading-relaxed">
+          <p
+            className="text-xs sm:text-[13px] font-medium leading-relaxed"
+            style={{ color: '#59616D' }}
+          >
             {subtitle}
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-2 p-1 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] mb-5 relative z-10">
+        <div className="grid grid-cols-2 p-1 rounded-2xl bg-[#FFFDF9] border border-[#EBD6A2] mb-5 relative z-10 shadow-sm">
           <button
             type="button"
             onClick={() => {
@@ -175,8 +222,8 @@ export const AuthModal = ({
             }}
             className={`py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
               activeTab === 'LOGIN'
-                ? 'bg-[var(--orange)] text-white shadow-md'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                ? 'bg-[#F0441D] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Sign In
@@ -190,8 +237,8 @@ export const AuthModal = ({
             }}
             className={`py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
               activeTab === 'SIGNUP'
-                ? 'bg-[var(--orange)] text-white shadow-md'
-                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                ? 'bg-[#F0441D] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Create Account
@@ -200,7 +247,7 @@ export const AuthModal = ({
 
         {/* Server Error Alert */}
         {serverError && (
-          <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-red-500 text-xs font-semibold animate-in fade-in">
+          <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-start gap-2.5 text-red-600 text-xs font-semibold animate-in fade-in">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{serverError}</span>
           </div>
@@ -211,13 +258,13 @@ export const AuthModal = ({
           <form onSubmit={handleLoginSubmit} className="space-y-4 relative z-10">
             {/* Phone Number */}
             <div className="space-y-1">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-800">
                 Mobile Number
               </label>
               <div className="relative flex items-center">
-                <div className="absolute left-3.5 flex items-center gap-1 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2">
-                  <Phone className="w-3.5 h-3.5 text-[var(--orange)]" />
-                  <span className="text-xs font-bold text-[var(--text-primary)]">+91</span>
+                <div className="absolute left-3.5 flex items-center gap-1 pointer-events-none text-slate-500 border-r border-slate-200 pr-2">
+                  <Phone className="w-3.5 h-3.5 text-[#F0441D]" />
+                  <span className="text-xs font-bold text-slate-900">+91</span>
                 </div>
                 <input
                   type="tel"
@@ -229,8 +276,8 @@ export const AuthModal = ({
                   placeholder="98765 43210"
                   maxLength={11}
                   required
-                  className={`w-full pl-20 pr-4 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-sm font-semibold placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
-                    errors.phone ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
+                  className={`w-full pl-20 pr-4 py-3 rounded-2xl bg-[#FFFDF9] border text-slate-900 text-sm font-semibold placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all shadow-inner ${
+                    errors.phone ? 'border-red-500' : 'border-[#EBD6A2] focus:border-[#F0441D]'
                   }`}
                 />
               </div>
@@ -239,12 +286,12 @@ export const AuthModal = ({
 
             {/* Password */}
             <div className="space-y-1">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-800">
                 Password
               </label>
               <div className="relative flex items-center">
-                <div className="absolute left-3.5 pointer-events-none text-[var(--text-muted)]">
-                  <Lock className="w-4 h-4 text-[var(--orange)]" />
+                <div className="absolute left-3.5 pointer-events-none text-slate-500">
+                  <Lock className="w-4 h-4 text-[#F0441D]" />
                 </div>
                 <input
                   type={showLoginPassword ? 'text' : 'password'}
@@ -255,14 +302,14 @@ export const AuthModal = ({
                   }}
                   placeholder="••••••••"
                   required
-                  className={`w-full pl-10 pr-10 py-3 rounded-2xl bg-[var(--bg-tertiary)] border text-sm font-semibold placeholder-[var(--text-muted)] focus:outline-none transition-all shadow-inner ${
-                    errors.password ? 'border-red-500' : 'border-[var(--border-color)] focus:border-[var(--orange)]'
+                  className={`w-full pl-10 pr-10 py-3 rounded-2xl bg-[#FFFDF9] border text-slate-900 text-sm font-semibold placeholder:text-slate-400 focus:outline-none focus:bg-white transition-all shadow-inner ${
+                    errors.password ? 'border-red-500' : 'border-[#EBD6A2] focus:border-[#F0441D]'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3.5 p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus:outline-none"
+                  className="absolute right-3.5 p-1 text-slate-400 hover:text-slate-700 focus:outline-none cursor-pointer"
                 >
                   {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -273,7 +320,7 @@ export const AuthModal = ({
             <button
               type="submit"
               disabled={submitting}
-              className="w-full btn-primary py-3 rounded-2xl justify-center font-bold text-xs uppercase tracking-wider shadow-md shadow-[var(--orange)]/20 mt-1 cursor-pointer"
+              className="w-full py-3.5 rounded-2xl justify-center font-bold text-xs uppercase tracking-wider shadow-lg bg-[#F0441D] hover:bg-[#d93813] text-white shadow-orange-500/25 mt-1 cursor-pointer transition-all disabled:opacity-60 flex items-center gap-2"
             >
               {submitting ? 'Signing In...' : 'Sign In & Continue'}
             </button>
@@ -283,12 +330,12 @@ export const AuthModal = ({
           <form onSubmit={handleSignupSubmit} className="space-y-3 relative z-10">
             {/* Full Name */}
             <div className="space-y-1">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-800">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <div className="relative flex items-center">
-                <div className="absolute left-3 pointer-events-none text-[var(--text-muted)]">
-                  <User className="w-3.5 h-3.5 text-[var(--orange)]" />
+                <div className="absolute left-3 pointer-events-none text-slate-500">
+                  <User className="w-3.5 h-3.5 text-[#F0441D]" />
                 </div>
                 <input
                   type="text"
@@ -296,7 +343,7 @@ export const AuthModal = ({
                   onChange={(e) => setSignupData({ ...signupData, fullName: e.target.value })}
                   placeholder="e.g. Ramesh Sharma"
                   required
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] focus:border-[var(--orange)] text-xs font-semibold focus:outline-none shadow-inner"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#EBD6A2] focus:border-[#F0441D] focus:bg-white text-slate-900 text-xs font-semibold focus:outline-none shadow-inner placeholder:text-slate-400"
                 />
               </div>
               {errors.fullName && <p className="text-[10px] text-red-500 font-semibold">{errors.fullName}</p>}
@@ -304,12 +351,12 @@ export const AuthModal = ({
 
             {/* Email Address */}
             <div className="space-y-1">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-800">
                 Email Address <span className="text-red-500">*</span>
               </label>
               <div className="relative flex items-center">
-                <div className="absolute left-3 pointer-events-none text-[var(--text-muted)]">
-                  <Mail className="w-3.5 h-3.5 text-[var(--orange)]" />
+                <div className="absolute left-3 pointer-events-none text-slate-500">
+                  <Mail className="w-3.5 h-3.5 text-[#F0441D]" />
                 </div>
                 <input
                   type="email"
@@ -317,7 +364,7 @@ export const AuthModal = ({
                   onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
                   placeholder="devotee@example.com"
                   required
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] focus:border-[var(--orange)] text-xs font-semibold focus:outline-none shadow-inner"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#EBD6A2] focus:border-[#F0441D] focus:bg-white text-slate-900 text-xs font-semibold focus:outline-none shadow-inner placeholder:text-slate-400"
                 />
               </div>
               {errors.email && <p className="text-[10px] text-red-500 font-semibold">{errors.email}</p>}
@@ -325,13 +372,13 @@ export const AuthModal = ({
 
             {/* Phone Number */}
             <div className="space-y-1">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-800">
                 Phone Number <span className="text-red-500">*</span>
               </label>
               <div className="relative flex items-center">
-                <div className="absolute left-3 flex items-center gap-1 pointer-events-none text-[var(--text-muted)] border-r border-[var(--border-color)] pr-2">
-                  <Phone className="w-3.5 h-3.5 text-[var(--orange)]" />
-                  <span className="text-[11px] font-bold text-[var(--text-primary)]">+91</span>
+                <div className="absolute left-3 flex items-center gap-1 pointer-events-none text-slate-500 border-r border-slate-200 pr-2">
+                  <Phone className="w-3.5 h-3.5 text-[#F0441D]" />
+                  <span className="text-[11px] font-bold text-slate-900">+91</span>
                 </div>
                 <input
                   type="tel"
@@ -340,7 +387,7 @@ export const AuthModal = ({
                   placeholder="98765 43210"
                   maxLength={11}
                   required
-                  className="w-full pl-18 pr-3 py-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] focus:border-[var(--orange)] text-xs font-semibold focus:outline-none shadow-inner"
+                  className="w-full pl-18 pr-3 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#EBD6A2] focus:border-[#F0441D] focus:bg-white text-slate-900 text-xs font-semibold focus:outline-none shadow-inner placeholder:text-slate-400"
                 />
               </div>
               {errors.phone && <p className="text-[10px] text-red-500 font-semibold">{errors.phone}</p>}
@@ -349,7 +396,7 @@ export const AuthModal = ({
             {/* Passwords */}
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-800">
                   Password <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -358,11 +405,11 @@ export const AuthModal = ({
                   onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                   placeholder="Min 6 chars"
                   required
-                  className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] focus:border-[var(--orange)] text-xs font-semibold focus:outline-none shadow-inner"
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#EBD6A2] focus:border-[#F0441D] focus:bg-white text-slate-900 text-xs font-semibold focus:outline-none shadow-inner placeholder:text-slate-400"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-800">
                   Confirm <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -371,7 +418,7 @@ export const AuthModal = ({
                   onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
                   placeholder="Re-enter"
                   required
-                  className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] focus:border-[var(--orange)] text-xs font-semibold focus:outline-none shadow-inner"
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#EBD6A2] focus:border-[#F0441D] focus:bg-white text-slate-900 text-xs font-semibold focus:outline-none shadow-inner placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -381,7 +428,7 @@ export const AuthModal = ({
             <button
               type="submit"
               disabled={submitting}
-              className="w-full btn-primary py-3 rounded-2xl justify-center font-bold text-xs uppercase tracking-wider shadow-md shadow-[var(--orange)]/20 mt-1 cursor-pointer"
+              className="w-full py-3.5 rounded-2xl justify-center font-bold text-xs uppercase tracking-wider shadow-lg bg-[#F0441D] hover:bg-[#d93813] text-white shadow-orange-500/25 mt-1 cursor-pointer transition-all disabled:opacity-60 flex items-center gap-2"
             >
               {submitting ? 'Creating Account...' : 'Register & Continue'}
             </button>
@@ -389,13 +436,16 @@ export const AuthModal = ({
         )}
 
         {/* Security badge */}
-        <div className="pt-4 mt-2 border-t border-[var(--border-color)]/60 flex items-center justify-center gap-1.5 text-[11px] text-[var(--text-muted)]">
+        <div className="pt-4 mt-2 border-t border-slate-200/80 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
           <span>Encrypted Account for Chinmaya Mission Adoni</span>
         </div>
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 };
 
 export default AuthModal;
+

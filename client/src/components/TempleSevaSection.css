@@ -178,7 +178,7 @@
 }
 
 /* Headings */
-.temple-seva-wrapper h2 {
+.temple-seva-wrapper .seva-header-block h2 {
   font-family: var(--seva-f-display);
   font-weight: 500;
   color: var(--seva-ivory);
