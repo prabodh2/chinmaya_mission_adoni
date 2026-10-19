@@ -22,14 +22,6 @@ export const GALLERY_IMAGES = [
     tag: 'Sanctum Photograph',
   },
   {
-    id: 'temple-real-darshan',
-    src: '/assets/temple-real-photo.jpeg',
-    title: 'Panchamrita Abhisheka Darshan',
-    category: 'Temple & Sanctum',
-    desc: 'Sacred sanctum lingam receiving Vedic holy bath during morning Pratah Puja rituals.',
-    tag: 'Abhisheka Darshan',
-  },
-  {
     id: 'temple-nandi',
     src: '/assets/temple-real-photo-nandi.jpeg',
     title: 'Sacred Nandi Vahana Guardian',

@@ -303,6 +303,15 @@
   position: absolute;
   right: clamp(4%, 7vw, 10%);
   bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-signature-name {
   font-family: 'Playfair Display', serif;
   font-style: normal;
   font-weight: 700;
@@ -311,8 +320,18 @@
   letter-spacing: 0.8px;
   white-space: nowrap;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.9);
-  z-index: 3;
-  pointer-events: none;
+}
+
+.hero-signature-sub {
+  font-family: 'Playfair Display', serif;
+  font-style: normal;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(10.5px, 0.85vw, 12.5px);
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  margin-top: 2px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 0, 0, 0.9);
 }
 
 .sun-disc {

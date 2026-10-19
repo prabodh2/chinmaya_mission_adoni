@@ -190,7 +190,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           order: 1,
           isEnabled: true,
           fields: [
-            { key: 'title', label: 'Page Title', type: 'text', value: 'CHINMAYA MISSION ADONI' },
+            { key: 'title', label: 'Page Title', type: 'text', value: 'CHINMAYA MISSION, ADONI' },
             { key: 'subtitle', label: 'Subtitle Tagline', type: 'text', value: 'Timeless Wisdom. Inspired Youth. Meaningful Service.' },
             {
               key: 'intro',

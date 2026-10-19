@@ -27,7 +27,7 @@ export const ChinmayaMissionAdoniPage = () => {
   // Fallback default content matching exact prompt specification
   const defaultContent = {
     hero: {
-      title: 'CHINMAYA MISSION ADONI',
+      title: 'CHINMAYA MISSION, ADONI',
       subtitle: 'Timeless Wisdom. Inspired Youth. Meaningful Service.',
       intro:
         'Chinmaya Mission, Adoni is a spiritual and cultural organisation dedicated to sharing timeless wisdom, nurturing human values and inspiring individuals to lead purposeful lives.',
@@ -178,7 +178,6 @@ export const ChinmayaMissionAdoniPage = () => {
     },
     geetaJnanaMandiram: {
       heading: 'Geeta Jnana Mandiram',
-      eyebrow: 'CENTRAL SPIRITUAL & CULTURAL SPACE',
       p1: 'Geeta Jnana Mandiram is a central spiritual and cultural space at Chinmaya Mission, Adoni, where major religious activities, Poojas, spiritual gatherings, and community programmes are conducted. The hall serves as a place for devotees and members to come together for prayers, devotional practices, and the study of Vedanta and the Bhagavad Gita.',
       p2: 'It also provides a welcoming environment for spiritual discourses, festivals, youth activities, and other Mission initiatives. Rooted in the teachings of Pujya Gurudev Swami Chinmayananda, Geeta Jnana Mandiram continues to nurture devotion, knowledge, discipline, and community spirit among people of all ages.',
       imageUrl: '/assets/images/geeta-jnana-mandiram.jpg',
@@ -545,7 +544,7 @@ export const ChinmayaMissionAdoniPage = () => {
   };
 
   useEffect(() => {
-    document.title = 'Chinmaya Mission Adoni';
+    document.title = 'Chinmaya Mission, Adoni';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     loadAboutContent();
 
@@ -615,13 +614,19 @@ export const ChinmayaMissionAdoniPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Title & Intro */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[var(--text-primary)] leading-[1.1]">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[44px] font-black font-heading tracking-tight text-[var(--text-primary)] leading-tight sm:whitespace-nowrap">
               {(() => {
-                const rawTitle = (data.hero?.title || 'CHINMAYA MISSION ADONI')
+                let rawTitle = (data.hero?.title || 'CHINMAYA MISSION, ADONI')
                   .replace(/^ABOUT\s+/i, '')
-                  .replace(/,\s*Adoni/gi, ' ADONI')
                   .trim();
-                return /adoni/i.test(rawTitle) ? rawTitle : `${rawTitle} ADONI`;
+                if (/chinmaya mission adoni/i.test(rawTitle)) {
+                  rawTitle = rawTitle.replace(/chinmaya mission\s+adoni/i, 'CHINMAYA MISSION, ADONI');
+                } else if (!/,\s*adoni/i.test(rawTitle) && /adoni/i.test(rawTitle)) {
+                  rawTitle = rawTitle.replace(/\s*adoni/i, ', ADONI');
+                } else if (!/adoni/i.test(rawTitle)) {
+                  rawTitle = `${rawTitle}, ADONI`;
+                }
+                return rawTitle;
               })()}
             </h1>
 
@@ -687,7 +692,7 @@ export const ChinmayaMissionAdoniPage = () => {
                       Swami Chinmayananda
                     </h3>
                     <p className="text-xs text-white/80 font-medium mt-0.5">
-                      Visionary & Founder of Chinmaya Mission
+                      Founder Of Chinmaya Mission
                     </p>
                   </div>
                 </div>
@@ -767,29 +772,12 @@ export const ChinmayaMissionAdoniPage = () => {
                       e.currentTarget.src = '/assets/images/geeta-jnana-mandiram-raw.png';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 text-white">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-[var(--orange)]/90 text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 shadow-sm">
-                      Sacred Space
-                    </span>
-                    <h3 className="text-base sm:text-lg font-bold font-heading text-white">
-                      Geeta Jnana Mandiram
-                    </h3>
-                    <p className="text-xs text-white/80 font-medium">
-                      Chinmaya Mission, Adoni
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
 
             {/* Right: Sacred Content */}
             <div className="lg:col-span-7 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] font-bold text-xs uppercase tracking-wider border border-[var(--orange)]/25">
-                <Landmark className="w-3.5 h-3.5 text-[var(--orange)]" />
-                <span>{data.geetaJnanaMandiram?.eyebrow || 'CENTRAL SPIRITUAL & CULTURAL SPACE'}</span>
-              </div>
-
               <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
                 {data.geetaJnanaMandiram?.heading || 'Geeta Jnana Mandiram'}
               </h2>
@@ -803,37 +791,6 @@ export const ChinmayaMissionAdoniPage = () => {
                 {data.geetaJnanaMandiram?.p2 ||
                   'It also provides a welcoming environment for spiritual discourses, festivals, youth activities, and other Mission initiatives. Rooted in the teachings of Pujya Gurudev Swami Chinmayananda, Geeta Jnana Mandiram continues to nurture devotion, knowledge, discipline, and community spirit among people of all ages.'}
               </p>
-
-              {/* Highlights Feature Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="w-4 h-4 text-[var(--orange)]" />
-                    <span className="text-xs font-bold text-[#0C1A30]">Spiritual Gatherings</span>
-                  </div>
-                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
-                    Daily Poojas, Prayers &amp; Festive Observances
-                  </span>
-                </div>
-                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <BookOpen className="w-4 h-4 text-[var(--orange)]" />
-                    <span className="text-xs font-bold text-[#0C1A30]">Vedanta &amp; Gita</span>
-                  </div>
-                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
-                    Scriptural Study &amp; Spiritual Discourses
-                  </span>
-                </div>
-                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <HeartHandshake className="w-4 h-4 text-[var(--orange)]" />
-                    <span className="text-xs font-bold text-[#0C1A30]">Community Spirit</span>
-                  </div>
-                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
-                    Youth Initiatives &amp; Collective Devotion
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

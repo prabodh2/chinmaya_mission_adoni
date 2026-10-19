@@ -78,22 +78,18 @@ export const submitSevaBooking = async (req, res) => {
     }
 
     const finalSevaName = (sevaName || pujaName || 'General Seva').trim();
-    const finalUtrId = (utrId || '').trim();
-    if (!finalUtrId || finalUtrId.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please enter a valid Bank / UPI Transaction UTR Reference ID (at least 6 characters).',
-      });
-    }
+    const finalUtrId = (utrId || '').trim() || `WA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-    // 1. Deduplication Guard: Check if this UTR Reference was already submitted
-    const existingUtr = await SevaBooking.findOne({ utrId: finalUtrId });
-    if (existingUtr) {
-      return res.status(409).json({
-        success: false,
-        message: 'A submission with this UTR Transaction ID already exists. If this is an error, please contact the temple administration.',
-        data: existingUtr,
-      });
+    // 1. Deduplication Guard: Check if this UTR Reference was already submitted (only for manual UTRs)
+    if (!finalUtrId.startsWith('WA-')) {
+      const existingUtr = await SevaBooking.findOne({ utrId: finalUtrId });
+      if (existingUtr) {
+        return res.status(409).json({
+          success: false,
+          message: 'A submission with this UTR Transaction ID already exists. If this is an error, please contact the temple administration.',
+          data: existingUtr,
+        });
+      }
     }
 
     // 2. Double-Click Concurrency Guard: 15-second window for exact same phone and seva

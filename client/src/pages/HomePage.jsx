@@ -159,6 +159,7 @@ export function HomePage() {
     : '/assets/swami-chinmayananda-golden-tree.jpg';
   const portraitQuote = f.hero?.portraitQuote || 'Arise, Awake and Guide Others';
   const portraitSig = f.hero?.portraitSignature || 'Swami Chinmayananda';
+  const portraitSub = f.hero?.portraitSubtitle || 'Founder Of Chinmaya Mission';
 
   const aboutEyebrow = f.about_purpose?.eyebrow || 'OUR PURPOSE';
   let aboutHeading = f.about_purpose?.heading || 'About Chinmaya Mission, Adoni';
@@ -329,7 +330,8 @@ export function HomePage() {
           </div>
 
           <div className="hero-signature" aria-hidden="true">
-            {portraitSig}
+            <span className="hero-signature-name">{portraitSig}</span>
+            <span className="hero-signature-sub">{portraitSub}</span>
           </div>
 
           <div className="sun-disc" />

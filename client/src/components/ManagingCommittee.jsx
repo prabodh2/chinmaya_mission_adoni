@@ -81,7 +81,7 @@ const TREASURER = {
 const HONORARY_MEMBERS = [
   'Vitta Ramesh',
   'Adappa Mohan Reddy',
-  'S. Sujatha',
+  'H. Sujatha',
 ];
 
 // 7 Committee Members Data

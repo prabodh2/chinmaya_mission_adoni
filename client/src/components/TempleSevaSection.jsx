@@ -466,6 +466,8 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
   const validateProof = () => {
     const newErrors = {};
 
+    /*
+    // Commented out as requested for Chinmaya Sanjeevaraya & Shri Shantamalleshwara
     if (!formData.utrId.trim()) {
       newErrors.utrId = 'Please enter the UTR ID / UPI Transaction Reference Number';
     } else if (formData.utrId.trim().length < 6) {
@@ -475,6 +477,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
     if (!formData.screenshot) {
       newErrors.screenshot = 'Please upload a screenshot of your payment as transaction proof';
     }
+    */
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -509,8 +512,8 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
       email: formData.email.trim(),
       date: formData.dob || todayStr(),
       address: formData.address.trim(),
-      utrId: formData.utrId.trim(),
-      screenshotName: formData.screenshot,
+      utrId: formData.utrId?.trim() || `WA-${Date.now().toString(36).toUpperCase()}`,
+      screenshotName: formData.screenshot || 'Sent via WhatsApp/Email',
       createdAt: new Date().toISOString(),
       status: 'Payment Proof Submitted (Verification Pending)',
       userId: normalUser?._id || undefined,
@@ -1615,7 +1618,39 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 </div>
               </div>
 
-              {/* UTR ID Input */}
+              {/* Payment details notice for Chinmaya Sanjeevaraya & Shri Shantamalleshwara */}
+              <div className="bg-[#FAF7F2] p-5 rounded-2xl border border-[#EAE0CE] space-y-3.5 shadow-sm text-left">
+                <p className="text-sm font-semibold text-[#0C1A30] leading-snug">
+                  Share the payment details to the what number or email attached below.
+                </p>
+
+                <div className="space-y-2 pt-1 border-t border-[#EAE0CE]/70 text-xs sm:text-sm">
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-bold text-slate-700">whats app number :</span>
+                    <a
+                      href="https://wa.me/917337351555"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono font-bold text-emerald-700 hover:text-emerald-800 hover:underline"
+                    >
+                      +91 7337351555
+                    </a>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-bold text-slate-700">Email id:</span>
+                    <a
+                      href="mailto:Chinmayamission01@gmail.com"
+                      className="font-mono font-bold text-[#B8860B] hover:text-[#996515] hover:underline"
+                    >
+                      Chinmayamission01@gmail.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/*
+              // Commented out UTR ID Input & Upload Screenshot for Chinmaya Sanjeevaraya & Shri Shantamalleshwara
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                   UTR ID / UPI Reference Number <span className="text-red-500">*</span>
@@ -1644,7 +1679,6 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                 )}
               </div>
 
-              {/* Upload Screenshot of Payment */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#0C1A30]">
                   Upload Screenshot of Payment <span className="text-red-500">*</span>
@@ -1711,6 +1745,7 @@ export function UnifiedBookingModal({ service, onClose, onBookingSuccess }) {
                   <p className="text-xs text-red-500 font-medium">{errors.screenshot}</p>
                 )}
               </div>
+              */}
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
