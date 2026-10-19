@@ -297,6 +297,17 @@ export const ChinmayaMissionAdoniPage = () => {
     ];
   };
 
+  const filterLegacyHighlights = (items) => {
+    const defaultHighlights = ['Knowledge', 'Devotion', 'Selfless Service', 'Youth', 'Community'];
+    if (!Array.isArray(items) || items.length === 0) return defaultHighlights;
+    const filtered = items.filter((item) => {
+      if (!item) return false;
+      const str = String(item).trim();
+      return str !== '1992' && str !== '2001' && !/^\d+$/.test(str);
+    });
+    return filtered.length > 0 ? filtered : defaultHighlights;
+  };
+
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   useEffect(() => {
@@ -335,9 +346,7 @@ export const ChinmayaMissionAdoniPage = () => {
           parsed.conclusion = { ...defaultContent.conclusion };
         }
         if (parsed?.continuingLegacy?.highlights) {
-          parsed.continuingLegacy.highlights = parsed.continuingLegacy.highlights.filter(
-            (h) => h !== '1992'
-          );
+          parsed.continuingLegacy.highlights = filterLegacyHighlights(parsed.continuingLegacy.highlights);
         }
         if (!parsed?.chykSection?.imageUrl || parsed?.chykSection?.imageUrl?.includes('photo-1529156069898-49953e39b3ac')) {
           parsed.chykSection = { ...parsed.chykSection, imageUrl: '/assets/images/chyk-youth-team.jpg' };
@@ -469,9 +478,7 @@ export const ChinmayaMissionAdoniPage = () => {
             merged.ourActivities.cards = normalizeActivities(merged.ourActivities?.cards);
           }
           if (merged?.continuingLegacy?.highlights) {
-            merged.continuingLegacy.highlights = merged.continuingLegacy.highlights.filter(
-              (h) => h !== '1992'
-            );
+            merged.continuingLegacy.highlights = filterLegacyHighlights(merged.continuingLegacy.highlights);
           }
 
           setContent(merged);
@@ -494,9 +501,7 @@ export const ChinmayaMissionAdoniPage = () => {
                 merged.ourActivities.cards = normalizeActivities(merged.ourActivities?.cards);
               }
               if (merged?.continuingLegacy?.highlights) {
-                merged.continuingLegacy.highlights = merged.continuingLegacy.highlights.filter(
-                  (h) => h !== '1992'
-                );
+                merged.continuingLegacy.highlights = filterLegacyHighlights(merged.continuingLegacy.highlights);
               }
               setContent(merged);
               try {
@@ -929,9 +934,7 @@ export const ChinmayaMissionAdoniPage = () => {
 
           {/* Key Values Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pt-4">
-            {(data.continuingLegacy?.highlights || [])
-              .filter((item) => item !== '1992')
-              .map((item, idx) => (
+            {filterLegacyHighlights(data.continuingLegacy?.highlights).map((item, idx) => (
                 <div
                   key={idx}
                   className="p-4 rounded-2xl bg-white border border-[rgba(11,35,64,0.08)] shadow-sm text-center space-y-1 hover:border-[var(--orange)] transition-colors"
