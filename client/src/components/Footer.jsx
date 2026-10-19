@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 import { footerService } from '../services/api';
 import { MapPin, Phone, Mail, Globe, ExternalLink, MessageSquare } from 'lucide-react';
 
-const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
-
 // Official Platform Social Media Logos
 const YouTubeIcon = ({ className = "w-5 h-5" }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">

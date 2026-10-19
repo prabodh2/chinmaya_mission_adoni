@@ -16,9 +16,6 @@ import {
 } from 'lucide-react';
 import '../styles/homepage.css';
 
-const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
-
 const corePillars = [
   {
     id: 'vision',

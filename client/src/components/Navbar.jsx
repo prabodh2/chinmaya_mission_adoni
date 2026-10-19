@@ -4,13 +4,8 @@ import { LeftLogo } from './common/LogoGroup';
 import {
   Menu,
   X,
-  Flame,
-  ExternalLink,
   ChevronDown,
 } from 'lucide-react';
-
-const MARATHON_PORTAL_URL =
-  import.meta.env.VITE_MARATHON_URL || 'https://marathon-chinmaya-mission-adoni.vercel.app/';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -338,38 +333,25 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* RIGHT CORNER: Direct Link to Marathon Subdomain */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a
-              href={MARATHON_PORTAL_URL}
-              className="btn-primary text-decoration-none py-2 px-3.5 xl:px-4 text-xs font-bold shadow-md hover:scale-[1.02] transition-transform flex items-center gap-1.5 whitespace-nowrap"
-              title="Visit Anti-Drug Movement Marathon Run 2026 Portal"
-            >
-              <Flame className="w-3.5 h-3.5 fill-current text-white shrink-0" />
-              <span>MARATHON 2026</span>
-              <ExternalLink className="w-3 h-3 text-white/80 shrink-0" />
-            </a>
-
-            {/* Mobile Menu Toggle Button */}
-            <div className="flex lg:hidden items-center">
-              <button
-                onClick={() => {
-                  if (!mobileMenuOpen) {
-                    if (isAnyTempleActive) {
-                      setMobileTemplesOpen(true);
-                    }
-                    if (isAboutActive) {
-                      setMobileAboutOpen(true);
-                    }
+          {/* Mobile Menu Toggle Button */}
+          <div className="flex lg:hidden items-center">
+            <button
+              onClick={() => {
+                if (!mobileMenuOpen) {
+                  if (isAnyTempleActive) {
+                    setMobileTemplesOpen(true);
                   }
-                  setMobileMenuOpen(!mobileMenuOpen);
-                }}
-                className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none cursor-pointer"
-                aria-label="Toggle Navigation Menu"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
+                  if (isAboutActive) {
+                    setMobileAboutOpen(true);
+                  }
+                }
+                setMobileMenuOpen(!mobileMenuOpen);
+              }}
+              className="p-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] focus:outline-none cursor-pointer"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       </div>
@@ -496,18 +478,6 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Mobile Marathon Portal CTA */}
-          <div className="pt-3 border-t border-[var(--border-color)]">
-            <a
-              href={MARATHON_PORTAL_URL}
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary w-full justify-center text-decoration-none py-3 font-extrabold text-xs flex items-center gap-2"
-            >
-              <Flame className="w-4 h-4 fill-current" />
-              <span>VISIT MARATHON WEBSITE</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
         </div>
       )}
     </header>
