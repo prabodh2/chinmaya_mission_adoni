@@ -176,6 +176,13 @@ export const ChinmayaMissionAdoniPage = () => {
         },
       ],
     },
+    geetaJnanaMandiram: {
+      heading: 'Geeta Jnana Mandiram',
+      eyebrow: 'CENTRAL SPIRITUAL & CULTURAL SPACE',
+      p1: 'Geeta Jnana Mandiram is a central spiritual and cultural space at Chinmaya Mission, Adoni, where major religious activities, Poojas, spiritual gatherings, and community programmes are conducted. The hall serves as a place for devotees and members to come together for prayers, devotional practices, and the study of Vedanta and the Bhagavad Gita.',
+      p2: 'It also provides a welcoming environment for spiritual discourses, festivals, youth activities, and other Mission initiatives. Rooted in the teachings of Pujya Gurudev Swami Chinmayananda, Geeta Jnana Mandiram continues to nurture devotion, knowledge, discipline, and community spirit among people of all ages.',
+      imageUrl: '/assets/images/geeta-jnana-mandiram.jpg',
+    },
     continuingLegacy: {
       heading: 'CONTINUING THE LEGACY',
       content:
@@ -741,6 +748,94 @@ export const ChinmayaMissionAdoniPage = () => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* GEETA JNANA MANDIRAM SECTION */}
+      <section id="geeta-jnana-mandiram" className="w-full px-4 sm:px-8 lg:px-12 scroll-mt-24">
+        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[rgba(11,35,64,0.08)] border-l-4 border-l-[var(--orange)] shadow-[0_1px_3px_rgba(11,35,64,0.04),0_8px_24px_rgba(11,35,64,0.06)] space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left: Geeta Jnana Mandiram Sacred Image */}
+            <div className="lg:col-span-5">
+              <div className="relative group overflow-hidden rounded-2xl border border-[rgba(11,35,64,0.1)] bg-gradient-to-b from-[#fbf8f3] to-white shadow-lg">
+                <div className="relative w-full overflow-hidden bg-slate-900 flex items-center justify-center">
+                  <img
+                    src={data.geetaJnanaMandiram?.imageUrl || '/assets/images/geeta-jnana-mandiram.jpg'}
+                    alt="Geeta Jnana Mandiram - Chinmaya Mission, Adoni"
+                    className="w-full h-auto max-h-[460px] object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
+                    onError={(e) => {
+                      e.currentTarget.src = '/assets/images/geeta-jnana-mandiram-raw.png';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 text-white">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-[var(--orange)]/90 text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1 shadow-sm">
+                      Sacred Space
+                    </span>
+                    <h3 className="text-base sm:text-lg font-bold font-heading text-white">
+                      Geeta Jnana Mandiram
+                    </h3>
+                    <p className="text-xs text-white/80 font-medium">
+                      Chinmaya Mission, Adoni
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Sacred Content */}
+            <div className="lg:col-span-7 space-y-5 text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--orange)]/10 text-[var(--orange)] font-bold text-xs uppercase tracking-wider border border-[var(--orange)]/25">
+                <Landmark className="w-3.5 h-3.5 text-[var(--orange)]" />
+                <span>{data.geetaJnanaMandiram?.eyebrow || 'CENTRAL SPIRITUAL & CULTURAL SPACE'}</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)] tracking-tight">
+                {data.geetaJnanaMandiram?.heading || 'Geeta Jnana Mandiram'}
+              </h2>
+
+              <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed font-normal">
+                {data.geetaJnanaMandiram?.p1 ||
+                  'Geeta Jnana Mandiram is a central spiritual and cultural space at Chinmaya Mission, Adoni, where major religious activities, Poojas, spiritual gatherings, and community programmes are conducted. The hall serves as a place for devotees and members to come together for prayers, devotional practices, and the study of Vedanta and the Bhagavad Gita.'}
+              </p>
+
+              <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed font-normal">
+                {data.geetaJnanaMandiram?.p2 ||
+                  'It also provides a welcoming environment for spiritual discourses, festivals, youth activities, and other Mission initiatives. Rooted in the teachings of Pujya Gurudev Swami Chinmayananda, Geeta Jnana Mandiram continues to nurture devotion, knowledge, discipline, and community spirit among people of all ages.'}
+              </p>
+
+              {/* Highlights Feature Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Sparkles className="w-4 h-4 text-[var(--orange)]" />
+                    <span className="text-xs font-bold text-[#0C1A30]">Spiritual Gatherings</span>
+                  </div>
+                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
+                    Daily Poojas, Prayers &amp; Festive Observances
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <BookOpen className="w-4 h-4 text-[var(--orange)]" />
+                    <span className="text-xs font-bold text-[#0C1A30]">Vedanta &amp; Gita</span>
+                  </div>
+                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
+                    Scriptural Study &amp; Spiritual Discourses
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-xl bg-[#FAF7F2] border border-[#EAE0CE] text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <HeartHandshake className="w-4 h-4 text-[var(--orange)]" />
+                    <span className="text-xs font-bold text-[#0C1A30]">Community Spirit</span>
+                  </div>
+                  <span className="text-[11px] text-slate-500 font-medium leading-snug block">
+                    Youth Initiatives &amp; Collective Devotion
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
