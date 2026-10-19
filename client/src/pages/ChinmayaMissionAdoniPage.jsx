@@ -34,7 +34,7 @@ export const ChinmayaMissionAdoniPage = () => {
       imageUrl: '/assets/images/about-ashram-hero.jpg',
     },
     whoWeAre: {
-      heading: 'WHO WE ARE',
+      heading: 'WHO ARE WE',
       p1: 'Chinmaya Mission has been serving the spiritual, cultural and educational needs of the community for over three decades. The Mission was established in 1992 by Swamini Shyamananda (Dr. Shyamala) under the guidance and blessings of Swamini Sharadapriyananda, with the wholehearted support of dedicated well-wishers including Sri Vita Bhimaiah and Sri B. V. R. Reddy. Inspired by the vision of Pujya Gurudev Swami Chinmayananda, the Mission has consistently worked to spread the timeless wisdom of the Bhagavad Gita, Upanishads and other scriptures while promoting Indian culture, values and character-building among children, youth and adults. Over the years, Chinmaya Mission has expanded its activities and has made significant contributions to the spiritual, cultural and social development of the region.',
       p2: 'We believe that true transformation begins with understanding oneself and applying spiritual wisdom in everyday life. Through spiritual learning, cultural programmes, youth engagement and community initiatives, we strive to nurture individuals who are thoughtful, compassionate and committed to the well-being of society.',
     },
@@ -404,7 +404,7 @@ export const ChinmayaMissionAdoniPage = () => {
             const rawP1 = f.who_we_are.p1 || merged.whoWeAre.p1;
             merged.whoWeAre = {
               ...merged.whoWeAre,
-              heading: (f.who_we_are.heading || merged.whoWeAre.heading).replace(/WHO ARE WE\??/i, 'WHO WE ARE'),
+              heading: (f.who_we_are.heading || merged.whoWeAre.heading).replace(/WHO WE ARE/i, 'WHO ARE WE').replace(/\?+/g, ''),
               p1: rawP1.replace(/Swami Shyamananda/g, 'Swamini Shyamananda').replace(/Swami Sharadapriyananda/g, 'Swamini Sharadapriyananda'),
               p2: f.who_we_are.p2 || merged.whoWeAre.p2,
             };
@@ -657,7 +657,7 @@ export const ChinmayaMissionAdoniPage = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
             <div>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[var(--text-primary)]">
-                {(data.whoWeAre.heading || 'WHO WE ARE').replace(/WHO ARE WE\??/i, 'WHO WE ARE')}
+                {(data.whoWeAre.heading || 'WHO ARE WE').replace(/WHO WE ARE/i, 'WHO ARE WE').replace(/\?+/g, '')}
               </h2>
             </div>
           </div>

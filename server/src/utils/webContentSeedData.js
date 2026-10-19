@@ -209,7 +209,7 @@ export const DEFAULT_WEBSITE_PAGES = {
           order: 2,
           isEnabled: true,
           fields: [
-            { key: 'heading', label: 'Section Heading', type: 'text', value: 'WHO WE ARE' },
+            { key: 'heading', label: 'Section Heading', type: 'text', value: 'WHO ARE WE' },
             {
               key: 'p1',
               label: 'First Paragraph',
