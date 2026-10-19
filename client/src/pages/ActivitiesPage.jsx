@@ -380,57 +380,6 @@ export const ActivitiesPage = () => {
         ],
       },
     },
-    {
-      id: 'chinmaya-sanjeevaraya-temple',
-      title: 'Chinmaya Sanjeevaraya Temple',
-      subtitle: 'Devotional Shrine',
-      category: 'Spirituality & Devotion',
-      imageUrl: '/assets/images/chinmaya-sanjeevaraya-temple.png',
-      imageSource: 'Chinmaya Mission Devotional Center',
-      icon: <Landmark className="w-5 h-5 text-[var(--orange)]" />,
-      description:
-        'Dedicated to devotion and spiritual practice, Chinmaya Sanjeevaraya Temple serves as a place for worship, prayer and the observance of religious traditions.',
-      detailedInfo: {
-        title: 'Sri Chinnaya Sanjeevarya Swamy Devasthanam',
-        subtitle: 'Consecrated Shrine of Lord Sanjeevaraya',
-        location: 'Chinmaya Cultural Complex',
-        sections: [
-          {
-            heading: 'History and Spiritual Significance',
-            paragraphs: [
-              'The Sri Chinnaya Sanjeevarya Swamy Devasthanam was consecrated in 2006, in accordance with the vision and spiritual inspiration of Pujya Swamini Shyamananda, the founder of Chinmaya Mission.',
-              'The consecration ceremony was performed in accordance with traditional Agama Shastras under the guidance of Pujya Swami Pranavananda.',
-              'Daily poojas, Shravana Masa celebrations, Hanuman Jayanti, and Karthika Deepotsavam are conducted with great devotion.',
-            ],
-          },
-        ],
-      },
-    },
-    {
-      id: 'shanta-malleshwara-temple',
-      title: 'Shri Shantamalleshwara Swami Temple',
-      subtitle: 'Hilltop Shrine',
-      category: 'Devotion & Community',
-      imageUrl: '/assets/images/activity-shantamalleshwara.webp',
-      imageSource: 'Shri Shantamalleshwara Swami Temple',
-      icon: <Flame className="w-5 h-5 text-[var(--orange)]" />,
-      description:
-        'Shri Shantamalleshwara Swami Temple is an important centre of worship and devotion associated with Chinmaya Mission, fostering devotion and community service.',
-      detailedInfo: {
-        title: 'Shri Shantamalleshwara Swami Temple',
-        subtitle: 'Sacred Hilltop Temple & Sanctum of Lord Shiva',
-        location: 'Navarantanagiri',
-        sections: [
-          {
-            heading: 'History and Spiritual Legacy',
-            paragraphs: [
-              'Shri Shantamalleshwara Swami Temple is a sacred centre of worship developed from 1996 onwards under the spiritual guidance of Chinmaya Mission.',
-              'The temple provides a space for devotees to participate in sacred rituals, Maha Shivaratri, Karthika Somavaram, and community celebrations.',
-            ],
-          },
-        ],
-      },
-    },
   ];
 
   const handleSelectActivity = (act) => {
