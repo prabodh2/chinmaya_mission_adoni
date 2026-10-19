@@ -156,11 +156,11 @@ export const SupportOurMissionPage = () => {
 
           <div className="space-y-5 text-[#2D3748] text-base sm:text-lg font-normal leading-relaxed sm:leading-loose">
             <p>
-              Chinmaya Mission is a journey of spiritual learning, personal
-              growth, and selfless service. Through spiritual education,
-              cultural initiatives, community outreach, and the preservation of
-              our heritage, we strive to enrich lives and make a meaningful
-              difference in society.
+              Chinmaya Mission, Adoni is a journey of spiritual learning,
+              personal growth, and selfless service. Through spiritual
+              education, cultural initiatives, community outreach, and the
+              preservation of our heritage, we strive to enrich lives and make a
+              meaningful difference in society.
             </p>
             <p>
               There are many ways to be part of this journey. Whether through a

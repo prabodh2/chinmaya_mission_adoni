@@ -63,6 +63,7 @@ export const DonationModal = ({
   }, [normalUser]);
 
   const [errors, setErrors] = useState({});
+  const [step3Errors, setStep3Errors] = useState({});
   const [submittedReceipt, setSubmittedReceipt] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -72,6 +73,7 @@ export const DonationModal = ({
       document.body.style.overflow = 'hidden';
       setStep('form');
       setErrors({});
+      setStep3Errors({});
     } else {
       document.body.style.overflow = '';
     }
@@ -147,7 +149,7 @@ export const DonationModal = ({
     }
     */
 
-    setErrors(newErrors);
+    setStep3Errors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -1433,39 +1435,41 @@ export const DonationModal = ({
                       Donation Reference
                     </span>
                     <span className="font-mono font-bold text-[#B8860B] text-xs">
-                      {submittedReceipt.refId}
+                      {submittedReceipt.refId || submittedReceipt.bookingId}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Amount:</span>
                     <span className="font-extrabold text-[#0C1A30] text-sm">
-                      ₹{Number(submittedReceipt.amount).toLocaleString('en-IN')}
+                      ₹{Number(submittedReceipt.amount || formData.amount || 0).toLocaleString('en-IN')}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">UTR / Transaction ID:</span>
                     <span className="font-mono font-bold text-slate-800">
-                      {submittedReceipt.utrId}
+                      {submittedReceipt.utrId || 'Shared via WhatsApp/Email'}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Devotee Name:</span>
-                    <span className="font-medium text-slate-800">{submittedReceipt.name}</span>
+                    <span className="font-medium text-slate-800">
+                      {submittedReceipt.name || submittedReceipt.devoteeName || formData.name}
+                    </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Phone Number:</span>
                     <span className="font-medium text-slate-800">
-                      {submittedReceipt.phoneNumber}
+                      {submittedReceipt.phoneNumber || submittedReceipt.phone || formData.phoneNumber}
                     </span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-medium">Payment Screenshot:</span>
-                    <span className="font-medium text-emerald-600">✓ Uploaded &amp; Attached</span>
+                    <span className="font-medium text-emerald-600">✓ Shared via WhatsApp / Email</span>
                   </div>
 
                   <div className="flex justify-between pt-1 border-t border-slate-100">

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { webContentService } from '../services/api';
 import { TempleSevaSection } from '../components/TempleSevaSection';
 import {
-  Landmark,
   Flame,
   Heart,
   Sparkles,
@@ -78,11 +77,6 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
         <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Sacred Title & Overview */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs uppercase tracking-widest">
-              <Landmark className="w-3.5 h-3.5 text-amber-400" />
-              <span>SPIRITUALITY &amp; DEVOTION</span>
-            </div>
-
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
               SHRI SHANTAMALLESHWARA SWAMI TEMPLE
             </h1>
@@ -219,9 +213,6 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
       <section className="bg-gradient-to-b from-amber-50/50 to-white py-12 sm:py-16 border-t border-amber-900/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-2">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[var(--orange)]">
-              DEVOTIONAL JOY &amp; CELEBRATIONS
-            </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-heading text-slate-900 tracking-tight">
               Annual Festivals &amp; Observances
             </h2>

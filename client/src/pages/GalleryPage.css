@@ -671,32 +671,3 @@
   background: var(--gold-soft);
   box-shadow: 0 4px 16px var(--gold-glow);
 }
-
-/* Sacred Sanskrit Banner at Bottom */
-.gallery-sacred-footer-banner {
-  border-top: 1px solid var(--line-soft);
-  padding: 50px 0 20px;
-  text-align: center;
-  background: #F8FAFC;
-  margin-top: 50px;
-}
-
-.gallery-mantra {
-  font-family: var(--f-sanskrit);
-  font-size: 34px;
-  color: var(--gold);
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-
-.gallery-mantra-sub {
-  color: var(--ivory-dim);
-  font-size: 15px;
-}
-
-.gallery-mantra-count {
-  font-size: 13px;
-  color: var(--ivory-faint);
-  margin-top: 4px;
-  font-family: var(--f-mono);
-}

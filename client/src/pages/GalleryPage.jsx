@@ -467,17 +467,6 @@ export const GalleryPage = () => {
           </div>
         </div>
       )}
-
-      {/* Sacred Sanskrit Banner at Bottom */}
-      <footer className="gallery-sacred-footer-banner">
-        <div className="gallery-content-wrap">
-          <div className="gallery-mantra">ॐ नमः शिवाय</div>
-          <p className="gallery-mantra-sub">Shri Shantamalleshwara Swami Temple Sanctuary</p>
-          <p className="gallery-mantra-count">
-            Navaratna Shikhara Sacred Heritage · {GALLERY_IMAGES.length} Images Archived
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };
