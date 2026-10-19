@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   Heart,
@@ -233,7 +234,7 @@ export const DonationModal = ({
     submittedReceipt?.refId ||
     `DON-${Date.now().toString(36).slice(-5).toUpperCase()}`;
 
-  const printAmount = submittedReceipt?.amount || currentAmount;
+  const printAmount = submittedReceipt?.amount || formData.amount || 0;
 
   const printDateStr = new Date().toLocaleDateString('en-IN', {
     day: 'numeric',
@@ -242,162 +243,394 @@ export const DonationModal = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
-      {/* Print-specific style ensuring ONLY the 1-page Official Receipt prints */}
-      <style>{`
-        @media print {
-          @page {
-            size: A4 portrait;
-            margin: 8mm;
-          }
-          html, body {
-            background: #ffffff !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            height: auto !important;
-            overflow: visible !important;
-          }
-          body * {
-            visibility: hidden !important;
-          }
-          #donation-printable-receipt,
-          #donation-printable-receipt * {
-            visibility: visible !important;
-          }
-          #donation-printable-receipt {
-            display: block !important;
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            max-width: 190mm !important;
-            margin: 0 auto !important;
-            padding: 4mm 6mm !important;
-            box-sizing: border-box !important;
-            background: #ffffff !important;
-            color: #0f172a !important;
-            page-break-after: avoid !important;
-            page-break-before: avoid !important;
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-          }
-        }
-      `}</style>
-
-      {/* DEDICATED 1-PAGE PRINTABLE DONATION RECEIPT */}
-      <div id="donation-printable-receipt" className="hidden" aria-hidden="true">
-        <div style={{ border: '2px solid #b45309', padding: '14px 18px', borderRadius: '8px', background: '#ffffff' }}>
-          {/* Header */}
-          <div style={{ textAlign: 'center', borderBottom: '2px solid #d97706', paddingBottom: '10px', marginBottom: '12px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 'bold', letterSpacing: '0.25em', color: '#b45309', textTransform: 'uppercase' }}>
-              ॥ श्री चिन्मय मिशन आधोनी ॥
-            </div>
-            <h1 style={{ fontSize: '20px', fontWeight: '900', color: '#0f172a', margin: '4px 0 2px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              CHINMAYA MISSION, ADONI
-            </h1>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: '#475569' }}>
-              Official Sacred Contribution & Donation Acknowledgment
-            </div>
-            <div style={{ display: 'inline-block', marginTop: '6px', padding: '3px 12px', background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '9999px', fontSize: '10px', fontWeight: '800', color: '#92400e', textTransform: 'uppercase' }}>
-              Tax Exemption & Seva Receipt
-            </div>
-          </div>
-
-          {/* Reference & Date Bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '7px 12px', borderRadius: '6px', marginBottom: '12px', fontSize: '11px' }}>
-            <div>
-              <span style={{ color: '#64748b', fontWeight: '600' }}>Receipt / Ref No: </span>
-              <strong style={{ fontFamily: 'monospace', fontSize: '13px', color: '#b45309' }}>{printRefId}</strong>
-            </div>
-            <div>
-              <span style={{ color: '#64748b', fontWeight: '600' }}>Date: </span>
-              <strong>{printDateStr}</strong>
-            </div>
-            <div>
-              <span style={{ color: '#64748b', fontWeight: '600' }}>Status: </span>
-              <strong style={{ color: '#16a34a' }}>✓ Acknowledged & Under Accounts Verification</strong>
-            </div>
-          </div>
-
-          {/* Donation Amount Highlight Box */}
-          <div style={{ background: '#fffbeb', border: '1.5px solid #fcd34d', borderRadius: '6px', padding: '10px 14px', marginBottom: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
-              <div>
-                <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#b45309', letterSpacing: '0.08em' }}>
-                  Contribution Cause / Seva
+    <>
+      {/* DEDICATED 1-PAGE PRINTABLE DONATION RECEIPT (Rendered into document.body outside #root) */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <div id="donation-printable-receipt" aria-hidden="true">
+            <style>{`
+              @media screen {
+                #donation-printable-receipt {
+                  display: none !important;
+                }
+              }
+              @media print {
+                @page {
+                  size: A4 portrait;
+                  margin: 6mm 10mm;
+                }
+                html, body {
+                  background: #ffffff !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  height: auto !important;
+                  overflow: visible !important;
+                }
+                #root {
+                  display: none !important;
+                }
+                #donation-printable-receipt {
+                  display: block !important;
+                  position: static !important;
+                  width: 100% !important;
+                  max-width: 190mm !important;
+                  margin: 0 auto !important;
+                  padding: 2mm 0 !important;
+                  box-sizing: border-box !important;
+                  background: #ffffff !important;
+                  color: #0f172a !important;
+                  page-break-after: avoid !important;
+                  page-break-before: avoid !important;
+                  page-break-inside: avoid !important;
+                  break-inside: avoid !important;
+                  -webkit-print-color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+                #donation-printable-receipt * {
+                  visibility: visible !important;
+                  -webkit-print-color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+              }
+            `}</style>
+            <div
+              style={{
+                border: '2px solid #b45309',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                background: '#ffffff',
+                pageBreakInside: 'avoid',
+                breakInside: 'avoid',
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  textAlign: 'center',
+                  borderBottom: '2px solid #d97706',
+                  paddingBottom: '8px',
+                  marginBottom: '10px',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    letterSpacing: '0.25em',
+                    color: '#b45309',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  ॥ श्री चिन्मय मिशन आधोनी ॥
                 </div>
-                <div style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>
-                  {modalTitle || 'Support Our Mission'}
+                <h1
+                  style={{
+                    fontSize: '19px',
+                    fontWeight: '900',
+                    color: '#0f172a',
+                    margin: '3px 0 2px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  CHINMAYA MISSION, ADONI
+                </h1>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#475569' }}>
+                  Official Sacred Contribution & Donation Acknowledgment
                 </div>
-                {submittedReceipt?.utrId && (
-                  <div style={{ fontSize: '11px', color: '#475569', marginTop: '2px' }}>
-                    UTR / Txn ID: <strong style={{ fontFamily: 'monospace' }}>{submittedReceipt.utrId}</strong>
+                <div
+                  style={{
+                    display: 'inline-block',
+                    marginTop: '4px',
+                    padding: '2px 10px',
+                    background: '#fef3c7',
+                    border: '1px solid #f59e0b',
+                    borderRadius: '9999px',
+                    fontSize: '10px',
+                    fontWeight: '800',
+                    color: '#92400e',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Tax Exemption & Seva Receipt
+                </div>
+              </div>
+
+              {/* Reference & Date Bar */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  background: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  padding: '6px 10px',
+                  borderRadius: '6px',
+                  marginBottom: '10px',
+                  fontSize: '11px',
+                }}
+              >
+                <div>
+                  <span style={{ color: '#64748b', fontWeight: '600' }}>Receipt / Ref No: </span>
+                  <strong
+                    style={{
+                      fontFamily: 'monospace',
+                      fontSize: '12px',
+                      color: '#b45309',
+                    }}
+                  >
+                    {printRefId}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ color: '#64748b', fontWeight: '600' }}>Date: </span>
+                  <strong>{printDateStr}</strong>
+                </div>
+                <div>
+                  <span style={{ color: '#64748b', fontWeight: '600' }}>Status: </span>
+                  <strong style={{ color: '#16a34a' }}>
+                    {submittedReceipt
+                      ? '✓ Payment Proof Submitted & Under Verification'
+                      : '✓ Acknowledged & Under Accounts Verification'}
+                  </strong>
+                </div>
+              </div>
+
+              {/* Donation Amount Highlight Box */}
+              <div
+                style={{
+                  background: '#fffbeb',
+                  border: '1.5px solid #fcd34d',
+                  borderRadius: '6px',
+                  padding: '9px 12px',
+                  marginBottom: '10px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    flexWrap: 'wrap',
+                    gap: '8px',
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: '800',
+                        textTransform: 'uppercase',
+                        color: '#b45309',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      Contribution Cause / Seva
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '800',
+                        color: '#0f172a',
+                        marginTop: '1px',
+                      }}
+                    >
+                      {modalTitle || 'Support Our Mission'}
+                    </div>
+                    {submittedReceipt?.utrId || formData.utrId ? (
+                      <div style={{ fontSize: '11px', color: '#475569', marginTop: '2px' }}>
+                        UTR / Txn ID:{' '}
+                        <strong style={{ fontFamily: 'monospace' }}>
+                          {submittedReceipt?.utrId || formData.utrId}
+                        </strong>
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                        Payment Mode:{' '}
+                        <strong style={{ fontFamily: 'monospace' }}>UPI / PhonePe QR</strong>
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div style={{ textAlign: 'right' }}>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: '800',
+                        textTransform: 'uppercase',
+                        color: '#b45309',
+                        letterSpacing: '0.08em',
+                      }}
+                    >
+                      Donation Amount
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '17px',
+                        fontWeight: '900',
+                        color: '#0f172a',
+                        marginTop: '1px',
+                      }}
+                    >
+                      ₹{Number(printAmount).toLocaleString('en-IN')}
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#16a34a', fontWeight: '700' }}>
+                      Eligible for 80G Tax Exemption
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '10px', fontWeight: '800', textTransform: 'uppercase', color: '#b45309', letterSpacing: '0.08em' }}>
-                  Donation Amount
+
+              {/* Devotee Details */}
+              <div style={{ marginBottom: '10px' }}>
+                <div
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: '800',
+                    textTransform: 'uppercase',
+                    color: '#0f172a',
+                    letterSpacing: '0.06em',
+                    borderBottom: '1px solid #e2e8f0',
+                    paddingBottom: '3px',
+                    marginBottom: '5px',
+                  }}
+                >
+                  Donor Information
                 </div>
-                <div style={{ fontSize: '17px', fontWeight: '900', color: '#0f172a', marginTop: '2px' }}>
-                  ₹{Number(printAmount).toLocaleString('en-IN')}
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td
+                        style={{
+                          padding: '3.5px 6px',
+                          width: '22%',
+                          color: '#64748b',
+                          fontWeight: '600',
+                        }}
+                      >
+                        Donor Name:
+                      </td>
+                      <td
+                        style={{
+                          padding: '3.5px 6px',
+                          width: '38%',
+                          fontWeight: '700',
+                          color: '#0f172a',
+                        }}
+                      >
+                        {submittedReceipt?.name || formData.name || '—'}
+                      </td>
+                      <td
+                        style={{
+                          padding: '3.5px 6px',
+                          width: '18%',
+                          color: '#64748b',
+                          fontWeight: '600',
+                        }}
+                      >
+                        PAN Number:
+                      </td>
+                      <td
+                        style={{
+                          padding: '3.5px 6px',
+                          width: '22%',
+                          fontWeight: '700',
+                          color: '#0f172a',
+                        }}
+                      >
+                        {formData.panNumber || 'Not Provided'}
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '3.5px 6px', color: '#64748b', fontWeight: '600' }}>
+                        Phone Number:
+                      </td>
+                      <td style={{ padding: '3.5px 6px', fontWeight: '700', color: '#0f172a' }}>
+                        {submittedReceipt?.phoneNumber || formData.phoneNumber || '—'}
+                      </td>
+                      <td style={{ padding: '3.5px 6px', color: '#64748b', fontWeight: '600' }}>
+                        Email Address:
+                      </td>
+                      <td style={{ padding: '3.5px 6px', fontWeight: '600', color: '#0f172a' }}>
+                        {submittedReceipt?.email || formData.email || '—'}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '3.5px 6px', color: '#64748b', fontWeight: '600' }}>
+                        Address:
+                      </td>
+                      <td colSpan="3" style={{ padding: '3.5px 6px', color: '#334155' }}>
+                        {submittedReceipt?.address || formData.address || 'Adoni, Andhra Pradesh'}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Acknowledgement Notice */}
+              <div
+                style={{
+                  background: '#f8fafc',
+                  borderLeft: '3px solid #b45309',
+                  padding: '6px 9px',
+                  borderRadius: '4px',
+                  marginBottom: '10px',
+                  fontSize: '10px',
+                  lineHeight: '1.4',
+                  color: '#475569',
+                }}
+              >
+                <strong style={{ color: '#0f172a' }}>Hari Om! </strong>
+                Thank you for supporting Chinmaya Mission, Adoni. Your voluntary contribution will be
+                utilized for noble dharmic, cultural, youth development, and spiritual activities. May
+                Pujya Gurudev’s divine grace be with you and your family.
+              </div>
+
+              {/* Footer & Signature Section */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  borderTop: '1px solid #e2e8f0',
+                  paddingTop: '8px',
+                  fontSize: '10px',
+                  color: '#64748b',
+                }}
+              >
+                <div>
+                  <div>
+                    <strong>Chinmaya Mission, Adoni</strong>
+                  </div>
+                  <div>Near Arts College, Adoni, Andhra Pradesh - 518301</div>
+                  <div>Helpline: +91 94402 85859 | Web: chinmayamissionadoni.org</div>
                 </div>
-                <div style={{ fontSize: '10px', color: '#16a34a', fontWeight: '700' }}>
-                  Eligible for 80G Tax Exemption
+                <div style={{ textAlign: 'center' }}>
+                  <div
+                    style={{
+                      width: '130px',
+                      borderBottom: '1px dashed #94a3b8',
+                      height: '26px',
+                      marginBottom: '2px',
+                    }}
+                  ></div>
+                  <div
+                    style={{
+                      fontSize: '9px',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      color: '#475569',
+                    }}
+                  >
+                    Authorized Accounts Signature
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
+        )}
 
-          {/* Devotee Details */}
-          <div style={{ marginBottom: '12px' }}>
-            <div style={{ fontSize: '11px', fontWeight: '800', textTransform: 'uppercase', color: '#0f172a', letterSpacing: '0.06em', borderBottom: '1px solid #e2e8f0', paddingBottom: '4px', marginBottom: '6px' }}>
-              Donor Information
-            </div>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
-              <tbody>
-                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '4px 6px', width: '22%', color: '#64748b', fontWeight: '600' }}>Donor Name:</td>
-                  <td style={{ padding: '4px 6px', width: '38%', fontWeight: '700', color: '#0f172a' }}>{formData.name || '—'}</td>
-                  <td style={{ padding: '4px 6px', width: '18%', color: '#64748b', fontWeight: '600' }}>PAN Number:</td>
-                  <td style={{ padding: '4px 6px', width: '22%', fontWeight: '700', color: '#0f172a' }}>{formData.panNumber || 'Not Provided'}</td>
-                </tr>
-                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '4px 6px', color: '#64748b', fontWeight: '600' }}>Phone Number:</td>
-                  <td style={{ padding: '4px 6px', fontWeight: '700', color: '#0f172a' }}>{formData.phoneNumber || '—'}</td>
-                  <td style={{ padding: '4px 6px', color: '#64748b', fontWeight: '600' }}>Email Address:</td>
-                  <td style={{ padding: '4px 6px', fontWeight: '600', color: '#0f172a' }}>{formData.email || '—'}</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '4px 6px', color: '#64748b', fontWeight: '600' }}>Address:</td>
-                  <td colSpan="3" style={{ padding: '4px 6px', color: '#334155' }}>{formData.address || 'Not Specified'}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Acknowledgement Notice */}
-          <div style={{ background: '#f8fafc', borderLeft: '3px solid #b45309', padding: '7px 10px', borderRadius: '4px', marginBottom: '12px', fontSize: '10px', lineHeight: '1.45', color: '#475569' }}>
-            <strong style={{ color: '#0f172a' }}>Hari Om! </strong>
-            Thank you for supporting Chinmaya Mission, Adoni. Your voluntary contribution will be utilized for noble dharmic, cultural, youth development, and spiritual activities. May Pujya Gurudev’s divine grace be with you and your family.
-          </div>
-
-          {/* Footer & Signature Section */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '10px', fontSize: '10px', color: '#64748b' }}>
-            <div>
-              <div><strong>Chinmaya Mission, Adoni</strong></div>
-              <div>Near Arts College, Adoni, Andhra Pradesh - 518301</div>
-              <div>Helpline: +91 94402 85859 | Web: chinmayamissionadoni.org</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ width: '130px', borderBottom: '1px dashed #94a3b8', height: '30px', marginBottom: '3px' }}></div>
-              <div style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase', color: '#475569' }}>Authorized Accounts Signature</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
 
       {/* Backdrop */}
       <div
@@ -1191,6 +1424,7 @@ export const DonationModal = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 
