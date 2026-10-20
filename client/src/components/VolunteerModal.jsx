@@ -150,16 +150,16 @@ export const VolunteerModal = ({ isOpen, onClose }) => {
         <div className="h-1.5 w-full bg-gradient-to-r from-[var(--orange,#FF8A3D)] via-[#FFA14A] to-[var(--yellow,#D97706)]" />
 
         {/* Modal Header */}
-        <div className="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start justify-between bg-gradient-to-b from-[#FFFDF9] to-white shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 shadow-sm">
+        <div className="px-4 sm:px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-b from-[#FFFDF9] to-white shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[var(--orange)]/10 text-[var(--orange)] flex items-center justify-center shrink-0 shadow-sm">
               <HeartHandshake className="w-5 h-5" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--orange)] block">
                 PARTICIPATE IN SEVA
               </span>
-              <h2 className="text-xl font-bold font-heading text-[#0A192F] leading-tight">
+              <h2 className="text-lg sm:text-xl font-bold font-heading text-[#0A192F] leading-tight truncate">
                 Connect for Volunteering
               </h2>
             </div>
@@ -168,7 +168,7 @@ export const VolunteerModal = ({ isOpen, onClose }) => {
           <button
             type="button"
             onClick={handleResetAndClose}
-            className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0 ml-2"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -176,7 +176,7 @@ export const VolunteerModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-5 flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1">
           {isSuccess ? (
             /* Success Screen */
             <div className="py-6 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">

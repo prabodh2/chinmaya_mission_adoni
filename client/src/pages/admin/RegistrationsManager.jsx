@@ -406,7 +406,7 @@ export const RegistrationsManager = () => {
 
       {/* Main Table: Registrations OR Bulk Batches */}
       {regType !== 'BATCHES' ? (
-        <div className="p-6 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-4">
+        <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-4">
           <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
             <table className="w-full text-left text-xs">
               <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase tracking-wider">
@@ -535,7 +535,7 @@ export const RegistrationsManager = () => {
         </div>
       ) : (
         /* Batches View */
-        <div className="p-6 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-4">
+        <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-xl space-y-4">
           <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
             <table className="w-full text-left text-xs">
               <thead className="bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-extrabold uppercase tracking-wider">

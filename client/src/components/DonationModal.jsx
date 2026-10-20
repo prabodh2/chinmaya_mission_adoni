@@ -689,20 +689,20 @@ export const DonationModal = ({
       {/* Modal Dialog Card */}
       <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-[#EAE0CE] w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden z-10 transition-all transform scale-100 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#0C1A30] via-[#142845] to-[#0C1A30] text-white p-5 sm:p-6 relative border-b border-[#C89B59]/30 shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#C89B59]/20 border border-[#C89B59]/40 flex items-center justify-center shrink-0">
-                <Heart className="w-5 h-5 text-[#E6BF70] fill-current" />
+        <div className="bg-gradient-to-r from-[#0C1A30] via-[#142845] to-[#0C1A30] text-white p-4 sm:p-6 relative border-b border-[#C89B59]/30 shrink-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#C89B59]/20 border border-[#C89B59]/40 flex items-center justify-center shrink-0">
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#E6BF70] fill-current" />
               </div>
-              <div>
-                <h3 className="text-lg sm:text-xl font-bold font-spiritual-heading text-white tracking-wide">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-xl font-bold font-spiritual-heading text-white tracking-wide truncate">
                   {step === 'form' && modalTitle}
                   {step === 'review' && 'Review Donation & PhonePe QR'}
                   {step === 'proof' && 'Submit Payment Verification'}
                   {step === 'confirmed' && 'Contribution Received With Gratitude'}
                 </h3>
-                <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80">
+                <p className="text-xs sm:text-[13px] text-[#F4E8D3]/80 truncate">
                   {step === 'form' && modalSubtitle}
                   {step === 'review' && 'Verify details and scan the QR code to complete donation'}
                   {step === 'proof' && 'Enter your UTR ID and upload the payment screenshot'}
@@ -714,7 +714,7 @@ export const DonationModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />

@@ -614,7 +614,7 @@ export const ChinmayaMissionAdoniPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Title & Intro */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[44px] font-black font-heading tracking-tight text-[var(--text-primary)] leading-tight sm:whitespace-nowrap">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[44px] font-black font-heading tracking-tight text-[var(--text-primary)] leading-tight">
               {(() => {
                 let rawTitle = (data.hero?.title || 'CHINMAYA MISSION, ADONI')
                   .replace(/^ABOUT\s+/i, '')

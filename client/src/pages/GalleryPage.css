@@ -35,11 +35,16 @@
   color: #FFFFFF;
 }
 
-/* Inner Container */
 .gallery-page-container .gallery-content-wrap {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px;
+}
+
+@media (min-width: 480px) {
+  .gallery-page-container .gallery-content-wrap {
+    padding: 0 24px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -191,8 +196,10 @@
 /* Search Box */
 .gallery-search-box {
   position: relative;
-  flex: 1 1 280px;
+  flex: 1 1 200px;
+  min-width: 0;
   max-width: 440px;
+  width: 100%;
 }
 
 .gallery-search-box input {

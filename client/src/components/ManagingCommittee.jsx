@@ -199,7 +199,7 @@ export const ManagingCommittee = () => {
             <span className="h-[1px] w-full bg-gradient-to-r from-transparent to-[#B49350]" />
             <span className="w-1.5 h-1.5 rotate-45 bg-[#B49350] shrink-0" />
           </div>
-          <h3 className="mc-heading-serif text-base sm:text-lg md:text-xl font-bold tracking-wider mc-text-navy uppercase text-center px-2 shrink-0">
+          <h3 className="mc-heading-serif text-sm sm:text-lg md:text-xl font-bold tracking-wider mc-text-navy uppercase text-center px-1 sm:px-2 shrink-0">
             HONORARY MEMBERS
           </h3>
           <div className="flex items-center gap-1.5 flex-1 justify-start">
@@ -235,7 +235,7 @@ export const ManagingCommittee = () => {
             <span className="h-[1px] w-full bg-gradient-to-r from-transparent to-[#B49350]" />
             <span className="w-1.5 h-1.5 rotate-45 bg-[#B49350] shrink-0" />
           </div>
-          <h3 className="mc-heading-serif text-base sm:text-lg md:text-xl font-bold tracking-wider mc-text-navy uppercase text-center px-2 shrink-0">
+          <h3 className="mc-heading-serif text-sm sm:text-lg md:text-xl font-bold tracking-wider mc-text-navy uppercase text-center px-1 sm:px-2 shrink-0">
             COMMITTEE MEMBERS
           </h3>
           <div className="flex items-center gap-1.5 flex-1 justify-start">
