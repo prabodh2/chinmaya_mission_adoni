@@ -10,7 +10,7 @@ export const GALLERY_IMAGES = [
     src: '/assets/hero-lingam-new.jpeg',
     title: 'Shri Shantamalleshwara Swami Jyotirlinga (Hero Sanctum)',
     category: 'Temple & Sanctum',
-    desc: 'Sacred Ishana Lingam representing the cosmic space element, consecrated with arrow marks from Kakatiya times.',
+    desc: 'Sacred Ishana Lingam representing the cosmic space element, revered for generations in the sanctum sanctorum.',
     tag: 'Principal Shrine',
   },
   {
@@ -42,7 +42,7 @@ export const GALLERY_IMAGES = [
     src: '/assets/temple-hilltop-view.jpeg',
     title: 'Navaratna Shikhara Hilltop Sanctuary',
     category: 'Temple & Sanctum',
-    desc: 'Panoramic hilltop view of the 12th-century Kakatiya temple complex built on multicolored strata rock.',
+    desc: 'Panoramic hilltop view of the sacred hilltop temple complex built on multicolored strata rock.',
     tag: 'Hilltop View',
   },
 

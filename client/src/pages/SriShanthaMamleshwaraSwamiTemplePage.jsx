@@ -159,7 +159,8 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
             </div>
 
             <p className="text-sm sm:text-base text-slate-700">
-              The Shri Shantamalleshwara Swami Temple (also known as Shri Shantamalleshwara Swami Devasthanam) is an ancient and sanctified hilltop seat of Lord Shiva, revered for generations as an abode of profound peace, meditation, and spiritual grace.
+              {f.temple_history?.historyP1 ||
+                'The Shri Shantamalleshwara Swami Temple (also known as Shri Shantamalleshwara Swami Devasthanam) is an ancient and sanctified hilltop seat of Lord Shiva, revered for generations as an abode of profound peace, meditation, and spiritual grace.'}
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">
