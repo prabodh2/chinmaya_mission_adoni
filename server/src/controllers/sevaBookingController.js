@@ -221,7 +221,18 @@ export const getSevaBookingsAdmin = async (req, res) => {
     }
 
     if (temple && temple !== 'ALL') {
-      query.templeName = temple;
+      if (temple === 'SANJEEVARAYA' || /Sanjeevaraya/i.test(temple)) {
+        query.templeName = { $regex: /Sanjeevaraya/i };
+      } else if (temple === 'SHANTAMALLESHWARA' || /Shantamalleshwara|Shantha|Malleshwara/i.test(temple)) {
+        query.templeName = { $regex: /Shantamalleshwara|Shantha|Malleshwara/i };
+      } else if (temple === 'SUPPORT_OUR_MISSION' || temple === 'DEVOTEE_CONTRIBUTION' || /Support/i.test(temple)) {
+        query.$or = [
+          { bookingType: 'DEVOTEE_CONTRIBUTION' },
+          { templeName: { $regex: /Chinmaya Mission|Support/i } },
+        ];
+      } else {
+        query.templeName = temple;
+      }
     }
 
     if (search && search.trim()) {

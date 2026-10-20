@@ -1153,16 +1153,6 @@ export const DonationModal = ({
                 </button>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handlePrint}
-                    className="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
-                    title="Print Devotee Summary"
-                  >
-                    <Printer className="w-4 h-4 text-slate-600" />
-                    <span>Print</span>
-                  </button>
-
                   {/* "Done" Button which redirects to Step 3 (Proof form) */}
                   <button
                     type="button"
@@ -1397,7 +1387,7 @@ export const DonationModal = ({
                   className="btn-seva-register px-6 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md"
                 >
                   <CheckCircle2 className="w-4 h-4 text-[#0A192F]" />
-                  <span>{isSubmitting ? 'Submitting...' : 'Submit Payment Proof'}</span>
+                  <span>{isSubmitting ? 'Submitting...' : 'Done'}</span>
                 </button>
               </div>
             </form>
@@ -1490,14 +1480,6 @@ export const DonationModal = ({
               </div>
 
               <div className="pt-2 flex items-center justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={handlePrint}
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
-                >
-                  <Printer className="w-4 h-4 text-slate-600" />
-                  <span>Print Receipt</span>
-                </button>
                 <button
                   type="button"
                   onClick={onClose}

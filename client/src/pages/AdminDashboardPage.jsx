@@ -78,6 +78,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
     if (path.includes('/admin/update-content') || path.includes('/admin/content')) return 'UPDATE_CONTENT';
     if (path.includes('/admin/footer')) return 'FOOTER_CMS';
     if (path.includes('/admin/home')) return 'HOME_PAGE';
+    if (path.includes('/admin/bookings') || path.includes('/admin/seva-bookings') || path.includes('/admin/donations')) return 'BOOKINGS';
     return 'STATS';
   };
 
@@ -515,7 +516,7 @@ export const AdminDashboardPage = ({ defaultTab }) => {
           { id: 'UPDATE_CONTENT', label: 'Update Content', icon: Globe },
           { id: 'LETS_CONNECT', label: "Let's Connect", icon: MessageSquare },
           { id: 'VOLUNTEERING', label: 'Volunteering', icon: HeartHandshake },
-          { id: 'SEVA_BOOKINGS', label: 'Sevas & Contributions', icon: Landmark },
+          { id: 'BOOKINGS', label: 'Bookings', icon: Landmark },
           { id: 'IMAGES', label: 'Images & Media', icon: ImageIcon },
           { id: 'HOME_PAGE', label: 'Home Page CMS', icon: Layout },
           { id: 'FOOTER_CMS', label: 'Footer CMS', icon: Settings },
@@ -544,8 +545,8 @@ export const AdminDashboardPage = ({ defaultTab }) => {
         })}
       </div>
 
-      {/* TAB: SEVAS & DEVOTEE CONTRIBUTIONS */}
-      {activeTab === 'SEVA_BOOKINGS' && <SevaBookingsManager />}
+      {/* TAB: SEVAS & DEVOTEE CONTRIBUTIONS / BOOKINGS */}
+      {(activeTab === 'BOOKINGS' || activeTab === 'SEVA_BOOKINGS') && <SevaBookingsManager />}
 
       {/* TAB: MULTI-WEBSITE UPDATE CONTENT CMS */}
       {activeTab === 'UPDATE_CONTENT' && <UpdateContentManager />}

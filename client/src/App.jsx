@@ -324,10 +324,18 @@ export function App() {
               }
             />
             <Route
+              path="/admin/bookings"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboardPage defaultTab="BOOKINGS" />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/seva-bookings"
               element={
                 <ProtectedRoute requireAdmin={true}>
-                  <AdminDashboardPage defaultTab="SEVA_BOOKINGS" />
+                  <AdminDashboardPage defaultTab="BOOKINGS" />
                 </ProtectedRoute>
               }
             />
@@ -335,7 +343,7 @@ export function App() {
               path="/admin/donations"
               element={
                 <ProtectedRoute requireAdmin={true}>
-                  <AdminDashboardPage defaultTab="SEVA_BOOKINGS" />
+                  <AdminDashboardPage defaultTab="BOOKINGS" />
                 </ProtectedRoute>
               }
             />
