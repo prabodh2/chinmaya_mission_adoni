@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { webContentService } from '../services/api';
 import {
@@ -87,6 +87,18 @@ export function HomePage() {
   const [active, setActive] = useState('Home');
   const [previewEvent, setPreviewEvent] = useState(null);
   const navigate = useNavigate();
+  const mobileVideoRef = useRef(null);
+
+  useEffect(() => {
+    if (mobileVideoRef.current) {
+      mobileVideoRef.current.defaultMuted = true;
+      mobileVideoRef.current.muted = true;
+      const playPromise = mobileVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    }
+  }, []);
 
   const [pageData, setPageData] = useState(() => {
     try {
@@ -293,11 +305,13 @@ export function HomePage() {
 
             {/* Mobile Video (homepagevideo.mp4 - Shown only on mobile phones) */}
             <video
+              ref={mobileVideoRef}
               className="hero-video-bg hero-video-mobile"
               autoPlay
               loop
               muted
               playsInline
+              webkit-playsinline="true"
               preload="auto"
             >
               <source src="/assets/homepagevideo.mp4" type="video/mp4" />
