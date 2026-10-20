@@ -61,6 +61,27 @@
   object-position: center center;
 }
 
+/* Desktop video: visible on desktop, laptop & tablet */
+.hero-video-desktop {
+  display: block;
+}
+
+/* Mobile video: hidden by default on desktop/laptop/tablet */
+.hero-video-mobile {
+  display: none;
+}
+
+/* Mobile phones: show portrait mobile video and hide desktop video */
+@media (max-width: 768px) {
+  .hero-video-desktop {
+    display: none !important;
+  }
+
+  .hero-video-mobile {
+    display: block !important;
+  }
+}
+
 .hero-video-overlay {
   position: absolute;
   inset: 0;

@@ -279,8 +279,9 @@ export function HomePage() {
         <section className="hero" id="home">
           {/* Background Video */}
           <div className="hero-video-wrap" aria-hidden="true">
+            {/* Desktop Video (Shown on tablet, laptop & desktop screens) */}
             <video
-              className="hero-video-bg"
+              className="hero-video-bg hero-video-desktop"
               autoPlay
               loop
               muted
@@ -288,6 +289,19 @@ export function HomePage() {
               preload="auto"
             >
               <source src="/assets/download.mp4" type="video/mp4" />
+            </video>
+
+            {/* Mobile Video (homepagevideo.mp4 - Shown only on mobile phones) */}
+            <video
+              className="hero-video-bg hero-video-mobile"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src="/assets/homepagevideo.mp4" type="video/mp4" />
+              <source src="/homepagevideo.mp4" type="video/mp4" />
             </video>
             <div className="hero-video-overlay" />
           </div>
