@@ -289,9 +289,8 @@ export function HomePage() {
       <main>
         {/* HERO SECTION */}
         <section className="hero" id="home">
-          {/* Background Video */}
-          <div className="hero-video-wrap" aria-hidden="true">
-            {/* Desktop Video (Shown on tablet, laptop & desktop screens) */}
+          {/* Desktop Background Video (Shown only on tablet, laptop & desktop screens) */}
+          <div className="hero-video-wrap hero-video-wrap-desktop" aria-hidden="true">
             <video
               className="hero-video-bg hero-video-desktop"
               autoPlay
@@ -301,22 +300,6 @@ export function HomePage() {
               preload="auto"
             >
               <source src="/assets/download.mp4" type="video/mp4" />
-            </video>
-
-            {/* Mobile Video (homepagevideo-cream.mp4 - Shown only on mobile phones) */}
-            <video
-              ref={mobileVideoRef}
-              className="hero-video-bg hero-video-mobile"
-              autoPlay
-              loop
-              muted
-              playsInline
-              webkit-playsinline="true"
-              preload="auto"
-            >
-              <source src="/assets/homepagevideo-cream.mp4?v=cream_v4" type="video/mp4" />
-              <source src="/homepagevideo-cream.mp4?v=cream_v4" type="video/mp4" />
-              <source src="/assets/homepagevideo.mp4?v=cream_v4" type="video/mp4" />
             </video>
             <div className="hero-video-overlay" />
           </div>
@@ -338,6 +321,24 @@ export function HomePage() {
             <p className="hero-description whitespace-pre-line">
               {heroDesc}
             </p>
+
+            {/* Mobile Video: Placed cleanly under the content on mobile, hidden on desktop */}
+            <div className="hero-mobile-video-wrap" aria-hidden="true">
+              <video
+                ref={mobileVideoRef}
+                className="hero-mobile-video-el"
+                autoPlay
+                loop
+                muted
+                playsInline
+                webkit-playsinline="true"
+                preload="auto"
+              >
+                <source src="/assets/homepagevideo.mp4" type="video/mp4" />
+                <source src="/homepagevideo.mp4" type="video/mp4" />
+                <source src="/assets/download.mp4" type="video/mp4" />
+              </video>
+            </div>
             <div className="hero-actions">
               {primaryBtnLink.startsWith('#') ? (
                 <a
