@@ -82,7 +82,19 @@
   }
 
   .hero-video-overlay {
-    background: transparent !important;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      #FFF5E5 0%,
+      #FFF5E5 33.5%,
+      transparent 34%,
+      transparent 66%,
+      #FFF5E5 66.5%,
+      #FFF5E5 100%
+    ) !important;
   }
 
   .hero-glow {
@@ -1043,7 +1055,7 @@
     display: none;
   }
   .hero-actions {
-    margin-top: clamp(160px, 32vh, 260px);
+    margin-top: clamp(240px, 38vh, 320px);
     width: 100%;
     gap: 9px;
   }

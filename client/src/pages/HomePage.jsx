@@ -303,7 +303,7 @@ export function HomePage() {
               <source src="/assets/download.mp4" type="video/mp4" />
             </video>
 
-            {/* Mobile Video (homepagevideo.mp4 - Shown only on mobile phones) */}
+            {/* Mobile Video (homepagevideo-cream.mp4 - Shown only on mobile phones) */}
             <video
               ref={mobileVideoRef}
               className="hero-video-bg hero-video-mobile"
@@ -314,8 +314,9 @@ export function HomePage() {
               webkit-playsinline="true"
               preload="auto"
             >
-              <source src="/assets/homepagevideo.mp4" type="video/mp4" />
-              <source src="/homepagevideo.mp4" type="video/mp4" />
+              <source src="/assets/homepagevideo-cream.mp4?v=cream_v4" type="video/mp4" />
+              <source src="/homepagevideo-cream.mp4?v=cream_v4" type="video/mp4" />
+              <source src="/assets/homepagevideo.mp4?v=cream_v4" type="video/mp4" />
             </video>
             <div className="hero-video-overlay" />
           </div>
