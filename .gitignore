@@ -41,3 +41,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.swp
+
+# Local scratch media in root
+/homepagevideo.mp4
