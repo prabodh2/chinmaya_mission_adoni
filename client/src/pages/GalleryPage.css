@@ -324,7 +324,7 @@
   flex-direction: column;
 }
 
-/* Temple Ornamental Corners */
+/* Kakatiya Ornamental Corners */
 .gallery-image-card::before,
 .gallery-image-card::after {
   content: "";

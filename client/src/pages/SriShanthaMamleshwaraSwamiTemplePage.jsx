@@ -12,7 +12,8 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
   const [pageData, setPageData] = useState(() => {
     try {
       localStorage.removeItem('cached_cms_shantamalleshwara_temple');
-      const cached = localStorage.getItem('cached_cms_shantamalleshwara_temple_v2');
+      localStorage.removeItem('cached_cms_shantamalleshwara_temple_v2');
+      const cached = localStorage.getItem('cached_cms_shantamalleshwara_temple_v3');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -30,7 +31,7 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
           setPageData(res.data.data);
           try {
             localStorage.setItem(
-              'cached_cms_shantamalleshwara_temple_v2',
+              'cached_cms_shantamalleshwara_temple_v3',
               JSON.stringify(res.data.data)
             );
           } catch {}
@@ -161,6 +162,11 @@ export const SriShanthaMamleshwaraSwamiTemplePage = () => {
             <p className="text-sm sm:text-base text-slate-700">
               {f.temple_history?.historyP1 ||
                 'The Shri Shantamalleshwara Swami Temple (also known as Shri Shantamalleshwara Swami Devasthanam) is an ancient and sanctified hilltop seat of Lord Shiva, revered for generations as an abode of profound peace, meditation, and spiritual grace.'}
+            </p>
+
+            <p className="text-sm sm:text-base text-slate-700">
+              {f.temple_history?.historyOrigin ||
+                'Originally constructed by the Kakatiyas in the 12th century and later restored by the Vijayanagara rulers in the 16th century.'}
             </p>
 
             <p className="text-sm sm:text-base text-slate-700">
