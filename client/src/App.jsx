@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
+import { SiteSettingsProvider } from './context/SiteSettingsContext';
+import { SiteAccessGate } from './components/SiteAccessGate';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -18,6 +20,7 @@ import { ChinmayaSanjeevarayaTemplePage } from './pages/ChinmayaSanjeevarayaTemp
 import { SriShanthaMamleshwaraSwamiTemplePage } from './pages/SriShanthaMamleshwaraSwamiTemplePage';
 import { GalleryPage } from './pages/GalleryPage';
 import { SupportOurMissionPage } from './pages/SupportOurMissionPage';
+import { ComingSoonPage } from './pages/ComingSoonPage';
 
 // Public Authentication Pages
 import { LoginPage } from './pages/LoginPage';
@@ -87,9 +90,11 @@ export function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <ScrollToTop />
-          <Routes>
+        <SiteSettingsProvider>
+          <Router>
+            <ScrollToTop />
+            <SiteAccessGate>
+              <Routes>
             {/* 1. Main Chinmaya Mission Website Pages */}
             <Route element={<PublicLayout />}>
               {/* Main Landing Page */}
@@ -198,6 +203,12 @@ export function App() {
               <Route path="/story-board" element={<MarathonPortalRedirect path="/your-thoughts" />} />
               <Route path="/storyboard" element={<MarathonPortalRedirect path="/your-thoughts" />} />
             </Route>
+
+            {/* Standalone Teaser / Coming Soon Page */}
+            <Route path="/coming-soon" element={<ComingSoonPage />} />
+            <Route path="/comming-soon" element={<ComingSoonPage />} />
+            <Route path="/launch" element={<ComingSoonPage />} />
+            <Route path="/teaser" element={<ComingSoonPage />} />
 
             {/* 2. Standalone Admin Login (NO Public Navbar, NO Public Footer, NO Normal User Pill) */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -383,9 +394,11 @@ export function App() {
             {/* Catch-all Redirect */}
             <Route path="*" element={<Navigate to="/chinmaya-mission-adoni" replace />} />
           </Routes>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+        </SiteAccessGate>
+      </Router>
+    </SiteSettingsProvider>
+  </AuthProvider>
+</ThemeProvider>
   );
 }
 

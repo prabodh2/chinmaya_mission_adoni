@@ -1,0 +1,277 @@
+.coming-soon-root {
+  --night: #161a33;
+  --dusk: #2f2652;
+  --ember: #c8572b;
+  --saffron: #ec9a3c;
+  --flame: #ffd679;
+  --ash: #efe8dc;
+  --ash-dim: #b9b1c9;
+  --display: "Tiro Telugu", Georgia, serif;
+  --body: "Hind Guntur", system-ui, sans-serif;
+
+  background: var(--night);
+  color: var(--ash);
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  height: 100svh;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+.coming-soon-root * {
+  box-sizing: border-box;
+}
+
+.coming-soon-root a {
+  color: var(--flame);
+  text-underline-offset: 3px;
+}
+
+.coming-soon-root a:focus-visible {
+  outline: 2px solid var(--flame);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* ---------- Dawn hero ---------- */
+.coming-soon-root .dawn {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 60% at 50% 100%, rgba(236, 154, 60, .55) 0%, rgba(200, 87, 43, .28) 28%, rgba(47, 38, 82, 0) 62%),
+    linear-gradient(180deg, var(--night) 0%, var(--night) 30%, var(--dusk) 78%, #4a2f4f 100%);
+}
+
+.coming-soon-root .stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.coming-soon-root .stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--ash);
+  opacity: .5;
+}
+
+.coming-soon-root .title {
+  position: relative;
+  align-self: center;
+  text-align: center;
+  padding: 12vh 16px 0;
+}
+
+.coming-soon-root .telugu {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 3.4vw, 1.75rem);
+  color: var(--saffron);
+  letter-spacing: .01em;
+  margin-bottom: .4em;
+}
+
+.coming-soon-root h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 9vw, 6.25rem);
+  line-height: 1.02;
+  letter-spacing: -.01em;
+}
+
+.coming-soon-root h1 .place {
+  display: block;
+  color: var(--ash-dim);
+  font-size: .52em;
+  margin-top: .25em;
+  letter-spacing: .06em;
+}
+
+.coming-soon-root .lede {
+  max-width: 34ch;
+  margin: 1.6rem auto 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  color: var(--ash);
+}
+
+/* lamp sits on the horizon */
+.coming-soon-root .horizon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 6vh;
+}
+
+.coming-soon-root .lamp {
+  width: min(220px, 52vw);
+  height: auto;
+  overflow: visible;
+}
+
+.coming-soon-root .glow {
+  position: absolute;
+  left: 50%;
+  bottom: calc(6vh + 70px);
+  width: 340px;
+  height: 340px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 214, 121, .45) 0%, rgba(236, 154, 60, .15) 35%, rgba(236, 154, 60, 0) 70%);
+  pointer-events: none;
+  animation: cs-breathe 4.5s ease-in-out infinite;
+}
+
+.coming-soon-root .flame {
+  transform-origin: 110px 96px;
+  animation: cs-flicker 2.6s ease-in-out infinite;
+}
+
+.coming-soon-root .flame-core {
+  transform-origin: 110px 96px;
+  animation: cs-flicker 1.9s ease-in-out infinite reverse;
+}
+
+@keyframes cs-flicker {
+  0%, 100% {
+    transform: scale(1, 1) rotate(0);
+  }
+  30% {
+    transform: scale(.96, 1.05) rotate(-2deg);
+  }
+  60% {
+    transform: scale(1.03, .97) rotate(1.5deg);
+  }
+}
+
+@keyframes cs-breathe {
+  0%, 100% {
+    opacity: .85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.coming-soon-root .ground {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 214, 121, .55), transparent);
+  margin-top: -2px;
+}
+
+.coming-soon-root .scroll-hint {
+  margin-top: 1.4rem;
+  font-size: .95rem;
+  color: var(--ash-dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.coming-soon-root .scroll-hint:hover {
+  color: var(--flame);
+}
+
+/* ---------- What's coming ---------- */
+.coming-soon-root .coming {
+  background: var(--ash);
+  color: var(--night);
+  padding: clamp(4rem, 10vw, 7rem) 16px;
+}
+
+.coming-soon-root .wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.coming-soon-root .coming h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  max-width: 18ch;
+}
+
+.coming-soon-root .coming .intro {
+  max-width: 52ch;
+  margin-top: 1rem;
+  color: #4a4560;
+}
+
+.coming-soon-root .offerings {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 2.5rem 3rem;
+  margin-top: 3.5rem;
+  padding: 0;
+}
+
+.coming-soon-root .offerings li {
+  border-left: 3px solid var(--saffron);
+  padding-left: 1.1rem;
+}
+
+.coming-soon-root .offerings h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.coming-soon-root .offerings .te {
+  display: block;
+  font-size: 1rem;
+  color: var(--ember);
+  margin-top: .15rem;
+}
+
+.coming-soon-root .offerings p {
+  margin-top: .5rem;
+  color: #4a4560;
+  max-width: 36ch;
+}
+
+/* ---------- Footer ---------- */
+.coming-soon-root footer {
+  background: var(--night);
+  color: var(--ash-dim);
+  padding: 3rem 16px;
+  font-size: .95rem;
+}
+
+.coming-soon-root footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.coming-soon-root footer .name {
+  font-family: var(--display);
+  color: var(--ash);
+  font-size: 1.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon-root .flame,
+  .coming-soon-root .flame-core,
+  .coming-soon-root .glow {
+    animation: none;
+  }
+}

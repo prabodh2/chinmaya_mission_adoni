@@ -1,6 +1,6 @@
 import Activity from '../models/Activity.js';
 import Media from '../models/Media.js';
-import { uploadToCloudinary } from '../config/cloudinary.js';
+import { uploadToR2, deleteFromR2 } from '../config/r2.js';
 import { seedInitialData } from '../utils/seedData.js';
 
 import fs from 'fs';
@@ -110,9 +110,9 @@ export const createActivity = async (req, res) => {
     let publicId = `act_${Date.now()}`;
 
     if (req.file) {
-      const cloudRes = await uploadToCloudinary(req.file.buffer, 'marathon_activities', req.file.mimetype);
-      imageUrl = cloudRes.url;
-      publicId = cloudRes.public_id;
+      const r2Res = await uploadToR2(req.file.buffer, 'chinmaya/activities', req.file.mimetype, req.file.originalname);
+      imageUrl = r2Res.url;
+      publicId = r2Res.public_id;
     }
 
     const activity = new Activity({
@@ -158,6 +158,12 @@ export const deleteActivity = async (req, res) => {
     const activity = await Activity.findByIdAndDelete(req.params.id);
     if (!activity) return res.status(404).json({ success: false, message: 'Activity not found' });
     invalidateActivitiesCache();
+
+    // Delete the file from R2 (no-op if dev/fallback or already gone)
+    if (activity.publicId) {
+      await deleteFromR2(activity.publicId);
+    }
+
     try {
       const Media = (await import('../models/Media.js')).default;
       await Media.deleteMany({
@@ -168,6 +174,7 @@ export const deleteActivity = async (req, res) => {
         ],
       });
     } catch (_) {}
+
     res.json({ success: true, message: 'Activity deleted permanently' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

@@ -1,7 +1,27 @@
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { isDBConnected } from './config/db.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Locate client dist directory across multiple potential runtime environments
+const candidateDistPaths = [
+  path.resolve(__dirname, '../../client/dist'),
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(process.cwd(), '../client/dist'),
+  path.resolve(__dirname, '../public'),
+  path.resolve(__dirname, '../dist'),
+  path.resolve(process.cwd(), 'dist'),
+];
+
+const clientDistPath = candidateDistPaths.find(
+  (p) => fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))
+);
 import authRoutes from './routes/authRoutes.js';
 import registrationRoutes from './routes/registrationRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
@@ -20,6 +40,7 @@ import thoughtRoutes from './routes/thoughtRoutes.js';
 import webContentRoutes from './routes/webContentRoutes.js';
 import volunteerRoutes from './routes/volunteerRoutes.js';
 import sevaBookingRoutes from './routes/sevaBookingRoutes.js';
+import siteSettingsRoutes from './routes/siteSettingsRoutes.js';
 
 const app = express();
 
@@ -112,9 +133,14 @@ const healthHandler = (req, res) => {
   });
 };
 
-app.get(['/api/health', '/health', '/'], healthHandler);
+app.get(['/api/health', '/health'], healthHandler);
 
-// Mount API Routes (supports both /api/* and root /* for seamless deployment compatibility)
+// When running without client dist, fallback root to health check
+if (!clientDistPath) {
+  app.get('/', healthHandler);
+}
+
+// Mount API Routes (under /api/* and fallback for root when standalone)
 const routes = [
   { path: 'auth', router: authRoutes },
   { path: 'users', router: userRoutes },
@@ -134,19 +160,60 @@ const routes = [
   { path: 'admin/content', router: webContentRoutes },
   { path: 'volunteers', router: volunteerRoutes },
   { path: 'seva-bookings', router: sevaBookingRoutes },
+  { path: 'site-settings', router: siteSettingsRoutes },
+  { path: 'site-status', router: siteSettingsRoutes },
 ];
 
-routes.forEach(({ path, router }) => {
-  app.use(`/api/${path}`, router);
-  app.use(`/${path}`, router);
+routes.forEach(({ path: routePath, router }) => {
+  app.use(`/api/${routePath}`, router);
+  // Only mount at root if client dist is not being served to prevent collision with SPA
+  if (!clientDistPath) {
+    app.use(`/${routePath}`, router);
+  }
 });
 
+// Serve client static build files
+if (clientDistPath) {
+  app.use(
+    express.static(clientDistPath, {
+      maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0,
+      index: false,
+    })
+  );
+}
 
-// Global 404 Route
-app.use((req, res) => {
+// Global API 404 handler
+app.all(['/api', '/api/*'], (req, res) => {
   res.status(404).json({
     success: false,
     message: `API Route not found: ${req.originalUrl}`,
+    errorCode: 'ROUTE_NOT_FOUND',
+  });
+});
+
+// Single Page Application (SPA) Catch-all for Client Routing
+if (clientDistPath) {
+  const indexHtmlPath = path.join(clientDistPath, 'index.html');
+  app.get('*', (req, res, next) => {
+    // If request has a file extension and wasn't matched by express.static, return 404
+    const ext = path.extname(req.path);
+    if (ext && ext !== '.html') {
+      return res.status(404).send('Asset not found');
+    }
+
+    res.sendFile(indexHtmlPath, (err) => {
+      if (err) {
+        next(err);
+      }
+    });
+  });
+}
+
+// Global 404 Route for remaining unhandled requests
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.originalUrl}`,
     errorCode: 'ROUTE_NOT_FOUND',
   });
 });

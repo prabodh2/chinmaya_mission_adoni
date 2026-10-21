@@ -2,7 +2,12 @@ import axios from 'axios';
 
 const normalizeApiBaseUrl = (rawUrl) => {
   let url = (rawUrl || '').trim();
-  if (!url) return 'http://localhost:5000/api';
+  if (!url) return '/api';
+  // When running in production with Express serving the frontend,
+  // ensure requests target the same origin rather than hardcoded localhost
+  if (import.meta.env.PROD && (url.includes('localhost') || url.includes('127.0.0.1'))) {
+    return '/api';
+  }
   url = url.replace(/\/+$/, '');
   if (!url.endsWith('/api')) {
     url = `${url}/api`;
@@ -347,6 +352,12 @@ export const sevaBookingService = {
   getAllAdmin: (params) => api.get('/seva-bookings/admin/all', { params }),
   updateStatus: (id, status) => api.patch(`/seva-bookings/admin/${id}/status`, { status }),
   deleteBooking: (id) => api.delete(`/seva-bookings/admin/${id}`),
+};
+
+export const siteSettingsService = {
+  getStatus: () => api.get('/site-settings'),
+  updateStatus: (isLive) => api.put('/site-settings', { isLive }),
+  toggleStatus: () => api.post('/site-settings/toggle'),
 };
 
 export default api;

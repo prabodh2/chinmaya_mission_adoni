@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chinmaya Mission Adoni</title>
+    <meta name="description" content="Chinmaya Mission Adoni — our website is on its way.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Telugu&family=Hind+Guntur:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --night: #161a33;
+            --dusk: #2f2652;
+            --ember: #c8572b;
+            --saffron: #ec9a3c;
+            --flame: #ffd679;
+            --ash: #efe8dc;
+            --ash-dim: #b9b1c9;
+            --display: "Tiro Telugu", Georgia, serif;
+            --body: "Hind Guntur", system-ui, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--night);
+            color: var(--ash);
+            font-family: var(--body);
+            font-weight: 300;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--flame);
+            text-underline-offset: 3px
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--flame);
+            outline-offset: 4px;
+            border-radius: 2px
+        }
+
+        /* ---------- Dawn hero ---------- */
+        .dawn {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100svh;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            overflow: hidden;
+            background:
+                radial-gradient(120% 60% at 50% 100%, rgba(236, 154, 60, .55) 0%, rgba(200, 87, 43, .28) 28%, rgba(47, 38, 82, 0) 62%),
+                linear-gradient(180deg, var(--night) 0%, var(--night) 30%, var(--dusk) 78%, #4a2f4f 100%);
+        }
+
+        .stars {
+            position: absolute;
+            inset: 0;
+            pointer-events: none
+        }
+
+        .stars span {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: var(--ash);
+            opacity: .5
+        }
+
+        .title {
+            position: relative;
+            align-self: center;
+            text-align: center;
+            padding: 12vh 16px 0;
+        }
+
+        .telugu {
+            font-family: var(--display);
+            font-size: clamp(1.25rem, 3.4vw, 1.75rem);
+            color: var(--saffron);
+            letter-spacing: .01em;
+            margin-bottom: .4em;
+        }
+
+        h1 {
+            font-family: var(--display);
+            font-weight: 400;
+            font-size: clamp(2.6rem, 9vw, 6.25rem);
+            line-height: 1.02;
+            letter-spacing: -.01em;
+        }
+
+        h1 .place {
+            display: block;
+            color: var(--ash-dim);
+            font-size: .52em;
+            margin-top: .25em;
+            letter-spacing: .06em
+        }
+
+        .lede {
+            max-width: 34ch;
+            margin: 1.6rem auto 0;
+            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+            color: var(--ash);
+        }
+
+        /* lamp sits on the horizon */
+        .horizon {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 6vh;
+        }
+
+        .lamp {
+            width: min(220px, 52vw);
+            height: auto;
+            overflow: visible
+        }
+
+        .glow {
+            position: absolute;
+            left: 50%;
+            bottom: calc(6vh + 70px);
+            width: 340px;
+            height: 340px;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255, 214, 121, .45) 0%, rgba(236, 154, 60, .15) 35%, rgba(236, 154, 60, 0) 70%);
+            pointer-events: none;
+            animation: breathe 4.5s ease-in-out infinite;
+        }
+
+        .flame {
+            transform-origin: 110px 96px;
+            animation: flicker 2.6s ease-in-out infinite
+        }
+
+        .flame-core {
+            transform-origin: 110px 96px;
+            animation: flicker 1.9s ease-in-out infinite reverse
+        }
+
+        @keyframes flicker {
+
+            0%,
+            100% {
+                transform: scale(1, 1) rotate(0)
+            }
+
+            30% {
+                transform: scale(.96, 1.05) rotate(-2deg)
+            }
+
+            60% {
+                transform: scale(1.03, .97) rotate(1.5deg)
+            }
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                opacity: .85
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        .ground {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 214, 121, .55), transparent);
+            margin-top: -2px;
+        }
+
+        .scroll-hint {
+            margin-top: 1.4rem;
+            font-size: .95rem;
+            color: var(--ash-dim);
+            text-decoration: none;
+        }
+
+        .scroll-hint:hover {
+            color: var(--flame)
+        }
+
+        /* ---------- What's coming ---------- */
+        .coming {
+            background: var(--ash);
+            color: var(--night);
+            padding: clamp(4rem, 10vw, 7rem) 16px;
+        }
+
+        .wrap {
+            max-width: 62rem;
+            margin: 0 auto
+        }
+
+        .coming h2 {
+            font-family: var(--display);
+            font-weight: 400;
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.1;
+            max-width: 18ch;
+        }
+
+        .coming .intro {
+            max-width: 52ch;
+            margin-top: 1rem;
+            color: #4a4560
+        }
+
+        .offerings {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+            gap: 2.5rem 3rem;
+            margin-top: 3.5rem;
+        }
+
+        .offerings li {
+            border-left: 3px solid var(--saffron);
+            padding-left: 1.1rem
+        }
+
+        .offerings h3 {
+            font-family: var(--display);
+            font-weight: 400;
+            font-size: 1.45rem;
+            line-height: 1.2;
+        }
+
+        .offerings .te {
+            display: block;
+            font-size: 1rem;
+            color: var(--ember);
+            margin-top: .15rem
+        }
+
+        .offerings p {
+            margin-top: .5rem;
+            color: #4a4560;
+            max-width: 36ch
+        }
+
+        /* ---------- Footer ---------- */
+        footer {
+            background: var(--night);
+            color: var(--ash-dim);
+            padding: 3rem 16px;
+            font-size: .95rem;
+        }
+
+        footer .wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            justify-content: space-between;
+            align-items: baseline
+        }
+
+        footer .name {
+            font-family: var(--display);
+            color: var(--ash);
+            font-size: 1.15rem
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .flame,
+            .flame-core,
+            .glow {
+                animation: none
+            }
+
+            html {
+                scroll-behavior: auto
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="dawn">
+        <div class="stars" aria-hidden="true" id="stars"></div>
+
+        <div class="title">
+            <p class="telugu" lang="te">చిన్మయ మిషన్ ఆదోని</p>
+            <h1>Chinmaya Mission<span class="place">Adoni</span></h1>
+            <p class="lede">Our new home on the web is being prepared. The lamp is lit — we'll open the doors soon.</p>
+        </div>
+
+        <div class="horizon">
+            <div class="glow" aria-hidden="true"></div>
+            <svg class="lamp" viewBox="0 0 220 170" role="img" aria-label="A lit oil lamp">
+                <defs>
+                    <linearGradient id="brass" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#f3c26b" />
+                        <stop offset=".55" stop-color="#c98a35" />
+                        <stop offset="1" stop-color="#7a4a1c" />
+                    </linearGradient>
+                    <radialGradient id="fl" cx=".5" cy=".75" r=".7">
+                        <stop offset="0" stop-color="#fff6d6" />
+                        <stop offset=".45" stop-color="#ffd679" />
+                        <stop offset="1" stop-color="#ec9a3c" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+                <!-- flame -->
+                <path class="flame" d="M110 22 C122 48 132 66 126 84 C122 95 98 95 94 84 C88 66 99 48 110 22 Z"
+                    fill="url(#fl)" />
+                <path class="flame-core" d="M110 56 C116 68 119 77 116 86 C113 92 107 92 104 86 C101 77 104 68 110 56 Z"
+                    fill="#fff8e4" />
+                <!-- wick -->
+                <rect x="108.5" y="92" width="3" height="10" rx="1.5" fill="#3b2412" />
+                <!-- bowl -->
+                <path d="M38 104 Q110 96 182 104 Q174 138 110 140 Q46 138 38 104 Z" fill="url(#brass)" />
+                <path d="M38 104 Q110 112 182 104" fill="none" stroke="#ffe3a3" stroke-opacity=".6"
+                    stroke-width="1.5" />
+                <!-- stem and base -->
+                <path d="M98 139 L122 139 L118 152 L102 152 Z" fill="#a36a2b" />
+                <ellipse cx="110" cy="158" rx="38" ry="7" fill="url(#brass)" />
+            </svg>
+            <div class="ground" aria-hidden="true"></div>
+            <a class="scroll-hint" href="#coming">See what's coming</a>
+        </div>
+    </header>
+
+    <main class="coming" id="coming">
+        <div class="wrap">
+            <h2>What you'll find here</h2>
+            <p class="intro">Class timings, satsangs, camps and festival celebrations at our Adoni centre — all in one
+                place, in English and Telugu.</p>
+
+            <ul class="offerings">
+                <li>
+                    <h3>Bala Vihar<span class="te" lang="te">బాల విహార్</span></h3>
+                    <p>Weekly sessions for children with stories, shlokas, bhajans and values.</p>
+                </li>
+                <li>
+                    <h3>Chinmaya Yuva Kendra<span class="te" lang="te">యువ కేంద్ర</span></h3>
+                    <p>Talks, service projects and retreats for young adults.</p>
+                </li>
+                <li>
+                    <h3>Study groups<span class="te" lang="te">అధ్యయన బృందాలు</span></h3>
+                    <p>Guided reading of the Bhagavad Gita and Vedanta texts for adults.</p>
+                </li>
+                <li>
+                    <h3>Devi groups<span class="te" lang="te">దేవి బృందాలు</span></h3>
+                    <p>Gatherings for women to study, chant and serve together.</p>
+                </li>
+                <li>
+                    <h3>Gita chanting<span class="te" lang="te">గీతా పారాయణం</span></h3>
+                    <p>Learn to chant the Gita, chapter by chapter, with correct pronunciation.</p>
+                </li>
+                <li>
+                    <h3>Events and jnana yagnas<span class="te" lang="te">కార్యక్రమాలు</span></h3>
+                    <p>Upcoming discourses, camps and festival dates, posted as they're announced.</p>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            <span class="name">Chinmaya Mission Adoni</span>
+            <span>Meanwhile, learn about the wider mission at <a href="https://www.chinmayamission.com" target="_blank"
+                    rel="noopener">chinmayamission.com</a></span>
+        </div>
+    </footer>
+
+    <script>
+        // scatter a few quiet stars across the upper sky
+        (function () {
+            var box = document.getElementById('stars');
+            if (!box) return;
+            for (var i = 0; i < 46; i++) {
+                var s = document.createElement('span');
+                s.style.left = (Math.random() * 100) + '%';
+                s.style.top = (Math.random() * 48) + '%';
+                s.style.opacity = (0.15 + Math.random() * 0.55).toFixed(2);
+                if (Math.random() > .85) { s.style.width = s.style.height = '3px'; }
+                box.appendChild(s);
+            }
+        })();
+    </script>
+</body>
+
+</html>

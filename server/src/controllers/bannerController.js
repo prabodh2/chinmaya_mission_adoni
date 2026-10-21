@@ -1,6 +1,6 @@
 import Banner from '../models/Banner.js';
 import Media from '../models/Media.js';
-import { uploadToCloudinary } from '../config/cloudinary.js';
+import { uploadToR2, deleteFromR2 } from '../config/r2.js';
 
 import fs from 'fs';
 import path from 'path';
@@ -121,11 +121,12 @@ export const uploadBanner = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Banner type must be HORIZONTAL or VERTICAL' });
     }
 
-    // Upload to Cloudinary / Data URI
-    const cloudRes = await uploadToCloudinary(
+    // Upload to Cloudflare R2
+    const r2Res = await uploadToR2(
       req.file.buffer,
-      `marathon_banners/${bannerType.toLowerCase()}`,
-      req.file.mimetype
+      `chinmaya/banners/${bannerType.toLowerCase()}`,
+      req.file.mimetype,
+      req.file.originalname
     );
 
     if (bannerType === 'HORIZONTAL') {
@@ -135,8 +136,8 @@ export const uploadBanner = async (req, res) => {
 
     const banner = new Banner({
       title: title || `${bannerType} Banner ${Date.now()}`,
-      imageUrl: cloudRes.url,
-      publicId: cloudRes.public_id,
+      imageUrl: r2Res.url,
+      publicId: r2Res.public_id,
       bannerType,
       order: order ? Number(order) : 1,
       active: true,
@@ -179,6 +180,12 @@ export const deleteBanner = async (req, res) => {
   try {
     const banner = await Banner.findByIdAndDelete(req.params.id);
     if (!banner) return res.status(404).json({ success: false, message: 'Banner not found' });
+
+    // Delete underlying R2 object
+    if (banner.publicId) {
+      await deleteFromR2(banner.publicId);
+    }
+
     invalidateBannersCache();
     res.json({ success: true, message: 'Banner deleted successfully' });
   } catch (err) {

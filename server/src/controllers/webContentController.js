@@ -1,6 +1,6 @@
 import WebContent from '../models/WebContent.js';
 import { DEFAULT_WEBSITE_PAGES } from '../utils/webContentSeedData.js';
-import { uploadToCloudinary } from '../config/cloudinary.js';
+import { uploadToR2 } from '../config/r2.js';
 
 /**
  * Helper to auto-seed default pages for a website if none exist
@@ -320,8 +320,8 @@ export const uploadPageImage = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please select an image file to upload.' });
     }
 
-    const { folder = 'website_cms' } = req.body;
-    const result = await uploadToCloudinary(req.file.buffer, folder, req.file.mimetype);
+    const { folder = 'chinmaya/website_cms' } = req.body;
+    const result = await uploadToR2(req.file.buffer, folder, req.file.mimetype, req.file.originalname);
 
     res.json({
       success: true,

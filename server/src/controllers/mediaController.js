@@ -4,7 +4,7 @@ import Activity from '../models/Activity.js';
 import HomePage from '../models/HomePage.js';
 import PageContent from '../models/PageContent.js';
 import Footer from '../models/Footer.js';
-import { uploadToCloudinary } from '../config/cloudinary.js';
+import { uploadToR2, deleteFromR2 } from '../config/r2.js';
 import { seedInitialData } from '../utils/seedData.js';
 
 // @desc    Get paginated media items with search & filtering
@@ -135,8 +135,8 @@ export const uploadMedia = async (req, res) => {
       height = 0,
     } = req.body;
 
-    const folder = `marathon_assets/${category.toLowerCase().replace(/\s+/g, '_')}`;
-    const result = await uploadToCloudinary(req.file.buffer, folder, req.file.mimetype);
+    const folder = `chinmaya/media/${category.toLowerCase().replace(/\s+/g, '_')}`;
+    const result = await uploadToR2(req.file.buffer, folder, req.file.mimetype, req.file.originalname);
 
     const parsedTags = typeof tags === 'string'
       ? tags.split(',').map((t) => t.trim()).filter(Boolean)
@@ -380,8 +380,8 @@ export const updateMedia = async (req, res) => {
     // Check if a new image file is uploaded with the edit request
     if (req.file) {
       const catName = category || media.category || 'other';
-      const folder = `marathon_assets/${catName.toLowerCase().replace(/\s+/g, '_')}`;
-      const result = await uploadToCloudinary(req.file.buffer, folder, req.file.mimetype);
+      const folder = `chinmaya/media/${catName.toLowerCase().replace(/\s+/g, '_')}`;
+      const result = await uploadToR2(req.file.buffer, folder, req.file.mimetype, req.file.originalname);
 
       media.url = result.url;
       media.thumbnailUrl = result.url;
@@ -458,8 +458,12 @@ export const replaceMediaFile = async (req, res) => {
     }
 
     const oldUrl = media.url;
-    const folder = `marathon_assets/${media.category.toLowerCase().replace(/\s+/g, '_')}`;
-    const result = await uploadToCloudinary(req.file.buffer, folder, req.file.mimetype);
+    const oldPublicId = media.publicId;
+    const folder = `chinmaya/media/${media.category.toLowerCase().replace(/\s+/g, '_')}`;
+    const result = await uploadToR2(req.file.buffer, folder, req.file.mimetype, req.file.originalname);
+
+    // Delete old R2 object (non-blocking)
+    if (oldPublicId) deleteFromR2(oldPublicId).catch(() => {});
 
     media.url = result.url;
     media.thumbnailUrl = result.url;
@@ -573,6 +577,11 @@ export const deleteMedia = async (req, res) => {
     }
 
     await Media.findByIdAndDelete(req.params.id);
+
+    // Delete from Cloudflare R2
+    if (mediaPublicId) {
+      await deleteFromR2(mediaPublicId);
+    }
 
     res.json({
       success: true,
